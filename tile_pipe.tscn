@@ -2,7 +2,7 @@
 
 [ext_resource path="res://tile_pipe.gd" type="Script" id=1]
 [ext_resource path="res://in_green.png" type="Texture" id=2]
-[ext_resource path="res://autotile_template.png" type="Texture" id=3]
+[ext_resource path="res://template.png" type="Texture" id=3]
 [ext_resource path="res://rotate_shader.shader" type="Shader" id=4]
 
 [sub_resource type="ShaderMaterial" id=1]
