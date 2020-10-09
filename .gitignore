@@ -1,0 +1,7 @@
+.import/*
+*.import
+*~
+**/PerfMonitor/*
+*.translation
+*.tres
+out.png
