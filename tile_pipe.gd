@@ -1,4 +1,4 @@
-	extends Control
+extends Node
 
 const SIZES: Dictionary = {
 	8: "8x8",
@@ -166,7 +166,9 @@ onready var debug_input_texture: TextureRect = $Center/Panel/HBox/Images/InConta
 onready var slice_slider: HSlider = $Center/Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider
 onready var export_type_select: CheckButton = $Center/Panel/HBox/Settings/Resourse/AutotileSelect
 onready var description_select_box: HBoxContainer = $Center/Panel/HBox/Settings/DescriptionResourse
-onready var export_description_select: CheckButton = $Center/Panel/HBox/Settings/DescriptionResourse/Select
+onready var export_manual_resource_type_select: CheckButton = $Center/Panel/HBox/Settings/DescriptionResourse/Select
+
+onready var base_path: String = "res://addons/TilePipe"
 
 # tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
 var tile_masks: Array = []
@@ -455,43 +457,56 @@ func _on_HSlider_value_changed(value):
 func _on_OptionButton_item_selected(_index):
 	preprocess_input_image()
 
+func tile_name_from_position(pos: Vector2) -> String:
+	return "%d_%d" % [pos.x, pos.y]
+
 func make_manual_resource_data(path: String) -> String:
 	var tile_size: int = SIZES.keys()[size_select.selected]
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
 	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % path
-	out_string += "[resource]\n"
+	if export_manual_resource_type_select.pressed:
+		out_string += "[ext_resource path=\"res://addons/TilePipe/tilesheet_description.gd\" type=\"Script\" id=2]\n"
+	out_string += "\n[resource]\n"
 	var count: int = 0
+	var tile_lines: PoolStringArray = []
+	var tile_description_lines: PoolStringArray = []
 	for mask in tile_masks:
 		var pos: Vector2 = mask["position"]
-		out_string +=  "%d/name = \"%d_%d\"\n" % [count, pos.x, pos.y]
-		out_string +=  "%d/texture = ExtResource( 1 )\n" % count
-		out_string +=  "%d/tex_offset = Vector2( 0, 0 )\n" % count
-		out_string +=  "%d/modulate = Color( 1, 1, 1, 1 )\n" % count
-		out_string +=  "%d/region = Rect2( %d, %d, %d, %d )\n" % [count, 
-						tile_size * pos.x, tile_size * pos.y, tile_size, tile_size]
-		out_string +=  "%d/tile_mode = 0\n" % count
-		out_string +=  "%d/occluder_offset = Vector2( 0, 0 )\n" % count
-		out_string +=  "%d/navigation_offset = Vector2( 0, 0 )\n" % count
-		out_string +=  "%d/shape_offset = Vector2( 0, 0 )\n" % count
-		out_string +=  "%d/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )\n" % count
-		out_string +=  "%d/shape_one_way = false\n" % count
-		out_string +=  "%d/shape_one_way_margin = 0.0\n" % count
-		out_string +=  "%d/shapes = [  ]\n" % count
-		out_string +=  "%d/z_index = 0\n" % count
+		tile_lines.append("%d/name = \"%s\"" % [count, tile_name_from_position(pos)])
+		tile_lines.append("%d/texture = ExtResource( 1 )" % count)
+		tile_lines.append("%d/tex_offset = Vector2( 0, 0 )" % count)
+		tile_lines.append("%d/modulate = Color( 1, 1, 1, 1 )" % count)
+		tile_lines.append("%d/region = Rect2( %d, %d, %d, %d )" % [count, 
+						tile_size * pos.x, tile_size * pos.y, tile_size, tile_size])
+		tile_lines.append("%d/tile_mode = 0" % count)
+		tile_lines.append("%d/occluder_offset = Vector2( 0, 0 )" % count)
+		tile_lines.append("%d/navigation_offset = Vector2( 0, 0 )" % count)
+		tile_lines.append("%d/shape_offset = Vector2( 0, 0 )" % count)
+		tile_lines.append("%d/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )" % count)
+		tile_lines.append("%d/shape_one_way = false" % count)
+		tile_lines.append("%d/shape_one_way_margin = 0.0" % count)
+		tile_lines.append("%d/shapes = [  ]" % count)
+		tile_lines.append("%d/z_index = 0" % count)
 		count += 1
+		tile_description_lines.append("%d: \"%s\"" % [mask['godot_mask'], tile_name_from_position(pos)])
+	out_string += tile_lines.join("\n")
+	if export_manual_resource_type_select.pressed:
+		out_string += "\nscript = ExtResource( 2 )\nreplacements_table = {\n"
+		out_string += tile_description_lines.join(",\n")
+		out_string += "\n}"
 	return out_string
-	
+
 func make_autotile_resource_data(path: String) -> String:
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
 	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % path
-	out_string += "[resource]\n"
+	out_string += "\n[resource]\n"
 	var tile_size: int = SIZES.keys()[size_select.selected]
 	var texture_size: Vector2 = out_texture.texture.get_data().get_size()
 	var mask_out_vector: Array = []
 	for mask in tile_masks:
 		mask_out_vector.append("Vector2 ( %d, %d )" % [mask['position'].x, mask['position'].y])
 		mask_out_vector.append(mask['godot_mask'])
-	out_string += "0/name = \"autotile\"\n"
+	out_string += "0/name = \"0_0\"\n"
 	out_string += "0/texture = ExtResource( 1 )\n"
 	out_string += "0/tex_offset = Vector2( 0, 0 )\n"
 	out_string += "0/modulate = Color( 1, 1, 1, 1 )\n"
@@ -521,28 +536,20 @@ const IGNORE_GODOT_MASK: int = GODOT_MASK["TOP_LEFT"] | GODOT_MASK["TOP_RIGHT"] 
 func compute_tile_replacement_data() -> Dictionary:
 	var data: Dictionary = {}
 	for mask in tile_masks:
-		var gd_mask = mask["godot_mask"]
-		data[gd_mask] = []
-		for check_mask in range(512):
-			var is_mask_replaceable: bool = \
-					gd_mask & ~IGNORE_GODOT_MASK == check_mask & ~IGNORE_GODOT_MASK && \
-					~gd_mask | IGNORE_GODOT_MASK == ~check_mask | IGNORE_GODOT_MASK
-			if is_mask_replaceable:
-				data[gd_mask].append(check_mask)
+		data[mask["godot_mask"]] = tile_name_from_position(mask["position"])
 	return data
 
 func _on_SaveTextureDialog2_file_selected(path: String):
 	save_texture_png(path)
 	var output_string : String
+	print(export_type_select.pressed)
 	if export_type_select.pressed:
 		output_string = make_autotile_resource_data(path)
 	else:
 		output_string = make_manual_resource_data(path)
-		var description_resource: TilesheetDescrption = TilesheetDescrption.new()
-		description_resource.replacements_table = compute_tile_replacement_data()
-		var description_resource_path: String = path.get_basename( ) + "_description.tres"
-		ResourceSaver.save(description_resource_path, description_resource)
 	var tileset_resource_path: String = path.get_basename( ) + ".tres"
+#	var dir = Directory.new()
+#	dir.remove(tileset_resource_path)
 	var file = File.new()
 	file.open(tileset_resource_path, File.WRITE)
 	file.store_string(output_string)

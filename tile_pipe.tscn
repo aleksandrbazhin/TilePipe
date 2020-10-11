@@ -1,64 +1,64 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://tile_pipe.gd" type="Script" id=1]
-[ext_resource path="res://in_green.png" type="Texture" id=2]
-[ext_resource path="res://template.png" type="Texture" id=3]
-[ext_resource path="res://rotate_shader.shader" type="Shader" id=4]
+[ext_resource path="res://addons/TilePipe/tile_pipe.gd" type="Script" id=1]
+[ext_resource path="res://addons/TilePipe/template.png" type="Texture" id=2]
+[ext_resource path="res://addons/TilePipe/in_green.png" type="Texture" id=3]
+[ext_resource path="res://addons/TilePipe/rotate_shader.shader" type="Shader" id=4]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 4 )
 shader_param/center = Vector2( 0.5, 0.5 )
-shader_param/rotation = 0.0
+shader_param/rotation = -4.71239
 
-[node name="Node2D" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Node" type="Node"]
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TextureDialog" type="FileDialog" parent="."]
 margin_left = 7.0
 margin_top = 229.0
 margin_right = 322.0
 margin_bottom = 359.0
-rect_min_size = Vector2( 400, 400 )
+rect_min_size = Vector2( 500, 400 )
 popup_exclusive = true
 window_title = "Select half tile slices"
 resizable = true
 mode_overrides_title = false
 mode = 0
 filters = PoolStringArray( "*.png ; PNG Images" )
+current_dir = "res://addons/TilePipe"
+current_path = "res://addons/TilePipe/"
 
 [node name="TemplateDialog" type="FileDialog" parent="."]
 margin_left = 7.0
 margin_top = 229.0
 margin_right = 322.0
 margin_bottom = 359.0
-rect_min_size = Vector2( 400, 400 )
+rect_min_size = Vector2( 500, 400 )
 popup_exclusive = true
 window_title = "Select generation template"
 resizable = true
 mode_overrides_title = false
 mode = 0
 filters = PoolStringArray( "*.png ; PNG Images" )
+current_dir = "res://addons/TilePipe"
+current_path = "res://addons/TilePipe/"
 
 [node name="SaveTextureDialog" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
-rect_min_size = Vector2( 400, 400 )
+rect_min_size = Vector2( 500, 400 )
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_file = "out.png"
-current_path = "res://out.png"
+current_dir = "res://assets/images/tilesets"
+current_path = "res://assets/images/tilesets/"
 
 [node name="SaveTextureDialog2" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
-rect_min_size = Vector2( 400, 400 )
+rect_min_size = Vector2( 500, 400 )
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_file = "out.png"
-current_path = "res://out.png"
+current_dir = "res://assets/images/tilesets"
+current_file = "generated.png"
+current_path = "res://assets/images/tilesets/generated.png"
 
 [node name="Center" type="CenterContainer" parent="."]
 margin_left = 13.4451
@@ -101,7 +101,7 @@ margin_right = 200.0
 margin_bottom = 96.0
 rect_min_size = Vector2( 200, 96 )
 size_flags_vertical = 3
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -219,7 +219,7 @@ margin_right = 818.0
 margin_bottom = 400.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_vertical = 3
-texture = ExtResource( 3 )
+texture = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -325,6 +325,8 @@ margin_top = -12.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 0, 36 )
 text = "tilemap.png"
+caret_blink = true
+caret_blink_speed = 0.5
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -348,6 +350,9 @@ margin_top = 92.0
 margin_right = 180.0
 margin_bottom = 122.0
 rect_min_size = Vector2( 0, 30 )
+text = "64x64"
+items = [ "8x8", null, false, 0, null, "16x16", null, false, 1, null, "32x32", null, false, 2, null, "64x64", null, false, 3, null, "128x128", null, false, 4, null, "8x8", null, false, 5, null, "16x16", null, false, 6, null, "32x32", null, false, 7, null, "64x64", null, false, 8, null, "128x128", null, false, 9, null ]
+selected = 3
 
 [node name="Small2x2" type="HBoxContainer" parent="Center/Panel/HBox/Settings"]
 visible = false
