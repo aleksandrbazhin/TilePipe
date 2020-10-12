@@ -13,6 +13,8 @@ const TEMPLATE_SIZE_3x3 := Vector2(12, 4)
 const TEMPLATE_SIZE_2x2 := Vector2(4, 4)
 var template_size: Vector2 = TEMPLATE_SIZE_3x3
 
+const SETTINGS_PATH: String = "user://tilepipe_settings.save"
+
 const GODOT_MASK: Dictionary = {
 	"TOP_LEFT": 1,
 	"TOP": 2,
@@ -154,7 +156,7 @@ onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
 onready var texture_in: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxInput/TextureRect
-onready var out_texture: TextureRect = $Center/Panel/HBox/Images/OutTextureRect
+onready var out_texture: TextureRect = $Center/Panel/HBox/Images/BG/OutTextureRect
 onready var template_texture: TextureRect = $Center/Panel/HBox/Images/TemplateTextureRect
 onready var toggle_2x2: CheckButton = $Center/Panel/HBox/Settings/Small2x2/Select2x2
 onready var toggle_3x3_min: CheckButton = $Center/Panel/HBox/Settings/Min/min3x3
@@ -169,7 +171,7 @@ onready var export_type_select: CheckButton = $Center/Panel/HBox/Settings/Resour
 onready var description_select_box: HBoxContainer = $Center/Panel/HBox/Settings/DescriptionResourse
 onready var export_manual_resource_type_select: CheckButton = $Center/Panel/HBox/Settings/DescriptionResourse/Select
 
-onready var base_path: String = "res://addons/TilePipe"
+#onready var base_path: String = "res://addons/TilePipe"
 
 # tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
 var tile_masks: Array = []
@@ -179,7 +181,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"last_template_path": "res://addons/TilePipe/template.png",
 	"last_save_texture_path": "res://generated.png",
 	"last_save_texture_resource_path": "res://generated.png",
-	"output_tile_size_index": DEFAULT_SIZE
+	"output_tile_size": DEFAULT_SIZE
 }
 
 func get_setting_values(load_defaluts: bool = false) -> Dictionary:
@@ -191,16 +193,15 @@ func get_setting_values(load_defaluts: bool = false) -> Dictionary:
 		"last_template_path": template_file_dialog.current_path,
 		"last_save_texture_path": save_file_dialog.current_path,
 		"last_save_texture_resource_path": save_resource_dialog.current_path,
-		"output_tile_size_index": size_select.selected - 1,
-		
+		"output_tile_size": SIZES.keys()[size_select.selected],
 	}
 
-func save_settings(store_default: bool = false):
-	var save_game = File.new()
-	save_game.open("user://savegame.save", File.WRITE)
-	var save_data := get_setting_values(store_default) 
-	save_game.store_line(to_json(save_data))
-	save_game.close()
+func save_settings(store_defaults: bool = false):
+	var save = File.new()
+	save.open(SETTINGS_PATH, File.WRITE)
+	var data := get_setting_values(store_defaults) 
+	save.store_line(to_json(data))
+	save.close()
 
 func apply_settings(data: Dictionary):
 	texture_file_dialog.current_path = data["last_texture_path"]
@@ -209,18 +210,31 @@ func apply_settings(data: Dictionary):
 	template_texture.texture = load(data["last_template_path"])
 	save_file_dialog.current_path = data["last_save_texture_path"]
 	save_resource_dialog.current_path = data["last_save_texture_resource_path"]
-	size_select.selected = SIZES.keys().find(data["output_tile_size_index"])
+	size_select.selected = SIZES.keys().find(int(data["output_tile_size"]))
+
+func setting_exist() -> bool:
+	var save = File.new()
+	return save.file_exists(SETTINGS_PATH)
 
 func load_settings():
-#	save_settings(true)
-	var save_game = File.new()
-	if not save_game.file_exists("user://savegame.save"):
-		save_settings()
-	else:
-		save_game.open("user://savegame.save", File.READ)
-		var save_data: Dictionary = parse_json(save_game.get_line())
-		apply_settings(save_data)
-		save_game.close()
+#	save_settings(true) # uncomment on change of save file structure
+	if not setting_exist():
+		save_settings(true)
+	var save = File.new()
+	save.open(SETTINGS_PATH, File.READ)
+	var save_data: Dictionary = parse_json(save.get_line())
+	apply_settings(save_data)
+	save.close()
+
+func _ready():
+	connect("input_image_processed", self, "make_output_texture")
+	size_select.clear()
+	for size in SIZES:
+		size_select.add_item(SIZES[size])
+	load_settings()
+	generate_tile_masks()
+	preprocess_input_image()
+
 
 func check_input_texture() -> bool:
 	if not is_instance_valid(texture_in.texture):
@@ -425,14 +439,7 @@ func check_mask_template(pos_check_mask: int, neg_check_mask: int, current_mask:
 			rotations.append(rotation)
 	return rotations
 
-func _ready():
-	connect("input_image_processed", self, "make_output_texture")
-	for size in SIZES:
-		size_select.add_item(SIZES[size])
-#	size_select.selected = SIZES.keys().find(DEFAULT_SIZE)
-	load_settings()
-	generate_tile_masks()
-	preprocess_input_image()
+
 
 func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -509,6 +516,7 @@ func _on_HSlider_value_changed(value):
 
 func _on_OptionButton_item_selected(_index):
 	preprocess_input_image()
+	save_settings()
 
 func tile_name_from_position(pos: Vector2) -> String:
 	return "%d_%d" % [pos.x, pos.y]

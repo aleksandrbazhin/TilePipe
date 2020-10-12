@@ -71,21 +71,21 @@ __meta__ = {
 
 [node name="Panel" type="PanelContainer" parent="Center"]
 margin_left = 440.0
-margin_top = 200.0
+margin_top = 152.0
 margin_right = 1464.0
-margin_bottom = 866.0
+margin_bottom = 914.0
 rect_min_size = Vector2( 1024, 600 )
 
 [node name="HBox" type="HBoxContainer" parent="Center/Panel"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1017.0
-margin_bottom = 659.0
+margin_bottom = 755.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Center/Panel/HBox"]
 margin_right = 818.0
-margin_bottom = 652.0
+margin_bottom = 748.0
 size_flags_horizontal = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
@@ -250,10 +250,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OutTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images"]
+[node name="BG" type="ColorRect" parent="Center/Panel/HBox/Images"]
 margin_top = 448.0
 margin_right = 818.0
-margin_bottom = 648.0
+margin_bottom = 748.0
+rect_min_size = Vector2( 0, 300 )
+color = Color( 0.482353, 0.678431, 0.85098, 1 )
+
+[node name="OutTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images/BG"]
+margin_top = 4.0
+margin_right = 818.0
+margin_bottom = 204.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_vertical = 3
 __meta__ = {
@@ -261,6 +268,7 @@ __meta__ = {
 }
 
 [node name="OutButtonBox" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
+visible = false
 margin_top = 652.0
 margin_right = 818.0
 margin_bottom = 652.0
@@ -279,12 +287,12 @@ __meta__ = {
 [node name="VSeparator" type="VSeparator" parent="Center/Panel/HBox"]
 margin_left = 822.0
 margin_right = 826.0
-margin_bottom = 652.0
+margin_bottom = 748.0
 
 [node name="Settings" type="VBoxContainer" parent="Center/Panel/HBox"]
 margin_left = 830.0
 margin_right = 1010.0
-margin_bottom = 652.0
+margin_bottom = 748.0
 rect_min_size = Vector2( 180, 0 )
 
 [node name="CloseButton" type="Button" parent="Center/Panel/HBox/Settings"]
