@@ -77,12 +77,13 @@ const TEMPLATE_MASK_CHECK_POINTS := {
 #]
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
-const ROTATION_SHIFTS = {
+const ROTATION_SHIFTS := {
 	0: {"vector": Vector2(1, 0), "angle": 0.0},
 	2: {"vector": Vector2(1, 1), "angle": PI / 2},
 	4: {"vector": Vector2(0, 1), "angle": PI},
 	6: {"vector": Vector2(0, 0), "angle": 3 * PI / 2},
 }
+const FLIP_HORIZONTAL_KEYS := [0, 4]
 
 # positive mask defines mask values where neighbour must exist (from 1 - north, clockwise)
 # negative mask defines mask values where neighbour must not exist (from 1 - north, clockwise)
@@ -94,38 +95,39 @@ const CHECK_MASKS_IN_OUT := [
 			"positive": 0,
 			"negative": MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["RIGHT"] | MY_MASK["BOTTOM_RIGHT"],
 		},
-		"out_tile": {"index": 3, "flip": false}
+		"out_tile": {"index": 4, "flip": false}
 	},
 #	{"in_mask": {"positive": 0, "negative": 241}, "out_tile": {"index": 3, "flip": true}},
 	# border with corner
 	{
 		"in_mask": {
-			"positive": MY_MASK["RIGHT"],
-			"negative": MY_MASK["LEFT"] | MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"]
+			"positive": MY_MASK["LEFT"],
+			"negative": MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["RIGHT"] | MY_MASK["BOTTOM_RIGHT"]
 		},
-		"out_tile": {"index": 2, "flip": false}
-	},
+		"out_tile": {"index": 3, "flip": true}
+	},	
 	{
 		"in_mask": {
-			"positive": MY_MASK["LEFT"],
-			"negative": MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["RIGHT"]
+			"positive": MY_MASK["RIGHT"],
+			"negative": MY_MASK["LEFT"] | MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["BOTTOM_LEFT"]
 		},
-		"out_tile": {"index": 2, "flip": true}
+		"out_tile": {"index": 3, "flip": false}
 	},
+
 	# border
 	{
 		"in_mask": {
 			"positive": MY_MASK["LEFT"] | MY_MASK["RIGHT"],
 			"negative": MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"]
 		},
-		"out_tile": {"index": 4, "flip": false}
+		"out_tile": {"index": 2, "flip": false}
 	},
 	{
 		"in_mask": {
 			"positive": MY_MASK["LEFT"] | MY_MASK["RIGHT"],
 			"negative": MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"]
 		},
-		"out_tile": {"index": 4, "flip": true}
+		"out_tile": {"index": 2, "flip": true}
 	},
 	# full without corner
 	{
@@ -169,6 +171,7 @@ onready var slice_slider: HSlider = $Center/Panel/HBox/Images/InContainer/VBoxVi
 onready var export_type_select: CheckButton = $Center/Panel/HBox/Settings/Resourse/AutotileSelect
 onready var description_select_box: HBoxContainer = $Center/Panel/HBox/Settings/DescriptionResourse
 onready var export_manual_resource_type_select: CheckButton = $Center/Panel/HBox/Settings/DescriptionResourse/Select
+onready var normal_map_checkbutton: CheckButton = $Center/Panel/HBox/Images/InContainer/VBoxInput/Control/HBoxContainer/CheckButton
 
 func _ready():
 	connect("input_image_processed", self, "make_output_texture")
@@ -281,14 +284,22 @@ func generate_tile_masks():
 			mask_text_label.rect_position = Vector2(x, y) * DEFAULT_SIZE + Vector2(5, 5)
 			template_texture.add_child(mask_text_label)
 
-func put_to_viewport(slice: Image, rotation : float = 0.0):
-	texture_in_viewport.texture = null
+func put_to_viewport(slice: Image, rotation_key: int, is_flipped := false, is_normal_map := false ):
+	var flip_x := false
+	var flip_y := false
+	if is_flipped:
+		if rotation_key in FLIP_HORIZONTAL_KEYS:
+			flip_x = true
+		else:
+			flip_y = true
+	var rotation_angle: float = ROTATION_SHIFTS[rotation_key]['angle']
 	var itex = ImageTexture.new()
 	itex.create_from_image(slice)
 	texture_in_viewport.texture = itex
-	texture_in_viewport.set_rotation(rotation)
-	texture_in_viewport.rect_pivot_offset = texture_in_viewport.rect_size / 2
-#	texture_in_viewport.material.set_shader_param("rotation", -rotation)
+	texture_in_viewport.material.set_shader_param("rotation", -rotation_angle)
+	texture_in_viewport.material.set_shader_param("is_flipped_x", flip_x)
+	texture_in_viewport.material.set_shader_param("is_flipped_y", flip_y)
+	texture_in_viewport.material.set_shader_param("is_normal_map", is_normal_map)
 
 func get_from_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
 	var image := Image.new()
@@ -301,6 +312,10 @@ func get_from_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
 	if resize_factor != 1.0:
 		image.resize(int(size.x * resize_factor), int(size.y * resize_factor))
 	return image
+
+# invert for 3 slice
+func get_input_flip(index: int, flip: bool) -> bool:
+	return flip if index != 3 else not flip
 
 func preprocess_input_image():
 	texture_in_viewport.show()
@@ -320,6 +335,7 @@ func preprocess_input_image():
 	var image_input_fmt: int = input_image.get_format()
 	var image_fmt: int = slice_viewport.get_texture().get_data().get_format()
 	var debug_image := Image.new()
+	var is_normal_map = normal_map_checkbutton.pressed
 	debug_image.create(int(output_slice_size * MIN_IMAGE_SIZE.x),
 		int(output_slice_size * MIN_IMAGE_SIZE.y * 8), false, image_fmt)
 	for x in range(MIN_IMAGE_SIZE.x):
@@ -327,37 +343,37 @@ func preprocess_input_image():
 		var slice := Image.new()
 		slice.create(input_slice_size, input_slice_size, false, image_input_fmt)
 		slice.blit_rect(input_image, Rect2(x * input_slice_size, 0, input_slice_size, input_slice_size), Vector2.ZERO)
-		var slice_flipped := Image.new()
-		slice_flipped.create(input_slice_size, input_slice_size, false, image_input_fmt)
-		slice_flipped.copy_from(slice)
 		for rot_index in ROTATION_SHIFTS.size():
-			var rot_shift_bits: int = ROTATION_SHIFTS.keys()[rot_index]
-			var rot_angle: float = ROTATION_SHIFTS[rot_shift_bits]['angle']
-			put_to_viewport(slice, rot_angle)
+			var rotation_key: int = ROTATION_SHIFTS.keys()[rot_index]
+
+			put_to_viewport(slice, rotation_key, get_input_flip(x, false), is_normal_map)
 			yield(VisualServer, 'frame_post_draw')
 			var processed_slice : Image = get_from_viewport(image_fmt, resize_factor)
-			var processed_flipped_slice : Image = get_from_viewport(image_fmt, resize_factor)
-			if rot_index in [0, 2]:
-				processed_flipped_slice.flip_x()
-			else:
-				processed_flipped_slice.flip_y()
-			input_slices[x][rot_shift_bits] = {
-				false: processed_slice, 
-				true: processed_flipped_slice
-			}
 			debug_image.blit_rect(
 				processed_slice,
 				Rect2(0, 0, output_slice_size, output_slice_size), 
-				Vector2(x * output_slice_size, rot_index * output_slice_size)
-			)
-			debug_image.blit_rect(
-				processed_flipped_slice,
-				Rect2(0, 0, output_slice_size, output_slice_size), 
-				Vector2(x * output_slice_size, (rot_index + 4) * output_slice_size)
+				Vector2(x * output_slice_size, 2*rot_index * output_slice_size)
 			)
 			var itex = ImageTexture.new()
 			itex.create_from_image(debug_image)
 			debug_input_texture.texture = itex
+
+			put_to_viewport(slice, rotation_key, get_input_flip(x, true), is_normal_map)
+			yield(VisualServer, 'frame_post_draw')
+			var processed_flipped_slice : Image = get_from_viewport(image_fmt, resize_factor)
+			debug_image.blit_rect(
+				processed_flipped_slice,
+				Rect2(0, 0, output_slice_size, output_slice_size), 
+				Vector2(x * output_slice_size, (2*rot_index + 1) * output_slice_size)
+			)
+			itex.create_from_image(debug_image)
+			debug_input_texture.texture = itex
+			
+			input_slices[x][rotation_key] = {
+				false: processed_slice, 
+				true: processed_flipped_slice
+			}
+
 	texture_in_viewport.hide()
 #	display_slice()
 	emit_signal("input_image_processed")
@@ -386,11 +402,9 @@ func make_output_texture():
 					var is_flipped: bool = out_tile["flip"]
 					var slice_index: int = out_tile["index"]
 					var slice_image: Image = input_slices[slice_index][rotation][is_flipped]
-					var intile_offset := Vector2.ZERO
-					if not is_flipped: 
-						intile_offset += ROTATION_SHIFTS[rotation]["vector"] * slice_size
-					else:
-						intile_offset += ROTATION_SHIFTS[rotate_clockwise(rotation)]["vector"] * slice_size
+					var intile_offset : Vector2 = ROTATION_SHIFTS[rotation]["vector"] * slice_size
+					if is_flipped: 
+						intile_offset = ROTATION_SHIFTS[rotate_clockwise(rotation)]["vector"] * slice_size
 					out_image.blit_rect(slice_image, slice_rect, tile_position + intile_offset)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image)
@@ -561,3 +575,6 @@ func _on_SaveTextureDialog2_file_selected(path: String):
 
 func _on_AutotileSelect_toggled(button_pressed):
 	description_select_box.visible = not button_pressed
+
+func _on_CheckButton_toggled(button_pressed):
+	preprocess_input_image()

@@ -7,8 +7,10 @@
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 4 )
-shader_param/center = Vector2( 0.5, 0.5 )
 shader_param/rotation = 0.0
+shader_param/is_flipped_x = false
+shader_param/is_flipped_y = false
+shader_param/is_normal_map = false
 
 [node name="Node" type="Node"]
 script = ExtResource( 1 )
@@ -68,45 +70,37 @@ __meta__ = {
 
 [node name="Panel" type="PanelContainer" parent="Center"]
 margin_left = 440.0
-margin_top = 202.0
+margin_top = 180.0
 margin_right = 1464.0
-margin_bottom = 864.0
+margin_bottom = 886.0
 rect_min_size = Vector2( 1024, 600 )
 
 [node name="HBox" type="HBoxContainer" parent="Center/Panel"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1017.0
-margin_bottom = 655.0
+margin_bottom = 699.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Center/Panel/HBox"]
 margin_right = 818.0
-margin_bottom = 648.0
+margin_bottom = 692.0
 size_flags_horizontal = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
 margin_right = 818.0
-margin_bottom = 140.0
+margin_bottom = 184.0
 
 [node name="VBoxInput" type="VBoxContainer" parent="Center/Panel/HBox/Images/InContainer"]
 margin_right = 200.0
-margin_bottom = 140.0
+margin_bottom = 184.0
 
-[node name="TextureRect" type="TextureRect" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
+[node name="ButtonBox2" type="HBoxContainer" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
 margin_right = 200.0
-margin_bottom = 96.0
-rect_min_size = Vector2( 200, 96 )
-size_flags_vertical = 3
-texture = ExtResource( 3 )
+margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="ButtonBox2" type="HBoxContainer" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 100.0
-margin_right = 200.0
-margin_bottom = 140.0
 
 [node name="Button" type="Button" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/ButtonBox2"]
 margin_right = 200.0
@@ -118,10 +112,54 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="TextureRect" type="TextureRect" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
+margin_top = 44.0
+margin_right = 200.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 200, 96 )
+size_flags_vertical = 3
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
+margin_top = 144.0
+margin_right = 200.0
+margin_bottom = 184.0
+rect_min_size = Vector2( 0, 40 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/Control/HBoxContainer"]
+margin_top = 13.0
+margin_right = 120.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "Is normal map"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CheckButton" type="CheckButton" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/Control/HBoxContainer"]
+margin_left = 124.0
+margin_right = 200.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="VBoxViewport" type="VBoxContainer" parent="Center/Panel/HBox/Images/InContainer"]
 margin_left = 204.0
 margin_right = 332.0
-margin_bottom = 140.0
+margin_bottom = 184.0
 
 [node name="ViewportContainer" type="ViewportContainer" parent="Center/Panel/HBox/Images/InContainer/VBoxViewport"]
 margin_right = 128.0
@@ -149,7 +187,7 @@ stretch_mode = 3
 [node name="Spacer" type="Control" parent="Center/Panel/HBox/Images/InContainer/VBoxViewport"]
 margin_top = 132.0
 margin_right = 128.0
-margin_bottom = 140.0
+margin_bottom = 184.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="VBoxContainer" parent="Center/Panel/HBox/Images/InContainer/VBoxViewport"]
@@ -182,13 +220,13 @@ ticks_on_borders = true
 [node name="TextureRect2" type="TextureRect" parent="Center/Panel/HBox/Images/InContainer"]
 margin_left = 336.0
 margin_right = 464.0
-margin_bottom = 140.0
+margin_bottom = 184.0
 rect_min_size = Vector2( 128, 128 )
 
 [node name="TemplateTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images"]
-margin_top = 144.0
+margin_top = 188.0
 margin_right = 818.0
-margin_bottom = 400.0
+margin_bottom = 444.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_vertical = 3
 texture = ExtResource( 2 )
@@ -197,9 +235,9 @@ __meta__ = {
 }
 
 [node name="ButtonBox" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
-margin_top = 404.0
+margin_top = 448.0
 margin_right = 818.0
-margin_bottom = 444.0
+margin_bottom = 488.0
 
 [node name="TemplateButton" type="Button" parent="Center/Panel/HBox/Images/ButtonBox"]
 margin_right = 818.0
@@ -223,9 +261,9 @@ __meta__ = {
 }
 
 [node name="OutTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images"]
-margin_top = 448.0
+margin_top = 492.0
 margin_right = 818.0
-margin_bottom = 648.0
+margin_bottom = 692.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_vertical = 3
 __meta__ = {
@@ -235,12 +273,12 @@ __meta__ = {
 [node name="VSeparator" type="VSeparator" parent="Center/Panel/HBox"]
 margin_left = 822.0
 margin_right = 826.0
-margin_bottom = 648.0
+margin_bottom = 692.0
 
 [node name="Settings" type="VBoxContainer" parent="Center/Panel/HBox"]
 margin_left = 830.0
 margin_right = 1010.0
-margin_bottom = 648.0
+margin_bottom = 692.0
 rect_min_size = Vector2( 180, 0 )
 
 [node name="CloseButton" type="Button" parent="Center/Panel/HBox/Settings"]
@@ -416,6 +454,7 @@ __meta__ = {
 [connection signal="file_selected" from="SaveTextureDialog" to="." method="_on_SaveTextureDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureResourceDialog" to="." method="_on_SaveTextureDialog2_file_selected"]
 [connection signal="pressed" from="Center/Panel/HBox/Images/InContainer/VBoxInput/ButtonBox2/Button" to="." method="_on_Button_pressed"]
+[connection signal="toggled" from="Center/Panel/HBox/Images/InContainer/VBoxInput/Control/HBoxContainer/CheckButton" to="." method="_on_CheckButton_toggled"]
 [connection signal="value_changed" from="Center/Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider" to="." method="_on_HSlider_value_changed"]
 [connection signal="pressed" from="Center/Panel/HBox/Images/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="pressed" from="Center/Panel/HBox/Images/ButtonBox/Help" to="." method="_on_Help_pressed"]
