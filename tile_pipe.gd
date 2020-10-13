@@ -97,19 +97,25 @@ const CHECK_MASKS_IN_OUT := [
 		},
 		"out_tile": {"index": 4, "flip": false}
 	},
-#	{"in_mask": {"positive": 0, "negative": 241}, "out_tile": {"index": 3, "flip": true}},
+#	{
+#		"in_mask": {
+#			"positive": 0,
+#			"negative": MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["RIGHT"] | MY_MASK["BOTTOM_RIGHT"],
+#		},
+#		"out_tile": {"index": 4, "flip": true}
+#	},
 	# border with corner
 	{
 		"in_mask": {
 			"positive": MY_MASK["LEFT"],
-			"negative": MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["RIGHT"] | MY_MASK["BOTTOM_RIGHT"]
+			"negative": MY_MASK["TOP"] | MY_MASK["RIGHT"]
 		},
 		"out_tile": {"index": 3, "flip": true}
 	},	
 	{
 		"in_mask": {
 			"positive": MY_MASK["RIGHT"],
-			"negative": MY_MASK["LEFT"] | MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["BOTTOM_LEFT"]
+			"negative": MY_MASK["LEFT"] | MY_MASK["TOP"]
 		},
 		"out_tile": {"index": 3, "flip": false}
 	},
@@ -174,6 +180,7 @@ onready var export_manual_resource_type_select: CheckButton = $Center/Panel/HBox
 onready var normal_map_checkbutton: CheckButton = $Center/Panel/HBox/Images/InContainer/VBoxInput/Control/HBoxContainer/CheckButton
 
 func _ready():
+	print(get_allowed_mask_rotations(0, 5, 21))
 	connect("input_image_processed", self, "make_output_texture")
 	size_select.clear()
 	for size in SIZES:
@@ -397,7 +404,10 @@ func make_output_texture():
 		var tile_position: Vector2 = mask['position'] * tile_size
 		if mask["godot_mask"] != 0: # don't draw only center
 			for in_out_mask in CHECK_MASKS_IN_OUT:
-				for rotation in check_mask_template(in_out_mask["in_mask"]["positive"], in_out_mask["in_mask"]["negative"], mask['mask']):
+				var allowed_rotations: Array = get_allowed_mask_rotations(
+						in_out_mask["in_mask"]["positive"], 
+						in_out_mask["in_mask"]["negative"], mask['mask'])
+				for rotation in allowed_rotations:
 					var out_tile = in_out_mask["out_tile"]
 					var is_flipped: bool = out_tile["flip"]
 					var slice_index: int = out_tile["index"]
@@ -424,7 +434,9 @@ func rotate_check_mask(mask: int, rot: int) -> int:
 		rotated_check |= overshoot
 	return rotated_check
 
-func check_mask_template(pos_check_mask: int, neg_check_mask: int, current_mask: int) -> Array:
+# returns all rotations for mask which satisfy both templates
+#func check_mask_template(pos_check_mask: int, neg_check_mask: int, current_mask: int) -> Array:
+func get_allowed_mask_rotations(pos_check_mask: int, neg_check_mask: int, current_mask: int) -> Array:
 	var rotations: Array = []
 	for rotation in ROTATION_SHIFTS:
 		var rotated_check: int = rotate_check_mask(pos_check_mask, rotation)
@@ -433,7 +445,9 @@ func check_mask_template(pos_check_mask: int, neg_check_mask: int, current_mask:
 			satisfies_check = true
 		if satisfies_check and neg_check_mask != 0: # check negative mask
 			rotated_check = rotate_check_mask(neg_check_mask, rotation)
-			if current_mask |~ rotated_check == -rotated_check:
+			var inverted_cgeck: int = (~rotated_check & 0xFF)
+#			print(rotated_check, "  ", inverted_cgeck, "  ", current_mask &inverted_cgeck, " ", -rotated_check)
+			if current_mask & inverted_cgeck != 0:
 				satisfies_check = false
 		if satisfies_check:
 			rotations.append(rotation)
