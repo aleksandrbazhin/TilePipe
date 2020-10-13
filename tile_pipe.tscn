@@ -118,17 +118,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Help" type="Button" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/ButtonBox2"]
-visible = false
-margin_left = 160.0
-margin_right = 200.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-text = "?"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="VBoxViewport" type="VBoxContainer" parent="Center/Panel/HBox/Images/InContainer"]
 margin_left = 204.0
 margin_right = 332.0
@@ -190,22 +179,6 @@ rounded = true
 tick_count = 5
 ticks_on_borders = true
 
-[node name="InSettings" type="VBoxContainer" parent="Center/Panel/HBox/Images/InContainer"]
-visible = false
-margin_left = 336.0
-margin_right = 464.0
-margin_bottom = 128.0
-rect_min_size = Vector2( 128, 0 )
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Center/Panel/HBox/Images/InContainer/InSettings"]
-margin_right = 128.0
-margin_bottom = 14.0
-
-[node name="Label" type="Label" parent="Center/Panel/HBox/Images/InContainer/InSettings/HBoxContainer"]
-margin_right = 16.0
-margin_bottom = 14.0
-text = "Is "
-
 [node name="TextureRect2" type="TextureRect" parent="Center/Panel/HBox/Images/InContainer"]
 margin_left = 336.0
 margin_right = 464.0
@@ -255,23 +228,6 @@ margin_right = 818.0
 margin_bottom = 648.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="OutButtonBox" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
-visible = false
-margin_top = 652.0
-margin_right = 818.0
-margin_bottom = 652.0
-
-[node name="ComputeButton" type="Button" parent="Center/Panel/HBox/Images/OutButtonBox"]
-visible = false
-margin_right = 818.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 0, 40 )
-size_flags_horizontal = 3
-text = "Compute Tileset Texture"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -354,132 +310,6 @@ text = "64x64"
 items = [ "8x8", null, false, 0, null, "16x16", null, false, 1, null, "32x32", null, false, 2, null, "64x64", null, false, 3, null, "128x128", null, false, 4, null, "8x8", null, false, 5, null, "16x16", null, false, 6, null, "32x32", null, false, 7, null, "64x64", null, false, 8, null, "128x128", null, false, 9, null ]
 selected = 3
 
-[node name="Small2x2" type="HBoxContainer" parent="Center/Panel/HBox/Settings"]
-visible = false
-margin_top = 182.0
-margin_right = 192.0
-margin_bottom = 222.0
-alignment = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Center/Panel/HBox/Settings/Small2x2"]
-margin_right = 112.0
-margin_bottom = 40.0
-size_flags_horizontal = 3
-size_flags_vertical = 7
-text = "2 x 2	 min (16)"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Select2x2" type="CheckButton" parent="Center/Panel/HBox/Settings/Small2x2"]
-margin_left = 116.0
-margin_right = 192.0
-margin_bottom = 40.0
-disabled = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Min" type="HBoxContainer" parent="Center/Panel/HBox/Settings"]
-visible = false
-margin_top = 126.0
-margin_right = 180.0
-margin_bottom = 166.0
-alignment = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Center/Panel/HBox/Settings/Min"]
-margin_right = 100.0
-margin_bottom = 40.0
-size_flags_horizontal = 3
-size_flags_vertical = 7
-text = "3 X 3 min (48)"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="min3x3" type="CheckButton" parent="Center/Panel/HBox/Settings/Min"]
-margin_left = 104.0
-margin_right = 180.0
-margin_bottom = 40.0
-disabled = true
-pressed = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Full" type="HBoxContainer" parent="Center/Panel/HBox/Settings"]
-visible = false
-margin_top = 126.0
-margin_right = 180.0
-margin_bottom = 166.0
-alignment = 2
-
-[node name="Label" type="Label" parent="Center/Panel/HBox/Settings/Full"]
-margin_right = 100.0
-margin_bottom = 40.0
-size_flags_horizontal = 3
-size_flags_vertical = 7
-text = "3 X 3 full (256)"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="full3x3" type="CheckButton" parent="Center/Panel/HBox/Settings/Full"]
-margin_left = 104.0
-margin_right = 180.0
-margin_bottom = 40.0
-disabled = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Super" type="HBoxContainer" parent="Center/Panel/HBox/Settings"]
-visible = false
-margin_top = 270.0
-margin_right = 192.0
-margin_bottom = 310.0
-alignment = 2
-
-[node name="Label" type="Label" parent="Center/Panel/HBox/Settings/Super"]
-margin_right = 112.0
-margin_bottom = 40.0
-size_flags_horizontal = 3
-size_flags_vertical = 7
-text = "3 X 3 custom 512"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="custom3x3" type="CheckButton" parent="Center/Panel/HBox/Settings/Super"]
-margin_left = 116.0
-margin_right = 192.0
-margin_bottom = 40.0
-disabled = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HSeparator2" type="HSeparator" parent="Center/Panel/HBox/Settings"]
-visible = false
-margin_top = 290.0
-margin_right = 180.0
-margin_bottom = 310.0
-rect_min_size = Vector2( 0, 20 )
-
 [node name="Save" type="Button" parent="Center/Panel/HBox/Settings"]
 margin_top = 126.0
 margin_right = 180.0
@@ -543,7 +373,7 @@ __meta__ = {
 [node name="DescriptionResourse" type="HBoxContainer" parent="Center/Panel/HBox/Settings"]
 visible = false
 margin_top = 262.0
-margin_right = 185.0
+margin_right = 182.0
 margin_bottom = 302.0
 alignment = 2
 __meta__ = {
@@ -551,7 +381,7 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Center/Panel/HBox/Settings/DescriptionResourse"]
-margin_right = 105.0
+margin_right = 102.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
@@ -564,8 +394,8 @@ __meta__ = {
 }
 
 [node name="Select" type="CheckButton" parent="Center/Panel/HBox/Settings/DescriptionResourse"]
-margin_left = 109.0
-margin_right = 185.0
+margin_left = 106.0
+margin_right = 182.0
 margin_bottom = 40.0
 pressed = true
 __meta__ = {
@@ -586,17 +416,11 @@ __meta__ = {
 [connection signal="file_selected" from="SaveTextureDialog" to="." method="_on_SaveTextureDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureResourceDialog" to="." method="_on_SaveTextureDialog2_file_selected"]
 [connection signal="pressed" from="Center/Panel/HBox/Images/InContainer/VBoxInput/ButtonBox2/Button" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="Center/Panel/HBox/Images/InContainer/VBoxInput/ButtonBox2/Help" to="." method="_on_Help_pressed"]
 [connection signal="value_changed" from="Center/Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider" to="." method="_on_HSlider_value_changed"]
 [connection signal="pressed" from="Center/Panel/HBox/Images/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="pressed" from="Center/Panel/HBox/Images/ButtonBox/Help" to="." method="_on_Help_pressed"]
-[connection signal="pressed" from="Center/Panel/HBox/Images/OutButtonBox/ComputeButton" to="." method="_on_ComputeButton_pressed"]
 [connection signal="pressed" from="Center/Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="item_selected" from="Center/Panel/HBox/Settings/OptionButton" to="." method="_on_OptionButton_item_selected"]
-[connection signal="toggled" from="Center/Panel/HBox/Settings/Small2x2/Select2x2" to="." method="_on_Select2x2_toggled"]
-[connection signal="toggled" from="Center/Panel/HBox/Settings/Min/min3x3" to="." method="_on_3x3min_toggled"]
-[connection signal="toggled" from="Center/Panel/HBox/Settings/Full/full3x3" to="." method="_on_3x3full_toggled"]
-[connection signal="toggled" from="Center/Panel/HBox/Settings/Super/custom3x3" to="." method="_on_3x3full_toggled"]
 [connection signal="pressed" from="Center/Panel/HBox/Settings/Save" to="." method="_on_Save_pressed"]
 [connection signal="toggled" from="Center/Panel/HBox/Settings/Resourse/AutotileSelect" to="." method="_on_AutotileSelect_toggled"]
 [connection signal="pressed" from="Center/Panel/HBox/Settings/Save2" to="." method="_on_Save2_pressed"]

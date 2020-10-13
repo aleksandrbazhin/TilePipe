@@ -1,5 +1,7 @@
 extends Node
 
+signal input_image_processed()
+
 const SIZES: Dictionary = {
 	8: "8x8",
 	16: "16x16",
@@ -9,9 +11,6 @@ const SIZES: Dictionary = {
 }
 const TEMPLATE_TILE_SIZE: int = 64
 const DEFAULT_SIZE: int = 64
-const TEMPLATE_SIZE_3x3 := Vector2(12, 4)
-const TEMPLATE_SIZE_2x2 := Vector2(4, 4)
-var template_size: Vector2 = TEMPLATE_SIZE_3x3
 
 const SETTINGS_PATH: String = "user://tilepipe_settings.save"
 
@@ -59,8 +58,6 @@ const TEMPLATE_MASK_CHECK_POINTS := {
 	MY_MASK["LEFT"]: Vector2(10, 32),
 	MY_MASK["TOP_LEFT"]: Vector2(10, 10)
 }
-
-var MIN_IMAGE_SIZE := Vector2(5, 1)
 
 ## masks are in 4-base count system like
 ##  1
@@ -148,8 +145,14 @@ const CHECK_MASKS_IN_OUT := [
 	},
 ]
 
-
-signal input_image_processed()
+var MIN_IMAGE_SIZE := Vector2(5, 1)
+var template_size: Vector2
+# input slice = {
+#	0: {0: {false: Image, true: Image}, 2: , 4: , 6:}
+#	1: ... }
+var input_slices: Dictionary = {}
+# tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
+var tile_masks: Array = []
 
 onready var texture_file_dialog: FileDialog = $TextureDialog
 onready var template_file_dialog: FileDialog = $TemplateDialog
@@ -158,10 +161,6 @@ onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
 onready var texture_in: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxInput/TextureRect
 onready var out_texture: TextureRect = $Center/Panel/HBox/Images/OutTextureRect
 onready var template_texture: TextureRect = $Center/Panel/HBox/Images/TemplateTextureRect
-onready var toggle_2x2: CheckButton = $Center/Panel/HBox/Settings/Small2x2/Select2x2
-onready var toggle_3x3_min: CheckButton = $Center/Panel/HBox/Settings/Min/min3x3
-onready var toggle_3x3_full: CheckButton = $Center/Panel/HBox/Settings/Full/full3x3
-onready var toggle_3x3_super: CheckButton = $Center/Panel/HBox/Settings/Super/custom3x3
 onready var size_select: OptionButton = $Center/Panel/HBox/Settings/OptionButton
 onready var slice_viewport: Viewport = $Center/Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport
 onready var texture_in_viewport: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport/TextureRect
@@ -171,10 +170,18 @@ onready var export_type_select: CheckButton = $Center/Panel/HBox/Settings/Resour
 onready var description_select_box: HBoxContainer = $Center/Panel/HBox/Settings/DescriptionResourse
 onready var export_manual_resource_type_select: CheckButton = $Center/Panel/HBox/Settings/DescriptionResourse/Select
 
-#onready var base_path: String = "res://addons/TilePipe"
+func _ready():
+	connect("input_image_processed", self, "make_output_texture")
+	size_select.clear()
+	for size in SIZES:
+		size_select.add_item(SIZES[size])
+	load_settings()
+	generate_tile_masks()
+	preprocess_input_image()
 
-# tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
-var tile_masks: Array = []
+func _process(_delta: float):
+	if Input.is_action_just_pressed("ui_cancel"):
+		_on_CloseButton_pressed()
 
 const DEFAULT_SETTINGS: Dictionary = {
 	"last_texture_path": "res://addons/TilePipe/in_green.png",
@@ -226,23 +233,9 @@ func load_settings():
 	apply_settings(save_data)
 	save.close()
 
-func _ready():
-	connect("input_image_processed", self, "make_output_texture")
-	size_select.clear()
-	for size in SIZES:
-		size_select.add_item(SIZES[size])
-	load_settings()
-	generate_tile_masks()
-	preprocess_input_image()
-
-
 func check_input_texture() -> bool:
 	if not is_instance_valid(texture_in.texture):
 		return false
-#	var image: Image = texture_in.texture.get_data()
-#	if image.get_size().x < MIN_IMAGE_SIZE.x * tile_size / 2 or \
-#			image.get_size().x < MIN_IMAGE_SIZE.y * tile_size / 2:
-#		return false
 	return true
 
 func check_template_texture() -> bool:
@@ -288,21 +281,18 @@ func generate_tile_masks():
 			mask_text_label.rect_position = Vector2(x, y) * DEFAULT_SIZE + Vector2(5, 5)
 			template_texture.add_child(mask_text_label)
 
-#func put_to_viewport(slice: Image, rotation: int):
 func put_to_viewport(slice: Image, rotation : float = 0.0):
 	texture_in_viewport.texture = null
 	var itex = ImageTexture.new()
 	itex.create_from_image(slice)
 	texture_in_viewport.texture = itex
-#	texture_in_viewport.set_rotation(rotation)
-#	texture_in_viewport.rect_pivot_offset = texture_in_viewport.rect_size / 2
-#	texture_in_viewport.material.set_shader_param("rotation_steps_90", rotation)
-	texture_in_viewport.material.set_shader_param("rotation", -rotation)
+	texture_in_viewport.set_rotation(rotation)
+	texture_in_viewport.rect_pivot_offset = texture_in_viewport.rect_size / 2
+#	texture_in_viewport.material.set_shader_param("rotation", -rotation)
 
 func get_from_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
 	var image := Image.new()
 	var size: Vector2 = texture_in_viewport.texture.get_size()
-#	print(slice_viewport.get_texture().get_data().get_format(), "", image_fmt)
 	image.create(int(size.x), int(size.y), false, image_fmt)
 	image.blit_rect(
 		slice_viewport.get_texture().get_data(),
@@ -311,11 +301,6 @@ func get_from_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
 	if resize_factor != 1.0:
 		image.resize(int(size.x * resize_factor), int(size.y * resize_factor))
 	return image
-
-# input slice = {
-#	0: {0: {false: Image, true: Image}, 2: , 4: , 6:}
-#	1: ... }
-var input_slices: Dictionary = {}
 
 func preprocess_input_image():
 	texture_in_viewport.show()
@@ -329,12 +314,9 @@ func preprocess_input_image():
 	var output_slice_size: int = int(output_tile_size / 2.0)
 	var resize_factor: float = float(output_slice_size) / float(input_slice_size)
 	var new_viewport_size := Vector2(input_slice_size, input_slice_size)
-#	print(slice_viewport.size, " - > ", new_viewport_size)
 	if slice_viewport.size != new_viewport_size:
 		slice_viewport.size = new_viewport_size
 		texture_in_viewport.rect_size = new_viewport_size
-#	var image_fmt: int = Image.FORMAT_RGBA8
-#	var image_fmt: int = input_image.get_format()
 	var image_input_fmt: int = input_image.get_format()
 	var image_fmt: int = slice_viewport.get_texture().get_data().get_format()
 	var debug_image := Image.new()
@@ -409,8 +391,6 @@ func make_output_texture():
 						intile_offset += ROTATION_SHIFTS[rotation]["vector"] * slice_size
 					else:
 						intile_offset += ROTATION_SHIFTS[rotate_clockwise(rotation)]["vector"] * slice_size
-	#				if in_out_mask["in_mask"]["positive"] == 0 and mask['mask'] == 0:
-	#					print(mask['mask'])
 					out_image.blit_rect(slice_image, slice_rect, tile_position + intile_offset)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image)
@@ -431,7 +411,6 @@ func rotate_check_mask(mask: int, rot: int) -> int:
 	return rotated_check
 
 func check_mask_template(pos_check_mask: int, neg_check_mask: int, current_mask: int) -> Array:
-#	print("Now checking: ", current_mask, " for mask ", check_mask)
 	var rotations: Array = []
 	for rotation in ROTATION_SHIFTS:
 		var rotated_check: int = rotate_check_mask(pos_check_mask, rotation)
@@ -441,91 +420,10 @@ func check_mask_template(pos_check_mask: int, neg_check_mask: int, current_mask:
 		if satisfies_check and neg_check_mask != 0: # check negative mask
 			rotated_check = rotate_check_mask(neg_check_mask, rotation)
 			if current_mask |~ rotated_check == -rotated_check:
-	#			print ("mask found at ", ROTATION_SHIFTS[rot]["angle"]/PI*180)
 				satisfies_check = false
 		if satisfies_check:
 			rotations.append(rotation)
 	return rotations
-
-
-
-func _process(_delta: float):
-	if Input.is_action_just_pressed("ui_cancel"):
-		_on_CloseButton_pressed()
-
-func _on_CloseButton_pressed():
-	tile_masks.empty()
-	get_tree().quit()
-
-func _on_ComputeButton_pressed():
-	make_output_texture()
-
-func _on_Save_pressed():
-	save_file_dialog.popup_centered()
-
-func _on_3x3min_toggled(button_pressed):
-	toggle_2x2.pressed = not button_pressed
-	if button_pressed:
-		template_size = TEMPLATE_SIZE_3x3
-	else:
-		template_size = TEMPLATE_SIZE_2x2
-#	toggle_3x3_full.pressed = not button_pressed
-#	toggle_3x3_super.pressed = not button_pressed
-
-func _on_3x3full_toggled(button_pressed):
-	toggle_3x3_min.pressed = not button_pressed
-#	toggle_2x2.pressed = not button_pressed
-#	toggle_3x3_min.pressed = not button_pressed
-#	toggle_3x3_super.pressed = not button_pressed
-
-func _on_Help_pressed():
-	pass # Replace with function body.
-
-func _on_Save2_pressed():
-	save_resource_dialog.popup_centered()
-
-func _on_TextureDialog_file_selected(path):
-	texture_in.texture = load(path)
-	preprocess_input_image()
-	save_settings()
-
-func _on_TemplateDialog_file_selected(path):
-	template_texture.texture = load(path)
-	generate_tile_masks()
-	make_output_texture()
-#	preprocess_input_image()
-	save_settings()
-
-func _on_TemplateButton_pressed():
-	template_file_dialog.popup_centered()
-
-func _on_Button_pressed():
-	texture_file_dialog.popup_centered()
-
-func _on_Select2x2_toggled(button_pressed):
-#	toggle_3x3_full.pressed = not button_pressed
-	toggle_3x3_min.pressed = not button_pressed
-	if button_pressed:
-		template_size = TEMPLATE_SIZE_2x2
-	else:
-		template_size = TEMPLATE_SIZE_3x3
-#	toggle_3x3_super.pressed = not button_pressed
-
-func save_texture_png(path: String):
-	out_texture.texture.get_data().save_png(path)
-
-func _on_SaveTextureDialog_file_selected(path):
-	save_texture_png(path)
-	save_settings()
-
-func _on_HSlider_value_changed(value):
-	pass
-#	display_slice(int(value - 1))
-#	put_to_viewport(input_slices[int(value-1)][0][true], PI)
-
-func _on_OptionButton_item_selected(_index):
-	preprocess_input_image()
-	save_settings()
 
 func tile_name_from_position(pos: Vector2) -> String:
 	return "%d_%d" % [pos.x, pos.y]
@@ -609,17 +507,52 @@ func compute_tile_replacement_data() -> Dictionary:
 		data[mask["godot_mask"]] = tile_name_from_position(mask["position"])
 	return data
 
+func _on_CloseButton_pressed():
+	tile_masks.empty()
+	get_tree().quit()
+
+func _on_Save_pressed():
+	save_file_dialog.popup_centered()
+
+func _on_Save2_pressed():
+	save_resource_dialog.popup_centered()
+
+func _on_TextureDialog_file_selected(path):
+	texture_in.texture = load(path)
+	preprocess_input_image()
+	save_settings()
+
+func _on_TemplateDialog_file_selected(path):
+	template_texture.texture = load(path)
+	generate_tile_masks()
+	make_output_texture()
+	save_settings()
+
+func _on_TemplateButton_pressed():
+	template_file_dialog.popup_centered()
+
+func _on_Button_pressed():
+	texture_file_dialog.popup_centered()
+
+func save_texture_png(path: String):
+	out_texture.texture.get_data().save_png(path)
+
+func _on_SaveTextureDialog_file_selected(path):
+	save_texture_png(path)
+	save_settings()
+
+func _on_OptionButton_item_selected(_index):
+	preprocess_input_image()
+	save_settings()
+
 func _on_SaveTextureDialog2_file_selected(path: String):
 	save_texture_png(path)
 	var output_string : String
-#	print(export_type_select.pressed)
 	if export_type_select.pressed:
 		output_string = make_autotile_resource_data(path)
 	else:
 		output_string = make_manual_resource_data(path)
 	var tileset_resource_path: String = path.get_basename( ) + ".tres"
-#	var dir = Directory.new()
-#	dir.remove(tileset_resource_path)
 	var file = File.new()
 	file.open(tileset_resource_path, File.WRITE)
 	file.store_string(output_string)
