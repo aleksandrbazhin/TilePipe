@@ -8,7 +8,7 @@
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 4 )
 shader_param/center = Vector2( 0.5, 0.5 )
-shader_param/rotation = -4.71239
+shader_param/rotation = 0.0
 
 [node name="Node" type="Node"]
 script = ExtResource( 1 )
@@ -48,17 +48,14 @@ margin_right = 315.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 500, 400 )
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_dir = "res://assets/images/tilesets"
-current_path = "res://assets/images/tilesets/"
 
 [node name="SaveTextureResourceDialog" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 500, 400 )
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_dir = "res://assets/images/tilesets"
 current_file = "generated.png"
-current_path = "res://assets/images/tilesets/generated.png"
+current_path = "res://generated.png"
 
 [node name="Center" type="CenterContainer" parent="."]
 margin_left = 13.4451
@@ -71,21 +68,21 @@ __meta__ = {
 
 [node name="Panel" type="PanelContainer" parent="Center"]
 margin_left = 440.0
-margin_top = 152.0
+margin_top = 202.0
 margin_right = 1464.0
-margin_bottom = 914.0
+margin_bottom = 864.0
 rect_min_size = Vector2( 1024, 600 )
 
 [node name="HBox" type="HBoxContainer" parent="Center/Panel"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1017.0
-margin_bottom = 755.0
+margin_bottom = 655.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Center/Panel/HBox"]
 margin_right = 818.0
-margin_bottom = 748.0
+margin_bottom = 648.0
 size_flags_horizontal = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
@@ -141,21 +138,23 @@ margin_bottom = 140.0
 margin_right = 128.0
 margin_bottom = 128.0
 rect_min_size = Vector2( 128, 128 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Viewport" type="Viewport" parent="Center/Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer"]
 size = Vector2( 32, 32 )
 transparent_bg = true
 handle_input_locally = false
-msaa = 2
+msaa = 4
 disable_3d = true
-usage = 0
 render_target_v_flip = true
 render_target_update_mode = 3
 
 [node name="TextureRect" type="TextureRect" parent="Center/Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport"]
 material = SubResource( 1 )
-margin_right = 40.0
-margin_bottom = 40.0
+margin_right = 64.0
+margin_bottom = 64.0
 stretch_mode = 3
 
 [node name="Spacer" type="Control" parent="Center/Panel/HBox/Images/InContainer/VBoxViewport"]
@@ -250,17 +249,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BG" type="ColorRect" parent="Center/Panel/HBox/Images"]
+[node name="OutTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images"]
 margin_top = 448.0
 margin_right = 818.0
-margin_bottom = 748.0
-rect_min_size = Vector2( 0, 300 )
-color = Color( 0.482353, 0.678431, 0.85098, 1 )
-
-[node name="OutTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images/BG"]
-margin_top = 4.0
-margin_right = 818.0
-margin_bottom = 204.0
+margin_bottom = 648.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_vertical = 3
 __meta__ = {
@@ -287,12 +279,12 @@ __meta__ = {
 [node name="VSeparator" type="VSeparator" parent="Center/Panel/HBox"]
 margin_left = 822.0
 margin_right = 826.0
-margin_bottom = 748.0
+margin_bottom = 648.0
 
 [node name="Settings" type="VBoxContainer" parent="Center/Panel/HBox"]
 margin_left = 830.0
 margin_right = 1010.0
-margin_bottom = 748.0
+margin_bottom = 648.0
 rect_min_size = Vector2( 180, 0 )
 
 [node name="CloseButton" type="Button" parent="Center/Panel/HBox/Settings"]

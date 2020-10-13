@@ -156,7 +156,7 @@ onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
 onready var texture_in: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxInput/TextureRect
-onready var out_texture: TextureRect = $Center/Panel/HBox/Images/BG/OutTextureRect
+onready var out_texture: TextureRect = $Center/Panel/HBox/Images/OutTextureRect
 onready var template_texture: TextureRect = $Center/Panel/HBox/Images/TemplateTextureRect
 onready var toggle_2x2: CheckButton = $Center/Panel/HBox/Settings/Small2x2/Select2x2
 onready var toggle_3x3_min: CheckButton = $Center/Panel/HBox/Settings/Min/min3x3
@@ -288,16 +288,21 @@ func generate_tile_masks():
 			mask_text_label.rect_position = Vector2(x, y) * DEFAULT_SIZE + Vector2(5, 5)
 			template_texture.add_child(mask_text_label)
 
+#func put_to_viewport(slice: Image, rotation: int):
 func put_to_viewport(slice: Image, rotation : float = 0.0):
 	texture_in_viewport.texture = null
 	var itex = ImageTexture.new()
 	itex.create_from_image(slice)
 	texture_in_viewport.texture = itex
+#	texture_in_viewport.set_rotation(rotation)
+#	texture_in_viewport.rect_pivot_offset = texture_in_viewport.rect_size / 2
+#	texture_in_viewport.material.set_shader_param("rotation_steps_90", rotation)
 	texture_in_viewport.material.set_shader_param("rotation", -rotation)
 
 func get_from_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
 	var image := Image.new()
 	var size: Vector2 = texture_in_viewport.texture.get_size()
+#	print(slice_viewport.get_texture().get_data().get_format(), "", image_fmt)
 	image.create(int(size.x), int(size.y), false, image_fmt)
 	image.blit_rect(
 		slice_viewport.get_texture().get_data(),
@@ -328,17 +333,20 @@ func preprocess_input_image():
 	if slice_viewport.size != new_viewport_size:
 		slice_viewport.size = new_viewport_size
 		texture_in_viewport.rect_size = new_viewport_size
-	var image_fmt: int = input_image.get_format()
+#	var image_fmt: int = Image.FORMAT_RGBA8
+#	var image_fmt: int = input_image.get_format()
+	var image_input_fmt: int = input_image.get_format()
+	var image_fmt: int = slice_viewport.get_texture().get_data().get_format()
 	var debug_image := Image.new()
 	debug_image.create(int(output_slice_size * MIN_IMAGE_SIZE.x),
 		int(output_slice_size * MIN_IMAGE_SIZE.y * 8), false, image_fmt)
 	for x in range(MIN_IMAGE_SIZE.x):
 		input_slices[x] = {}
 		var slice := Image.new()
-		slice.create(input_slice_size, input_slice_size, false, image_fmt)
+		slice.create(input_slice_size, input_slice_size, false, image_input_fmt)
 		slice.blit_rect(input_image, Rect2(x * input_slice_size, 0, input_slice_size, input_slice_size), Vector2.ZERO)
 		var slice_flipped := Image.new()
-		slice_flipped.create(input_slice_size, input_slice_size, false, image_fmt)
+		slice_flipped.create(input_slice_size, input_slice_size, false, image_input_fmt)
 		slice_flipped.copy_from(slice)
 		for rot_index in ROTATION_SHIFTS.size():
 			var rot_shift_bits: int = ROTATION_SHIFTS.keys()[rot_index]
@@ -375,7 +383,7 @@ func preprocess_input_image():
 func display_slice(index: int = -1):
 	if index == -1:
 		index = int(slice_slider.value - 1)
-	put_to_viewport(input_slices[index][0][true], PI)
+#	put_to_viewport(input_slices[index][0][true], PI)
 
 func make_output_texture():
 	if input_slices.size() == 0:
@@ -511,7 +519,8 @@ func _on_SaveTextureDialog_file_selected(path):
 	save_settings()
 
 func _on_HSlider_value_changed(value):
-	display_slice(int(value - 1))
+	pass
+#	display_slice(int(value - 1))
 #	put_to_viewport(input_slices[int(value-1)][0][true], PI)
 
 func _on_OptionButton_item_selected(_index):
