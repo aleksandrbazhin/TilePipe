@@ -59,6 +59,13 @@ const TEMPLATE_MASK_CHECK_POINTS := {
 	MY_MASK["TOP_LEFT"]: Vector2(10, 10)
 }
 
+const DEFAULT_SETTINGS: Dictionary = {
+	"last_texture_path": "res://addons/TilePipe/in_green.png",
+	"last_template_path": "res://addons/TilePipe/template.png",
+	"last_save_texture_path": "res://generated.png",
+	"last_save_texture_resource_path": "res://generated.png",
+	"output_tile_size": DEFAULT_SIZE
+}
 ## masks are in 4-base count system like
 ##  1
 ## 64#4      
@@ -97,13 +104,7 @@ const CHECK_MASKS_IN_OUT := [
 		},
 		"out_tile": {"index": 4, "flip": false}
 	},
-#	{
-#		"in_mask": {
-#			"positive": 0,
-#			"negative": MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["RIGHT"] | MY_MASK["BOTTOM_RIGHT"],
-#		},
-#		"out_tile": {"index": 4, "flip": true}
-#	},
+
 	# border with corner
 	{
 		"in_mask": {
@@ -180,7 +181,10 @@ onready var export_manual_resource_type_select: CheckButton = $Center/Panel/HBox
 onready var normal_map_checkbutton: CheckButton = $Center/Panel/HBox/Images/InContainer/VBoxInput/Control/HBoxContainer/CheckButton
 
 func _ready():
-	print(get_allowed_mask_rotations(0, 5, 21))
+#	print(get_allowed_mask_rotations(16, 5, 21))
+#	print(get_allowed_mask_rotations(0,  
+#		MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["RIGHT"] | MY_MASK["BOTTOM_RIGHT"],
+#	 16))
 	connect("input_image_processed", self, "make_output_texture")
 	size_select.clear()
 	for size in SIZES:
@@ -192,14 +196,6 @@ func _ready():
 func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
 		_on_CloseButton_pressed()
-
-const DEFAULT_SETTINGS: Dictionary = {
-	"last_texture_path": "res://addons/TilePipe/in_green.png",
-	"last_template_path": "res://addons/TilePipe/template.png",
-	"last_save_texture_path": "res://generated.png",
-	"last_save_texture_resource_path": "res://generated.png",
-	"output_tile_size": DEFAULT_SIZE
-}
 
 func get_setting_values(load_defaluts: bool = false) -> Dictionary:
 	if load_defaluts:
@@ -287,7 +283,8 @@ func generate_tile_masks():
 			tile_masks.append({"mask": mask_value, "position": Vector2(x, y), "godot_mask": godot_mask_value })
 			var mask_text_label := Label.new()
 			mask_text_label.add_color_override("font_color", Color(0, 0.05, 0.1))
-			mask_text_label.text = str(godot_mask_value)
+#			mask_text_label.text = str(godot_mask_value)
+			mask_text_label.text = str(mask_value)
 			mask_text_label.rect_position = Vector2(x, y) * DEFAULT_SIZE + Vector2(5, 5)
 			template_texture.add_child(mask_text_label)
 
@@ -445,9 +442,11 @@ func get_allowed_mask_rotations(pos_check_mask: int, neg_check_mask: int, curren
 			satisfies_check = true
 		if satisfies_check and neg_check_mask != 0: # check negative mask
 			rotated_check = rotate_check_mask(neg_check_mask, rotation)
-			var inverted_cgeck: int = (~rotated_check & 0xFF)
-#			print(rotated_check, "  ", inverted_cgeck, "  ", current_mask &inverted_cgeck, " ", -rotated_check)
-			if current_mask & inverted_cgeck != 0:
+			var inverted_check: int = (~rotated_check & 0xFF)
+#			print("%s: %s %s %s" % [str(rotation), str(rotated_check), 
+#				str(inverted_check),
+#				str(current_mask & inverted_check)])
+			if current_mask | inverted_check != inverted_check:
 				satisfies_check = false
 		if satisfies_check:
 			rotations.append(rotation)
