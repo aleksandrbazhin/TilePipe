@@ -39,9 +39,9 @@ __meta__ = {
 [node name="TextureDialog" type="FileDialog" parent="."]
 margin_left = 7.0
 margin_top = 229.0
-margin_right = 322.0
-margin_bottom = 359.0
-rect_min_size = Vector2( 500, 400 )
+margin_right = 607.0
+margin_bottom = 669.0
+rect_min_size = Vector2( 600, 440 )
 popup_exclusive = true
 window_title = "Select half tile slices"
 resizable = true
@@ -55,9 +55,9 @@ current_path = "/Users/user/Documents/TilePipe/"
 [node name="TemplateDialog" type="FileDialog" parent="."]
 margin_left = 7.0
 margin_top = 229.0
-margin_right = 322.0
-margin_bottom = 359.0
-rect_min_size = Vector2( 500, 400 )
+margin_right = 607.0
+margin_bottom = 669.0
+rect_min_size = Vector2( 600, 440 )
 popup_exclusive = true
 window_title = "Select generation template"
 resizable = true
@@ -69,9 +69,9 @@ current_dir = "/Users/user/Documents/TilePipe"
 current_path = "/Users/user/Documents/TilePipe/"
 
 [node name="SaveTextureDialog" type="FileDialog" parent="."]
-margin_right = 315.0
-margin_bottom = 130.0
-rect_min_size = Vector2( 500, 400 )
+margin_right = 600.0
+margin_bottom = 440.0
+rect_min_size = Vector2( 600, 440 )
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
 current_dir = "/Users/user/Documents/TilePipe"
@@ -80,7 +80,7 @@ current_path = "/Users/user/Documents/TilePipe/"
 [node name="SaveTextureResourceDialog" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
-rect_min_size = Vector2( 500, 400 )
+rect_min_size = Vector2( 600, 440 )
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
 current_dir = "/Users/user/Documents/TilePipe"
@@ -274,9 +274,8 @@ margin_bottom = 130.0
 margin_right = 200.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 200, 32 )
-text = "47 tile blob"
+text = "Template type"
 align = 1
-items = [ "47 tile blob", null, false, 0, null, "Custom", null, false, 1, null ]
 selected = 0
 
 [node name="TemplateButton" type="Button" parent="Panel/HBox/Images/TemplateContainer/ButtonBox"]

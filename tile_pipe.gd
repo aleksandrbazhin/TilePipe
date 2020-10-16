@@ -13,7 +13,8 @@ onready var template_load_button : Button = $Panel/HBox/Images/TemplateContainer
 onready var color_process_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType
 onready var input_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/InputType
 onready var size_select: OptionButton = $Panel/HBox/Settings/OptionButton
-onready var template_select: OptionButton = $Panel/HBox/Settings/OptionButton
+onready var output_size_select: OptionButton = $Panel/HBox/Settings/OptionButton
+onready var template_type_select: OptionButton = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption
 onready var slice_viewport: Viewport = $Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport
 onready var texture_in_viewport: TextureRect = $Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport/TextureRect
 onready var debug_input_texture: TextureRect = $Panel/HBox/Images/InContainer/DebugTextureContainer/DebugTexture
@@ -21,6 +22,7 @@ onready var slice_slider: HSlider = $Panel/HBox/Images/InContainer/VBoxViewport/
 onready var export_type_select: CheckButton = $Panel/HBox/Settings/Resourse/AutotileSelect
 onready var description_select_box: HBoxContainer = $Panel/HBox/Settings/DescriptionResourse
 onready var export_manual_resource_type_select: CheckButton = $Panel/HBox/Settings/DescriptionResourse/Select
+onready var output_scroll: ScrollContainer = $Panel/HBox/Images/ScrollContainer
 
 const SIZES: Dictionary = {
 	8: "8x8",
@@ -43,7 +45,20 @@ const INPUT_TYPE_NAMES : Dictionary = {
 	INPUT_TYPES.CORNERS: "Corners merge",
 	INPUT_TYPES.OVERLAY: "Overlay"
 }
-enum TEMPLATE_TYPES {BLOB, CUSTOM}
+
+const TEMPLATE_47_PATH: String = "res://template.png"
+const TEMPLATE_256_PATH: String = "res://template_256.png"
+enum TEMPLATE_TYPES {TEMPLATE_47, TEMPLATE_256, CUSTOM}
+const TEMPLATE_TYPE_NAMES : Dictionary = {
+	TEMPLATE_TYPES.TEMPLATE_47: "Standard 3x3: 47",
+	TEMPLATE_TYPES.TEMPLATE_256: "Full 3x3: 256",
+	TEMPLATE_TYPES.CUSTOM: "Custom 3x3"
+}
+const TEMPLATE_PATHS : Dictionary = {
+	TEMPLATE_TYPES.TEMPLATE_47: TEMPLATE_47_PATH,
+	TEMPLATE_TYPES.TEMPLATE_256: TEMPLATE_256_PATH,
+	TEMPLATE_TYPES.CUSTOM: "res://"
+}
 
 const SETTINGS_PATH: String = "user://tilepipe_settings.save"
 
@@ -79,7 +94,6 @@ const GODOT_MASK_CHECK_POINTS := {
 	GODOT_MASK["BOTTOM"]: MASK_BOTTOM,
 	GODOT_MASK["BOTTOM_RIGHT"]: MASK_BOTTOM_RIGHT
 }
-
 # so it can be rotated by multiplication
 const MY_MASK: Dictionary = {
 	"TOP": 1,
@@ -103,13 +117,12 @@ const TEMPLATE_MASK_CHECK_POINTS := {
 }
 
 const DEFAULT_SETTINGS: Dictionary = {
-	"last_texture_path": "res://addons/TilePipe/in_green.png",
-	"last_template_path": "res://addons/TilePipe/template.png",
+	"last_texture_path": "res://test.png",
+	"last_template_path": TEMPLATE_47_PATH,
 	"last_save_texture_path": "res://generated.png",
 	"last_save_texture_resource_path": "res://generated.png",
 	"output_tile_size": DEFAULT_SIZE
 }
-
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
 const ROTATION_SHIFTS := {
@@ -205,6 +218,9 @@ func _ready():
 		color_process_select.add_item(COLOR_PROCESS_TYPE_NAMES[COLOR_PROCESS_TYPES[type]])
 	for type in INPUT_TYPES:
 		input_select.add_item(INPUT_TYPE_NAMES[INPUT_TYPES[type]])
+	for type in TEMPLATE_TYPES:
+		template_type_select.add_item(TEMPLATE_TYPE_NAMES[TEMPLATE_TYPES[type]])
+		
 	load_settings()
 	generate_tile_masks()
 	preprocess_input_image()
@@ -284,9 +300,13 @@ func get_template_mask_value(template_image: Image, x: int, y: int,
 	template_image.unlock()
 	return mask_value
 
-func generate_tile_masks():
+func clear_generation_mask():
+	tile_masks = []
 	for label in template_texture.get_children():
 		label.queue_free()
+	
+func generate_tile_masks():
+	clear_generation_mask()
 	if not check_template_texture():
 		print("WRONG template texture")
 		return
@@ -622,5 +642,15 @@ func _on_ReloadButton_pressed():
 func _on_TemplateOption_item_selected(index):
 	if index == TEMPLATE_TYPES.CUSTOM:
 		template_load_button.disabled = false
+		template_texture.texture = null
+		template_texture.rect_size = Vector2.ZERO
+		output_scroll.get_v_scrollbar().rect_size.x = 0
+		output_scroll.get_v_scrollbar().rect_size.y = 0
+		clear_generation_mask()
 	else:
 		template_load_button.disabled = true
+		template_texture.texture = load_image_texture(TEMPLATE_PATHS[index])
+		generate_tile_masks()
+	make_output_texture()
+	save_settings()
+

@@ -21,6 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="TilePipe"
+config/description="Tool to compose tilesets"
 run/main_scene="res://tile_pipe.tscn"
 config/icon="res://icon.png"
 
