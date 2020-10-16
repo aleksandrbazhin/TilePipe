@@ -8,7 +8,7 @@ onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
 onready var texture_in: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxInput/TextureRect
 onready var out_texture: TextureRect = $Center/Panel/HBox/Images/OutTextureRect
-onready var template_texture: TextureRect = $Center/Panel/HBox/Images/TemplateContainer/TemplateTextureRect
+onready var template_texture: TextureRect = $Center/Panel/HBox/Images/TemplateContainer/ScrollContainer/TemplateTextureRect
 onready var template_load_button : Button = $Center/Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
 onready var color_process_select: OptionButton = $Center/Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType
 onready var input_select: OptionButton = $Center/Panel/HBox/Images/InContainer/VBoxInput/InputType
@@ -29,7 +29,7 @@ const SIZES: Dictionary = {
 	64: "64x64",
 	128: "128x128"
 }
-const TEMPLATE_TILE_SIZE: int = 64
+const TEMPLATE_TILE_SIZE: int = 32
 const DEFAULT_SIZE: int = 64
 
 enum COLOR_PROCESS_TYPES {NO, FLOW_MAP, NORMAL_MAP}
@@ -47,6 +47,16 @@ enum TEMPLATE_TYPES {BLOB, CUSTOM}
 
 const SETTINGS_PATH: String = "user://tilepipe_settings.save"
 
+const MASK_TOP_LEFT := Vector2(4, 4)
+const MASK_TOP := Vector2(16, 4)
+const MASK_TOP_RIGHT := Vector2(28, 4)
+const MASK_LEFT := Vector2(4, 16)
+const MASK_CENTER := Vector2(16, 16)
+const MASK_RIGHT := Vector2(28, 16)
+const MASK_BOTTOM_LEFT := Vector2(4, 28)
+const MASK_BOTTOM := Vector2(16, 28)
+const MASK_BOTTOM_RIGHT := Vector2(28, 28)
+
 const GODOT_MASK: Dictionary = {
 	"TOP_LEFT": 1,
 	"TOP": 2,
@@ -59,15 +69,15 @@ const GODOT_MASK: Dictionary = {
 	"BOTTOM_RIGHT": 256
 }
 const GODOT_MASK_CHECK_POINTS := {
-	GODOT_MASK["TOP_LEFT"]: Vector2(10, 10),
-	GODOT_MASK["TOP"]: Vector2(32, 10),
-	GODOT_MASK["TOP_RIGHT"]: Vector2(54, 10),
-	GODOT_MASK["LEFT"]: Vector2(10, 32),
-	GODOT_MASK["CENTER"]: Vector2(32, 32),
-	GODOT_MASK["RIGHT"]: Vector2(54, 32),
-	GODOT_MASK["BOTTOM_LEFT"]: Vector2(10, 54),
-	GODOT_MASK["BOTTOM"]: Vector2(32, 54),
-	GODOT_MASK["BOTTOM_RIGHT"]: Vector2(54, 54)
+	GODOT_MASK["TOP_LEFT"]: MASK_TOP_LEFT,
+	GODOT_MASK["TOP"]: MASK_TOP,
+	GODOT_MASK["TOP_RIGHT"]: MASK_TOP_RIGHT,
+	GODOT_MASK["LEFT"]: MASK_LEFT,
+	GODOT_MASK["CENTER"]: MASK_CENTER,
+	GODOT_MASK["RIGHT"]: MASK_RIGHT,
+	GODOT_MASK["BOTTOM_LEFT"]: MASK_BOTTOM_LEFT,
+	GODOT_MASK["BOTTOM"]: MASK_BOTTOM,
+	GODOT_MASK["BOTTOM_RIGHT"]: MASK_BOTTOM_RIGHT
 }
 
 # so it can be rotated by multiplication
@@ -82,14 +92,14 @@ const MY_MASK: Dictionary = {
 	"TOP_LEFT": 128,
 }
 const TEMPLATE_MASK_CHECK_POINTS := {
-	MY_MASK["TOP"]: Vector2(32, 10),
-	MY_MASK["TOP_RIGHT"]: Vector2(54, 10),
-	MY_MASK["RIGHT"]: Vector2(54, 32),
-	MY_MASK["BOTTOM_RIGHT"]: Vector2(54, 54),
-	MY_MASK["BOTTOM"]: Vector2(32, 54),
-	MY_MASK["BOTTOM_LEFT"]: Vector2(10, 54),
-	MY_MASK["LEFT"]: Vector2(10, 32),
-	MY_MASK["TOP_LEFT"]: Vector2(10, 10)
+	MY_MASK["TOP"]: MASK_TOP,
+	MY_MASK["TOP_RIGHT"]: MASK_TOP_RIGHT,
+	MY_MASK["RIGHT"]: MASK_RIGHT,
+	MY_MASK["BOTTOM_RIGHT"]: MASK_BOTTOM_RIGHT,
+	MY_MASK["BOTTOM"]: MASK_BOTTOM,
+	MY_MASK["BOTTOM_LEFT"]: MASK_BOTTOM_LEFT,
+	MY_MASK["LEFT"]: MASK_LEFT,
+	MY_MASK["TOP_LEFT"]: MASK_TOP_LEFT
 }
 
 const DEFAULT_SETTINGS: Dictionary = {
@@ -290,7 +300,7 @@ func generate_tile_masks():
 			var mask_text_label := Label.new()
 			mask_text_label.add_color_override("font_color", Color(0, 0.05, 0.1))
 			mask_text_label.text = str(godot_mask_value)
-			mask_text_label.rect_position = Vector2(x, y) * DEFAULT_SIZE + Vector2(5, 5)
+			mask_text_label.rect_position = Vector2(x, y) * TEMPLATE_TILE_SIZE + Vector2(5, 5)
 			template_texture.add_child(mask_text_label)
 
 func put_to_viewport(slice: Image, rotation_key: int, color_process: int,

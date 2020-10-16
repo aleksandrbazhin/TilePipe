@@ -71,26 +71,26 @@ __meta__ = {
 }
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-margin_left = 401.0
-margin_top = 172.0
-margin_right = 1503.0
-margin_bottom = 894.0
+margin_left = 440.0
+margin_top = 233.0
+margin_right = 1464.0
+margin_bottom = 833.0
 rect_min_size = Vector2( 1024, 600 )
 
 [node name="HBox" type="HBoxContainer" parent="Center/Panel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 1095.0
-margin_bottom = 715.0
+margin_right = 1017.0
+margin_bottom = 593.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Center/Panel/HBox"]
-margin_right = 888.0
-margin_bottom = 708.0
+margin_right = 810.0
+margin_bottom = 586.0
 size_flags_horizontal = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
-margin_right = 888.0
+margin_right = 810.0
 margin_bottom = 212.0
 
 [node name="VBoxInput" type="VBoxContainer" parent="Center/Panel/HBox/Images/InContainer"]
@@ -218,29 +218,30 @@ rect_min_size = Vector2( 128, 128 )
 
 [node name="HSeparator" type="HSeparator" parent="Center/Panel/HBox/Images"]
 margin_top = 216.0
-margin_right = 888.0
+margin_right = 810.0
 margin_bottom = 228.0
 
 [node name="TemplateContainer" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
 margin_top = 232.0
-margin_right = 888.0
-margin_bottom = 488.0
+margin_right = 810.0
+margin_bottom = 360.0
 
 [node name="ButtonBox" type="VBoxContainer" parent="Center/Panel/HBox/Images/TemplateContainer"]
-margin_right = 116.0
-margin_bottom = 256.0
+margin_right = 200.0
+margin_bottom = 128.0
 
 [node name="TemplateOption" type="OptionButton" parent="Center/Panel/HBox/Images/TemplateContainer/ButtonBox"]
-margin_right = 116.0
+margin_right = 200.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 0, 32 )
+rect_min_size = Vector2( 200, 32 )
 text = "47 tile blob"
+align = 1
 items = [ "47 tile blob", null, false, 0, null, "Custom", null, false, 1, null ]
 selected = 0
 
 [node name="TemplateButton" type="Button" parent="Center/Panel/HBox/Images/TemplateContainer/ButtonBox"]
 margin_top = 36.0
-margin_right = 116.0
+margin_right = 200.0
 margin_bottom = 76.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
@@ -250,11 +251,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TemplateTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images/TemplateContainer"]
-margin_left = 120.0
-margin_right = 888.0
-margin_bottom = 256.0
-rect_min_size = Vector2( 200, 200 )
+[node name="Control" type="Control" parent="Center/Panel/HBox/Images/TemplateContainer"]
+margin_left = 204.0
+margin_right = 416.0
+margin_bottom = 128.0
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Center/Panel/HBox/Images/TemplateContainer"]
+margin_left = 420.0
+margin_right = 810.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 390, 128 )
+size_flags_horizontal = 3
+
+[node name="TemplateTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images/TemplateContainer/ScrollContainer"]
+margin_right = 384.0
+margin_bottom = 128.0
 size_flags_vertical = 3
 texture = ExtResource( 2 )
 __meta__ = {
@@ -262,14 +274,14 @@ __meta__ = {
 }
 
 [node name="HSeparator2" type="HSeparator" parent="Center/Panel/HBox/Images"]
-margin_top = 492.0
-margin_right = 888.0
-margin_bottom = 504.0
+margin_top = 364.0
+margin_right = 810.0
+margin_bottom = 376.0
 
 [node name="OutTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images"]
-margin_top = 508.0
-margin_right = 888.0
-margin_bottom = 708.0
+margin_top = 380.0
+margin_right = 810.0
+margin_bottom = 586.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_vertical = 3
 __meta__ = {
@@ -277,14 +289,14 @@ __meta__ = {
 }
 
 [node name="VSeparator" type="VSeparator" parent="Center/Panel/HBox"]
-margin_left = 892.0
-margin_right = 904.0
-margin_bottom = 708.0
+margin_left = 814.0
+margin_right = 826.0
+margin_bottom = 586.0
 
 [node name="Settings" type="VBoxContainer" parent="Center/Panel/HBox"]
-margin_left = 908.0
-margin_right = 1088.0
-margin_bottom = 708.0
+margin_left = 830.0
+margin_right = 1010.0
+margin_bottom = 586.0
 rect_min_size = Vector2( 180, 0 )
 
 [node name="CloseButton" type="Button" parent="Center/Panel/HBox/Settings"]
