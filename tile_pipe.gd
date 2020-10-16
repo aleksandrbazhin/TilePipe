@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 signal input_image_processed()
 
@@ -6,21 +6,21 @@ onready var texture_file_dialog: FileDialog = $TextureDialog
 onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
-onready var texture_in: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxInput/TextureRect
-onready var out_texture: TextureRect = $Center/Panel/HBox/Images/OutTextureRect
-onready var template_texture: TextureRect = $Center/Panel/HBox/Images/TemplateContainer/ScrollContainer/TemplateTextureRect
-onready var template_load_button : Button = $Center/Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
-onready var color_process_select: OptionButton = $Center/Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType
-onready var input_select: OptionButton = $Center/Panel/HBox/Images/InContainer/VBoxInput/InputType
-onready var size_select: OptionButton = $Center/Panel/HBox/Settings/OptionButton
-onready var template_select: OptionButton = $Center/Panel/HBox/Settings/OptionButton
-onready var slice_viewport: Viewport = $Center/Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport
-onready var texture_in_viewport: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport/TextureRect
-onready var debug_input_texture: TextureRect = $Center/Panel/HBox/Images/InContainer/TextureRect2
-onready var slice_slider: HSlider = $Center/Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider
-onready var export_type_select: CheckButton = $Center/Panel/HBox/Settings/Resourse/AutotileSelect
-onready var description_select_box: HBoxContainer = $Center/Panel/HBox/Settings/DescriptionResourse
-onready var export_manual_resource_type_select: CheckButton = $Center/Panel/HBox/Settings/DescriptionResourse/Select
+onready var texture_in: TextureRect = $Panel/HBox/Images/InContainer/VBoxInput/TextureRect
+onready var out_texture: TextureRect = $Panel/HBox/Images/ScrollContainer/OutTextureRect
+onready var template_texture: TextureRect = $Panel/HBox/Images/TemplateContainer/ScrollContainer/TemplateTextureRect
+onready var template_load_button : Button = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
+onready var color_process_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType
+onready var input_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/InputType
+onready var size_select: OptionButton = $Panel/HBox/Settings/OptionButton
+onready var template_select: OptionButton = $Panel/HBox/Settings/OptionButton
+onready var slice_viewport: Viewport = $Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport
+onready var texture_in_viewport: TextureRect = $Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport/TextureRect
+onready var debug_input_texture: TextureRect = $Panel/HBox/Images/InContainer/DebugTextureContainer/DebugTexture
+onready var slice_slider: HSlider = $Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider
+onready var export_type_select: CheckButton = $Panel/HBox/Settings/Resourse/AutotileSelect
+onready var description_select_box: HBoxContainer = $Panel/HBox/Settings/DescriptionResourse
+onready var export_manual_resource_type_select: CheckButton = $Panel/HBox/Settings/DescriptionResourse/Select
 
 const SIZES: Dictionary = {
 	8: "8x8",
@@ -34,7 +34,7 @@ const DEFAULT_SIZE: int = 64
 
 enum COLOR_PROCESS_TYPES {NO, FLOW_MAP, NORMAL_MAP}
 const COLOR_PROCESS_TYPE_NAMES: Dictionary = {
-	COLOR_PROCESS_TYPES.NO: "Normal color",
+	COLOR_PROCESS_TYPES.NO: "No processing",
 	COLOR_PROCESS_TYPES.FLOW_MAP: "Flow map",
 	COLOR_PROCESS_TYPES.NORMAL_MAP: "Normal map",
 }
