@@ -47,7 +47,10 @@ window_title = "Select half tile slices"
 resizable = true
 mode_overrides_title = false
 mode = 0
+access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
+current_dir = "/Users/user/Documents/TilePipe"
+current_path = "/Users/user/Documents/TilePipe/"
 
 [node name="TemplateDialog" type="FileDialog" parent="."]
 margin_left = 7.0
@@ -60,21 +63,29 @@ window_title = "Select generation template"
 resizable = true
 mode_overrides_title = false
 mode = 0
+access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
+current_dir = "/Users/user/Documents/TilePipe"
+current_path = "/Users/user/Documents/TilePipe/"
 
 [node name="SaveTextureDialog" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 500, 400 )
+access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
+current_dir = "/Users/user/Documents/TilePipe"
+current_path = "/Users/user/Documents/TilePipe/"
 
 [node name="SaveTextureResourceDialog" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 500, 400 )
+access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
+current_dir = "/Users/user/Documents/TilePipe"
 current_file = "generated.png"
-current_path = "res://generated.png"
+current_path = "/Users/user/Documents/TilePipe/generated.png"
 
 [node name="Panel" type="PanelContainer" parent="."]
 margin_right = 1366.0

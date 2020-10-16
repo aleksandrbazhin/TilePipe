@@ -234,9 +234,9 @@ func save_settings(store_defaults: bool = false):
 
 func apply_settings(data: Dictionary):
 	texture_file_dialog.current_path = data["last_texture_path"]
-	texture_in.texture = load(data["last_texture_path"])
+	texture_in.texture = load_image_texture(data["last_texture_path"])
 	template_file_dialog.current_path = data["last_template_path"]
-	template_texture.texture = load(data["last_template_path"])
+	template_texture.texture = load_image_texture(data["last_template_path"])
 	save_file_dialog.current_path = data["last_save_texture_path"]
 	save_resource_dialog.current_path = data["last_save_texture_resource_path"]
 	size_select.selected = SIZES.keys().find(int(data["output_tile_size"]))
@@ -555,13 +555,23 @@ func _on_Save_pressed():
 func _on_Save2_pressed():
 	save_resource_dialog.popup_centered()
 
+func load_image_texture(path) -> ImageTexture:
+	var img = Image.new()
+	var err = img.load(path)
+	if(err != 0):
+		print("Error loading the image: " + path)
+		return null
+	var img_tex = ImageTexture.new()
+	img_tex.create_from_image(img)
+	return img_tex
+	
 func _on_TextureDialog_file_selected(path):
-	texture_in.texture = load(path)
+	texture_in.texture = load_image_texture(path)
 	preprocess_input_image()
 	save_settings()
 
 func _on_TemplateDialog_file_selected(path):
-	template_texture.texture = load(path)
+	template_texture.texture = load_image_texture(path)
 	generate_tile_masks()
 	make_output_texture()
 	save_settings()
