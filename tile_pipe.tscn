@@ -1,16 +1,17 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/TilePipe/tile_pipe.gd" type="Script" id=1]
 [ext_resource path="res://addons/TilePipe/template.png" type="Texture" id=2]
 [ext_resource path="res://addons/TilePipe/in_green.png" type="Texture" id=3]
-[ext_resource path="res://addons/TilePipe/rotate_shader.shader" type="Shader" id=4]
+[ext_resource path="res://addons/TilePipe/slice_process.shader" type="Shader" id=4]
+[ext_resource path="res://addons/TilePipe/ui_theme.tres" type="Theme" id=5]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 4 )
 shader_param/rotation = 0.0
 shader_param/is_flipped_x = false
 shader_param/is_flipped_y = false
-shader_param/is_normal_map = false
+shader_param/is_flow_map = false
 
 [node name="Node" type="Node"]
 script = ExtResource( 1 )
@@ -64,58 +65,75 @@ margin_left = 13.4451
 margin_top = 5.66516
 margin_right = 1919.44
 margin_bottom = 1071.67
+theme = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-margin_left = 440.0
-margin_top = 180.0
-margin_right = 1464.0
-margin_bottom = 886.0
+margin_left = 401.0
+margin_top = 172.0
+margin_right = 1503.0
+margin_bottom = 894.0
 rect_min_size = Vector2( 1024, 600 )
 
 [node name="HBox" type="HBoxContainer" parent="Center/Panel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 1017.0
-margin_bottom = 699.0
+margin_right = 1095.0
+margin_bottom = 715.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Center/Panel/HBox"]
-margin_right = 818.0
-margin_bottom = 692.0
+margin_right = 888.0
+margin_bottom = 708.0
 size_flags_horizontal = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
-margin_right = 818.0
-margin_bottom = 184.0
+margin_right = 888.0
+margin_bottom = 212.0
 
 [node name="VBoxInput" type="VBoxContainer" parent="Center/Panel/HBox/Images/InContainer"]
 margin_right = 200.0
-margin_bottom = 184.0
+margin_bottom = 212.0
 
-[node name="ButtonBox2" type="HBoxContainer" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
+[node name="InputType" type="OptionButton" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
 margin_right = 200.0
-margin_bottom = 40.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "Corner merge"
+align = 1
+selected = 0
+
+[node name="LoadButtonBox" type="HBoxContainer" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
+margin_top = 36.0
+margin_right = 200.0
+margin_bottom = 76.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/ButtonBox2"]
-margin_right = 200.0
+[node name="LoadButton" type="Button" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox"]
+margin_right = 156.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
-text = "Select Texture"
+text = "Load Texture"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 44.0
+[node name="ReloadButton" type="Button" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox"]
+margin_left = 160.0
 margin_right = 200.0
-margin_bottom = 140.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+text = "↻"
+
+[node name="TextureRect" type="TextureRect" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
+margin_top = 80.0
+margin_right = 200.0
+margin_bottom = 176.0
 rect_min_size = Vector2( 200, 96 )
 size_flags_vertical = 3
 texture = ExtResource( 3 )
@@ -123,43 +141,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Control" type="Control" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 144.0
+[node name="ColorProcessType" type="OptionButton" parent="Center/Panel/HBox/Images/InContainer/VBoxInput"]
+margin_top = 180.0
 margin_right = 200.0
-margin_bottom = 184.0
-rect_min_size = Vector2( 0, 40 )
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-alignment = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/Control/HBoxContainer"]
-margin_top = 13.0
-margin_right = 120.0
-margin_bottom = 27.0
-size_flags_horizontal = 3
-text = "Is normal map"
-align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CheckButton" type="CheckButton" parent="Center/Panel/HBox/Images/InContainer/VBoxInput/Control/HBoxContainer"]
-margin_left = 124.0
-margin_right = 200.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_bottom = 212.0
+rect_min_size = Vector2( 0, 32 )
+text = "Color process type"
+align = 1
 
 [node name="VBoxViewport" type="VBoxContainer" parent="Center/Panel/HBox/Images/InContainer"]
 margin_left = 204.0
 margin_right = 332.0
-margin_bottom = 184.0
+margin_bottom = 212.0
 
 [node name="ViewportContainer" type="ViewportContainer" parent="Center/Panel/HBox/Images/InContainer/VBoxViewport"]
 margin_right = 128.0
@@ -187,7 +180,7 @@ stretch_mode = 3
 [node name="Spacer" type="Control" parent="Center/Panel/HBox/Images/InContainer/VBoxViewport"]
 margin_top = 132.0
 margin_right = 128.0
-margin_bottom = 184.0
+margin_bottom = 212.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="VBoxContainer" parent="Center/Panel/HBox/Images/InContainer/VBoxViewport"]
@@ -220,13 +213,47 @@ ticks_on_borders = true
 [node name="TextureRect2" type="TextureRect" parent="Center/Panel/HBox/Images/InContainer"]
 margin_left = 336.0
 margin_right = 464.0
-margin_bottom = 184.0
+margin_bottom = 212.0
 rect_min_size = Vector2( 128, 128 )
 
-[node name="TemplateTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images"]
-margin_top = 188.0
-margin_right = 818.0
-margin_bottom = 444.0
+[node name="HSeparator" type="HSeparator" parent="Center/Panel/HBox/Images"]
+margin_top = 216.0
+margin_right = 888.0
+margin_bottom = 228.0
+
+[node name="TemplateContainer" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
+margin_top = 232.0
+margin_right = 888.0
+margin_bottom = 488.0
+
+[node name="ButtonBox" type="VBoxContainer" parent="Center/Panel/HBox/Images/TemplateContainer"]
+margin_right = 116.0
+margin_bottom = 256.0
+
+[node name="TemplateOption" type="OptionButton" parent="Center/Panel/HBox/Images/TemplateContainer/ButtonBox"]
+margin_right = 116.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "47 tile blob"
+items = [ "47 tile blob", null, false, 0, null, "Custom", null, false, 1, null ]
+selected = 0
+
+[node name="TemplateButton" type="Button" parent="Center/Panel/HBox/Images/TemplateContainer/ButtonBox"]
+margin_top = 36.0
+margin_right = 116.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 3
+disabled = true
+text = "Select Template"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TemplateTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images/TemplateContainer"]
+margin_left = 120.0
+margin_right = 888.0
+margin_bottom = 256.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_vertical = 3
 texture = ExtResource( 2 )
@@ -234,36 +261,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ButtonBox" type="HBoxContainer" parent="Center/Panel/HBox/Images"]
-margin_top = 448.0
-margin_right = 818.0
-margin_bottom = 488.0
-
-[node name="TemplateButton" type="Button" parent="Center/Panel/HBox/Images/ButtonBox"]
-margin_right = 818.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 0, 40 )
-size_flags_horizontal = 3
-text = "Select Template"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Help" type="Button" parent="Center/Panel/HBox/Images/ButtonBox"]
-visible = false
-margin_left = 778.0
-margin_right = 818.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-text = "?"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="HSeparator2" type="HSeparator" parent="Center/Panel/HBox/Images"]
+margin_top = 492.0
+margin_right = 888.0
+margin_bottom = 504.0
 
 [node name="OutTextureRect" type="TextureRect" parent="Center/Panel/HBox/Images"]
-margin_top = 492.0
-margin_right = 818.0
-margin_bottom = 692.0
+margin_top = 508.0
+margin_right = 888.0
+margin_bottom = 708.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_vertical = 3
 __meta__ = {
@@ -271,27 +277,26 @@ __meta__ = {
 }
 
 [node name="VSeparator" type="VSeparator" parent="Center/Panel/HBox"]
-margin_left = 822.0
-margin_right = 826.0
-margin_bottom = 692.0
+margin_left = 892.0
+margin_right = 904.0
+margin_bottom = 708.0
 
 [node name="Settings" type="VBoxContainer" parent="Center/Panel/HBox"]
-margin_left = 830.0
-margin_right = 1010.0
-margin_bottom = 692.0
+margin_left = 908.0
+margin_right = 1088.0
+margin_bottom = 708.0
 rect_min_size = Vector2( 180, 0 )
 
 [node name="CloseButton" type="Button" parent="Center/Panel/HBox/Settings"]
 margin_right = 180.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 80, 40 )
-text = "CLOSE"
+text = "Exit"
 
 [node name="HSeparator" type="HSeparator" parent="Center/Panel/HBox/Settings"]
 margin_top = 44.0
 margin_right = 180.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 0, 20 )
+margin_bottom = 56.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -326,9 +331,9 @@ __meta__ = {
 }
 
 [node name="Texturet Label" type="Label" parent="Center/Panel/HBox/Settings"]
-margin_top = 68.0
+margin_top = 60.0
 margin_right = 180.0
-margin_bottom = 88.0
+margin_bottom = 80.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -340,18 +345,19 @@ __meta__ = {
 }
 
 [node name="OptionButton" type="OptionButton" parent="Center/Panel/HBox/Settings"]
-margin_top = 92.0
+margin_top = 84.0
 margin_right = 180.0
-margin_bottom = 122.0
-rect_min_size = Vector2( 0, 30 )
+margin_bottom = 116.0
+rect_min_size = Vector2( 0, 32 )
 text = "64x64"
+align = 1
 items = [ "8x8", null, false, 0, null, "16x16", null, false, 1, null, "32x32", null, false, 2, null, "64x64", null, false, 3, null, "128x128", null, false, 4, null, "8x8", null, false, 5, null, "16x16", null, false, 6, null, "32x32", null, false, 7, null, "64x64", null, false, 8, null, "128x128", null, false, 9, null ]
 selected = 3
 
 [node name="Save" type="Button" parent="Center/Panel/HBox/Settings"]
-margin_top = 126.0
+margin_top = 120.0
 margin_right = 180.0
-margin_bottom = 166.0
+margin_bottom = 160.0
 rect_min_size = Vector2( 0, 40 )
 text = "Save texture"
 __meta__ = {
@@ -359,15 +365,14 @@ __meta__ = {
 }
 
 [node name="HSeparator3" type="HSeparator" parent="Center/Panel/HBox/Settings"]
-margin_top = 170.0
+margin_top = 164.0
 margin_right = 180.0
-margin_bottom = 190.0
-rect_min_size = Vector2( 0, 20 )
+margin_bottom = 176.0
 
 [node name="Tileset Label" type="Label" parent="Center/Panel/HBox/Settings"]
-margin_top = 194.0
+margin_top = 180.0
 margin_right = 180.0
-margin_bottom = 214.0
+margin_bottom = 200.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -379,9 +384,9 @@ __meta__ = {
 }
 
 [node name="Resourse" type="HBoxContainer" parent="Center/Panel/HBox/Settings"]
-margin_top = 218.0
+margin_top = 204.0
 margin_right = 180.0
-margin_bottom = 258.0
+margin_bottom = 244.0
 alignment = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -441,9 +446,9 @@ __meta__ = {
 }
 
 [node name="Save2" type="Button" parent="Center/Panel/HBox/Settings"]
-margin_top = 262.0
+margin_top = 248.0
 margin_right = 180.0
-margin_bottom = 302.0
+margin_bottom = 288.0
 rect_min_size = Vector2( 0, 40 )
 text = "Save texture + .tres"
 __meta__ = {
@@ -453,11 +458,13 @@ __meta__ = {
 [connection signal="file_selected" from="TemplateDialog" to="." method="_on_TemplateDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureDialog" to="." method="_on_SaveTextureDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureResourceDialog" to="." method="_on_SaveTextureDialog2_file_selected"]
-[connection signal="pressed" from="Center/Panel/HBox/Images/InContainer/VBoxInput/ButtonBox2/Button" to="." method="_on_Button_pressed"]
-[connection signal="toggled" from="Center/Panel/HBox/Images/InContainer/VBoxInput/Control/HBoxContainer/CheckButton" to="." method="_on_CheckButton_toggled"]
+[connection signal="item_selected" from="Center/Panel/HBox/Images/InContainer/VBoxInput/InputType" to="." method="_on_InputType_item_selected"]
+[connection signal="pressed" from="Center/Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/LoadButton" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Center/Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/ReloadButton" to="." method="_on_ReloadButton_pressed"]
+[connection signal="item_selected" from="Center/Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
 [connection signal="value_changed" from="Center/Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider" to="." method="_on_HSlider_value_changed"]
-[connection signal="pressed" from="Center/Panel/HBox/Images/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
-[connection signal="pressed" from="Center/Panel/HBox/Images/ButtonBox/Help" to="." method="_on_Help_pressed"]
+[connection signal="item_selected" from="Center/Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
+[connection signal="pressed" from="Center/Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="pressed" from="Center/Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="item_selected" from="Center/Panel/HBox/Settings/OptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="pressed" from="Center/Panel/HBox/Settings/Save" to="." method="_on_Save_pressed"]

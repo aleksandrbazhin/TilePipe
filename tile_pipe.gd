@@ -2,6 +2,26 @@ extends Node
 
 signal input_image_processed()
 
+onready var texture_file_dialog: FileDialog = $TextureDialog
+onready var template_file_dialog: FileDialog = $TemplateDialog
+onready var save_file_dialog: FileDialog = $SaveTextureDialog
+onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
+onready var texture_in: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxInput/TextureRect
+onready var out_texture: TextureRect = $Center/Panel/HBox/Images/OutTextureRect
+onready var template_texture: TextureRect = $Center/Panel/HBox/Images/TemplateContainer/TemplateTextureRect
+onready var template_load_button : Button = $Center/Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
+onready var color_process_select: OptionButton = $Center/Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType
+onready var input_select: OptionButton = $Center/Panel/HBox/Images/InContainer/VBoxInput/InputType
+onready var size_select: OptionButton = $Center/Panel/HBox/Settings/OptionButton
+onready var template_select: OptionButton = $Center/Panel/HBox/Settings/OptionButton
+onready var slice_viewport: Viewport = $Center/Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport
+onready var texture_in_viewport: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport/TextureRect
+onready var debug_input_texture: TextureRect = $Center/Panel/HBox/Images/InContainer/TextureRect2
+onready var slice_slider: HSlider = $Center/Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider
+onready var export_type_select: CheckButton = $Center/Panel/HBox/Settings/Resourse/AutotileSelect
+onready var description_select_box: HBoxContainer = $Center/Panel/HBox/Settings/DescriptionResourse
+onready var export_manual_resource_type_select: CheckButton = $Center/Panel/HBox/Settings/DescriptionResourse/Select
+
 const SIZES: Dictionary = {
 	8: "8x8",
 	16: "16x16",
@@ -11,6 +31,19 @@ const SIZES: Dictionary = {
 }
 const TEMPLATE_TILE_SIZE: int = 64
 const DEFAULT_SIZE: int = 64
+
+enum COLOR_PROCESS_TYPES {NO, FLOW_MAP, NORMAL_MAP}
+const COLOR_PROCESS_TYPE_NAMES: Dictionary = {
+	COLOR_PROCESS_TYPES.NO: "Normal color",
+	COLOR_PROCESS_TYPES.FLOW_MAP: "Flow map",
+	COLOR_PROCESS_TYPES.NORMAL_MAP: "Normal map",
+}
+enum INPUT_TYPES {CORNERS, OVERLAY}
+const INPUT_TYPE_NAMES : Dictionary = {
+	INPUT_TYPES.CORNERS: "Corners merge",
+	INPUT_TYPES.OVERLAY: "Overlay"
+}
+enum TEMPLATE_TYPES {BLOB, CUSTOM}
 
 const SETTINGS_PATH: String = "user://tilepipe_settings.save"
 
@@ -66,22 +99,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"last_save_texture_resource_path": "res://generated.png",
 	"output_tile_size": DEFAULT_SIZE
 }
-## masks are in 4-base count system like
-##  1
-## 64#4      
-##  16
-## where 
-## 0 - no land
-## 1 - full land
-## 2 - border going out of tile
-## 3 - border staying in tile
-#var IMAGE_SLICE_MASK_VALUES := [
-#	[1, 1, 1, 1],
-#	[2, 2, 1, 1],
-#	[0, 3, 1, 2],
-#	[0, 0, 3, 3],
-#	[2, 3, 1, 1],
-#]
+
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
 const ROTATION_SHIFTS := {
@@ -104,8 +122,8 @@ const CHECK_MASKS_IN_OUT := [
 		},
 		"out_tile": {"index": 4, "flip": false}
 	},
-
-	# border with corner
+#
+#	# border with corner
 	{
 		"in_mask": {
 			"positive": MY_MASK["LEFT"],
@@ -133,6 +151,7 @@ const CHECK_MASKS_IN_OUT := [
 		"in_mask": {
 			"positive": MY_MASK["LEFT"] | MY_MASK["RIGHT"],
 			"negative": MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"]
+#			"negative": MY_MASK["BOTTOM_LEFT"] | MY_MASK["TOP"] | MY_MASK["BOTTOM_RIGHT"]
 		},
 		"out_tile": {"index": 2, "flip": true}
 	},
@@ -163,23 +182,6 @@ var input_slices: Dictionary = {}
 # tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
 var tile_masks: Array = []
 
-onready var texture_file_dialog: FileDialog = $TextureDialog
-onready var template_file_dialog: FileDialog = $TemplateDialog
-onready var save_file_dialog: FileDialog = $SaveTextureDialog
-onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
-onready var texture_in: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxInput/TextureRect
-onready var out_texture: TextureRect = $Center/Panel/HBox/Images/OutTextureRect
-onready var template_texture: TextureRect = $Center/Panel/HBox/Images/TemplateTextureRect
-onready var size_select: OptionButton = $Center/Panel/HBox/Settings/OptionButton
-onready var slice_viewport: Viewport = $Center/Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport
-onready var texture_in_viewport: TextureRect = $Center/Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport/TextureRect
-onready var debug_input_texture: TextureRect = $Center/Panel/HBox/Images/InContainer/TextureRect2
-onready var slice_slider: HSlider = $Center/Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider
-onready var export_type_select: CheckButton = $Center/Panel/HBox/Settings/Resourse/AutotileSelect
-onready var description_select_box: HBoxContainer = $Center/Panel/HBox/Settings/DescriptionResourse
-onready var export_manual_resource_type_select: CheckButton = $Center/Panel/HBox/Settings/DescriptionResourse/Select
-onready var normal_map_checkbutton: CheckButton = $Center/Panel/HBox/Images/InContainer/VBoxInput/Control/HBoxContainer/CheckButton
-
 func _ready():
 #	print(get_allowed_mask_rotations(16, 5, 21))
 #	print(get_allowed_mask_rotations(0,  
@@ -189,6 +191,10 @@ func _ready():
 	size_select.clear()
 	for size in SIZES:
 		size_select.add_item(SIZES[size])
+	for type in COLOR_PROCESS_TYPES:
+		color_process_select.add_item(COLOR_PROCESS_TYPE_NAMES[COLOR_PROCESS_TYPES[type]])
+	for type in INPUT_TYPES:
+		input_select.add_item(INPUT_TYPE_NAMES[INPUT_TYPES[type]])
 	load_settings()
 	generate_tile_masks()
 	preprocess_input_image()
@@ -283,12 +289,12 @@ func generate_tile_masks():
 			tile_masks.append({"mask": mask_value, "position": Vector2(x, y), "godot_mask": godot_mask_value })
 			var mask_text_label := Label.new()
 			mask_text_label.add_color_override("font_color", Color(0, 0.05, 0.1))
-#			mask_text_label.text = str(godot_mask_value)
-			mask_text_label.text = str(mask_value)
+			mask_text_label.text = str(godot_mask_value)
 			mask_text_label.rect_position = Vector2(x, y) * DEFAULT_SIZE + Vector2(5, 5)
 			template_texture.add_child(mask_text_label)
 
-func put_to_viewport(slice: Image, rotation_key: int, is_flipped := false, is_normal_map := false ):
+func put_to_viewport(slice: Image, rotation_key: int, color_process: int,
+		is_flipped := false):
 	var flip_x := false
 	var flip_y := false
 	if is_flipped:
@@ -303,7 +309,8 @@ func put_to_viewport(slice: Image, rotation_key: int, is_flipped := false, is_no
 	texture_in_viewport.material.set_shader_param("rotation", -rotation_angle)
 	texture_in_viewport.material.set_shader_param("is_flipped_x", flip_x)
 	texture_in_viewport.material.set_shader_param("is_flipped_y", flip_y)
-	texture_in_viewport.material.set_shader_param("is_normal_map", is_normal_map)
+	var is_flow_map: bool = color_process == COLOR_PROCESS_TYPES.FLOW_MAP
+	texture_in_viewport.material.set_shader_param("is_flow_map", is_flow_map)
 
 func get_from_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
 	var image := Image.new()
@@ -317,9 +324,24 @@ func get_from_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
 		image.resize(int(size.x * resize_factor), int(size.y * resize_factor))
 	return image
 
+func get_color_process() -> int:
+	return color_process_select.selected
+
+# TODO: remake - set offsets from corners data in ui for each corner
+# for now it only puts every corner slice to top left
 # invert for 3 slice
 func get_input_flip(index: int, flip: bool) -> bool:
 	return flip if index != 3 else not flip
+
+func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: int, slice_position: Vector2):
+	debug_image.blit_rect(
+		slice_image,
+		Rect2(0, 0, slice_size, slice_size), 
+		slice_position
+	)
+	var itex = ImageTexture.new()
+	itex.create_from_image(debug_image)
+	debug_input_texture.texture = itex
 
 func preprocess_input_image():
 	texture_in_viewport.show()
@@ -339,7 +361,7 @@ func preprocess_input_image():
 	var image_input_fmt: int = input_image.get_format()
 	var image_fmt: int = slice_viewport.get_texture().get_data().get_format()
 	var debug_image := Image.new()
-	var is_normal_map = normal_map_checkbutton.pressed
+	var color_process: int = get_color_process()
 	debug_image.create(int(output_slice_size * MIN_IMAGE_SIZE.x),
 		int(output_slice_size * MIN_IMAGE_SIZE.y * 8), false, image_fmt)
 	for x in range(MIN_IMAGE_SIZE.x):
@@ -349,43 +371,22 @@ func preprocess_input_image():
 		slice.blit_rect(input_image, Rect2(x * input_slice_size, 0, input_slice_size, input_slice_size), Vector2.ZERO)
 		for rot_index in ROTATION_SHIFTS.size():
 			var rotation_key: int = ROTATION_SHIFTS.keys()[rot_index]
-
-			put_to_viewport(slice, rotation_key, get_input_flip(x, false), is_normal_map)
+			put_to_viewport(slice, rotation_key, color_process, get_input_flip(x, false))
 			yield(VisualServer, 'frame_post_draw')
-			var processed_slice : Image = get_from_viewport(image_fmt, resize_factor)
-			debug_image.blit_rect(
-				processed_slice,
-				Rect2(0, 0, output_slice_size, output_slice_size), 
-				Vector2(x * output_slice_size, 2*rot_index * output_slice_size)
-			)
-			var itex = ImageTexture.new()
-			itex.create_from_image(debug_image)
-			debug_input_texture.texture = itex
-
-			put_to_viewport(slice, rotation_key, get_input_flip(x, true), is_normal_map)
+			var processed_slice: Image = get_from_viewport(image_fmt, resize_factor)
+			append_to_debug_image(debug_image, processed_slice, output_slice_size, 
+				Vector2(x * output_slice_size, 2 * rot_index * output_slice_size))
+			put_to_viewport(slice, rotation_key, color_process, get_input_flip(x, true))
 			yield(VisualServer, 'frame_post_draw')
 			var processed_flipped_slice : Image = get_from_viewport(image_fmt, resize_factor)
-			debug_image.blit_rect(
-				processed_flipped_slice,
-				Rect2(0, 0, output_slice_size, output_slice_size), 
-				Vector2(x * output_slice_size, (2*rot_index + 1) * output_slice_size)
-			)
-			itex.create_from_image(debug_image)
-			debug_input_texture.texture = itex
-			
+			append_to_debug_image(debug_image, processed_slice, output_slice_size, 
+				Vector2(x * output_slice_size, (2 * rot_index + 1) * output_slice_size))
 			input_slices[x][rotation_key] = {
 				false: processed_slice, 
 				true: processed_flipped_slice
 			}
-
 	texture_in_viewport.hide()
-#	display_slice()
 	emit_signal("input_image_processed")
-
-func display_slice(index: int = -1):
-	if index == -1:
-		index = int(slice_slider.value - 1)
-#	put_to_viewport(input_slices[index][0][true], PI)
 
 func make_output_texture():
 	if input_slices.size() == 0:
@@ -589,5 +590,17 @@ func _on_SaveTextureDialog2_file_selected(path: String):
 func _on_AutotileSelect_toggled(button_pressed):
 	description_select_box.visible = not button_pressed
 
-func _on_CheckButton_toggled(button_pressed):
+func _on_InputType_item_selected(index):
 	preprocess_input_image()
+
+func _on_ColorProcessType_item_selected(index):
+	preprocess_input_image()
+
+func _on_ReloadButton_pressed():
+	preprocess_input_image()
+
+func _on_TemplateOption_item_selected(index):
+	if index == TEMPLATE_TYPES.CUSTOM:
+		template_load_button.disabled = false
+	else:
+		template_load_button.disabled = true
