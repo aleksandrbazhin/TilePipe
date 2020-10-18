@@ -23,6 +23,7 @@ _global_script_class_icons={
 config/name="TilePipe"
 config/description="Tool to compose tilesets"
 run/main_scene="res://tile_pipe.tscn"
+run/low_processor_mode=true
 config/icon="res://icon.png"
 
 [debug]
@@ -34,11 +35,12 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1366
 window/size/height=768
-window/size/borderless=true
 
 [rendering]
 
 quality/driver/driver_name="GLES2"
+quality/intended_usage/framebuffer_allocation=0
+quality/intended_usage/framebuffer_allocation.mobile=0
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
 environment/default_environment="res://default_env.tres"

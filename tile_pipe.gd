@@ -6,25 +6,37 @@ onready var texture_file_dialog: FileDialog = $TextureDialog
 onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
+
 onready var texture_in: TextureRect = $Panel/HBox/Images/InContainer/VBoxInput/TextureRect
-onready var out_texture: TextureRect = $Panel/HBox/Images/ScrollContainer/OutTextureRect
-onready var template_texture: TextureRect = $Panel/HBox/Images/TemplateContainer/ScrollContainer/TemplateTextureRect
-onready var template_load_button : Button = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
+onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/InputType
 onready var color_process_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType
-onready var input_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/InputType
-onready var size_select: OptionButton = $Panel/HBox/Settings/OptionButton
-onready var output_size_select: OptionButton = $Panel/HBox/Settings/OptionButton
-onready var template_type_select: OptionButton = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption
+
+onready var corners_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings
+onready var corners_merge_type_select: OptionButton = corners_merge_container.get_node("CornersOptionButton")
+onready var overlay_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings
+onready var overlay_merge_type_select: OptionButton = overlay_merge_container.get_node("OverlayOptionButton")
+
 onready var slice_viewport: Viewport = $Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport
-onready var texture_in_viewport: TextureRect = $Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport/TextureRect
+onready var texture_in_viewport: TextureRect = slice_viewport.get_node("TextureRect")
 onready var debug_input_texture: TextureRect = $Panel/HBox/Images/InContainer/DebugTextureContainer/DebugTexture
 onready var slice_slider: HSlider = $Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider
+
+onready var template_load_button : Button = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
+onready var template_type_select: OptionButton = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption
+onready var template_texture: TextureRect = $Panel/HBox/Images/TemplateContainer/ScrollContainer/TemplateTextureRect
+
+onready var output_scroll: ScrollContainer = $Panel/HBox/Images/OutputContainer/ScrollContainer
+onready var output_control: Control = output_scroll.get_node("Control")
+onready var out_texture: TextureRect = output_scroll.get_node("Control/OutTextureRect")
+onready var out_bg_texture: TextureRect = output_scroll.get_node("Control/BGTextureRect")
+
+onready var output_size_select: OptionButton = $Panel/HBox/Settings/SizeOptionButton
 onready var export_type_select: CheckButton = $Panel/HBox/Settings/Resourse/AutotileSelect
 onready var description_select_box: HBoxContainer = $Panel/HBox/Settings/DescriptionResourse
 onready var export_manual_resource_type_select: CheckButton = $Panel/HBox/Settings/DescriptionResourse/Select
-onready var output_scroll: ScrollContainer = $Panel/HBox/Images/ScrollContainer
 
-const SIZES: Dictionary = {
+
+const OUTPUT_SIZES: Dictionary = {
 	8: "8x8",
 	16: "16x16",
 	32: "32x32",
@@ -32,7 +44,8 @@ const SIZES: Dictionary = {
 	128: "128x128"
 }
 const TEMPLATE_TILE_SIZE: int = 32
-const DEFAULT_SIZE: int = 64
+const DEFAULT_OUTPUT_SIZE: int = 64
+
 
 enum COLOR_PROCESS_TYPES {NO, FLOW_MAP, NORMAL_MAP}
 const COLOR_PROCESS_TYPE_NAMES: Dictionary = {
@@ -42,12 +55,39 @@ const COLOR_PROCESS_TYPE_NAMES: Dictionary = {
 }
 enum INPUT_TYPES {CORNERS, OVERLAY}
 const INPUT_TYPE_NAMES : Dictionary = {
-	INPUT_TYPES.CORNERS: "Corners merge",
+	INPUT_TYPES.CORNERS: "Quarters merge",
 	INPUT_TYPES.OVERLAY: "Overlay"
 }
+const DEFAULT_INPUT_TYPE: int = INPUT_TYPES.CORNERS
 
-const TEMPLATE_47_PATH: String = "res://template.png"
-const TEMPLATE_256_PATH: String = "res://template_256.png"
+enum CORNERS_INPUT_PRESETS {FIVE, FOUR, NO}
+const CORNERS_INPUT_PRESETS_NAMES: Dictionary = {
+	CORNERS_INPUT_PRESETS.FIVE: "Five corner preset (4 quaters)",
+	CORNERS_INPUT_PRESETS.FOUR: "Four corners preset (5 quaters)",
+	CORNERS_INPUT_PRESETS.NO: "Custom preset",
+}
+const CORNERS_INPUT_EXAMPLES: Dictionary = {
+	CORNERS_INPUT_PRESETS.FIVE: "res://images/input_quaters_5.png",
+	CORNERS_INPUT_PRESETS.FOUR: "res://images/input_quaters_5.png",
+	CORNERS_INPUT_PRESETS.NO: "",
+}
+
+enum OVERLAY_INPUT_PRESETS {TOP_DOWN_3, TOP_DOWN_4, SIDEVIEW_6, SIDEVIEW_8}
+const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "Top down (3 tiles)",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "Top down with internal corner (4)",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "Sideview (6 tiles)",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "Sideview with internal corner (8)"
+}
+const OVERLAY_INPUT_EXAMPLES: Dictionary = {
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://images/input_overlay_3.png",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://images/input_overlay_3.png",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "res://images/input_overlay_3.png",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "res://images/input_overlay_3.png"
+}
+
+const TEMPLATE_47_PATH: String = "res://images/template_47.png"
+const TEMPLATE_256_PATH: String = "res://images/template_256.png"
 enum TEMPLATE_TYPES {TEMPLATE_47, TEMPLATE_256, CUSTOM}
 const TEMPLATE_TYPE_NAMES : Dictionary = {
 	TEMPLATE_TYPES.TEMPLATE_47: "Standard 3x3: 47",
@@ -117,11 +157,11 @@ const TEMPLATE_MASK_CHECK_POINTS := {
 }
 
 const DEFAULT_SETTINGS: Dictionary = {
-	"last_texture_path": "res://test.png",
+	"last_texture_path": CORNERS_INPUT_EXAMPLES[CORNERS_INPUT_PRESETS.FIVE],
 	"last_template_path": TEMPLATE_47_PATH,
 	"last_save_texture_path": "res://generated.png",
 	"last_save_texture_resource_path": "res://generated.png",
-	"output_tile_size": DEFAULT_SIZE
+	"output_tile_size": DEFAULT_OUTPUT_SIZE
 }
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
@@ -202,6 +242,7 @@ var template_size: Vector2
 #	0: {0: {false: Image, true: Image}, 2: , 4: , 6:}
 #	1: ... }
 var input_slices: Dictionary = {}
+var input_overlayed: Dictionary = {}
 # tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
 var tile_masks: Array = []
 
@@ -211,16 +252,20 @@ func _ready():
 #		MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["RIGHT"] | MY_MASK["BOTTOM_RIGHT"],
 #	 16))
 	connect("input_image_processed", self, "make_output_texture")
-	size_select.clear()
-	for size in SIZES:
-		size_select.add_item(SIZES[size])
+	output_size_select.clear()
+	for size in OUTPUT_SIZES:
+		output_size_select.add_item(OUTPUT_SIZES[size])
 	for type in COLOR_PROCESS_TYPES:
 		color_process_select.add_item(COLOR_PROCESS_TYPE_NAMES[COLOR_PROCESS_TYPES[type]])
 	for type in INPUT_TYPES:
-		input_select.add_item(INPUT_TYPE_NAMES[INPUT_TYPES[type]])
+		generation_type_select.add_item(INPUT_TYPE_NAMES[INPUT_TYPES[type]])
+	setup_input_type(DEFAULT_INPUT_TYPE)
 	for type in TEMPLATE_TYPES:
 		template_type_select.add_item(TEMPLATE_TYPE_NAMES[TEMPLATE_TYPES[type]])
-		
+	for index in CORNERS_INPUT_PRESETS:
+		corners_merge_type_select.add_item(CORNERS_INPUT_PRESETS_NAMES[CORNERS_INPUT_PRESETS[index]])
+	for index in OVERLAY_INPUT_PRESETS:
+		overlay_merge_type_select.add_item(OVERLAY_INPUT_PRESET_NAMES[OVERLAY_INPUT_PRESETS[index]])
 	load_settings()
 	generate_tile_masks()
 	preprocess_input_image()
@@ -238,7 +283,7 @@ func get_setting_values(load_defaluts: bool = false) -> Dictionary:
 		"last_template_path": template_file_dialog.current_path,
 		"last_save_texture_path": save_file_dialog.current_path,
 		"last_save_texture_resource_path": save_resource_dialog.current_path,
-		"output_tile_size": SIZES.keys()[size_select.selected],
+		"output_tile_size": get_output_size(),
 	}
 
 func save_settings(store_defaults: bool = false):
@@ -255,14 +300,14 @@ func apply_settings(data: Dictionary):
 	template_texture.texture = load_image_texture(data["last_template_path"])
 	save_file_dialog.current_path = data["last_save_texture_path"]
 	save_resource_dialog.current_path = data["last_save_texture_resource_path"]
-	size_select.selected = SIZES.keys().find(int(data["output_tile_size"]))
+	output_size_select.selected = OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
 
 func setting_exist() -> bool:
 	var save = File.new()
 	return save.file_exists(SETTINGS_PATH)
 
 func load_settings():
-#	save_settings(true) # uncomment on change of save file structure
+	save_settings(true) # uncomment on change of save file structure
 	if not setting_exist():
 		save_settings(true)
 	var save = File.new()
@@ -373,13 +418,9 @@ func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: i
 	itex.create_from_image(debug_image)
 	debug_input_texture.texture = itex
 
-func preprocess_input_image():
-	texture_in_viewport.show()
+func generate_corner_slices():
 	input_slices = {}
-	var output_tile_size: int = SIZES.keys()[size_select.selected]
-	if not check_input_texture():
-		print("WRONG input texture")
-		return
+	var output_tile_size: int = get_output_size()
 	var input_image: Image = texture_in.texture.get_data()
 	var input_slice_size: int = int(input_image.get_size().y)
 	var output_slice_size: int = int(output_tile_size / 2.0)
@@ -418,10 +459,31 @@ func preprocess_input_image():
 	texture_in_viewport.hide()
 	emit_signal("input_image_processed")
 
-func make_output_texture():
-	if input_slices.size() == 0:
+func generate_overlayed_tiles():
+	input_slices = {}
+	emit_signal("input_image_processed")
+
+func preprocess_input_image():
+	texture_in_viewport.show()
+	if not check_input_texture():
+		print("WRONG input texture")
 		return
-	var tile_size: int = SIZES.keys()[size_select.selected]
+	debug_input_texture.texture = null
+	var generation_type: int = generation_type_select.selected
+	match generation_type:
+		INPUT_TYPES.CORNERS:
+			generate_corner_slices()
+		INPUT_TYPES.OVERLAY:
+			generate_overlayed_tiles()
+
+func get_output_size() -> int:
+	return OUTPUT_SIZES.keys()[output_size_select.selected]
+
+func make_from_corners():
+	if input_slices.size() == 0:
+		set_output_texture(null)
+		return
+	var tile_size: int = get_output_size()
 	# warning-ignore:integer_division
 	var slice_size: int = int(tile_size) / 2
 	var image_fmt: int = input_slices[0][0][true].get_format()
@@ -446,8 +508,32 @@ func make_output_texture():
 					out_image.blit_rect(slice_image, slice_rect, tile_position + intile_offset)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image)
-	out_texture.texture = itex
+	set_output_texture(itex)
 
+func set_output_texture(texture: Texture):
+	out_texture.texture = texture
+	if texture != null:
+		var image_size: Vector2 = out_texture.texture.get_data().get_size()
+		out_texture.rect_size = image_size
+		output_control.rect_min_size = image_size
+	else:
+		output_control.rect_min_size = Vector2.ZERO
+
+
+func make_from_overlayed():
+	if input_overlayed.size() == 0:
+		set_output_texture(null)
+		return
+
+func make_output_texture():
+	var generation_type: int = generation_type_select.selected
+	set_output_texture(null)
+	match generation_type:
+		INPUT_TYPES.CORNERS:
+			make_from_corners()
+		INPUT_TYPES.OVERLAY:
+			make_from_overlayed()
+	
 func rotate_clockwise(in_rot: int) -> int:
 	var out: int = int(clamp(in_rot, 0, 6)) - 2
 	if out == -2:
@@ -487,7 +573,7 @@ func tile_name_from_position(pos: Vector2) -> String:
 	return "%d_%d" % [pos.x, pos.y]
 
 func make_manual_resource_data(path: String) -> String:
-	var tile_size: int = SIZES.keys()[size_select.selected]
+	var tile_size: int = get_output_size()
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
 	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % path
 	if export_manual_resource_type_select.pressed:
@@ -526,7 +612,7 @@ func make_autotile_resource_data(path: String) -> String:
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
 	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % path
 	out_string += "\n[resource]\n"
-	var tile_size: int = SIZES.keys()[size_select.selected]
+	var tile_size: int = get_output_size()
 	var texture_size: Vector2 = out_texture.texture.get_data().get_size()
 	var mask_out_array: PoolStringArray = []
 	for mask in tile_masks:
@@ -575,15 +661,15 @@ func _on_Save_pressed():
 func _on_Save2_pressed():
 	save_resource_dialog.popup_centered()
 
-func load_image_texture(path) -> ImageTexture:
+func load_image_texture(path: String) -> Texture:
 	var img = Image.new()
 	var err = img.load(path)
 	if(err != 0):
 		print("Error loading the image: " + path)
 		return null
-	var img_tex = ImageTexture.new()
-	img_tex.create_from_image(img)
-	return img_tex
+	var image_texture = ImageTexture.new()
+	image_texture.create_from_image(img)
+	return image_texture
 	
 func _on_TextureDialog_file_selected(path):
 	texture_in.texture = load_image_texture(path)
@@ -609,10 +695,6 @@ func _on_SaveTextureDialog_file_selected(path):
 	save_texture_png(path)
 	save_settings()
 
-func _on_OptionButton_item_selected(_index):
-	preprocess_input_image()
-	save_settings()
-
 func _on_SaveTextureDialog2_file_selected(path: String):
 	save_texture_png(path)
 	var output_string : String
@@ -630,7 +712,20 @@ func _on_SaveTextureDialog2_file_selected(path: String):
 func _on_AutotileSelect_toggled(button_pressed):
 	description_select_box.visible = not button_pressed
 
+func setup_input_type(index: int):
+	match index:
+		INPUT_TYPES.CORNERS:
+			overlay_merge_container.hide()
+			corners_merge_container.show()
+			color_process_select.disabled = true
+			color_process_select.selected = COLOR_PROCESS_TYPES.NO
+		INPUT_TYPES.OVERLAY:
+			corners_merge_container.hide()
+			overlay_merge_container.show()
+			color_process_select.disabled = false
+
 func _on_InputType_item_selected(index):
+	setup_input_type(index)
 	preprocess_input_image()
 
 func _on_ColorProcessType_item_selected(index):
@@ -652,5 +747,20 @@ func _on_TemplateOption_item_selected(index):
 		template_texture.texture = load_image_texture(TEMPLATE_PATHS[index])
 		generate_tile_masks()
 	make_output_texture()
+	save_settings()
+
+
+func _on_CornersOptionButton_item_selected(index):
+	preprocess_input_image()
+
+func _on_OverlayOptionButton_item_selected(index):
+	preprocess_input_image()
+
+
+func _on_SizeOptionButton_item_selected(index):
+	var output_scale: float = float(get_output_size()) / float(DEFAULT_OUTPUT_SIZE)
+	out_bg_texture.rect_scale = Vector2(output_scale, output_scale)
+	out_bg_texture.rect_size = output_control.rect_size / output_scale
+	preprocess_input_image()
 	save_settings()
 
