@@ -7,7 +7,8 @@ onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
 
-onready var texture_in: TextureRect = $Panel/HBox/Images/InContainer/VBoxInput/TextureRect
+onready var texture_in: TextureRect = $Panel/HBox/Images/InContainer/VBoxInput/Control/InputTextureRect
+onready var texture_input_bg: TextureRect = $Panel/HBox/Images/InContainer/VBoxInput/Control/BGTextureRect
 onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/InputType
 onready var color_process_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType
 
@@ -18,8 +19,12 @@ onready var overlay_merge_type_select: OptionButton = overlay_merge_container.ge
 
 onready var slice_viewport: Viewport = $Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport
 onready var texture_in_viewport: TextureRect = slice_viewport.get_node("TextureRect")
-onready var debug_input_texture: TextureRect = $Panel/HBox/Images/InContainer/DebugTextureContainer/DebugTexture
 onready var slice_slider: HSlider = $Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider
+
+onready var debug_input_control: Control = $Panel/HBox/Images/InContainer/DebugTextureContainer/Control
+onready var debug_input_texture: TextureRect = debug_input_control.get_node("DebugTexture")
+onready var debug_input_texture_bg: TextureRect = debug_input_control.get_node("BGTextureRect")
+
 
 onready var template_load_button : Button = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
 onready var template_type_select: OptionButton = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption
@@ -62,8 +67,8 @@ const DEFAULT_INPUT_TYPE: int = INPUT_TYPES.CORNERS
 
 enum CORNERS_INPUT_PRESETS {FIVE, FOUR, NO}
 const CORNERS_INPUT_PRESETS_NAMES: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "Five corner preset (4 quaters)",
-	CORNERS_INPUT_PRESETS.FOUR: "Four corners preset (5 quaters)",
+	CORNERS_INPUT_PRESETS.FIVE: "Five corner preset (5 quaters)",
+	CORNERS_INPUT_PRESETS.FOUR: "Four corner preset (4 quaters)",
 	CORNERS_INPUT_PRESETS.NO: "Custom preset",
 }
 const CORNERS_INPUT_EXAMPLES: Dictionary = {
@@ -433,8 +438,8 @@ func generate_corner_slices():
 	var image_fmt: int = slice_viewport.get_texture().get_data().get_format()
 	var debug_image := Image.new()
 	var color_process: int = get_color_process()
-	debug_image.create(int(output_slice_size * MIN_IMAGE_SIZE.x),
-		int(output_slice_size * MIN_IMAGE_SIZE.y * 8), false, image_fmt)
+	var debug_texture_size: Vector2 = get_debug_image_rect_size(INPUT_TYPES.CORNERS)
+	debug_image.create(debug_texture_size.x, debug_texture_size.y, false, image_fmt)
 	for x in range(MIN_IMAGE_SIZE.x):
 		input_slices[x] = {}
 		var slice := Image.new()
@@ -749,18 +754,33 @@ func _on_TemplateOption_item_selected(index):
 	make_output_texture()
 	save_settings()
 
-
 func _on_CornersOptionButton_item_selected(index):
 	preprocess_input_image()
 
 func _on_OverlayOptionButton_item_selected(index):
 	preprocess_input_image()
 
+func get_debug_image_rect_size(input_type: int) -> Vector2:
+	var output_tile_size: int = get_output_size()
+	var size := Vector2.ZERO
+	match input_type:
+		INPUT_TYPES.CORNERS:
+			var slice_size: int = output_tile_size / 2
+			size.x = slice_size * MIN_IMAGE_SIZE.x
+			size.y = slice_size * MIN_IMAGE_SIZE.y * 8
+		INPUT_TYPES.OVERLAY:
+			pass
+	return size
 
 func _on_SizeOptionButton_item_selected(index):
-	var output_scale: float = float(get_output_size()) / float(DEFAULT_OUTPUT_SIZE)
-	out_bg_texture.rect_scale = Vector2(output_scale, output_scale)
-	out_bg_texture.rect_size = output_control.rect_size / output_scale
+	var output_scale_factor: float = float(get_output_size()) / float(DEFAULT_OUTPUT_SIZE)
+	var output_scale := Vector2(output_scale_factor, output_scale_factor)
+	out_bg_texture.rect_scale = output_scale
+	out_bg_texture.rect_size = output_control.rect_size / output_scale_factor
+	debug_input_control.rect_min_size = get_debug_image_rect_size(INPUT_TYPES.CORNERS)
+	print(debug_input_control.rect_min_size)
+	debug_input_texture_bg.rect_scale = output_scale
+	debug_input_texture_bg.rect_size = debug_input_control.rect_size / output_scale_factor
 	preprocess_input_image()
 	save_settings()
 

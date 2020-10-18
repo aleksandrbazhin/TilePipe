@@ -104,27 +104,28 @@ __meta__ = {
 [node name="HBox" type="HBoxContainer" parent="Panel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 1359.0
-margin_bottom = 818.0
+margin_right = 1361.0
+margin_bottom = 773.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
-margin_right = 1112.0
-margin_bottom = 811.0
+margin_right = 1114.0
+margin_bottom = 766.0
 size_flags_horizontal = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
-margin_right = 1112.0
-margin_bottom = 265.0
+margin_right = 1114.0
+margin_bottom = 256.0
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/InContainer"]
 margin_right = 40.0
-margin_bottom = 265.0
+margin_bottom = 256.0
 rect_min_size = Vector2( 40, 32 )
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/BlockLabel"]
+margin_left = 2.0
 margin_top = 260.0
-margin_right = 263.0
+margin_right = 265.0
 margin_bottom = 292.0
 rect_min_size = Vector2( 0, 32 )
 rect_rotation = 270.0
@@ -139,7 +140,8 @@ __meta__ = {
 [node name="VBoxInput" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 44.0
 margin_right = 244.0
-margin_bottom = 265.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 200, 0 )
 
 [node name="LoadButtonBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxInput"]
 margin_right = 200.0
@@ -153,7 +155,7 @@ margin_right = 156.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
-text = "Load Texture"
+text = "Load texture"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -165,10 +167,27 @@ margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
 text = "↻"
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxInput"]
+[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/VBoxInput"]
 margin_top = 44.0
 margin_right = 200.0
-margin_bottom = 140.0
+margin_bottom = 131.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 7 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InputTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_min_size = Vector2( 200, 96 )
 size_flags_vertical = 3
 texture = ExtResource( 3 )
@@ -177,32 +196,32 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 144.0
+margin_top = 135.0
 margin_right = 200.0
-margin_bottom = 163.0
+margin_bottom = 154.0
 text = "Generation type"
 valign = 2
 
 [node name="InputType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 167.0
+margin_top = 158.0
 margin_right = 200.0
-margin_bottom = 199.0
+margin_bottom = 190.0
 rect_min_size = Vector2( 0, 32 )
 text = "Type"
 align = 1
 
 [node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 203.0
+margin_top = 194.0
 margin_right = 200.0
-margin_bottom = 229.0
+margin_bottom = 220.0
 rect_min_size = Vector2( 0, 26 )
 text = "Color processing type"
 valign = 2
 
 [node name="ColorProcessType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 233.0
+margin_top = 224.0
 margin_right = 200.0
-margin_bottom = 265.0
+margin_bottom = 256.0
 rect_min_size = Vector2( 0, 32 )
 text = "Type"
 align = 1
@@ -210,7 +229,7 @@ align = 1
 [node name="MarginContainer" type="MarginContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 248.0
 margin_right = 548.0
-margin_bottom = 265.0
+margin_bottom = 256.0
 rect_min_size = Vector2( 300, 0 )
 custom_constants/margin_right = 20
 custom_constants/margin_left = 20
@@ -218,7 +237,7 @@ custom_constants/margin_left = 20
 [node name="CornersMergeSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/MarginContainer"]
 margin_left = 20.0
 margin_right = 280.0
-margin_bottom = 265.0
+margin_bottom = 256.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings"]
 margin_right = 260.0
@@ -238,7 +257,7 @@ text = "Preset"
 visible = false
 margin_left = 20.0
 margin_right = 280.0
-margin_bottom = 265.0
+margin_bottom = 256.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
 margin_top = 29.0
@@ -256,7 +275,7 @@ rect_min_size = Vector2( 180, 32 )
 [node name="VBoxViewport" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 552.0
 margin_right = 680.0
-margin_bottom = 265.0
+margin_bottom = 256.0
 
 [node name="ViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/VBoxViewport"]
 margin_right = 128.0
@@ -284,7 +303,7 @@ stretch_mode = 3
 [node name="Spacer" type="Control" parent="Panel/HBox/Images/InContainer/VBoxViewport"]
 margin_top = 132.0
 margin_right = 128.0
-margin_bottom = 265.0
+margin_bottom = 256.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxViewport"]
@@ -316,27 +335,44 @@ ticks_on_borders = true
 
 [node name="DebugTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 684.0
-margin_right = 1044.0
-margin_bottom = 265.0
-rect_min_size = Vector2( 360, 256 )
+margin_right = 1114.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 428, 256 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DebugTexture" type="TextureRect" parent="Panel/HBox/Images/InContainer/DebugTextureContainer"]
+[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/DebugTextureContainer"]
+margin_right = 430.0
+margin_bottom = 256.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/DebugTextureContainer/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 7 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DebugTexture" type="TextureRect" parent="Panel/HBox/Images/InContainer/DebugTextureContainer/Control"]
 margin_right = 128.0
 margin_bottom = 128.0
 rect_min_size = Vector2( 128, 128 )
 
 [node name="HSeparator" type="HSeparator" parent="Panel/HBox/Images"]
-margin_top = 269.0
-margin_right = 1112.0
-margin_bottom = 281.0
+margin_top = 260.0
+margin_right = 1114.0
+margin_bottom = 272.0
 
 [node name="TemplateContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
-margin_top = 285.0
-margin_right = 1112.0
-margin_bottom = 415.0
+margin_top = 276.0
+margin_right = 1114.0
+margin_bottom = 406.0
 size_flags_horizontal = 3
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/TemplateContainer"]
@@ -345,10 +381,11 @@ margin_bottom = 130.0
 rect_min_size = Vector2( 40, 32 )
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/TemplateContainer/BlockLabel"]
+margin_left = 2.0
 margin_top = 128.0
-margin_right = 131.0
+margin_right = 133.0
 margin_bottom = 160.0
-rect_min_size = Vector2( 0, 40 )
+rect_min_size = Vector2( 0, 32 )
 rect_rotation = 270.0
 custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
@@ -377,7 +414,7 @@ margin_bottom = 76.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 disabled = true
-text = "Select Template"
+text = "Load template"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -390,7 +427,7 @@ rect_min_size = Vector2( 120, 0 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/TemplateContainer"]
 margin_left = 372.0
-margin_right = 1112.0
+margin_right = 1114.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 390, 130 )
 size_flags_horizontal = 3
@@ -406,26 +443,26 @@ __meta__ = {
 }
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/HBox/Images"]
-margin_top = 419.0
-margin_right = 1112.0
-margin_bottom = 431.0
+margin_top = 410.0
+margin_right = 1114.0
+margin_bottom = 422.0
 
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
-margin_top = 435.0
-margin_right = 1112.0
-margin_bottom = 811.0
+margin_top = 426.0
+margin_right = 1114.0
+margin_bottom = 766.0
 size_flags_vertical = 3
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
-margin_bottom = 376.0
+margin_bottom = 340.0
 rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/OutputContainer/BlockLabel"]
-margin_left = 1.0
+margin_left = 2.0
 margin_top = 328.0
-margin_right = 334.0
+margin_right = 335.0
 margin_bottom = 360.0
 rect_min_size = Vector2( 0, 32 )
 rect_rotation = 270.0
@@ -441,8 +478,8 @@ __meta__ = {
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 44.0
-margin_right = 1112.0
-margin_bottom = 376.0
+margin_right = 1114.0
+margin_bottom = 340.0
 rect_min_size = Vector2( 0, 340 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -451,8 +488,8 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/ScrollContainer"]
-margin_right = 1068.0
-margin_bottom = 376.0
+margin_right = 1070.0
+margin_bottom = 340.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -478,14 +515,14 @@ __meta__ = {
 }
 
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
-margin_left = 1116.0
-margin_right = 1128.0
-margin_bottom = 811.0
+margin_left = 1118.0
+margin_right = 1130.0
+margin_bottom = 766.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
-margin_left = 1132.0
-margin_right = 1352.0
-margin_bottom = 811.0
+margin_left = 1134.0
+margin_right = 1354.0
+margin_bottom = 766.0
 rect_min_size = Vector2( 220, 0 )
 
 [node name="CloseButton" type="Button" parent="Panel/HBox/Settings"]
