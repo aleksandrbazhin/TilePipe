@@ -39,7 +39,7 @@ onready var export_type_select: CheckButton = $Panel/HBox/Settings/Resourse/Auto
 onready var description_select_box: HBoxContainer = $Panel/HBox/Settings/DescriptionResourse
 onready var export_manual_resource_type_select: CheckButton = $Panel/HBox/Settings/DescriptionResourse/Select
 
-var generation_preset: GenerationData
+var generation_data: GenerationData
 
 export var is_godot_plugin: bool = false
 
@@ -76,42 +76,60 @@ func _process(_delta: float):
 
 var last_generator_preset_path: String = ""
 func get_generator_preset_path() -> String:
-	if last_generator_preset_path == "":
-		return texture_file_dialog.current_path.replace(".png", ".json") # FIX
-	else: 
-		return last_generator_preset_path
+	var path: String = ""
+	match generation_type_select.selected:
+		Const.INPUT_TYPES.CORNERS:
+			var corner_preset: int = corners_merge_type_select.selected
+			path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[corner_preset]
+		Const.INPUT_TYPES.OVERLAY:
+			var overlay_preset: int = overlay_merge_type_select.selected
+			path = Const.OVERLAY_INPUT_PRESETS_DATA_PATH[overlay_preset]
+	return path
 
-func get_setting_values(load_defaluts: bool = false) -> Dictionary:
+var custom_template_path: String = ""
+func get_template_path() -> String:
+	if custom_template_path != "":
+		return custom_template_path
+	else:
+		return Const.TEMPLATE_47_PATH
+
+func capture_setting_values(load_defaluts: bool = false) -> Dictionary:
 	if load_defaluts:
 		return Const.DEFAULT_SETTINGS
 	else:
 		return {
 		"last_texture_path": texture_file_dialog.current_path,
 		"last_gen_preset_path": get_generator_preset_path(),
-		"last_template_path": template_file_dialog.current_path,
+		"last_template_path": get_template_path(),
 		"last_save_texture_path": save_file_dialog.current_path,
 		"last_save_texture_resource_path": save_resource_dialog.current_path,
 		"output_tile_size": get_output_tile_size(),
+		"input_type": generation_type_select.selected,
+		"corner_preset": corners_merge_type_select.selected,
+		"overlay_preset": overlay_merge_type_select.selected
 	}
 
 func save_settings(store_defaults: bool = false):
 	var save = File.new()
 	save.open(Const.SETTINGS_PATH, File.WRITE)
-	var data := get_setting_values(store_defaults) 
+	var data := capture_setting_values(store_defaults) 
 	save.store_line(to_json(data))
 	save.close()
 
 func apply_settings(data: Dictionary):
 	texture_file_dialog.current_path = data["last_texture_path"]
 	texture_in.texture = load_image_texture(data["last_texture_path"])
-	generation_preset = GenerationData.new(data["last_gen_preset_path"])
+	generation_data = GenerationData.new(data["last_gen_preset_path"])
 	template_file_dialog.current_path = data["last_template_path"]
 	template_texture.texture = load_image_texture(data["last_template_path"])
 	save_file_dialog.current_path = data["last_save_texture_path"]
 	save_resource_dialog.current_path = data["last_save_texture_resource_path"]
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
+	generation_type_select.selected = data["input_type"]
+	setup_input_type(generation_type_select.selected)
+	corners_merge_type_select.selected = data["corner_preset"]
+	overlay_merge_type_select.selected = data["overlay_preset"]
 	
-
 func setting_exist() -> bool:
 	var save = File.new()
 	return save.file_exists(Const.SETTINGS_PATH)
@@ -225,7 +243,7 @@ func generate_corner_slices():
 	input_slices = {}
 	var output_tile_size: int = get_output_tile_size()
 	var input_image: Image = texture_in.texture.get_data()
-	var min_input_slices: Vector2 = generation_preset.get_min_input_size()
+	var min_input_slices: Vector2 = generation_data.get_min_input_size()
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
 	var output_slice_size: int = int(output_tile_size / 2.0)
 	var resize_factor: float = float(output_slice_size) / float(input_slice_size)
@@ -294,7 +312,7 @@ func make_from_corners():
 	var slice_rect := Rect2(0, 0, slice_size, slice_size)
 	var out_image := Image.new()
 	out_image.create(tile_size * int(template_size.x), tile_size * int(template_size.y), false, image_fmt)
-	var preset: Array = generation_preset.get_preset()
+	var preset: Array = generation_data.get_preset()
 	for mask in tile_masks:
 		var tile_position: Vector2 = mask['position'] * tile_size
 		if mask["godot_mask"] != 0: # don't draw only center
@@ -413,6 +431,7 @@ func _on_TextureDialog_file_selected(path):
 	save_settings()
 
 func _on_TemplateDialog_file_selected(path):
+	custom_template_path = path
 	template_texture.texture = load_image_texture(path)
 	generate_tile_masks()
 	make_output_texture()
@@ -452,11 +471,15 @@ func setup_input_type(index: int):
 			corners_merge_container.show()
 			color_process_select.disabled = true
 			color_process_select.selected = Const.COLOR_PROCESS_TYPES.NO
+			set_corner_generation_data(corners_merge_type_select.selected)
+#			_on_CornersOptionButton_item_selected(corners_merge_type_select.selected)
 		Const.INPUT_TYPES.OVERLAY:
 			corners_merge_container.hide()
 			overlay_merge_container.show()
 			color_process_select.disabled = false
-
+			set_overlay_generation_data(overlay_merge_type_select.selected)
+#			_on_CornersOptionButton_item_selected(overlay_merge_type_select.selected)
+	
 func _on_InputType_item_selected(index):
 	setup_input_type(index)
 	preprocess_input_image()
@@ -482,23 +505,31 @@ func _on_TemplateOption_item_selected(index):
 	make_output_texture()
 	save_settings()
 
-func _on_CornersOptionButton_item_selected(index):
+func set_corner_generation_data(index: int):
 	match index:
 		Const.CORNERS_INPUT_PRESETS.FIVE:
 			last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[Const.CORNERS_INPUT_PRESETS.FIVE]
-			generation_preset = GenerationData.new(last_generator_preset_path)
+			generation_data = GenerationData.new(last_generator_preset_path)
 		Const.CORNERS_INPUT_PRESETS.FOUR:
 			last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[Const.CORNERS_INPUT_PRESETS.FOUR]
-			generation_preset = GenerationData.new(last_generator_preset_path)
-	preprocess_input_image()
+			generation_data = GenerationData.new(last_generator_preset_path)
 
-func _on_OverlayOptionButton_item_selected(index):
+func _on_CornersOptionButton_item_selected(index):
+	set_corner_generation_data(index)
+	preprocess_input_image()
+	save_settings()
+
+func set_overlay_generation_data(index: int):
 	match index:
 		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_3:
 			pass
 		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_4:
 			pass
+
+func _on_OverlayOptionButton_item_selected(index):
+	set_overlay_generation_data(index)
 	preprocess_input_image()
+	save_settings()
 
 func get_debug_image_rect_size(input_type: int) -> Vector2:
 	var output_tile_size: int = get_output_tile_size()
@@ -507,7 +538,7 @@ func get_debug_image_rect_size(input_type: int) -> Vector2:
 		Const.INPUT_TYPES.CORNERS:
 			# warning-ignore:integer_division
 			var slice_size: int = output_tile_size / 2
-			var min_size: Vector2 = generation_preset.get_min_input_size()
+			var min_size: Vector2 = generation_data.get_min_input_size()
 			size.x = slice_size * min_size.x
 			size.y = slice_size * min_size.y * 8
 		Const.INPUT_TYPES.OVERLAY:

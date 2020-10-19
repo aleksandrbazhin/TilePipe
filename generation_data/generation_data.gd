@@ -23,7 +23,10 @@ func load_data_from_json(data_path: String) -> Dictionary:
 	return object_data
 
 func get_preset() -> Array:
-	return data.data
+	return data["data"]
+
+func get_name() -> String:
+	return data["name"]
 
 func get_min_input_size() -> Vector2:
 	return Vector2(data.min_size.x, data.min_size.y)

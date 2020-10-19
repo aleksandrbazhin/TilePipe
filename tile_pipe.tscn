@@ -1,7 +1,6 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://tile_pipe.gd" type="Script" id=1]
-[ext_resource path="res://generation_data/template_47.png" type="Texture" id=2]
 [ext_resource path="res://slice_process.shader" type="Shader" id=4]
 [ext_resource path="res://IBMPlexSans-Medium.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://ui_theme.tres" type="Theme" id=6]
@@ -431,11 +430,9 @@ rect_min_size = Vector2( 390, 130 )
 size_flags_horizontal = 3
 
 [node name="TemplateTextureRect" type="TextureRect" parent="Panel/HBox/Images/TemplateContainer/ScrollContainer"]
-margin_right = 384.0
 margin_bottom = 130.0
 size_flags_vertical = 3
 theme = SubResource( 4 )
-texture = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

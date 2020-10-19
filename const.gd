@@ -63,7 +63,11 @@ const OVERLAY_INPUT_EXAMPLES: Dictionary = {
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "res://generation_data/input_overlay_3.png",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "res://generation_data/input_overlay_3.png"
 }
-
+const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/input_overlay_3.json",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/input_overlay_4.json",
+#	CORNERS_INPUT_PRESETS.NO: "",
+}
 const TEMPLATE_47_PATH: String = "res://generation_data/template_47.png"
 const TEMPLATE_256_PATH: String = "res://generation_data/template_256.png"
 enum TEMPLATE_TYPES {TEMPLATE_47, TEMPLATE_256, CUSTOM}
@@ -78,7 +82,7 @@ const TEMPLATE_PATHS : Dictionary = {
 	TEMPLATE_TYPES.CUSTOM: "res://"
 }
 
-const SETTINGS_PATH: String = "user://tilepipe_settings.save"
+const SETTINGS_PATH: String = "user://settings.save"
 
 const MASK_TOP_LEFT := Vector2(4, 4)
 const MASK_TOP := Vector2(16, 4)
@@ -140,7 +144,10 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"last_template_path": TEMPLATE_47_PATH,
 	"last_save_texture_path": "res://generated.png",
 	"last_save_texture_resource_path": "res://generated.png",
-	"output_tile_size": DEFAULT_OUTPUT_SIZE
+	"output_tile_size": DEFAULT_OUTPUT_SIZE,
+	"input_type": 0,
+	"corner_preset": 0,
+	"overlay_preset": 0
 }
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
