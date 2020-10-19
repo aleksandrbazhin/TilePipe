@@ -1,0 +1,30 @@
+[gd_resource type="Theme" load_steps=5 format=2]
+
+[ext_resource path="res://IBMPlexSans-Medium.ttf" type="DynamicFontData" id=1]
+
+[sub_resource type="StyleBoxLine" id=1]
+color = Color( 0.439216, 0.470588, 0.52549, 1 )
+
+[sub_resource type="StyleBoxLine" id=2]
+color = Color( 0.439216, 0.470588, 0.52549, 1 )
+vertical = true
+
+[sub_resource type="DynamicFont" id=3]
+size = 14
+font_data = ExtResource( 1 )
+
+[resource]
+default_font = SubResource( 3 )
+HScrollBar/icons/decrement = null
+HScrollBar/icons/decrement_highlight = null
+HScrollBar/icons/increment = null
+HScrollBar/icons/increment_highlight = null
+HScrollBar/styles/grabber = null
+HScrollBar/styles/grabber_highlight = null
+HScrollBar/styles/grabber_pressed = null
+HScrollBar/styles/scroll = null
+HScrollBar/styles/scroll_focus = null
+HSeparator/constants/separation = 12
+HSeparator/styles/separator = SubResource( 1 )
+VSeparator/constants/separation = 12
+VSeparator/styles/separator = SubResource( 2 )

@@ -9,12 +9,24 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Resource",
+"class": "GenerationData",
+"language": "GDScript",
+"path": "res://generation_data/generation_data.gd"
+}, {
+"base": "Node",
+"class": "GodotExporter",
+"language": "GDScript",
+"path": "res://godot_exporter.gd"
+}, {
 "base": "TileSet",
 "class": "TilesheetDescrption",
 "language": "GDScript",
 "path": "res://tilesheet_description.gd"
 } ]
 _global_script_class_icons={
+"GenerationData": "",
+"GodotExporter": "",
 "TilesheetDescrption": ""
 }
 
@@ -25,6 +37,10 @@ config/description="Tool to compose tilesets"
 run/main_scene="res://tile_pipe.tscn"
 run/low_processor_mode=true
 config/icon="res://icon.png"
+
+[autoload]
+
+Const="*res://const.gd"
 
 [debug]
 

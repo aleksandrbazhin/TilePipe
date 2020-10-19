@@ -1,7 +1,6 @@
 .import/*
 *.import
 *~
-**/PerfMonitor/*
 *.translation
-*.tres
+default_env.tres
 out.png
