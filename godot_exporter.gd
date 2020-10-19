@@ -24,7 +24,7 @@ func make_manual_resource_data(path: String, tile_size: int, tile_masks: Array, 
 	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % path
 #	if export_manual_resource_type_select.pressed:
 	if with_description:
-		out_string += "[ext_resource path=\"tilesheet_description.gd\" type=\"Script\" id=2]\n"
+		out_string += "[ext_resource path=\"res://addons/TilePipe/tilesheet_description.gd\" type=\"Script\" id=2]\n"
 	out_string += "\n[resource]\n"
 	var count: int = 0
 	var tile_lines: PoolStringArray = []

@@ -1,8 +1,7 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://tile_pipe.gd" type="Script" id=1]
 [ext_resource path="res://generation_data/template_47.png" type="Texture" id=2]
-[ext_resource path="res://generation_data/input_quaters_5.png" type="Texture" id=3]
 [ext_resource path="res://slice_process.shader" type="Shader" id=4]
 [ext_resource path="res://IBMPlexSans-Medium.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://ui_theme.tres" type="Theme" id=6]
@@ -190,7 +189,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 200, 96 )
 size_flags_vertical = 3
-texture = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -678,7 +676,6 @@ __meta__ = {
 margin_left = 144.0
 margin_right = 220.0
 margin_bottom = 41.0
-pressed = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

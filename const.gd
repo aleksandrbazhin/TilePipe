@@ -30,18 +30,18 @@ enum CORNERS_INPUT_PRESETS {
 #	NO
 }
 const CORNERS_INPUT_PRESETS_NAMES: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "Five corner preset (5 quaters)",
-	CORNERS_INPUT_PRESETS.FOUR: "Four corner preset (4 quaters)",
+	CORNERS_INPUT_PRESETS.FIVE: "Five corner (5 quarters)",
+	CORNERS_INPUT_PRESETS.FOUR: "Four corner (4 quarters)",
 #	CORNERS_INPUT_PRESETS.NO: "Custom preset",
 }
 const CORNERS_INPUT_PRESETS_EXAMPLES: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "res://generation_data/input_quaters_5.png",
-	CORNERS_INPUT_PRESETS.FOUR: "res://generation_data/input_quaters_4.png",
+	CORNERS_INPUT_PRESETS.FIVE: "res://generation_data/input_quarters_5.png",
+	CORNERS_INPUT_PRESETS.FOUR: "res://generation_data/input_quarters_4.png",
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
-const CORNERS_INPUT_PRESETS_DATA: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "res://generation_data/input_quaters_5.json",
-	CORNERS_INPUT_PRESETS.FOUR: "res://generation_data/input_quaters_4.json",
+const CORNERS_INPUT_PRESETS_DATA_PATH: Dictionary = {
+	CORNERS_INPUT_PRESETS.FIVE: "res://generation_data/input_quarters_5.json",
+	CORNERS_INPUT_PRESETS.FOUR: "res://generation_data/input_quarters_4.json",
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
 
@@ -136,7 +136,7 @@ const TEMPLATE_MASK_CHECK_POINTS := {
 
 const DEFAULT_SETTINGS: Dictionary = {
 	"last_texture_path": CORNERS_INPUT_PRESETS_EXAMPLES[CORNERS_INPUT_PRESETS.FIVE],
-	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA[CORNERS_INPUT_PRESETS.FIVE],
+	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
 	"last_template_path": TEMPLATE_47_PATH,
 	"last_save_texture_path": "res://generated.png",
 	"last_save_texture_resource_path": "res://generated.png",
@@ -144,10 +144,16 @@ const DEFAULT_SETTINGS: Dictionary = {
 }
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
+#const ROTATION_SHIFTS := {
+#	0: {"vector": Vector2(1, 0), "angle": 0.0},
+#	2: {"vector": Vector2(1, 1), "angle": PI / 2},
+#	4: {"vector": Vector2(0, 1), "angle": PI},
+#	6: {"vector": Vector2(0, 0), "angle": 3 * PI / 2},
+#}
 const ROTATION_SHIFTS := {
-	0: {"vector": Vector2(1, 0), "angle": 0.0},
-	2: {"vector": Vector2(1, 1), "angle": PI / 2},
-	4: {"vector": Vector2(0, 1), "angle": PI},
-	6: {"vector": Vector2(0, 0), "angle": 3 * PI / 2},
+	0: {"vector": Vector2(0, 0), "angle": 0.0},
+	2: {"vector": Vector2(1, 0), "angle": PI / 2},
+	4: {"vector": Vector2(1, 1), "angle": PI},
+	6: {"vector": Vector2(0, 1), "angle": 3 * PI / 2},
 }
 const FLIP_HORIZONTAL_KEYS := [0, 4]

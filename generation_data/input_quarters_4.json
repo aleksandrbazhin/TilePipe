@@ -11,41 +11,31 @@
 			"positive": 0,
 			"negative": 143
 		},
-		"out_tile": {"index": 4, "flip": false}
-	},
-	{
-		"in_mask": {
-			"positive": 64,
-			"negative": 5
-		},
-		"out_tile": {"index": 3, "flip": true}
-	},	
-	{
-		"in_mask": {
-			"positive": 4,
-			"negative": 65
-		},
+		"rotation_offset" : 1,
 		"out_tile": {"index": 3, "flip": false}
 	},
 	{
 		"in_mask": {
-			"positive": 68,
+			"positive": 4,
 			"negative": 131
 		},
+		"rotation_offset" : 1,
 		"out_tile": {"index": 2, "flip": false}
 	},
 	{
 		"in_mask": {
-			"positive": 68,
+			"positive": 64,
 			"negative": 131
 		},
-		"out_tile": {"index": 2, "flip": true}
+		"rotation_offset" : 0,
+		"out_tile": {"index": 2, "flip": false}
 	},
 	{
 		"in_mask": {
 			"positive": 5,
 			"negative": 2
 		},
+		"rotation_offset" : 1,
 		"out_tile":  {"index": 1, "flip": false}
 	},
 	{
@@ -53,6 +43,7 @@
 			"positive": 7,
 			"negative": 0
 		},
+		"rotation_offset" : 1,
 		"out_tile":  {"index": 0, "flip": false}
 	},
 ]}

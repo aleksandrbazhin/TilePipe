@@ -41,11 +41,9 @@ onready var export_manual_resource_type_select: CheckButton = $Panel/HBox/Settin
 
 var generation_preset: GenerationData
 
+export var is_godot_plugin: bool = false
 
 var template_size: Vector2
-# input slice = {
-#	0: {0: {false: Image, true: Image}, 2: , 4: , 6:}
-#	1: ... }
 var input_slices: Dictionary = {}
 var input_overlayed: Dictionary = {}
 # tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
@@ -53,11 +51,6 @@ var tile_masks: Array = []
 
 func _ready():
 #	save_settings(true) # uncomment on change of save file structure
-	
-#	print(get_allowed_mask_rotations(16, 5, 21))
-#	print(get_allowed_mask_rotations(0,  
-#		MY_MASK["TOP_LEFT"] | MY_MASK["TOP"] | MY_MASK["TOP_RIGHT"] | MY_MASK["RIGHT"] | MY_MASK["BOTTOM_RIGHT"],
-#	 16))
 	connect("input_image_processed", self, "make_output_texture")
 	output_size_select.clear()
 	for size in Const.OUTPUT_SIZES:
@@ -81,14 +74,20 @@ func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
 		_on_CloseButton_pressed()
 
+var last_generator_preset_path: String = ""
+func get_generator_preset_path() -> String:
+	if last_generator_preset_path == "":
+		return texture_file_dialog.current_path.replace(".png", ".json") # FIX
+	else: 
+		return last_generator_preset_path
+
 func get_setting_values(load_defaluts: bool = false) -> Dictionary:
 	if load_defaluts:
 		return Const.DEFAULT_SETTINGS
 	else:
 		return {
 		"last_texture_path": texture_file_dialog.current_path,
-		"last_gen_preset_path": texture_file_dialog.current_path.replace(".png", ".json"), # FIX
-#		"last_texture_path": texture_file_dialog.current_path.replace(".png", ".json"),
+		"last_gen_preset_path": get_generator_preset_path(),
 		"last_template_path": template_file_dialog.current_path,
 		"last_save_texture_path": save_file_dialog.current_path,
 		"last_save_texture_resource_path": save_resource_dialog.current_path,
@@ -212,12 +211,6 @@ func get_from_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
 func get_color_process() -> int:
 	return color_process_select.selected
 
-# TODO: remake - set offsets from corners data in ui for each corner
-# for now it only puts every corner slice to top left
-# invert for 3 slice
-func get_input_flip(index: int, flip: bool) -> bool:
-	return flip if index != 3 else not flip
-
 func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: int, slice_position: Vector2):
 	debug_image.blit_rect(
 		slice_image,
@@ -232,7 +225,8 @@ func generate_corner_slices():
 	input_slices = {}
 	var output_tile_size: int = get_output_tile_size()
 	var input_image: Image = texture_in.texture.get_data()
-	var input_slice_size: int = int(input_image.get_size().y)
+	var min_input_slices: Vector2 = generation_preset.get_min_input_size()
+	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
 	var output_slice_size: int = int(output_tile_size / 2.0)
 	var resize_factor: float = float(output_slice_size) / float(input_slice_size)
 	var new_viewport_size := Vector2(input_slice_size, input_slice_size)
@@ -245,22 +239,22 @@ func generate_corner_slices():
 	var color_process: int = get_color_process()
 	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.CORNERS)
 	debug_image.create(int(debug_texture_size.x), int(debug_texture_size.y), false, image_fmt)
-	for x in range(generation_preset.get_min_input_size().x):
+	for x in range(min_input_slices.x):
 		input_slices[x] = {}
 		var slice := Image.new()
 		slice.create(input_slice_size, input_slice_size, false, image_input_fmt)
 		slice.blit_rect(input_image, Rect2(x * input_slice_size, 0, input_slice_size, input_slice_size), Vector2.ZERO)
 		for rot_index in Const.ROTATION_SHIFTS.size():
 			var rotation_key: int = Const.ROTATION_SHIFTS.keys()[rot_index]
-			put_to_viewport(slice, rotation_key, color_process, get_input_flip(x, false))
+			put_to_viewport(slice, rotation_key, color_process, false)
 			yield(VisualServer, 'frame_post_draw')
 			var processed_slice: Image = get_from_viewport(image_fmt, resize_factor)
 			append_to_debug_image(debug_image, processed_slice, output_slice_size, 
 				Vector2(x * output_slice_size, 2 * rot_index * output_slice_size))
-			put_to_viewport(slice, rotation_key, color_process, get_input_flip(x, true))
+			put_to_viewport(slice, rotation_key, color_process, true)
 			yield(VisualServer, 'frame_post_draw')
 			var processed_flipped_slice : Image = get_from_viewport(image_fmt, resize_factor)
-			append_to_debug_image(debug_image, processed_slice, output_slice_size, 
+			append_to_debug_image(debug_image, processed_flipped_slice, output_slice_size, 
 				Vector2(x * output_slice_size, (2 * rot_index + 1) * output_slice_size))
 			input_slices[x][rotation_key] = {
 				false: processed_slice, 
@@ -304,19 +298,21 @@ func make_from_corners():
 	for mask in tile_masks:
 		var tile_position: Vector2 = mask['position'] * tile_size
 		if mask["godot_mask"] != 0: # don't draw only center
-			
-			for in_out_mask in preset:
+			for place_mask in preset:
 				var allowed_rotations: Array = get_allowed_mask_rotations(
-						in_out_mask["in_mask"]["positive"], 
-						in_out_mask["in_mask"]["negative"], mask['mask'])
+						place_mask["in_mask"]["positive"], 
+						place_mask["in_mask"]["negative"], 
+						mask['mask'],
+						place_mask["rotation_offset"])
 				for rotation in allowed_rotations:
-					var out_tile = in_out_mask["out_tile"]
+					var out_tile = place_mask["out_tile"]
 					var is_flipped: bool = out_tile["flip"]
 					var slice_index: int = out_tile["index"]
 					var slice_image: Image = input_slices[slice_index][rotation][is_flipped]
-					var intile_offset : Vector2 = Const.ROTATION_SHIFTS[rotation]["vector"] * slice_size
+					var init_rotation: int = rotate_cw(rotation, place_mask["rotation_offset"])
+					var intile_offset : Vector2 = Const.ROTATION_SHIFTS[init_rotation]["vector"] * slice_size
 					if is_flipped: 
-						intile_offset = Const.ROTATION_SHIFTS[rotate_clockwise(rotation)]["vector"] * slice_size
+						intile_offset = Const.ROTATION_SHIFTS[rotate_cw(init_rotation)]["vector"] * slice_size
 					out_image.blit_rect(slice_image, slice_rect, tile_position + intile_offset)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image)
@@ -330,7 +326,6 @@ func set_output_texture(texture: Texture):
 		output_control.rect_min_size = image_size
 	else:
 		output_control.rect_min_size = Vector2.ZERO
-
 
 func make_from_overlayed():
 	if input_overlayed.size() == 0:
@@ -346,10 +341,16 @@ func make_output_texture():
 		Const.INPUT_TYPES.OVERLAY:
 			make_from_overlayed()
 	
-func rotate_clockwise(in_rot: int) -> int:
-	var out: int = int(clamp(in_rot, 0, 6)) - 2
-	if out == -2:
-		out = 6
+func rotate_ccw(in_rot: int, quarters: int = 1) -> int:
+	var out: int = int(clamp(in_rot, 0, 6)) - 2 * quarters
+	out = out % 8
+	if out < 0:
+		out = 8 + out
+	return out
+	
+func rotate_cw(in_rot: int, quarters: int = 1) -> int:
+	var out: int = int(clamp(in_rot, 0, 6)) + 2 * quarters
+	out = out % 8
 	return out
 
 func rotate_check_mask(mask: int, rot: int) -> int:
@@ -362,7 +363,8 @@ func rotate_check_mask(mask: int, rot: int) -> int:
 
 # returns all rotations for mask which satisfy both templates
 #func check_mask_template(pos_check_mask: int, neg_check_mask: int, current_mask: int) -> Array:
-func get_allowed_mask_rotations(pos_check_mask: int, neg_check_mask: int, current_mask: int) -> Array:
+# quarters_offset - это количество поворотов на 90 от квадрата (0,0) для положения на картинке (если как на картинке ставим налево вверх, то 0)
+func get_allowed_mask_rotations(pos_check_mask: int, neg_check_mask: int, current_mask: int, quarters_offset: int = 0) -> Array:
 	var rotations: Array = []
 	for rotation in Const.ROTATION_SHIFTS:
 		var rotated_check: int = rotate_check_mask(pos_check_mask, rotation)
@@ -440,7 +442,8 @@ func _on_SaveTextureDialog2_file_selected(path: String):
 	save_settings()
 
 func _on_AutotileSelect_toggled(button_pressed):
-	description_select_box.visible = not button_pressed
+	if is_godot_plugin:
+		description_select_box.visible = not button_pressed
 
 func setup_input_type(index: int):
 	match index:
@@ -480,9 +483,21 @@ func _on_TemplateOption_item_selected(index):
 	save_settings()
 
 func _on_CornersOptionButton_item_selected(index):
+	match index:
+		Const.CORNERS_INPUT_PRESETS.FIVE:
+			last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[Const.CORNERS_INPUT_PRESETS.FIVE]
+			generation_preset = GenerationData.new(last_generator_preset_path)
+		Const.CORNERS_INPUT_PRESETS.FOUR:
+			last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[Const.CORNERS_INPUT_PRESETS.FOUR]
+			generation_preset = GenerationData.new(last_generator_preset_path)
 	preprocess_input_image()
 
 func _on_OverlayOptionButton_item_selected(index):
+	match index:
+		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_3:
+			pass
+		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_4:
+			pass
 	preprocess_input_image()
 
 func get_debug_image_rect_size(input_type: int) -> Vector2:
@@ -505,10 +520,7 @@ func _on_SizeOptionButton_item_selected(index):
 	out_bg_texture.rect_scale = output_scale
 	out_bg_texture.rect_size = output_control.rect_size / output_scale_factor
 	debug_input_control.rect_min_size = get_debug_image_rect_size(Const.INPUT_TYPES.CORNERS)
-	print(debug_input_control.rect_min_size)
 	debug_input_texture_bg.rect_scale = output_scale
 	debug_input_texture_bg.rect_size = debug_input_control.rect_size / output_scale_factor
 	preprocess_input_image()
 	save_settings()
-
-
