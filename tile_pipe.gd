@@ -7,8 +7,10 @@ onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
 
-onready var texture_in: TextureRect = $Panel/HBox/Images/InContainer/VBoxInput/Control/InputTextureRect
-onready var texture_input_bg: TextureRect = $Panel/HBox/Images/InContainer/VBoxInput/Control/BGTextureRect
+
+onready var texture_in_container: Control = $Panel/HBox/Images/InContainer/VBoxInput/Control
+onready var texture_in: TextureRect = texture_in_container.get_node("InputTextureRect")
+onready var texture_input_bg: TextureRect = texture_in_container.get_node("BGTextureRect")
 onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/InputType
 onready var color_process_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType
 
@@ -21,7 +23,8 @@ onready var slice_viewport: Viewport = $Panel/HBox/Images/InContainer/VBoxViewpo
 onready var texture_in_viewport: TextureRect = slice_viewport.get_node("TextureRect")
 onready var slice_slider: HSlider = $Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer/HSlider
 
-onready var debug_input_control: Control = $Panel/HBox/Images/InContainer/DebugTextureContainer/Control
+onready var debug_input_scroll: Control = $Panel/HBox/Images/InContainer/DebugTextureContainer
+onready var debug_input_control: Control = debug_input_scroll.get_node("Control")
 onready var debug_input_texture: TextureRect = debug_input_control.get_node("DebugTexture")
 onready var debug_input_texture_bg: TextureRect = debug_input_control.get_node("BGTextureRect")
 
@@ -38,6 +41,7 @@ onready var output_size_select: OptionButton = $Panel/HBox/Settings/SizeOptionBu
 onready var export_type_select: CheckButton = $Panel/HBox/Settings/Resourse/AutotileSelect
 onready var description_select_box: HBoxContainer = $Panel/HBox/Settings/DescriptionResourse
 onready var export_manual_resource_type_select: CheckButton = $Panel/HBox/Settings/DescriptionResourse/Select
+
 
 var generation_data: GenerationData
 
@@ -59,7 +63,7 @@ func _ready():
 		color_process_select.add_item(Const.COLOR_PROCESS_TYPE_NAMES[Const.COLOR_PROCESS_TYPES[type]])
 	for type in Const.INPUT_TYPES:
 		generation_type_select.add_item(Const.INPUT_TYPE_NAMES[Const.INPUT_TYPES[type]])
-	setup_input_type(Const.DEFAULT_INPUT_TYPE)
+#	setup_input_type(Const.DEFAULT_INPUT_TYPE)
 	for type in Const.TEMPLATE_TYPES:
 		template_type_select.add_item(Const.TEMPLATE_TYPE_NAMES[Const.TEMPLATE_TYPES[type]])
 	for index in Const.CORNERS_INPUT_PRESETS:
@@ -93,11 +97,8 @@ func get_template_path() -> String:
 	else:
 		return Const.TEMPLATE_47_PATH
 
-func capture_setting_values(load_defaluts: bool = false) -> Dictionary:
-	if load_defaluts:
-		return Const.DEFAULT_SETTINGS
-	else:
-		return {
+func capture_setting_values() -> Dictionary:
+	return {
 		"last_texture_path": texture_file_dialog.current_path,
 		"last_gen_preset_path": get_generator_preset_path(),
 		"last_template_path": get_template_path(),
@@ -112,13 +113,16 @@ func capture_setting_values(load_defaluts: bool = false) -> Dictionary:
 func save_settings(store_defaults: bool = false):
 	var save = File.new()
 	save.open(Const.SETTINGS_PATH, File.WRITE)
-	var data := capture_setting_values(store_defaults) 
+	var data := Const.DEFAULT_SETTINGS
+	if not store_defaults:
+		data = capture_setting_values() 
 	save.store_line(to_json(data))
 	save.close()
 
 func apply_settings(data: Dictionary):
 	texture_file_dialog.current_path = data["last_texture_path"]
 	texture_in.texture = load_image_texture(data["last_texture_path"])
+	resize_input_container()
 	generation_data = GenerationData.new(data["last_gen_preset_path"])
 	template_file_dialog.current_path = data["last_template_path"]
 	template_texture.texture = load_image_texture(data["last_template_path"])
@@ -126,9 +130,9 @@ func apply_settings(data: Dictionary):
 	save_resource_dialog.current_path = data["last_save_texture_resource_path"]
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
 	generation_type_select.selected = data["input_type"]
-	setup_input_type(generation_type_select.selected)
 	corners_merge_type_select.selected = data["corner_preset"]
 	overlay_merge_type_select.selected = data["overlay_preset"]
+	setup_input_type(generation_type_select.selected)
 	
 func setting_exist() -> bool:
 	var save = File.new()
@@ -424,9 +428,16 @@ func load_image_texture(path: String) -> Texture:
 		var image_texture = ImageTexture.new()
 		image_texture.create_from_image(image)
 		return image_texture
+
+func resize_input_container():
+	var prev_input_width: float = texture_in_container.rect_min_size.x
+	texture_in_container.rect_min_size = texture_in.texture.get_data().get_size()
+	debug_input_control.rect_size.x -= texture_in_container.rect_min_size.x - prev_input_width
+	debug_input_scroll.rect_min_size.x = debug_input_control.rect_size.x
 	
 func _on_TextureDialog_file_selected(path):
 	texture_in.texture = load_image_texture(path)
+	resize_input_container()
 	preprocess_input_image()
 	save_settings()
 
@@ -483,9 +494,11 @@ func setup_input_type(index: int):
 func _on_InputType_item_selected(index):
 	setup_input_type(index)
 	preprocess_input_image()
+	save_settings()
 
 func _on_ColorProcessType_item_selected(index):
 	preprocess_input_image()
+	save_settings()
 
 func _on_ReloadButton_pressed():
 	preprocess_input_image()
