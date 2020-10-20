@@ -95,7 +95,7 @@ current_path = "/Users/user/Documents/TilePipe/generated.png"
 [node name="Panel" type="PanelContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_bottom = 16.0
+margin_bottom = -4.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -104,22 +104,22 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1359.0
-margin_bottom = 777.0
+margin_bottom = 759.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
 margin_right = 1112.0
-margin_bottom = 770.0
+margin_bottom = 752.0
 size_flags_horizontal = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_right = 1112.0
-margin_bottom = 300.0
+margin_bottom = 302.0
 rect_min_size = Vector2( 0, 300 )
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/InContainer"]
 margin_right = 40.0
-margin_bottom = 300.0
+margin_bottom = 302.0
 rect_min_size = Vector2( 40, 32 )
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/BlockLabel"]
@@ -139,19 +139,19 @@ __meta__ = {
 
 [node name="VBoxInput" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 44.0
-margin_right = 244.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 200, 0 )
+margin_right = 236.0
+margin_bottom = 302.0
+rect_min_size = Vector2( 192, 0 )
 
 [node name="LoadButtonBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_right = 200.0
+margin_right = 192.0
 margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="LoadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox"]
-margin_right = 156.0
+margin_right = 148.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
@@ -161,27 +161,25 @@ __meta__ = {
 }
 
 [node name="ReloadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox"]
-margin_left = 160.0
-margin_right = 200.0
+margin_left = 152.0
+margin_right = 192.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
 text = "↻"
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/VBoxInput"]
 margin_top = 44.0
-margin_right = 200.0
-margin_bottom = 168.0
-rect_min_size = Vector2( 200, 0 )
+margin_right = 192.0
+margin_bottom = 236.0
+rect_min_size = Vector2( 192, 192 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 7 )
+expand = true
 stretch_mode = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -190,48 +188,45 @@ __meta__ = {
 [node name="InputTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_min_size = Vector2( 200, 96 )
+margin_bottom = -96.0
+rect_min_size = Vector2( 192, 96 )
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -44.0
+margin_top = -19.0
+text = "64x64"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 171.0
-margin_right = 200.0
-margin_bottom = 197.0
+margin_top = 239.0
+margin_right = 192.0
+margin_bottom = 265.0
 rect_min_size = Vector2( 0, 26 )
 text = "Generation type"
 valign = 2
 
 [node name="InputType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 202.0
-margin_right = 200.0
-margin_bottom = 234.0
-rect_min_size = Vector2( 0, 32 )
-text = "Type"
-align = 1
-
-[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 238.0
-margin_right = 200.0
-margin_bottom = 264.0
-rect_min_size = Vector2( 0, 26 )
-text = "Color processing type"
-valign = 2
-
-[node name="ColorProcessType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 268.0
-margin_right = 200.0
-margin_bottom = 300.0
+margin_top = 270.0
+margin_right = 192.0
+margin_bottom = 302.0
 rect_min_size = Vector2( 0, 32 )
 text = "Type"
 align = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 248.0
-margin_right = 548.0
-margin_bottom = 300.0
+margin_left = 240.0
+margin_right = 540.0
+margin_bottom = 302.0
 rect_min_size = Vector2( 300, 0 )
 custom_constants/margin_right = 20
 custom_constants/margin_left = 20
@@ -239,7 +234,7 @@ custom_constants/margin_left = 20
 [node name="CornersMergeSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/MarginContainer"]
 margin_left = 20.0
 margin_right = 280.0
-margin_bottom = 300.0
+margin_bottom = 302.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings"]
 margin_right = 260.0
@@ -259,7 +254,7 @@ text = "Preset"
 visible = false
 margin_left = 20.0
 margin_right = 280.0
-margin_bottom = 300.0
+margin_bottom = 302.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
 margin_top = 29.0
@@ -274,10 +269,26 @@ margin_right = 200.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 180, 32 )
 
+[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
+margin_top = 66.0
+margin_right = 260.0
+margin_bottom = 92.0
+rect_min_size = Vector2( 0, 26 )
+text = "Color processing type"
+valign = 2
+
+[node name="ColorProcessType" type="OptionButton" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
+margin_top = 66.0
+margin_right = 260.0
+margin_bottom = 98.0
+rect_min_size = Vector2( 0, 32 )
+text = "Type"
+align = 1
+
 [node name="VBoxViewport" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 552.0
-margin_right = 680.0
-margin_bottom = 300.0
+margin_left = 544.0
+margin_right = 672.0
+margin_bottom = 302.0
 
 [node name="ViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/VBoxViewport"]
 margin_right = 128.0
@@ -305,7 +316,7 @@ stretch_mode = 3
 [node name="Spacer" type="Control" parent="Panel/HBox/Images/InContainer/VBoxViewport"]
 margin_top = 132.0
 margin_right = 128.0
-margin_bottom = 300.0
+margin_bottom = 302.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxViewport"]
@@ -336,10 +347,10 @@ tick_count = 5
 ticks_on_borders = true
 
 [node name="DebugTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 684.0
+margin_left = 676.0
 margin_right = 1112.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 428, 256 )
+margin_bottom = 302.0
+rect_min_size = Vector2( 256, 256 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -347,14 +358,18 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/DebugTextureContainer"]
-margin_right = 428.0
-margin_bottom = 300.0
+margin_right = 436.0
+margin_bottom = 302.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/DebugTextureContainer/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 2.66968
+margin_top = -1.33484
+margin_right = 2.66971
+margin_bottom = -1.33484
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource( 7 )
@@ -368,19 +383,35 @@ __meta__ = {
 margin_right = 128.0
 margin_bottom = 128.0
 rect_min_size = Vector2( 128, 128 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/InContainer/DebugTextureContainer/Control"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -41.3303
+margin_top = -20.3348
+margin_right = 2.66968
+margin_bottom = -1.33484
+text = "64x64"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HSeparator" type="HSeparator" parent="Panel/HBox/Images"]
-margin_top = 304.0
+margin_top = 306.0
 margin_right = 1112.0
-margin_bottom = 316.0
+margin_bottom = 318.0
 
 [node name="TemplateContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
-margin_top = 320.0
+margin_top = 322.0
 margin_right = 1112.0
-margin_bottom = 450.0
+margin_bottom = 452.0
 size_flags_horizontal = 3
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/TemplateContainer"]
@@ -449,20 +480,20 @@ __meta__ = {
 }
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/HBox/Images"]
-margin_top = 454.0
+margin_top = 456.0
 margin_right = 1112.0
-margin_bottom = 466.0
+margin_bottom = 468.0
 
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
-margin_top = 470.0
+margin_top = 472.0
 margin_right = 1112.0
-margin_bottom = 770.0
-rect_min_size = Vector2( 0, 300 )
+margin_bottom = 752.0
+rect_min_size = Vector2( 0, 280 )
 size_flags_vertical = 3
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
-margin_bottom = 300.0
+margin_bottom = 280.0
 rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
@@ -486,8 +517,8 @@ __meta__ = {
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 44.0
 margin_right = 1112.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 0, 300 )
+margin_bottom = 280.0
+rect_min_size = Vector2( 900, 280 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -496,7 +527,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/ScrollContainer"]
 margin_right = 1068.0
-margin_bottom = 300.0
+margin_bottom = 280.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -511,7 +542,7 @@ __meta__ = {
 }
 
 [node name="OutTextureRect" type="TextureRect" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control"]
-margin_right = 100.0
+margin_right = 400.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 400, 200 )
 size_flags_horizontal = 5
@@ -521,15 +552,27 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -44.0
+margin_top = -19.0
+text = "64x64"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
 margin_left = 1116.0
 margin_right = 1128.0
-margin_bottom = 770.0
+margin_bottom = 752.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
 margin_left = 1132.0
 margin_right = 1352.0
-margin_bottom = 770.0
+margin_bottom = 752.0
 rect_min_size = Vector2( 220, 0 )
 
 [node name="CloseButton" type="Button" parent="Panel/HBox/Settings"]
@@ -705,9 +748,9 @@ __meta__ = {
 [connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/LoadButton" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/ReloadButton" to="." method="_on_ReloadButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxInput/InputType" to="." method="_on_InputType_item_selected"]
-[connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings/CornersOptionButton" to="." method="_on_CornersOptionButton_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/OverlayOptionButton" to="." method="_on_OverlayOptionButton_item_selected"]
+[connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]

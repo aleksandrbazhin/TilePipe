@@ -2,22 +2,23 @@ extends Control
 
 signal input_image_processed()
 
+const INPUT_COONTAINER_DEFAULT_SIZE := Vector2(192, 192)
+
 onready var texture_file_dialog: FileDialog = $TextureDialog
 onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
 
-
 onready var texture_in_container: Control = $Panel/HBox/Images/InContainer/VBoxInput/Control
 onready var texture_in: TextureRect = texture_in_container.get_node("InputTextureRect")
 onready var texture_input_bg: TextureRect = texture_in_container.get_node("BGTextureRect")
 onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/InputType
-onready var color_process_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/ColorProcessType
 
 onready var corners_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings
 onready var corners_merge_type_select: OptionButton = corners_merge_container.get_node("CornersOptionButton")
 onready var overlay_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings
 onready var overlay_merge_type_select: OptionButton = overlay_merge_container.get_node("OverlayOptionButton")
+onready var color_process_select: OptionButton = overlay_merge_container.get_node("ColorProcessType")
 
 onready var slice_viewport: Viewport = $Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport
 onready var texture_in_viewport: TextureRect = slice_viewport.get_node("TextureRect")
@@ -133,6 +134,7 @@ func apply_settings(data: Dictionary):
 	corners_merge_type_select.selected = data["corner_preset"]
 	overlay_merge_type_select.selected = data["overlay_preset"]
 	setup_input_type(generation_type_select.selected)
+	update_output_bg_texture_scale()
 	
 func setting_exist() -> bool:
 	var save = File.new()
@@ -243,12 +245,23 @@ func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: i
 	itex.create_from_image(debug_image)
 	debug_input_texture.texture = itex
 
+func resize_input_bg_texture(input_tile_size: int, input_image: Image):
+	var input_scale_factor: float = float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
+	var input_scale := Vector2(input_scale_factor, input_scale_factor)
+	var input_size = input_image.get_size()
+	texture_in_container.rect_size.x = max(input_size.x, INPUT_COONTAINER_DEFAULT_SIZE.x)
+	texture_in_container.rect_size.y = max(input_size.y, INPUT_COONTAINER_DEFAULT_SIZE.y)
+	texture_input_bg.rect_size = texture_in_container.rect_size / input_scale_factor
+	texture_input_bg.rect_scale = input_scale
+	texture_in_container.get_node("TileSizeLabel").text = "%sx%s" % [input_tile_size, input_tile_size]
+
 func generate_corner_slices():
 	input_slices = {}
 	var output_tile_size: int = get_output_tile_size()
 	var input_image: Image = texture_in.texture.get_data()
 	var min_input_slices: Vector2 = generation_data.get_min_input_size()
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
+	resize_input_bg_texture(input_slice_size * 2, input_image)
 	var output_slice_size: int = int(output_tile_size / 2.0)
 	var resize_factor: float = float(output_slice_size) / float(input_slice_size)
 	var new_viewport_size := Vector2(input_slice_size, input_slice_size)
@@ -430,10 +443,12 @@ func load_image_texture(path: String) -> Texture:
 		return image_texture
 
 func resize_input_container():
-	var prev_input_width: float = texture_in_container.rect_min_size.x
+	var prev_min_input_width: float = texture_in_container.rect_min_size.x
 	texture_in_container.rect_min_size = texture_in.texture.get_data().get_size()
-	debug_input_control.rect_size.x -= texture_in_container.rect_min_size.x - prev_input_width
-	debug_input_scroll.rect_min_size.x = debug_input_control.rect_size.x
+	var texture_width_increase: float = texture_in_container.rect_min_size.x - prev_min_input_width
+	if texture_width_increase > 0:
+		debug_input_control.rect_size.x -= texture_width_increase
+		debug_input_scroll.rect_min_size.x = debug_input_control.rect_size.x
 	
 func _on_TextureDialog_file_selected(path):
 	texture_in.texture = load_image_texture(path)
@@ -558,13 +573,19 @@ func get_debug_image_rect_size(input_type: int) -> Vector2:
 			pass
 	return size
 
-func _on_SizeOptionButton_item_selected(index):
-	var output_scale_factor: float = float(get_output_tile_size()) / float(Const.DEFAULT_OUTPUT_SIZE)
+func update_output_bg_texture_scale():
+	var tile_size: int = get_output_tile_size()
+	var output_scale_factor: float = float(tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
 	var output_scale := Vector2(output_scale_factor, output_scale_factor)
 	out_bg_texture.rect_scale = output_scale
 	out_bg_texture.rect_size = output_control.rect_size / output_scale_factor
+	output_control.get_node("TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size]
 	debug_input_control.rect_min_size = get_debug_image_rect_size(Const.INPUT_TYPES.CORNERS)
 	debug_input_texture_bg.rect_scale = output_scale
 	debug_input_texture_bg.rect_size = debug_input_control.rect_size / output_scale_factor
+	debug_input_control.get_node("TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size]
+
+func _on_SizeOptionButton_item_selected(index):
+	update_output_bg_texture_scale()
 	preprocess_input_image()
 	save_settings()
