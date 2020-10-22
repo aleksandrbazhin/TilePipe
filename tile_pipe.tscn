@@ -87,10 +87,10 @@ margin_right = 315.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 600, 440 )
 access = 2
-filters = PoolStringArray( "*.png ; PNG Images" )
+filters = PoolStringArray( "*.tres ; Godot resouces" )
 current_dir = "/Users/user/Documents/TilePipe"
-current_file = "generated.png"
-current_path = "/Users/user/Documents/TilePipe/generated.png"
+current_file = "generated.tres"
+current_path = "/Users/user/Documents/TilePipe/generated.tres"
 
 [node name="Panel" type="PanelContainer" parent="."]
 anchor_right = 1.0
@@ -208,9 +208,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_top = 239.0
+margin_top = 240.0
 margin_right = 192.0
-margin_bottom = 265.0
+margin_bottom = 266.0
 rect_min_size = Vector2( 0, 26 )
 text = "Generation type"
 valign = 2
@@ -257,33 +257,90 @@ margin_right = 280.0
 margin_bottom = 302.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
-margin_top = 29.0
-margin_right = 180.0
-margin_bottom = 55.0
+margin_right = 260.0
+margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
 text = "Generation preset"
 valign = 2
 
 [node name="OverlayOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
-margin_right = 200.0
-margin_bottom = 32.0
+margin_top = 30.0
+margin_right = 260.0
+margin_bottom = 62.0
 rect_min_size = Vector2( 180, 32 )
 
-[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
+[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
 margin_top = 66.0
 margin_right = 260.0
-margin_bottom = 92.0
+margin_bottom = 66.0
+
+[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
+margin_top = 70.0
+margin_right = 260.0
+margin_bottom = 96.0
 rect_min_size = Vector2( 0, 26 )
 text = "Color processing type"
 valign = 2
 
 [node name="ColorProcessType" type="OptionButton" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
-margin_top = 66.0
+margin_top = 100.0
 margin_right = 260.0
-margin_bottom = 98.0
+margin_bottom = 132.0
 rect_min_size = Vector2( 0, 32 )
 text = "Type"
 align = 1
+
+[node name="HSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
+margin_top = 136.0
+margin_right = 260.0
+margin_bottom = 302.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 2
+
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer"]
+margin_top = 127.0
+margin_right = 260.0
+margin_bottom = 146.0
+text = "Merge percent"
+
+[node name="MergeSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer"]
+margin_top = 150.0
+margin_right = 260.0
+margin_bottom = 166.0
+value = 50.0
+tick_count = 11
+ticks_on_borders = true
+
+[node name="HSlider2" type="HSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer"]
+visible = false
+margin_top = 154.0
+margin_right = 260.0
+margin_bottom = 170.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="SliderContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
+visible = false
+margin_top = 153.0
+margin_right = 260.0
+margin_bottom = 236.0
+size_flags_vertical = 3
+
+[node name="VSlider" type="VSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/SliderContainer"]
+visible = false
+margin_right = 16.0
+margin_bottom = 170.0
+tick_count = 10
+ticks_on_borders = true
+
+[node name="VSlider2" type="VSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/SliderContainer"]
+visible = false
+margin_left = 20.0
+margin_right = 36.0
+margin_bottom = 170.0
+tick_count = 10
+ticks_on_borders = true
 
 [node name="VBoxViewport" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 544.0
@@ -366,10 +423,7 @@ size_flags_vertical = 3
 [node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/DebugTextureContainer/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 2.66968
-margin_top = -1.33484
-margin_right = 2.66971
-margin_bottom = -1.33484
+margin_right = 3.05176e-05
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource( 7 )
@@ -737,7 +791,7 @@ margin_top = 248.0
 margin_right = 220.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 0, 40 )
-text = "Save texture + .tres"
+text = "Export Godot resourse"
 __meta__ = {
 "_edit_use_anchors_": false
 }

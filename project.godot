@@ -51,10 +51,18 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1366
 window/size/height=768
+window/dpi/allow_hidpi=true
+window/per_pixel_transparency/allowed=true
+window/per_pixel_transparency/enabled=true
+
+[logging]
+
+file_logging/enable_file_logging=true
 
 [rendering]
 
 quality/driver/driver_name="GLES2"
+quality/2d/use_nvidia_rect_flicker_workaround=true
 quality/intended_usage/framebuffer_allocation=0
 quality/intended_usage/framebuffer_allocation.mobile=0
 vram_compression/import_etc=true

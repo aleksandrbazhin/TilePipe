@@ -50,6 +50,7 @@ export var is_godot_plugin: bool = false
 
 var template_size: Vector2
 var input_slices: Dictionary = {}
+var input_tile_size_vector := Vector2.ZERO
 var input_overlayed: Dictionary = {}
 # tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
 var tile_masks: Array = []
@@ -182,7 +183,28 @@ func clear_generation_mask():
 	tile_masks = []
 	for label in template_texture.get_children():
 		label.queue_free()
-	
+
+func mark_template_tile(mask_value: int, mask_position: Vector2, is_text: bool = false):
+	if is_text:
+		var mask_text_label := Label.new()
+		mask_text_label.add_color_override("font_color", Color(0, 0.05, 0.1))
+		mask_text_label.text = str(mask_value)
+		mask_text_label.rect_position = mask_position * Const.TEMPLATE_TILE_SIZE + Vector2(5, 5)
+		template_texture.add_child(mask_text_label)
+	else:
+		for x in range(3):
+			for y in range(3):
+				var check: int = 1 << (x + y*3)
+				if check & mask_value == check:
+					var mask_marker = TextureRect.new()
+					mask_marker.texture = preload("res://template_marker.png")
+					mask_marker.rect_position = mask_position * Const.TEMPLATE_TILE_SIZE + \
+						Vector2(x * 10.6 + 1, y * 10.6 + 1)
+					template_texture.add_child(mask_marker)
+
+
+		
+
 func generate_tile_masks():
 	clear_generation_mask()
 	if not check_template_texture():
@@ -195,11 +217,8 @@ func generate_tile_masks():
 			var mask_value: int = get_template_mask_value(template_image, x, y) 
 			var godot_mask_value: int = get_template_mask_value(template_image, x, y, Const.GODOT_MASK_CHECK_POINTS)
 			tile_masks.append({"mask": mask_value, "position": Vector2(x, y), "godot_mask": godot_mask_value })
-			var mask_text_label := Label.new()
-			mask_text_label.add_color_override("font_color", Color(0, 0.05, 0.1))
-			mask_text_label.text = str(godot_mask_value)
-			mask_text_label.rect_position = Vector2(x, y) * Const.TEMPLATE_TILE_SIZE + Vector2(5, 5)
-			template_texture.add_child(mask_text_label)
+#			mark_template_tile(godot_mask_value, Vector2(x, y), true)
+			mark_template_tile(godot_mask_value, Vector2(x, y), false)
 
 func put_to_viewport(slice: Image, rotation_key: int, color_process: int,
 		is_flipped := false):
@@ -245,7 +264,8 @@ func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: i
 	itex.create_from_image(debug_image)
 	debug_input_texture.texture = itex
 
-func resize_input_bg_texture(input_tile_size: int, input_image: Image):
+func set_input_tile_size(input_tile_size: int, input_image: Image):
+	input_tile_size_vector = Vector2(input_tile_size, input_tile_size)
 	var input_scale_factor: float = float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
 	var input_scale := Vector2(input_scale_factor, input_scale_factor)
 	var input_size = input_image.get_size()
@@ -261,7 +281,7 @@ func generate_corner_slices():
 	var input_image: Image = texture_in.texture.get_data()
 	var min_input_slices: Vector2 = generation_data.get_min_input_size()
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
-	resize_input_bg_texture(input_slice_size * 2, input_image)
+	set_input_tile_size(input_slice_size * 2, input_image)
 	var output_slice_size: int = int(output_tile_size / 2.0)
 	var resize_factor: float = float(output_slice_size) / float(input_slice_size)
 	var new_viewport_size := Vector2(input_slice_size, input_slice_size)
@@ -300,6 +320,35 @@ func generate_corner_slices():
 
 func generate_overlayed_tiles():
 	input_slices = {}
+	var output_tile_size: int = get_output_tile_size()
+	var input_image: Image = texture_in.texture.get_data()
+	var min_input_tiles: Vector2 = generation_data.get_min_input_size()
+	var input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
+#
+#	print(min_input_tiles, input_tile_size)
+	set_input_tile_size(input_tile_size, input_image)
+	var resize_factor: float = float(output_tile_size) / float(input_tile_size)
+	var new_viewport_size := Vector2(input_tile_size, input_tile_size)
+	if slice_viewport.size != new_viewport_size:
+		slice_viewport.size = new_viewport_size
+		texture_in_viewport.rect_size = new_viewport_size
+	var image_input_fmt: int = input_image.get_format()
+	var image_fmt: int = slice_viewport.get_texture().get_data().get_format()
+	var debug_image := Image.new()
+	var color_process: int = get_color_process()
+	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY) * 2
+	debug_image.create(int(debug_texture_size.x), int(debug_texture_size.y), false, image_fmt)
+	for x in range(min_input_tiles.x):
+		for rot_index in Const.ROTATION_SHIFTS.size():
+			input_slices[x] = {}
+			var slice := Image.new()
+			slice.create(input_tile_size, input_tile_size, false, image_input_fmt)
+	#		print(Rect2(x * input_tile_size, 0, input_tile_size, input_tile_size), Vector2(x * input_tile_size, 0))
+			slice.blit_rect(input_image, Rect2(x * input_tile_size, 0, input_tile_size, input_tile_size), Vector2.ZERO)
+			append_to_debug_image(debug_image, slice, output_tile_size, Vector2(x * input_tile_size, rot_index * input_tile_size))
+
+	
+	
 	emit_signal("input_image_processed")
 
 func preprocess_input_image():
@@ -477,7 +526,7 @@ func _on_SaveTextureDialog_file_selected(path):
 	save_settings()
 
 func _on_SaveTextureDialog2_file_selected(path: String):
-	save_texture_png(path)
+#	save_texture_png(path)
 	var resource_exporter: GodotExporter = GodotExporter.new()
 	resource_exporter.save_resource(path, get_output_tile_size(), tile_masks,
 		export_type_select.pressed, 
@@ -498,13 +547,11 @@ func setup_input_type(index: int):
 			color_process_select.disabled = true
 			color_process_select.selected = Const.COLOR_PROCESS_TYPES.NO
 			set_corner_generation_data(corners_merge_type_select.selected)
-#			_on_CornersOptionButton_item_selected(corners_merge_type_select.selected)
 		Const.INPUT_TYPES.OVERLAY:
 			corners_merge_container.hide()
 			overlay_merge_container.show()
 			color_process_select.disabled = false
 			set_overlay_generation_data(overlay_merge_type_select.selected)
-#			_on_CornersOptionButton_item_selected(overlay_merge_type_select.selected)
 	
 func _on_InputType_item_selected(index):
 	setup_input_type(index)
@@ -516,6 +563,8 @@ func _on_ColorProcessType_item_selected(index):
 	save_settings()
 
 func _on_ReloadButton_pressed():
+	texture_in.texture = load_image_texture(texture_file_dialog.current_path)
+	resize_input_container()
 	preprocess_input_image()
 
 func _on_TemplateOption_item_selected(index):
@@ -534,13 +583,15 @@ func _on_TemplateOption_item_selected(index):
 	save_settings()
 
 func set_corner_generation_data(index: int):
-	match index:
-		Const.CORNERS_INPUT_PRESETS.FIVE:
-			last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[Const.CORNERS_INPUT_PRESETS.FIVE]
-			generation_data = GenerationData.new(last_generator_preset_path)
-		Const.CORNERS_INPUT_PRESETS.FOUR:
-			last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[Const.CORNERS_INPUT_PRESETS.FOUR]
-			generation_data = GenerationData.new(last_generator_preset_path)
+	last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[index]
+	generation_data = GenerationData.new(last_generator_preset_path)
+#	match index:
+#		Const.CORNERS_INPUT_PRESETS.FIVE:
+#			last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[Const.CORNERS_INPUT_PRESETS.FIVE]
+#			generation_data = GenerationData.new(last_generator_preset_path)
+#		Const.CORNERS_INPUT_PRESETS.FOUR:
+#			last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[Const.CORNERS_INPUT_PRESETS.FOUR]
+#			generation_data = GenerationData.new(last_generator_preset_path)
 
 func _on_CornersOptionButton_item_selected(index):
 	set_corner_generation_data(index)
@@ -548,11 +599,16 @@ func _on_CornersOptionButton_item_selected(index):
 	save_settings()
 
 func set_overlay_generation_data(index: int):
-	match index:
-		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_3:
-			pass
-		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_4:
-			pass
+	last_generator_preset_path = Const.OVERLAY_INPUT_PRESETS_DATA_PATH[index]
+	generation_data = GenerationData.new(last_generator_preset_path)
+#
+#	match index:
+#		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_2:
+#			pass
+#		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_3:
+#			pass
+#		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_4:
+#			pass
 
 func _on_OverlayOptionButton_item_selected(index):
 	set_overlay_generation_data(index)
@@ -570,7 +626,9 @@ func get_debug_image_rect_size(input_type: int) -> Vector2:
 			size.x = slice_size * min_size.x
 			size.y = slice_size * min_size.y * 8
 		Const.INPUT_TYPES.OVERLAY:
-			pass
+			var min_size: Vector2 = generation_data.get_min_input_size()
+			size.x = min_size.x * input_tile_size_vector.x
+			size.y = min_size.y * input_tile_size_vector.y * 4
 	return size
 
 func update_output_bg_texture_scale():

@@ -30,42 +30,46 @@ enum CORNERS_INPUT_PRESETS {
 #	NO
 }
 const CORNERS_INPUT_PRESETS_NAMES: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "Five corner (5 quarters)",
-	CORNERS_INPUT_PRESETS.FOUR: "Four corner (4 quarters)",
+	CORNERS_INPUT_PRESETS.FIVE: "Five quarters for 47-tile blob",
+	CORNERS_INPUT_PRESETS.FOUR: "Four quarters for 47-tile blob",
 #	CORNERS_INPUT_PRESETS.NO: "Custom preset",
 }
 const CORNERS_INPUT_PRESETS_EXAMPLES: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "res://generation_data/input_quarters_5.png",
-	CORNERS_INPUT_PRESETS.FOUR: "res://generation_data/input_quarters_4.png",
+	CORNERS_INPUT_PRESETS.FIVE: "res://generation_data/quarters_5.png",
+	CORNERS_INPUT_PRESETS.FOUR: "res://generation_data/quarters_4.png",
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
 const CORNERS_INPUT_PRESETS_DATA_PATH: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "res://generation_data/input_quarters_5.json",
-	CORNERS_INPUT_PRESETS.FOUR: "res://generation_data/input_quarters_4.json",
+	CORNERS_INPUT_PRESETS.FIVE: "res://generation_data/quarters_5.json",
+	CORNERS_INPUT_PRESETS.FOUR: "res://generation_data/quarters_4.json",
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
 
 enum OVERLAY_INPUT_PRESETS {
+	TOP_DOWN_2, 
 	TOP_DOWN_3, 
 	TOP_DOWN_4, 
 #	SIDEVIEW_6, 
 #	SIDEVIEW_8
 }
 const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "Top down (3 tiles)",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "Top down without corners (2 tiles)",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "Top down with corners (3 tiles)",
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "Top down with internal corner (4)",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "Sideview (6 tiles)",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "Sideview with internal corner (8)"
 }
 const OVERLAY_INPUT_EXAMPLES: Dictionary = {
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/input_overlay_3.png",
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/input_overlay_4.png",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "res://generation_data/overlay_2.png",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/overlay_3.png",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/overlay_4.png",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "res://generation_data/input_overlay_3.png",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "res://generation_data/input_overlay_3.png"
 }
 const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/input_overlay_3.json",
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/input_overlay_4.json",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "res://generation_data/overlay_2.json",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/overlay_3.json",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/overlay_4.json",
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
 const TEMPLATE_47_PATH: String = "res://generation_data/template_47.png"
