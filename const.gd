@@ -30,8 +30,8 @@ enum CORNERS_INPUT_PRESETS {
 #	NO
 }
 const CORNERS_INPUT_PRESETS_NAMES: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "Five quarters for 47-tile blob",
-	CORNERS_INPUT_PRESETS.FOUR: "Four quarters for 47-tile blob",
+	CORNERS_INPUT_PRESETS.FIVE: "5 quarters for 47-tile blob",
+	CORNERS_INPUT_PRESETS.FOUR: "4 quarters for 47-tile blob",
 #	CORNERS_INPUT_PRESETS.NO: "Custom preset",
 }
 const CORNERS_INPUT_PRESETS_EXAMPLES: Dictionary = {
@@ -46,29 +46,29 @@ const CORNERS_INPUT_PRESETS_DATA_PATH: Dictionary = {
 }
 
 enum OVERLAY_INPUT_PRESETS {
-	TOP_DOWN_2, 
-	TOP_DOWN_3, 
+#	TOP_DOWN_2, 
+#	TOP_DOWN_3, 
 	TOP_DOWN_4, 
 #	SIDEVIEW_6, 
 #	SIDEVIEW_8
 }
 const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "Top down without corners (2 tiles)",
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "Top down with corners (3 tiles)",
+#	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "Top down without corners (2 tiles)",
+#	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "Top down with corners (3 tiles)",
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "Top down with internal corner (4)",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "Sideview (6 tiles)",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "Sideview with internal corner (8)"
 }
 const OVERLAY_INPUT_EXAMPLES: Dictionary = {
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "res://generation_data/overlay_2.png",
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/overlay_3.png",
+#	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "res://generation_data/overlay_2.png",
+#	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/overlay_3.png",
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/overlay_4.png",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "res://generation_data/input_overlay_3.png",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "res://generation_data/input_overlay_3.png"
 }
 const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "res://generation_data/overlay_2.json",
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/overlay_3.json",
+#	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "res://generation_data/overlay_2.json",
+#	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/overlay_3.json",
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/overlay_4.json",
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
@@ -131,6 +131,16 @@ const MY_MASK: Dictionary = {
 	"LEFT": 64,
 	"TOP_LEFT": 128,
 }
+#const MY_MASK_TRUE_ROTATIONS: Dictionary = {
+#	"TOP": 0.0,
+#	"TOP_RIGHT": PI / 4.0,
+#	"RIGHT": PI / 2.0,
+#	"BOTTOM_RIGHT": 3 * PI / 4.0,
+#	"BOTTOM": PI,
+#	"BOTTOM_LEFT": 5 * PI / 4.0,
+#	"LEFT": 3 * PI / 2,
+#	"TOP_LEFT": 7 * PI / 4.0,
+#}
 const TEMPLATE_MASK_CHECK_POINTS := {
 	MY_MASK["TOP"]: MASK_TOP,
 	MY_MASK["TOP_RIGHT"]: MASK_TOP_RIGHT,

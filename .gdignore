@@ -1,0 +1,11 @@
+screens/*
+.import/*
+*.import
+.gitignore
+project.godot
+readme.md
+LICENSE
+icon.png
+example.gd
+example.tscn
+

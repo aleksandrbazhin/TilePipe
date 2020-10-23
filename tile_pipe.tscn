@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://tile_pipe.gd" type="Script" id=1]
+[ext_resource path="res://overlay.shader" type="Shader" id=2]
 [ext_resource path="res://slice_process.shader" type="Shader" id=4]
 [ext_resource path="res://IBMPlexSans-Medium.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://ui_theme.tres" type="Theme" id=6]
@@ -16,11 +17,23 @@ shader_param/is_flipped_x = false
 shader_param/is_flipped_y = false
 shader_param/is_flow_map = false
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 2 )
+shader_param/rotation_1 = null
+shader_param/rotation_2 = null
+shader_param/rotation_4 = null
+shader_param/rotation_8 = null
+shader_param/rotation_16 = null
+shader_param/rotation_32 = null
+shader_param/rotation_64 = null
+shader_param/rotation_128 = null
+shader_param/overlay_rate = null
+
+[sub_resource type="DynamicFont" id=4]
 size = 11
 font_data = ExtResource( 5 )
 
-[sub_resource type="Theme" id=4]
+[sub_resource type="Theme" id=5]
 Label/colors/font_color = Color( 0.207843, 0.258824, 0.317647, 1 )
 Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
@@ -28,7 +41,7 @@ Label/constants/line_spacing = 3
 Label/constants/shadow_as_outline = 0
 Label/constants/shadow_offset_x = 1
 Label/constants/shadow_offset_y = 1
-Label/fonts/font = SubResource( 3 )
+Label/fonts/font = SubResource( 4 )
 Label/styles/normal = null
 
 [node name="Node" type="Control"]
@@ -251,7 +264,6 @@ rect_min_size = Vector2( 180, 32 )
 text = "Preset"
 
 [node name="OverlaySettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/MarginContainer"]
-visible = false
 margin_left = 20.0
 margin_right = 280.0
 margin_bottom = 302.0
@@ -304,19 +316,22 @@ margin_right = 260.0
 margin_bottom = 146.0
 text = "Merge percent"
 
-[node name="MergeSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer"]
+[node name="RateSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer"]
 margin_top = 150.0
 margin_right = 260.0
 margin_bottom = 166.0
-value = 50.0
+max_value = 0.5
+step = 0.05
+value = 0.25
+scrollable = false
 tick_count = 11
 ticks_on_borders = true
 
 [node name="HSlider2" type="HSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer"]
 visible = false
-margin_top = 154.0
+margin_top = 150.0
 margin_right = 260.0
-margin_bottom = 170.0
+margin_bottom = 166.0
 tick_count = 10
 ticks_on_borders = true
 
@@ -343,68 +358,17 @@ tick_count = 10
 ticks_on_borders = true
 
 [node name="VBoxViewport" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
+visible = false
 margin_left = 544.0
-margin_right = 672.0
+margin_right = 544.0
 margin_bottom = 302.0
 
-[node name="ViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/VBoxViewport"]
-margin_right = 128.0
-margin_bottom = 128.0
-rect_min_size = Vector2( 128, 128 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Viewport" type="Viewport" parent="Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer"]
-size = Vector2( 32, 32 )
-transparent_bg = true
-handle_input_locally = false
-msaa = 4
-disable_3d = true
-render_target_v_flip = true
-render_target_update_mode = 3
-
-[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxViewport/ViewportContainer/Viewport"]
-material = SubResource( 2 )
-margin_right = 64.0
-margin_bottom = 64.0
-stretch_mode = 3
-
 [node name="Spacer" type="Control" parent="Panel/HBox/Images/InContainer/VBoxViewport"]
-margin_top = 132.0
-margin_right = 128.0
 margin_bottom = 302.0
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxViewport"]
-visible = false
-margin_top = 225.0
-margin_right = 128.0
-margin_bottom = 265.0
-alignment = 1
-
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer"]
-margin_right = 128.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 0, 20 )
-text = "Tile"
-align = 1
-valign = 1
-
-[node name="HSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxViewport/HBoxContainer"]
-margin_top = 24.0
-margin_right = 128.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 100, 0 )
-min_value = 1.0
-max_value = 5.0
-value = 1.0
-rounded = true
-tick_count = 5
-ticks_on_borders = true
-
-[node name="DebugTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 676.0
+[node name="WorkTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer"]
+margin_left = 544.0
 margin_right = 1112.0
 margin_bottom = 302.0
 rect_min_size = Vector2( 256, 256 )
@@ -414,13 +378,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/DebugTextureContainer"]
-margin_right = 436.0
+[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/WorkTextureContainer"]
+margin_right = 568.0
 margin_bottom = 302.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/DebugTextureContainer/Control"]
+[node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 3.05176e-05
@@ -433,7 +397,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="DebugTexture" type="TextureRect" parent="Panel/HBox/Images/InContainer/DebugTextureContainer/Control"]
+[node name="DebugTexture" type="TextureRect" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
 margin_right = 128.0
 margin_bottom = 128.0
 rect_min_size = Vector2( 128, 128 )
@@ -443,7 +407,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/InContainer/DebugTextureContainer/Control"]
+[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -456,6 +420,53 @@ text = "64x64"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="InViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Viewport" type="Viewport" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control/InViewportContainer"]
+size = Vector2( 32, 32 )
+transparent_bg = true
+handle_input_locally = false
+msaa = 4
+disable_3d = true
+render_target_v_flip = true
+render_target_update_mode = 3
+
+[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control/InViewportContainer/Viewport"]
+material = SubResource( 2 )
+margin_right = 64.0
+margin_bottom = 64.0
+stretch_mode = 3
+
+[node name="OverlayViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 128, 128 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Viewport" type="Viewport" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control/OverlayViewportContainer"]
+size = Vector2( 32, 32 )
+transparent_bg = true
+handle_input_locally = false
+msaa = 4
+disable_3d = true
+render_target_v_flip = true
+render_target_update_mode = 3
+
+[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control/OverlayViewportContainer/Viewport"]
+material = SubResource( 3 )
+stretch_mode = 3
 
 [node name="HSeparator" type="HSeparator" parent="Panel/HBox/Images"]
 margin_top = 306.0
@@ -528,7 +539,7 @@ size_flags_horizontal = 3
 [node name="TemplateTextureRect" type="TextureRect" parent="Panel/HBox/Images/TemplateContainer/ScrollContainer"]
 margin_bottom = 130.0
 size_flags_vertical = 3
-theme = SubResource( 4 )
+theme = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -805,6 +816,7 @@ __meta__ = {
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings/CornersOptionButton" to="." method="_on_CornersOptionButton_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/OverlayOptionButton" to="." method="_on_OverlayOptionButton_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
+[connection signal="value_changed" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer/RateSlider" to="." method="_on_MergeSlider_value_changed"]
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]

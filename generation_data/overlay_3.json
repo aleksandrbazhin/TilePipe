@@ -1,5 +1,5 @@
 {
-"is_corners": false,
+"type": "overlay",
 "name": "input_overlay_3",
 "min_size": {
 	"x": 3,
