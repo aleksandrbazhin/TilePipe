@@ -3,4 +3,5 @@
 *~
 *.translation
 default_env.tres
-out.png
+generated.*
+addons/*
