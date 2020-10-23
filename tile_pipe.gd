@@ -45,7 +45,8 @@ onready var export_type_select: CheckButton = $Panel/HBox/Settings/Resourse/Auto
 onready var description_select_box: HBoxContainer = $Panel/HBox/Settings/DescriptionResourse
 onready var export_manual_resource_type_select: CheckButton = $Panel/HBox/Settings/DescriptionResourse/Select
 
-
+var is_ui_blocked: bool = false
+var is_slider_changed: bool = false
 var generation_data: GenerationData
 
 export var is_godot_plugin: bool = false
@@ -216,8 +217,8 @@ func generate_tile_masks():
 			var mask_value: int = get_template_mask_value(template_image, x, y) 
 			var godot_mask_value: int = get_template_mask_value(template_image, x, y, Const.GODOT_MASK_CHECK_POINTS)
 			tile_masks.append({"mask": mask_value, "position": Vector2(x, y), "godot_mask": godot_mask_value })
-			mark_template_tile(mask_value, Vector2(x, y), true)
-#			mark_template_tile(godot_mask_value, Vector2(x, y), false)
+#			mark_template_tile(mask_value, Vector2(x, y), true)
+			mark_template_tile(godot_mask_value, Vector2(x, y), false)
 
 func put_to_rotation_viewport(slice: Image, rotation_key: int, color_process: int,
 		is_flipped := false):
@@ -355,6 +356,7 @@ func make_from_corners():
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image)
 	set_output_texture(itex)
+	unblock_ui()
 
 #slice: Image, rotation_key: int, color_process: int,
 #		is_flipped := false
@@ -509,8 +511,10 @@ func make_from_overlayed():
 #	
 		
 	rotated_texture_in_viewport.hide()
+	unblock_ui()
 
 func preprocess_input_image():
+	block_ui()
 	rotated_texture_in_viewport.show()
 	if not check_input_texture():
 		print("WRONG input texture")
@@ -542,6 +546,7 @@ func make_output_texture():
 			make_from_corners()
 		Const.INPUT_TYPES.OVERLAY:
 			make_from_overlayed()
+	
 	
 func rotate_ccw(in_rot: int, quarters: int = 1) -> int:
 	var out: int = int(clamp(in_rot, 0, 6)) - 2 * quarters
@@ -703,13 +708,6 @@ func _on_TemplateOption_item_selected(index):
 func set_corner_generation_data(index: int):
 	last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[index]
 	generation_data = GenerationData.new(last_generator_preset_path)
-#	match index:
-#		Const.CORNERS_INPUT_PRESETS.FIVE:
-#			last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[Const.CORNERS_INPUT_PRESETS.FIVE]
-#			generation_data = GenerationData.new(last_generator_preset_path)
-#		Const.CORNERS_INPUT_PRESETS.FOUR:
-#			last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[Const.CORNERS_INPUT_PRESETS.FOUR]
-#			generation_data = GenerationData.new(last_generator_preset_path)
 
 func _on_CornersOptionButton_item_selected(index):
 	set_corner_generation_data(index)
@@ -719,14 +717,6 @@ func _on_CornersOptionButton_item_selected(index):
 func set_overlay_generation_data(index: int):
 	last_generator_preset_path = Const.OVERLAY_INPUT_PRESETS_DATA_PATH[index]
 	generation_data = GenerationData.new(last_generator_preset_path)
-#
-#	match index:
-#		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_2:
-#			pass
-#		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_3:
-#			pass
-#		Const.OVERLAY_INPUT_PRESETS.TOP_DOWN_4:
-#			pass
 
 func _on_OverlayOptionButton_item_selected(index):
 	set_overlay_generation_data(index)
@@ -766,5 +756,25 @@ func _on_SizeOptionButton_item_selected(index):
 	preprocess_input_image()
 	save_settings()
 
-func _on_MergeSlider_value_changed(value):
-	preprocess_input_image()
+	
+func block_ui():
+	is_ui_blocked = true
+	for node in get_tree().get_nodes_in_group("blockable"):
+		if node is Button:
+			node.disabled = true
+	
+func unblock_ui():
+	is_ui_blocked = false
+	for node in get_tree().get_nodes_in_group("blockable"):
+		if node is Button:
+			node.disabled = false
+		if is_slider_changed:
+			preprocess_input_image()
+	is_slider_changed = false
+
+func _on_RateSlider_released(value):
+	if not is_ui_blocked:
+		preprocess_input_image()
+#	else:
+#		is_slider_changed = true
+		

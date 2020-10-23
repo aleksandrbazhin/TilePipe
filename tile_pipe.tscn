@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://tile_pipe.gd" type="Script" id=1]
 [ext_resource path="res://overlay.shader" type="Shader" id=2]
+[ext_resource path="res://BlockableSlider.gd" type="Script" id=3]
 [ext_resource path="res://slice_process.shader" type="Shader" id=4]
 [ext_resource path="res://IBMPlexSans-Medium.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://ui_theme.tres" type="Theme" id=6]
@@ -163,7 +164,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LoadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox"]
+[node name="LoadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=[
+"blockable",
+]]
 margin_right = 148.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
@@ -173,7 +176,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ReloadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox"]
+[node name="ReloadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=[
+"blockable",
+]]
 margin_left = 152.0
 margin_right = 192.0
 margin_bottom = 40.0
@@ -228,7 +233,9 @@ rect_min_size = Vector2( 0, 26 )
 text = "Generation type"
 valign = 2
 
-[node name="InputType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxInput"]
+[node name="InputType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxInput" groups=[
+"blockable",
+]]
 margin_top = 270.0
 margin_right = 192.0
 margin_bottom = 302.0
@@ -245,6 +252,7 @@ custom_constants/margin_right = 20
 custom_constants/margin_left = 20
 
 [node name="CornersMergeSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/MarginContainer"]
+visible = false
 margin_left = 20.0
 margin_right = 280.0
 margin_bottom = 302.0
@@ -256,7 +264,9 @@ rect_min_size = Vector2( 0, 26 )
 text = "Generation preset"
 valign = 2
 
-[node name="CornersOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings"]
+[node name="CornersOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings" groups=[
+"blockable",
+]]
 margin_top = 30.0
 margin_right = 260.0
 margin_bottom = 62.0
@@ -275,7 +285,9 @@ rect_min_size = Vector2( 0, 26 )
 text = "Generation preset"
 valign = 2
 
-[node name="OverlayOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
+[node name="OverlayOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings" groups=[
+"blockable",
+]]
 margin_top = 30.0
 margin_right = 260.0
 margin_bottom = 62.0
@@ -294,7 +306,9 @@ rect_min_size = Vector2( 0, 26 )
 text = "Color processing type"
 valign = 2
 
-[node name="ColorProcessType" type="OptionButton" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
+[node name="ColorProcessType" type="OptionButton" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings" groups=[
+"blockable",
+]]
 margin_top = 100.0
 margin_right = 260.0
 margin_bottom = 132.0
@@ -316,16 +330,20 @@ margin_right = 260.0
 margin_bottom = 146.0
 text = "Merge percent"
 
-[node name="RateSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer"]
+[node name="RateSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer" groups=[
+"blockable",
+]]
 margin_top = 150.0
 margin_right = 260.0
 margin_bottom = 166.0
+focus_mode = 0
 max_value = 0.5
-step = 0.05
+step = 0.01
 value = 0.25
 scrollable = false
 tick_count = 11
 ticks_on_borders = true
+script = ExtResource( 3 )
 
 [node name="HSlider2" type="HSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer"]
 visible = false
@@ -504,7 +522,9 @@ margin_left = 44.0
 margin_right = 244.0
 margin_bottom = 130.0
 
-[node name="TemplateOption" type="OptionButton" parent="Panel/HBox/Images/TemplateContainer/ButtonBox"]
+[node name="TemplateOption" type="OptionButton" parent="Panel/HBox/Images/TemplateContainer/ButtonBox" groups=[
+"blockable",
+]]
 margin_right = 200.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 200, 32 )
@@ -697,7 +717,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SizeOptionButton" type="OptionButton" parent="Panel/HBox/Settings"]
+[node name="SizeOptionButton" type="OptionButton" parent="Panel/HBox/Settings" groups=[
+"blockable",
+]]
 margin_top = 84.0
 margin_right = 220.0
 margin_bottom = 116.0
@@ -707,7 +729,9 @@ align = 1
 items = [ "8x8", null, false, 0, null, "16x16", null, false, 1, null, "32x32", null, false, 2, null, "64x64", null, false, 3, null, "128x128", null, false, 4, null, "8x8", null, false, 5, null, "16x16", null, false, 6, null, "32x32", null, false, 7, null, "64x64", null, false, 8, null, "128x128", null, false, 9, null ]
 selected = 3
 
-[node name="Save" type="Button" parent="Panel/HBox/Settings"]
+[node name="Save" type="Button" parent="Panel/HBox/Settings" groups=[
+"blockable",
+]]
 margin_top = 120.0
 margin_right = 220.0
 margin_bottom = 160.0
@@ -797,11 +821,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Save2" type="Button" parent="Panel/HBox/Settings"]
+[node name="Save2" type="Button" parent="Panel/HBox/Settings" groups=[
+"blockable",
+]]
 margin_top = 248.0
 margin_right = 220.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 0, 40 )
+rect_pivot_offset = Vector2( 227, -255 )
 text = "Export Godot resourse"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -816,7 +843,7 @@ __meta__ = {
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings/CornersOptionButton" to="." method="_on_CornersOptionButton_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/OverlayOptionButton" to="." method="_on_OverlayOptionButton_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
-[connection signal="value_changed" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer/RateSlider" to="." method="_on_MergeSlider_value_changed"]
+[connection signal="released" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer/RateSlider" to="." method="_on_RateSlider_released"]
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
