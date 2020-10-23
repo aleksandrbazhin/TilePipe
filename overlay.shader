@@ -22,10 +22,7 @@ uniform float rotation_64;
 uniform float rotation_128;
 
 uniform float overlay_rate;
-
-//uniform float overlay_rotation;
-//const float PI = 3.14159265358979323846;
-//uniform float rotation = 0.0;
+uniform bool is_flow_map = false;
 
 vec2 rotateUV(vec2 uv, float rot) {
     float cosa = cos(rot);
@@ -41,55 +38,36 @@ vec2 rotate_around_center(vec2 uv, float rot) {
 	return CENTER + rotateUV(uv - CENTER, rot);
 }
 
-//vec4 mix_overlay() {
-//	return 
-//}
+vec4 get_color_from_rotated(vec2 uv, vec4 bg_color, sampler2D overlay, float rotation) {
+	vec4 pixel_color;
+	vec2 new_uv = rotate_around_center(uv, rotation);
+	pixel_color =  mix(bg_color, texture(overlay, new_uv), 1.0);
+	if (is_flow_map) {
+		pixel_color.rg = rotate_around_center(pixel_color.rg, rotation);
+	}
+	return pixel_color;
+}
 
 void fragment() {
 	COLOR = texture(TEXTURE, UV);
-	
-	
 	if (UV.y < overlay_rate) {
-		vec2 new_uv = rotate_around_center(UV, rotation_1);
-		COLOR = mix(COLOR, texture(overlay_texture_1, new_uv), 1.0);
+		COLOR = get_color_from_rotated(UV, COLOR, overlay_texture_1, rotation_1);
 	} else if (UV.y > 1.0 - overlay_rate) {
-		vec2 new_uv = rotate_around_center(UV, rotation_16);
-		COLOR = mix(COLOR, texture(overlay_texture_16, new_uv), 1.0);
+		COLOR = get_color_from_rotated(UV, COLOR, overlay_texture_16, rotation_16);
 	} else if (UV.x > 1.0 - overlay_rate) {
-		vec2 new_uv = rotate_around_center(UV, rotation_4);
-		COLOR = mix(COLOR, texture(overlay_texture_4, new_uv), 1.0);
+		COLOR = get_color_from_rotated(UV, COLOR, overlay_texture_4, rotation_4);
 	} else if (UV.x < overlay_rate) {
-		vec2 new_uv = rotate_around_center(UV, rotation_64);
-		COLOR = mix(COLOR, texture(overlay_texture_64, new_uv), 1.0);
+		COLOR = get_color_from_rotated(UV, COLOR, overlay_texture_64, rotation_64);
 	}
 	
 //	float from_center = distance(UV, CENTER);
 	if (UV.y < overlay_rate && UV.x > 1.0 - overlay_rate) {
-		vec2 new_uv = rotate_around_center(UV, rotation_2);
-		COLOR = mix(COLOR, texture(overlay_texture_2, new_uv), 1.0);
+		COLOR = get_color_from_rotated(UV, COLOR, overlay_texture_2, rotation_2);
 	} else if (UV.y > 1.0 - overlay_rate && UV.x > 1.0 - overlay_rate) {
-		vec2 new_uv = rotate_around_center(UV, rotation_8);
-		COLOR = mix(COLOR, texture(overlay_texture_8, new_uv), 1.0);
+		COLOR = get_color_from_rotated(UV, COLOR, overlay_texture_8, rotation_8);
 	} else if (UV.y > 1.0 - overlay_rate && UV.x < overlay_rate) {
-		vec2 new_uv = rotate_around_center(UV, rotation_32);
-		COLOR = mix(COLOR, texture(overlay_texture_32, new_uv), 1.0);
+		COLOR = get_color_from_rotated(UV, COLOR, overlay_texture_32, rotation_32);
 	} else if (UV.y < overlay_rate && UV.x < overlay_rate) {
-		vec2 new_uv = rotate_around_center(UV, rotation_128);
-		COLOR = mix(COLOR, texture(overlay_texture_128, new_uv), 1.0);
+		COLOR = get_color_from_rotated(UV, COLOR, overlay_texture_128, rotation_128);
 	}
-//	} else {
-//		COLOR = texture(TEXTURE, UV);
-//	}
-//	vec4 overlay_color_2 = texture(overlay_texture_2, new_uv);
-//	if (distance(UV, CENTER) > overlay_rate) {
-//		COLOR = mix(COLOR, overlay_color_2, 0.5);
-//	}
-//	vec2 new_uv = flip(UV, is_flipped_x, is_flipped_y);
-//	new_uv = rotate_around_center(new_uv, rotation);
-//	vec4 pixel_color = texture(TEXTURE, new_uv);
-//	if (is_flow_map) {
-//		pixel_color.rg = flip(pixel_color.rg, is_flipped_x, is_flipped_y);
-//		pixel_color.rg = rotate_around_center(pixel_color.rg, -rotation);
-//	}	
-//	COLOR = pixel_color;
 }

@@ -220,8 +220,7 @@ func generate_tile_masks():
 #			mark_template_tile(mask_value, Vector2(x, y), true)
 			mark_template_tile(godot_mask_value, Vector2(x, y), false)
 
-func put_to_rotation_viewport(slice: Image, rotation_key: int, color_process: int,
-		is_flipped := false):
+func put_to_rotation_viewport(slice: Image, rotation_key: int, is_flipped := false):
 	var flip_x := false
 	var flip_y := false
 	if is_flipped:
@@ -236,7 +235,7 @@ func put_to_rotation_viewport(slice: Image, rotation_key: int, color_process: in
 	rotated_texture_in_viewport.material.set_shader_param("rotation", -rotation_angle)
 	rotated_texture_in_viewport.material.set_shader_param("is_flipped_x", flip_x)
 	rotated_texture_in_viewport.material.set_shader_param("is_flipped_y", flip_y)
-	var is_flow_map: bool = color_process == Const.COLOR_PROCESS_TYPES.FLOW_MAP
+	var is_flow_map: bool = get_color_process() == Const.COLOR_PROCESS_TYPES.FLOW_MAP
 	rotated_texture_in_viewport.material.set_shader_param("is_flow_map", is_flow_map)
 
 func get_from_rotation_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
@@ -295,7 +294,7 @@ func generate_corner_slices():
 	var image_input_fmt: int = input_image.get_format()
 	var image_fmt: int = rotate_viewport.get_texture().get_data().get_format()
 	var debug_image := Image.new()
-	var color_process: int = get_color_process()
+#	var color_process: int = get_color_process()
 	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.CORNERS)
 	debug_image.create(int(debug_texture_size.x), int(debug_texture_size.y), false, image_fmt)
 	for x in range(min_input_slices.x):
@@ -305,12 +304,12 @@ func generate_corner_slices():
 		slice.blit_rect(input_image, Rect2(x * input_slice_size, 0, input_slice_size, input_slice_size), Vector2.ZERO)
 		for rot_index in Const.ROTATION_SHIFTS.size():
 			var rotation_key: int = Const.ROTATION_SHIFTS.keys()[rot_index]
-			put_to_rotation_viewport(slice, rotation_key, color_process, false)
+			put_to_rotation_viewport(slice, rotation_key, false)
 			yield(VisualServer, 'frame_post_draw')
 			var processed_slice: Image = get_from_rotation_viewport(image_fmt, resize_factor)
 			append_to_debug_image(debug_image, processed_slice, output_slice_size, 
 				Vector2(x * output_slice_size, 2 * rot_index * output_slice_size))
-			put_to_rotation_viewport(slice, rotation_key, color_process, true)
+			put_to_rotation_viewport(slice, rotation_key, true)
 			yield(VisualServer, 'frame_post_draw')
 			var processed_flipped_slice : Image = get_from_rotation_viewport(image_fmt, resize_factor)
 			append_to_debug_image(debug_image, processed_flipped_slice, output_slice_size, 
@@ -382,7 +381,9 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -Const.ROTATION_SHIFTS[rotation_shift]["angle"])
 		piece_index += 1
 
-	overlay_texture_in_viewport.material.set_shader_param("overlay_rate", overlay_rate)		
+	overlay_texture_in_viewport.material.set_shader_param("overlay_rate", overlay_rate)
+	var is_flow_map: bool = get_color_process() == Const.COLOR_PROCESS_TYPES.FLOW_MAP
+	overlay_texture_in_viewport.material.set_shader_param("is_flow_map", is_flow_map)
 #	var is_flow_map: bool = color_process == Const.COLOR_PROCESS_TYPES.FLOW_MAP
 #	input_texture_in_viewport.material.set_shader_param("is_flow_map", is_flow_map)
 
@@ -469,7 +470,7 @@ func make_from_overlayed():
 #	print(rotated_texture_in_viewport.rect_size)
 #	print(rotated_texture_in_viewport.rect_scale)
 	
-	var color_process: int = get_color_process()
+#	var color_process: int = get_color_process()
 	
 	var out_image := Image.new()
 	var first_tile_image: Image = input_overlayed_tiles[0]["tile_image"]
@@ -493,7 +494,7 @@ func make_from_overlayed():
 				var rotation_key: int = Const.ROTATION_SHIFTS.keys()[tile_data["variant_rotations"][variant_index]]
 				if rotation_key != 0:
 #					print(tile_data["tile_image"].get_size())
-					put_to_rotation_viewport(tile_data["tile_image"], rotation_key, color_process, false)
+					put_to_rotation_viewport(tile_data["tile_image"], rotation_key, false)
 					yield(VisualServer, 'frame_post_draw')
 					var tile_image: Image = get_from_rotation_viewport(out_image_fmt)
 					out_image.blit_rect(tile_image, tile_rect, tile_position)

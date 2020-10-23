@@ -37,8 +37,8 @@ void fragment() {
 	new_uv = rotate_around_center(new_uv, rotation);
 	vec4 pixel_color = texture(TEXTURE, new_uv);
 	if (is_flow_map) {
-		pixel_color.rg = flip(pixel_color.rg, is_flipped_x, is_flipped_y);
-		pixel_color.rg = rotate_around_center(pixel_color.rg, -rotation);
+//		pixel_color.rg = flip(pixel_color.rg, is_flipped_x, is_flipped_y);
+		pixel_color.rg = rotate_around_center(pixel_color.rg, rotation);
 	}	
 	COLOR = pixel_color;
 }

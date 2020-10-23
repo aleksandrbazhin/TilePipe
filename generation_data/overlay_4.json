@@ -14,7 +14,7 @@
 	},
 	{
 		"mask_variants": [68, 17],
-		"variant_rotations": [0, 2],
+		"variant_rotations": [0, 1],
 		"generate_piece_indexes":   [2, 2, 0, 2, 2, 2, 0, 2],
 		"generate_piece_rotations": [0, 0, 0, 2, 2, 2, 0, 0],
 	},
