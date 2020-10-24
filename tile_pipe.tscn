@@ -28,6 +28,14 @@ shader_param/rotation_16 = null
 shader_param/rotation_32 = null
 shader_param/rotation_64 = null
 shader_param/rotation_128 = null
+shader_param/rotation_1_key = null
+shader_param/rotation_2_key = null
+shader_param/rotation_4_key = null
+shader_param/rotation_8_key = null
+shader_param/rotation_16_key = null
+shader_param/rotation_32_key = null
+shader_param/rotation_64_key = null
+shader_param/rotation_128_key = null
 shader_param/overlay_rate = null
 shader_param/is_flow_map = false
 
@@ -119,12 +127,12 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1359.0
-margin_bottom = 759.0
+margin_bottom = 825.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
 margin_right = 1112.0
-margin_bottom = 752.0
+margin_bottom = 818.0
 size_flags_horizontal = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
@@ -294,15 +302,10 @@ margin_right = 260.0
 margin_bottom = 62.0
 rect_min_size = Vector2( 180, 32 )
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
+[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
 margin_top = 66.0
 margin_right = 260.0
-margin_bottom = 66.0
-
-[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
-margin_top = 70.0
-margin_right = 260.0
-margin_bottom = 96.0
+margin_bottom = 92.0
 rect_min_size = Vector2( 0, 26 )
 text = "Color processing type"
 valign = 2
@@ -310,15 +313,21 @@ valign = 2
 [node name="ColorProcessType" type="OptionButton" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings" groups=[
 "blockable",
 ]]
-margin_top = 100.0
+margin_top = 96.0
 margin_right = 260.0
-margin_bottom = 132.0
+margin_bottom = 128.0
 rect_min_size = Vector2( 0, 32 )
 text = "Type"
 align = 1
 
+[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
+visible = false
+margin_top = 132.0
+margin_right = 260.0
+margin_bottom = 132.0
+
 [node name="HSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings"]
-margin_top = 136.0
+margin_top = 132.0
 margin_right = 260.0
 margin_bottom = 302.0
 size_flags_horizontal = 3
@@ -326,20 +335,20 @@ size_flags_vertical = 3
 alignment = 2
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer"]
-margin_top = 127.0
+margin_top = 131.0
 margin_right = 260.0
-margin_bottom = 146.0
+margin_bottom = 150.0
 text = "Merge percent"
 
 [node name="RateSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer" groups=[
 "blockable",
 ]]
-margin_top = 150.0
+margin_top = 154.0
 margin_right = 260.0
-margin_bottom = 166.0
+margin_bottom = 170.0
 focus_mode = 0
 max_value = 0.5
-step = 0.01
+step = 0.025
 value = 0.25
 scrollable = false
 tick_count = 11
@@ -573,13 +582,13 @@ margin_bottom = 468.0
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 472.0
 margin_right = 1112.0
-margin_bottom = 752.0
+margin_bottom = 818.0
 rect_min_size = Vector2( 0, 280 )
 size_flags_vertical = 3
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
-margin_bottom = 280.0
+margin_bottom = 346.0
 rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
@@ -603,7 +612,7 @@ __meta__ = {
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 44.0
 margin_right = 1112.0
-margin_bottom = 280.0
+margin_bottom = 346.0
 rect_min_size = Vector2( 900, 280 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -613,7 +622,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/ScrollContainer"]
 margin_right = 1068.0
-margin_bottom = 280.0
+margin_bottom = 346.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -653,12 +662,12 @@ __meta__ = {
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
 margin_left = 1116.0
 margin_right = 1128.0
-margin_bottom = 752.0
+margin_bottom = 818.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
 margin_left = 1132.0
 margin_right = 1352.0
-margin_bottom = 752.0
+margin_bottom = 818.0
 rect_min_size = Vector2( 220, 0 )
 
 [node name="CloseButton" type="Button" parent="Panel/HBox/Settings"]

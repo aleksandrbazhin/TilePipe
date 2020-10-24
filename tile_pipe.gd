@@ -379,6 +379,7 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 		itex2.create_from_image(input_tiles[input_index][random_tile_index])
 		overlay_texture_in_viewport.material.set_shader_param("overlay_texture_%s" % mask_key, itex2)
 		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -Const.ROTATION_SHIFTS[rotation_shift]["angle"])
+		overlay_texture_in_viewport.material.set_shader_param("rotation_%s_key" % mask_key, data["generate_piece_rotations"][piece_index])
 		piece_index += 1
 
 	overlay_texture_in_viewport.material.set_shader_param("overlay_rate", overlay_rate)
