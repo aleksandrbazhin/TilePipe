@@ -9,19 +9,24 @@ onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
 
-onready var texture_in_container: Control = $Panel/HBox/Images/InContainer/VBoxInput/Control
+onready var input_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxInput
+onready var texture_in_container: Control = input_container.get_node("Control")
 onready var texture_in: TextureRect = texture_in_container.get_node("InputTextureRect")
 onready var texture_input_bg: TextureRect = texture_in_container.get_node("BGTextureRect")
-onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxInput/InputType
+onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/InputType
 
-onready var corners_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings
+onready var corners_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/CornersMergeSettings
 onready var corners_merge_type_select: OptionButton = corners_merge_container.get_node("CornersOptionButton")
-onready var rand_seed_check: CheckButton = corners_merge_container.get_node("HBoxContainer/CheckButton")
-onready var rand_seed_value: LineEdit = corners_merge_container.get_node("LineEdit")
 
-onready var overlay_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings
+onready var settings_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxSettings
+onready var rand_seed_container: VBoxContainer = settings_container.get_node("RandomContainer")
+onready var rand_seed_check: CheckButton = rand_seed_container.get_node("HBoxContainer/CheckButton")
+onready var rand_seed_value: LineEdit = rand_seed_container.get_node("LineEdit")
+
+onready var overlay_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/OverlaySettings
 onready var overlay_merge_type_select: OptionButton = overlay_merge_container.get_node("OverlayOptionButton")
-onready var color_process_select: OptionButton = overlay_merge_container.get_node("ColorProcessType")
+
+onready var color_process_select: OptionButton = settings_container.get_node("ColorProcessContainer/ColorProcessType")
 
 onready var debug_input_scroll: Control = $Panel/HBox/Images/InContainer/WorkTextureContainer
 onready var debug_input_control: Control = debug_input_scroll.get_node("Control")
@@ -32,7 +37,7 @@ onready var rotate_viewport: Viewport = debug_input_control.get_node("InViewport
 onready var rotated_texture_in_viewport: TextureRect = rotate_viewport.get_node("TextureRect")
 onready var overlay_viewport: Viewport = debug_input_control.get_node("OverlayViewportContainer/Viewport")
 onready var overlay_texture_in_viewport: TextureRect = overlay_viewport.get_node("TextureRect")
-onready var overlay_rate_slider: HSlider = $Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer/RateSlider
+onready var overlay_rate_slider: HSlider = settings_container.get_node("HSliderContainer/RateSlider")
 
 onready var template_load_button : Button = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
 onready var template_type_select: OptionButton = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption
@@ -699,14 +704,22 @@ func setup_input_type(index: int):
 		Const.INPUT_TYPES.CORNERS:
 			overlay_merge_container.hide()
 			corners_merge_container.show()
-			color_process_select.disabled = true
 			color_process_select.selected = Const.COLOR_PROCESS_TYPES.NO
 			set_corner_generation_data(corners_merge_type_select.selected)
+			for node in get_tree().get_nodes_in_group("overlay_settings"):
+				node.hide()
+			for node in get_tree().get_nodes_in_group("corners_settings"):
+				node.show()
 		Const.INPUT_TYPES.OVERLAY:
 			corners_merge_container.hide()
 			overlay_merge_container.show()
-			color_process_select.disabled = false
 			set_overlay_generation_data(overlay_merge_type_select.selected)
+			for node in get_tree().get_nodes_in_group("corners_settings"):
+				node.hide()
+			for node in get_tree().get_nodes_in_group("overlay_settings"):
+				node.show()
+
+
 	
 func _on_InputType_item_selected(index):
 	setup_input_type(index)
