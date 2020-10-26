@@ -16,6 +16,9 @@ onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContaine
 
 onready var corners_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings
 onready var corners_merge_type_select: OptionButton = corners_merge_container.get_node("CornersOptionButton")
+onready var rand_seed_check: CheckButton = corners_merge_container.get_node("HBoxContainer/CheckButton")
+onready var rand_seed_value: LineEdit = corners_merge_container.get_node("LineEdit")
+
 onready var overlay_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings
 onready var overlay_merge_type_select: OptionButton = overlay_merge_container.get_node("OverlayOptionButton")
 onready var color_process_select: OptionButton = overlay_merge_container.get_node("ColorProcessType")
@@ -57,8 +60,10 @@ var input_tile_size_vector := Vector2.ZERO
 var input_overlayed_tiles: Array = []
 # tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
 var tile_masks: Array = []
+var rng = RandomNumberGenerator.new()
 
 func _ready():
+	rng.randomize()
 #	save_settings(true) # uncomment on change of save file structure
 	connect("input_image_processed", self, "make_output_texture")
 	output_size_select.clear()
@@ -277,6 +282,12 @@ func set_input_tile_size(input_tile_size: int, input_image: Image):
 func get_output_tile_size() -> int:
 	return Const.OUTPUT_SIZES.keys()[output_size_select.selected]
 
+func get_input_image_random_max_variants() -> int:
+	var input_image: Image = texture_in.texture.get_data()
+	var min_input_slices: Vector2 = generation_data.get_min_input_size()
+	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
+	return int(input_image.get_size().y / input_slice_size)
+
 func generate_corner_slices():
 	input_slices = {}
 	var output_tile_size: int = get_output_tile_size()
@@ -284,6 +295,7 @@ func generate_corner_slices():
 	var min_input_slices: Vector2 = generation_data.get_min_input_size()
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
 	set_input_tile_size(input_slice_size * 2, input_image)
+	var input_max_random_variants: int = get_input_image_random_max_variants()
 	var output_slice_size: int = int(output_tile_size / 2.0)
 	var resize_factor: float = float(output_slice_size) / float(input_slice_size)
 	var new_viewport_size := Vector2(input_slice_size, input_slice_size)
@@ -296,39 +308,56 @@ func generate_corner_slices():
 	var debug_image := Image.new()
 #	var color_process: int = get_color_process()
 	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.CORNERS)
-	debug_image.create(int(debug_texture_size.x), int(debug_texture_size.y), false, image_fmt)
+	debug_image.create(int(debug_texture_size.x * input_max_random_variants), int(debug_texture_size.y), false, image_fmt)
 	for x in range(min_input_slices.x):
-		input_slices[x] = {}
-		var slice := Image.new()
-		slice.create(input_slice_size, input_slice_size, false, image_input_fmt)
-		slice.blit_rect(input_image, Rect2(x * input_slice_size, 0, input_slice_size, input_slice_size), Vector2.ZERO)
-		for rot_index in Const.ROTATION_SHIFTS.size():
-			var rotation_key: int = Const.ROTATION_SHIFTS.keys()[rot_index]
-			put_to_rotation_viewport(slice, rotation_key, false)
-			yield(VisualServer, 'frame_post_draw')
-			var processed_slice: Image = get_from_rotation_viewport(image_fmt, resize_factor)
-			append_to_debug_image(debug_image, processed_slice, output_slice_size, 
-				Vector2(x * output_slice_size, 2 * rot_index * output_slice_size))
-			put_to_rotation_viewport(slice, rotation_key, true)
-			yield(VisualServer, 'frame_post_draw')
-			var processed_flipped_slice : Image = get_from_rotation_viewport(image_fmt, resize_factor)
-			append_to_debug_image(debug_image, processed_flipped_slice, output_slice_size, 
-				Vector2(x * output_slice_size, (2 * rot_index + 1) * output_slice_size))
-			input_slices[x][rotation_key] = {
-				false: processed_slice, 
-				true: processed_flipped_slice
-			}
+		input_slices[x] = []
+		for random_variant_y in range(input_max_random_variants):
+			var slice := Image.new()
+			slice.create(input_slice_size, input_slice_size, false, image_input_fmt)
+			slice.blit_rect(input_image, Rect2(x * input_slice_size, 
+							random_variant_y * input_slice_size, 
+							input_slice_size, input_slice_size), Vector2.ZERO)
+			var slice_variant_not_empty: bool = true
+			if slice_variant_not_empty:
+				var slice_variant = {}
+				for rot_index in Const.ROTATION_SHIFTS.size():
+					var rotation_key: int = Const.ROTATION_SHIFTS.keys()[rot_index]
+					put_to_rotation_viewport(slice, rotation_key, false)
+					yield(VisualServer, 'frame_post_draw')
+					var processed_slice: Image = get_from_rotation_viewport(image_fmt, resize_factor)
+					append_to_debug_image(debug_image, processed_slice, output_slice_size, 
+						Vector2((x* input_max_random_variants + random_variant_y) * output_slice_size,
+						2 * rot_index * output_slice_size))
+					put_to_rotation_viewport(slice, rotation_key, true)
+					yield(VisualServer, 'frame_post_draw')
+					var processed_flipped_slice : Image = get_from_rotation_viewport(image_fmt, resize_factor)
+					append_to_debug_image(debug_image, processed_flipped_slice, output_slice_size, 
+						Vector2((x* input_max_random_variants + random_variant_y) * output_slice_size,
+						(2 * rot_index + 1) * output_slice_size))
+					slice_variant[rotation_key] = {
+						false: processed_slice, 
+						true: processed_flipped_slice
+					}
+				input_slices[x].append(slice_variant)
 	rotated_texture_in_viewport.hide()
 	emit_signal("input_image_processed")
 
+
+
 func make_from_corners():
+	
+	if rand_seed_check.pressed:
+		var random_seed_int: int = int(rand_seed_value.text)
+		var random_seed = rand_seed(random_seed_int)
+		rng.seed = random_seed[1]
+	
 	if input_slices.size() == 0:
 		set_output_texture(null)
 		return
 	var tile_size: int = get_output_tile_size()
 	# warning-ignore:integer_division
 	var slice_size: int = int(tile_size) / 2
-	var image_fmt: int = input_slices[0][0][false].get_format()
+	var image_fmt: int = input_slices[0][0][0][false].get_format()
 	var slice_rect := Rect2(0, 0, slice_size, slice_size)
 	var out_image := Image.new()
 	out_image.create(tile_size * int(template_size.x), tile_size * int(template_size.y), false, image_fmt)
@@ -346,7 +375,8 @@ func make_from_corners():
 					var out_tile = place_mask["out_tile"]
 					var is_flipped: bool = out_tile["flip"]
 					var slice_index: int = out_tile["index"]
-					var slice_image: Image = input_slices[slice_index][rotation][is_flipped]
+					var random_index: int = rng.randi_range(0, input_slices[slice_index].size()-1)
+					var slice_image: Image = input_slices[slice_index][random_index][rotation][is_flipped]
 					var init_rotation: int = rotate_cw(rotation, place_mask["rotation_offset"])
 					var intile_offset : Vector2 = Const.ROTATION_SHIFTS[init_rotation]["vector"] * slice_size
 					if is_flipped: 
@@ -379,7 +409,7 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 		itex2.create_from_image(input_tiles[input_index][random_tile_index])
 		overlay_texture_in_viewport.material.set_shader_param("overlay_texture_%s" % mask_key, itex2)
 		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -Const.ROTATION_SHIFTS[rotation_shift]["angle"])
-		overlay_texture_in_viewport.material.set_shader_param("rotation_%s_key" % mask_key, data["generate_piece_rotations"][piece_index])
+#		overlay_texture_in_viewport.material.set_shader_param("rotation_%s_key" % mask_key, -Const.ROTATION_SHIFTS[rotation_shift]["angle"])
 		piece_index += 1
 
 	overlay_texture_in_viewport.material.set_shader_param("overlay_rate", overlay_rate)
@@ -780,3 +810,7 @@ func _on_RateSlider_released(value):
 #	else:
 #		is_slider_changed = true
 		
+
+
+func _on_CheckButton_toggled(button_pressed):
+	rand_seed_value.editable = button_pressed
