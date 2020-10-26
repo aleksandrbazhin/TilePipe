@@ -296,6 +296,8 @@ margin_top = 110.0
 margin_right = 260.0
 margin_bottom = 139.0
 editable = false
+placeholder_text = "Integer value"
+placeholder_alpha = 0.4
 
 [node name="OverlaySettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/MarginContainer"]
 visible = false

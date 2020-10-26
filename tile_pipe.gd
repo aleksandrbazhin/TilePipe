@@ -814,3 +814,6 @@ func _on_RateSlider_released(value):
 
 func _on_CheckButton_toggled(button_pressed):
 	rand_seed_value.editable = button_pressed
+	if not button_pressed:
+		rng.randomize()
+		rand_seed_value.text = ""
