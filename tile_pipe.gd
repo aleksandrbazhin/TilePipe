@@ -817,3 +817,10 @@ func _on_CheckButton_toggled(button_pressed):
 	if not button_pressed:
 		rng.randomize()
 		rand_seed_value.text = ""
+
+func _on_RemakeButton_pressed():
+	make_output_texture()
+
+
+func _on_LineEdit_text_entered(new_text):
+	make_output_texture()

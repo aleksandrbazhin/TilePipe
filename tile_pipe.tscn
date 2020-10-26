@@ -286,15 +286,20 @@ rect_min_size = Vector2( 0, 26 )
 text = "Use random seed"
 valign = 2
 
-[node name="CheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings/HBoxContainer"]
+[node name="CheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings/HBoxContainer" groups=[
+"blockable",
+]]
 margin_left = 115.0
 margin_right = 191.0
 margin_bottom = 40.0
 
-[node name="LineEdit" type="LineEdit" parent="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings"]
+[node name="LineEdit" type="LineEdit" parent="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings" groups=[
+"blockable",
+]]
 margin_top = 110.0
 margin_right = 260.0
 margin_bottom = 139.0
+max_length = 20
 editable = false
 placeholder_text = "Integer value"
 placeholder_alpha = 0.4
@@ -571,11 +576,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Control" type="Control" parent="Panel/HBox/Images/TemplateContainer"]
+[node name="MoreTemplateControls" type="VBoxContainer" parent="Panel/HBox/Images/TemplateContainer"]
 margin_left = 248.0
 margin_right = 368.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 120, 0 )
+
+[node name="RemakeButton" type="Button" parent="Panel/HBox/Images/TemplateContainer/MoreTemplateControls" groups=[
+"blockable",
+]]
+margin_right = 120.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 0, 34 )
+text = "Apply ↻"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/TemplateContainer"]
 margin_left = 372.0
@@ -870,11 +883,13 @@ __meta__ = {
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxInput/InputType" to="." method="_on_InputType_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings/CornersOptionButton" to="." method="_on_CornersOptionButton_item_selected"]
 [connection signal="toggled" from="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings/HBoxContainer/CheckButton" to="." method="_on_CheckButton_toggled"]
+[connection signal="text_entered" from="Panel/HBox/Images/InContainer/MarginContainer/CornersMergeSettings/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/OverlayOptionButton" to="." method="_on_OverlayOptionButton_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
 [connection signal="released" from="Panel/HBox/Images/InContainer/MarginContainer/OverlaySettings/HSliderContainer/RateSlider" to="." method="_on_RateSlider_released"]
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
+[connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/MoreTemplateControls/RemakeButton" to="." method="_on_RemakeButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Settings/SizeOptionButton" to="." method="_on_SizeOptionButton_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save" to="." method="_on_Save_pressed"]
