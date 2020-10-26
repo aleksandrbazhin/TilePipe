@@ -1,5 +1,6 @@
 {
-"type": "overlay",
+"type": "quarters",
+"example": "quarters_5.png",
 "name": "input_quarters_5",
 "min_size": {
 	"x": 5,

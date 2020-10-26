@@ -30,3 +30,6 @@ func get_name() -> String:
 
 func get_min_input_size() -> Vector2:
 	return Vector2(data.min_size.x, data.min_size.y)
+
+func get_example_path() -> String:
+	return get_script().get_path().get_base_dir() + "/" + data["example"]

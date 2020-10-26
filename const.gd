@@ -11,11 +11,11 @@ const TEMPLATE_TILE_SIZE: int = 32
 const DEFAULT_OUTPUT_SIZE: int = 64
 
 
-enum COLOR_PROCESS_TYPES {NO, FLOW_MAP, NORMAL_MAP}
+enum COLOR_PROCESS_TYPES {NO, FLOW_MAP}#, NORMAL_MAP}
 const COLOR_PROCESS_TYPE_NAMES: Dictionary = {
 	COLOR_PROCESS_TYPES.NO: "No processing",
 	COLOR_PROCESS_TYPES.FLOW_MAP: "Flow map",
-	COLOR_PROCESS_TYPES.NORMAL_MAP: "Normal map",
+#	COLOR_PROCESS_TYPES.NORMAL_MAP: "Normal map",
 }
 enum INPUT_TYPES {CORNERS, OVERLAY}
 const INPUT_TYPE_NAMES : Dictionary = {
@@ -86,7 +86,7 @@ const TEMPLATE_PATHS : Dictionary = {
 	TEMPLATE_TYPES.CUSTOM: "res://"
 }
 
-const SETTINGS_PATH: String = "user://settings.save"
+const SETTINGS_PATH: String = "user://settings.sav"
 
 const MASK_TOP_LEFT := Vector2(4, 4)
 const MASK_TOP := Vector2(16, 4)

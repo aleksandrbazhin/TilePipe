@@ -53,6 +53,10 @@ window/size/width=1366
 window/size/height=768
 window/dpi/allow_hidpi=true
 
+[gui]
+
+timers/tooltip_delay_sec=0.25
+
 [logging]
 
 file_logging/enable_file_logging=true

@@ -1,5 +1,6 @@
 {
 "type": "overlay",
+"example": "overlay_4.png",
 "name": "input_overlay_4",
 "min_size": {
 	"x": 4,

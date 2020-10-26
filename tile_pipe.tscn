@@ -119,12 +119,12 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1359.0
-margin_bottom = 836.0
+margin_bottom = 757.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
 margin_right = 1112.0
-margin_bottom = 829.0
+margin_bottom = 750.0
 size_flags_horizontal = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
@@ -154,12 +154,12 @@ __meta__ = {
 
 [node name="VBoxInput" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 44.0
-margin_right = 304.0
+margin_right = 337.0
 margin_bottom = 300.0
-rect_min_size = Vector2( 260, 0 )
+size_flags_horizontal = 3
 
 [node name="LoadButtonBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_right = 260.0
+margin_right = 293.0
 margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -168,7 +168,7 @@ __meta__ = {
 [node name="LoadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=[
 "blockable",
 ]]
-margin_right = 216.0
+margin_right = 249.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
@@ -180,15 +180,15 @@ __meta__ = {
 [node name="ReloadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=[
 "blockable",
 ]]
-margin_left = 220.0
-margin_right = 260.0
+margin_left = 253.0
+margin_right = 293.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
 text = "↻"
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/VBoxInput"]
 margin_top = 44.0
-margin_right = 260.0
+margin_right = 293.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 192, 192 )
 size_flags_horizontal = 3
@@ -207,8 +207,9 @@ __meta__ = {
 [node name="InputTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 1.0
+margin_right = 1.0
 margin_bottom = -96.0
-rect_min_size = Vector2( 192, 96 )
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
@@ -227,8 +228,8 @@ __meta__ = {
 }
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 308.0
-margin_right = 558.0
+margin_left = 341.0
+margin_right = 591.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 250, 0 )
 custom_constants/margin_right = 12
@@ -311,9 +312,24 @@ margin_right = 226.0
 margin_bottom = 62.0
 rect_min_size = Vector2( 180, 32 )
 
+[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer"]
+margin_top = 234.0
+margin_right = 226.0
+margin_bottom = 238.0
+rect_min_size = Vector2( 0, 4 )
+
+[node name="ExampleButton" type="Button" parent="Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer" groups=[
+"blockable",
+]]
+margin_top = 242.0
+margin_right = 226.0
+margin_bottom = 278.0
+rect_min_size = Vector2( 0, 36 )
+text = "← Load example"
+
 [node name="VBoxSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 562.0
-margin_right = 782.0
+margin_left = 595.0
+margin_right = 815.0
 margin_bottom = 300.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings"]
@@ -361,9 +377,8 @@ size_flags_horizontal = 3
 alignment = 2
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer"]
-margin_top = -1.0
 margin_right = 220.0
-margin_bottom = 25.0
+margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
 text = "Merge percent"
 valign = 2
@@ -389,6 +404,8 @@ script = ExtResource( 3 )
 margin_top = 152.0
 margin_right = 220.0
 margin_bottom = 225.0
+hint_tooltip = "If you have multiple rows in your input image, the result will be randomized. 
+Use seed to get same results."
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer"]
 margin_right = 220.0
@@ -421,7 +438,7 @@ placeholder_text = "Integer value"
 placeholder_alpha = 0.4
 
 [node name="WorkTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 786.0
+margin_left = 819.0
 margin_right = 1112.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 256, 256 )
@@ -432,7 +449,7 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/WorkTextureContainer"]
-margin_right = 326.0
+margin_right = 293.0
 margin_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -588,6 +605,7 @@ rect_min_size = Vector2( 120, 0 )
 [node name="RemakeButton" type="Button" parent="Panel/HBox/Images/TemplateContainer/MoreTemplateControls" groups=[
 "blockable",
 ]]
+visible = false
 margin_right = 120.0
 margin_bottom = 34.0
 rect_min_size = Vector2( 0, 34 )
@@ -616,13 +634,13 @@ margin_bottom = 466.0
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 470.0
 margin_right = 1112.0
-margin_bottom = 829.0
+margin_bottom = 750.0
 rect_min_size = Vector2( 0, 280 )
 size_flags_vertical = 3
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
-margin_bottom = 359.0
+margin_bottom = 280.0
 rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
@@ -646,7 +664,7 @@ __meta__ = {
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 44.0
 margin_right = 1112.0
-margin_bottom = 359.0
+margin_bottom = 280.0
 rect_min_size = Vector2( 900, 280 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -656,7 +674,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/ScrollContainer"]
 margin_right = 1068.0
-margin_bottom = 359.0
+margin_bottom = 280.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -698,12 +716,12 @@ __meta__ = {
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
 margin_left = 1116.0
 margin_right = 1128.0
-margin_bottom = 829.0
+margin_bottom = 750.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
 margin_left = 1132.0
 margin_right = 1352.0
-margin_bottom = 829.0
+margin_bottom = 750.0
 rect_min_size = Vector2( 220, 0 )
 
 [node name="CloseButton" type="Button" parent="Panel/HBox/Settings"]
@@ -770,6 +788,7 @@ margin_top = 84.0
 margin_right = 220.0
 margin_bottom = 116.0
 rect_min_size = Vector2( 0, 32 )
+hint_tooltip = "Output tile are scaled up or down."
 text = "64x64"
 align = 1
 items = [ "8x8", null, false, 0, null, "16x16", null, false, 1, null, "32x32", null, false, 2, null, "64x64", null, false, 3, null, "128x128", null, false, 4, null, "8x8", null, false, 5, null, "16x16", null, false, 6, null, "32x32", null, false, 7, null, "64x64", null, false, 8, null, "128x128", null, false, 9, null ]
@@ -810,6 +829,7 @@ __meta__ = {
 margin_top = 204.0
 margin_right = 220.0
 margin_bottom = 244.0
+hint_tooltip = "With autotile off, the resulting tileset will consist of single tiles."
 alignment = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -888,6 +908,7 @@ __meta__ = {
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/InputType" to="." method="_on_InputType_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/CornersMergeSettings/CornersOptionButton" to="." method="_on_CornersOptionButton_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/OverlaySettings/OverlayOptionButton" to="." method="_on_OverlayOptionButton_item_selected"]
+[connection signal="pressed" from="Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/ExampleButton" to="." method="_on_ExampleButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxSettings/ColorProcessContainer/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
 [connection signal="released" from="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer/RateSlider" to="." method="_on_RateSlider_released"]
 [connection signal="toggled" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/HBoxContainer/CheckButton" to="." method="_on_CheckButton_toggled"]

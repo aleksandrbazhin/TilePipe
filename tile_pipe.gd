@@ -66,6 +66,7 @@ var input_overlayed_tiles: Array = []
 # tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
 var tile_masks: Array = []
 var rng = RandomNumberGenerator.new()
+var last_input_texture_path: String = ""
 
 func _ready():
 	rng.randomize()
@@ -114,7 +115,7 @@ func get_template_path() -> String:
 
 func capture_setting_values() -> Dictionary:
 	return {
-		"last_texture_path": texture_file_dialog.current_path,
+		"last_texture_path": last_input_texture_path,
 		"last_gen_preset_path": get_generator_preset_path(),
 		"last_template_path": get_template_path(),
 		"last_save_texture_path": save_file_dialog.current_path,
@@ -135,8 +136,9 @@ func save_settings(store_defaults: bool = false):
 	save.close()
 
 func apply_settings(data: Dictionary):
-	texture_file_dialog.current_path = data["last_texture_path"]
-	texture_in.texture = load_image_texture(data["last_texture_path"])
+	last_input_texture_path = data["last_texture_path"]
+	texture_file_dialog.current_path = last_input_texture_path
+	texture_in.texture = load_image_texture(last_input_texture_path)
 	resize_input_container()
 	generation_data = GenerationData.new(data["last_gen_preset_path"])
 	template_file_dialog.current_path = data["last_template_path"]
@@ -150,16 +152,18 @@ func apply_settings(data: Dictionary):
 	setup_input_type(generation_type_select.selected)
 	update_output_bg_texture_scale()
 	
-func setting_exist() -> bool:
+func settings_exist() -> bool:
 	var save = File.new()
 	return save.file_exists(Const.SETTINGS_PATH)
 
 func load_settings():
-	if not setting_exist():
+	if not settings_exist():
 		save_settings(true)
 	var save = File.new()
 	save.open(Const.SETTINGS_PATH, File.READ)
+#	print(save.get_line())
 	var save_data: Dictionary = parse_json(save.get_line())
+	
 	apply_settings(save_data)
 	save.close()
 
@@ -278,8 +282,8 @@ func set_input_tile_size(input_tile_size: int, input_image: Image):
 	var input_scale_factor: float = float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
 	var input_scale := Vector2(input_scale_factor, input_scale_factor)
 	var input_size = input_image.get_size()
-	texture_in_container.rect_size.x = max(input_size.x, INPUT_COONTAINER_DEFAULT_SIZE.x)
-	texture_in_container.rect_size.y = max(input_size.y, INPUT_COONTAINER_DEFAULT_SIZE.y)
+	texture_in_container.rect_size.x = max(input_size.x / input_scale.x, INPUT_COONTAINER_DEFAULT_SIZE.x)
+	texture_in_container.rect_size.y = max(input_size.y / input_scale.y, INPUT_COONTAINER_DEFAULT_SIZE.y)
 	texture_input_bg.rect_size = texture_in_container.rect_size / input_scale_factor
 	texture_input_bg.rect_scale = input_scale
 	texture_in_container.get_node("TileSizeLabel").text = "%sx%s" % [input_tile_size, input_tile_size]
@@ -291,7 +295,7 @@ func get_input_image_random_max_variants() -> int:
 	var input_image: Image = texture_in.texture.get_data()
 	var min_input_slices: Vector2 = generation_data.get_min_input_size()
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
-	return int(input_image.get_size().y / input_slice_size)
+	return int(max(1, input_image.get_size().y / input_slice_size))
 
 func generate_corner_slices():
 	input_slices = {}
@@ -660,6 +664,7 @@ func resize_input_container():
 		debug_input_scroll.rect_min_size.x = debug_input_control.rect_size.x
 	
 func _on_TextureDialog_file_selected(path):
+	last_input_texture_path = path
 	texture_in.texture = load_image_texture(path)
 	resize_input_container()
 	preprocess_input_image()
@@ -834,6 +839,12 @@ func _on_CheckButton_toggled(button_pressed):
 func _on_RemakeButton_pressed():
 	make_output_texture()
 
-
 func _on_LineEdit_text_entered(new_text):
 	make_output_texture()
+
+func _on_ExampleButton_pressed():
+	last_input_texture_path = generation_data.get_example_path()
+	texture_in.texture = load_image_texture(generation_data.get_example_path())
+	resize_input_container()
+	preprocess_input_image()
+	save_settings()
