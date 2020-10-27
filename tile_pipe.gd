@@ -14,6 +14,7 @@ onready var texture_in_container: Control = input_container.get_node("Control")
 onready var texture_in: TextureRect = texture_in_container.get_node("InputTextureRect")
 onready var texture_input_bg: TextureRect = texture_in_container.get_node("BGTextureRect")
 onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/InputType
+onready var example_texture: TextureRect = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/ExampleBox/TextureRect
 
 onready var corners_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/CornersMergeSettings
 onready var corners_merge_type_select: OptionButton = corners_merge_container.get_node("CornersOptionButton")
@@ -69,6 +70,7 @@ var rng = RandomNumberGenerator.new()
 var last_input_texture_path: String = ""
 
 func _ready():
+#	rand_seed_check.disabled = true
 	rng.randomize()
 #	save_settings(true) # uncomment on change of save file structure
 	connect("input_image_processed", self, "make_output_texture")
@@ -135,11 +137,14 @@ func save_settings(store_defaults: bool = false):
 	save.store_line(to_json(data))
 	save.close()
 
+func load_input_texture(path: String):
+	texture_in.texture = load_image_texture(last_input_texture_path)
+	resize_input_container()
+
 func apply_settings(data: Dictionary):
 	last_input_texture_path = data["last_texture_path"]
 	texture_file_dialog.current_path = last_input_texture_path
-	texture_in.texture = load_image_texture(last_input_texture_path)
-	resize_input_container()
+	load_input_texture(last_input_texture_path)
 	generation_data = GenerationData.new(data["last_gen_preset_path"])
 	template_file_dialog.current_path = data["last_template_path"]
 	template_texture.texture = load_image_texture(data["last_template_path"])
@@ -305,6 +310,14 @@ func generate_corner_slices():
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
 	set_input_tile_size(input_slice_size * 2, input_image)
 	var input_max_random_variants: int = get_input_image_random_max_variants()
+	if input_max_random_variants > 1:
+		rand_seed_check.disabled = false
+		if rand_seed_check.is_in_group("really_disabled"):
+			rand_seed_check.remove_from_group("really_disabled")
+	else:
+		rand_seed_check.add_to_group("really_disabled")
+		rand_seed_check.disabled = true
+		rand_seed_value.editable = false
 	var output_slice_size: int = int(output_tile_size / 2.0)
 	var resize_factor: float = float(output_slice_size) / float(input_slice_size)
 	var new_viewport_size := Vector2(input_slice_size, input_slice_size)
@@ -665,8 +678,7 @@ func resize_input_container():
 	
 func _on_TextureDialog_file_selected(path):
 	last_input_texture_path = path
-	texture_in.texture = load_image_texture(path)
-	resize_input_container()
+	load_input_texture(path)
 	preprocess_input_image()
 	save_settings()
 
@@ -736,8 +748,8 @@ func _on_ColorProcessType_item_selected(index):
 	save_settings()
 
 func _on_ReloadButton_pressed():
-	texture_in.texture = load_image_texture(texture_file_dialog.current_path)
-	resize_input_container()
+	load_input_texture(last_input_texture_path)
+#	load_input_texture(texture_file_dialog.current_path)
 	preprocess_input_image()
 
 func _on_TemplateOption_item_selected(index):
@@ -758,6 +770,7 @@ func _on_TemplateOption_item_selected(index):
 func set_corner_generation_data(index: int):
 	last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[index]
 	generation_data = GenerationData.new(last_generator_preset_path)
+	example_texture.texture = load(generation_data.get_example_path())
 
 func _on_CornersOptionButton_item_selected(index):
 	set_corner_generation_data(index)
@@ -767,6 +780,7 @@ func _on_CornersOptionButton_item_selected(index):
 func set_overlay_generation_data(index: int):
 	last_generator_preset_path = Const.OVERLAY_INPUT_PRESETS_DATA_PATH[index]
 	generation_data = GenerationData.new(last_generator_preset_path)
+	example_texture.texture = load(generation_data.get_example_path())
 
 func _on_OverlayOptionButton_item_selected(index):
 	set_overlay_generation_data(index)
@@ -816,7 +830,7 @@ func block_ui():
 func unblock_ui():
 	is_ui_blocked = false
 	for node in get_tree().get_nodes_in_group("blockable"):
-		if node is Button:
+		if node is Button and not node.is_in_group("really_disabled"):
 			node.disabled = false
 		if is_slider_changed:
 			preprocess_input_image()
@@ -844,7 +858,6 @@ func _on_LineEdit_text_entered(new_text):
 
 func _on_ExampleButton_pressed():
 	last_input_texture_path = generation_data.get_example_path()
-	texture_in.texture = load_image_texture(generation_data.get_example_path())
-	resize_input_container()
+	load_input_texture(generation_data.get_example_path())
 	preprocess_input_image()
 	save_settings()
