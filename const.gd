@@ -74,15 +74,16 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 }
 const TEMPLATE_47_PATH: String = "res://generation_data/template_47.png"
 const TEMPLATE_256_PATH: String = "res://generation_data/template_256.png"
-enum TEMPLATE_TYPES {TEMPLATE_47, TEMPLATE_256, CUSTOM}
+enum TEMPLATE_TYPES {TEMPLATE_47, CUSTOM}
+#enum TEMPLATE_TYPES {TEMPLATE_47, TEMPLATE_256, CUSTOM}
 const TEMPLATE_TYPE_NAMES : Dictionary = {
 	TEMPLATE_TYPES.TEMPLATE_47: "Standard 3x3: 47",
-	TEMPLATE_TYPES.TEMPLATE_256: "Full 3x3: 256",
+#	TEMPLATE_TYPES.TEMPLATE_256: "Full 3x3: 256",
 	TEMPLATE_TYPES.CUSTOM: "Custom 3x3"
 }
 const TEMPLATE_PATHS : Dictionary = {
 	TEMPLATE_TYPES.TEMPLATE_47: TEMPLATE_47_PATH,
-	TEMPLATE_TYPES.TEMPLATE_256: TEMPLATE_256_PATH,
+#	TEMPLATE_TYPES.TEMPLATE_256: TEMPLATE_256_PATH,
 	TEMPLATE_TYPES.CUSTOM: "res://"
 }
 
@@ -157,7 +158,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
 	"last_template_path": TEMPLATE_47_PATH,
 	"last_save_texture_path": "res://generated.png",
-	"last_save_texture_resource_path": "res://generated.png",
+	"last_save_texture_resource_path": "res://generated.tres",
 	"output_tile_size": DEFAULT_OUTPUT_SIZE,
 	"input_type": 0,
 	"corner_preset": 0,

@@ -487,8 +487,7 @@ __meta__ = {
 }
 
 [node name="DebugTexture" type="TextureRect" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
-margin_left = 2.52271
-margin_right = 130.523
+margin_right = 128.0
 margin_bottom = 128.0
 rect_min_size = Vector2( 128, 128 )
 size_flags_horizontal = 3
@@ -883,6 +882,7 @@ __meta__ = {
 margin_left = 144.0
 margin_right = 220.0
 margin_bottom = 40.0
+hint_tooltip = "With autotile off, the resulting tileset will consist of single tiles."
 pressed = true
 __meta__ = {
 "_edit_use_anchors_": false
