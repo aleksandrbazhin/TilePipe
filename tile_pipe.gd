@@ -285,18 +285,9 @@ func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: i
 func set_input_tile_size(input_tile_size: int, input_image: Image):
 	input_tile_size_vector = Vector2(input_tile_size, input_tile_size)
 	var input_size: Vector2 = input_image.get_size()
-	print(input_size)
-	print(texure_input_container.rect_size)
 	var x_scale: float = texure_input_container.rect_size.x / input_size.x
 	var y_scale: float = texure_input_container.rect_size.y / input_size.y
-	
 	var scale_factor: float = min(x_scale, y_scale)
-#	print(dx, ", ",dy)
-#	if dx <= dy:
-#		scale_factor = texure_input_container.rect_size.x / input_size.x
-#	else:
-#		scale_factor = texure_input_container.rect_size.y / input_size.y
-#	print(scale_factor)
 	texture_in.rect_scale = Vector2(scale_factor, scale_factor)
 	var bg_scale = scale_factor * float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
 	texture_input_bg.rect_size = texure_input_container.rect_size / bg_scale
