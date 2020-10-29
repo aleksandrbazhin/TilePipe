@@ -33,3 +33,6 @@ func get_min_input_size() -> Vector2:
 
 func get_example_path() -> String:
 	return get_script().get_path().get_base_dir() + "/" + data["example"]
+	
+func is_piece_corner(var index: int) -> bool:
+	return bool(data["is_piece_corner"][index])

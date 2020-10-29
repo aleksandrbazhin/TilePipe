@@ -236,8 +236,8 @@ func generate_tile_masks():
 			var mask_value: int = get_template_mask_value(template_image, x, y) 
 			var godot_mask_value: int = get_template_mask_value(template_image, x, y, Const.GODOT_MASK_CHECK_POINTS)
 			tile_masks.append({"mask": mask_value, "position": Vector2(x, y), "godot_mask": godot_mask_value })
-#			mark_template_tile(mask_value, Vector2(x, y), true)
-			mark_template_tile(godot_mask_value, Vector2(x, y), false)
+			mark_template_tile(mask_value, Vector2(x, y), true)
+#			mark_template_tile(godot_mask_value, Vector2(x, y), false)
 
 func put_to_rotation_viewport(slice: Image, rotation_key: int, is_flipped := false):
 	var flip_x := false
@@ -294,7 +294,6 @@ func snap_down_to_po2(x: float) -> float:
 		return float(nearest_po2(int(ceil(x)))) / 2.0
 	else:
 		return 1.0/float(nearest_po2(int(ceil(1.0/x))))
-
 
 func set_input_tile_size(input_tile_size: int, input_image: Image):
 	input_tile_size_vector = Vector2(input_tile_size, input_tile_size)
@@ -432,12 +431,16 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 	var center_image: Image = input_tiles[0][random_center_index]
 	var gen_pieces: Array = data["generate_piece_indexes"]
 	var gen_rotations: Array = data["generate_piece_rotations"]
+	var gen_overlap_vectors: Array = data["generate_overlap_vectors"]
+	
+
 	assert (gen_pieces.size() == 8 && gen_rotations.size() == 8)
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image)
 	overlay_texture_in_viewport.texture = itex
 	var piece_index: int = 0
-	
+
+#	print(data)
 	for mask_name in Const.MY_MASK:
 		var mask_key: int = Const.MY_MASK[mask_name]
 		var random_tile_index: int = 0
@@ -447,6 +450,13 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 		itex2.create_from_image(input_tiles[input_index][random_tile_index])
 		overlay_texture_in_viewport.material.set_shader_param("overlay_texture_%s" % mask_key, itex2)
 		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -Const.ROTATION_SHIFTS[rotation_shift]["angle"])
+#		print(generation_data.is_piece_corner(input_index))
+		overlay_texture_in_viewport.material.set_shader_param("is_corner_%s" % mask_key, generation_data.is_piece_corner(input_index))
+#		print("ovelap_direction_%s" % mask_key, gen_overlap_vectors[piece_index])
+#		print(gen_overlap_vectors[piece_index])
+		var overlap_dir := Vector2(gen_overlap_vectors[piece_index][0], gen_overlap_vectors[piece_index][1])
+		overlay_texture_in_viewport.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_dir)
+		
 #		overlay_texture_in_viewport.material.set_shader_param("rotation_%s_key" % mask_key, -Const.ROTATION_SHIFTS[rotation_shift]["angle"])
 		piece_index += 1
 
@@ -504,7 +514,7 @@ func generate_overlayed_tiles():
 			tile.blit_rect(input_image, copy_rect, Vector2.ZERO)
 			tile_alternatives.append(tile)
 		input_tiles.append(tile_alternatives)
-
+	
 	overlay_texture_in_viewport.show()
 	var index: int = 0 
 	for data in preset:

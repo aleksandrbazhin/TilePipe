@@ -2,6 +2,7 @@
 "type": "quarters",
 "example": "quarters_5.png",
 "name": "input_quarters_5",
+"is_piece_corner": [false, false, false, false, true],
 "min_size": {
 	"x": 5,
 	"y": 1
