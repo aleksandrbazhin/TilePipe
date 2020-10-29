@@ -94,7 +94,7 @@ func _ready():
 
 func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
-		_on_CloseButton_pressed()
+		exit()
 
 var last_generator_preset_path: String = ""
 func get_generator_preset_path() -> String:
@@ -644,10 +644,13 @@ func get_allowed_mask_rotations(pos_check_mask: int, neg_check_mask: int, curren
 			rotations.append(rotation)
 	return rotations
 
-func _on_CloseButton_pressed():
+func exit():
 	tile_masks.empty()
 	get_tree().quit()
 
+func _on_CloseButton_pressed():
+	exit()
+	
 func _on_Save_pressed():
 	save_file_dialog.popup_centered()
 
@@ -861,3 +864,7 @@ func _on_ExampleButton_pressed():
 	load_input_texture(generation_data.get_example_path())
 	preprocess_input_image()
 	save_settings()
+
+func _notification(what):
+	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
+		exit()
