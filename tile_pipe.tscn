@@ -29,6 +29,7 @@ shader_param/rotation_32 = null
 shader_param/rotation_64 = null
 shader_param/rotation_128 = null
 shader_param/overlay_rate = null
+shader_param/overlap = null
 shader_param/is_flow_map = false
 
 [sub_resource type="DynamicFont" id=4]
@@ -156,7 +157,6 @@ __meta__ = {
 margin_left = 44.0
 margin_right = 364.0
 margin_bottom = 300.0
-size_flags_horizontal = 3
 
 [node name="LoadButtonBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxInput"]
 margin_right = 320.0
@@ -191,12 +191,14 @@ margin_top = 44.0
 margin_right = 320.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 320, 256 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 texture = ExtResource( 7 )
 expand = true
 stretch_mode = 2
@@ -207,9 +209,7 @@ __meta__ = {
 [node name="InputTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 1.0
-margin_right = 1.0
-margin_bottom = -96.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
@@ -399,7 +399,7 @@ alignment = 2
 margin_right = 220.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
-text = "Merge percent"
+text = "Merge amount"
 valign = 2
 
 [node name="RateSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer" groups=[
@@ -417,12 +417,42 @@ tick_count = 11
 ticks_on_borders = true
 script = ExtResource( 3 )
 
-[node name="RandomContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings" groups=[
-"corners_settings",
+[node name="OverlapSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings" groups=[
+"overlay_settings",
 ]]
 margin_top = 152.0
 margin_right = 220.0
-margin_bottom = 225.0
+margin_bottom = 198.0
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer"]
+margin_right = 220.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 26 )
+text = "Overlap amount"
+valign = 2
+
+[node name="OverlapSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer" groups=[
+"blockable",
+]]
+margin_top = 30.0
+margin_right = 220.0
+margin_bottom = 46.0
+focus_mode = 0
+max_value = 0.5
+step = 0.01
+scrollable = false
+tick_count = 11
+ticks_on_borders = true
+script = ExtResource( 3 )
+
+[node name="RandomContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings" groups=[
+"corners_settings",
+]]
+margin_top = 202.0
+margin_right = 220.0
+margin_bottom = 275.0
 hint_tooltip = "If you have multiple rows in your input image, the result will be randomized. 
 Use seed to get same results."
 
@@ -943,6 +973,7 @@ __meta__ = {
 [connection signal="pressed" from="Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/ExampleBox/ExampleButton" to="." method="_on_ExampleButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxSettings/ColorProcessContainer/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
 [connection signal="released" from="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer/RateSlider" to="." method="_on_RateSlider_released"]
+[connection signal="released" from="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer/OverlapSlider" to="." method="_on_OverlapSlider_released"]
 [connection signal="toggled" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/HBoxContainer/CheckButton" to="." method="_on_CheckButton_toggled"]
 [connection signal="text_entered" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]

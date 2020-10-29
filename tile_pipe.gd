@@ -39,6 +39,7 @@ onready var rotated_texture_in_viewport: TextureRect = rotate_viewport.get_node(
 onready var overlay_viewport: Viewport = debug_input_control.get_node("OverlayViewportContainer/Viewport")
 onready var overlay_texture_in_viewport: TextureRect = overlay_viewport.get_node("TextureRect")
 onready var overlay_rate_slider: HSlider = settings_container.get_node("HSliderContainer/RateSlider")
+onready var overlay_overlap_slider: HSlider = settings_container.get_node("OverlapSliderContainer/OverlapSlider")
 
 onready var template_load_button : Button = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
 onready var template_type_select: OptionButton = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption
@@ -284,13 +285,17 @@ func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: i
 func set_input_tile_size(input_tile_size: int, input_image: Image):
 	input_tile_size_vector = Vector2(input_tile_size, input_tile_size)
 	var input_size: Vector2 = input_image.get_size()
+	print(input_size)
+	print(texure_input_container.rect_size)
 	var dx: float = texure_input_container.rect_size.x - input_size.x
 	var dy: float = texure_input_container.rect_size.y - input_size.y
 	var scale_factor: float = 0.0
+	print(dx, ", ",dy)
 	if dx <= dy:
 		scale_factor = texure_input_container.rect_size.x / input_size.x
 	else:
 		scale_factor = texure_input_container.rect_size.y / input_size.y
+	print(scale_factor)
 	texture_in.rect_scale = Vector2(scale_factor, scale_factor)
 	var bg_scale = scale_factor * float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
 	texture_input_bg.rect_size = texure_input_container.rect_size / bg_scale
@@ -415,7 +420,7 @@ func make_from_corners():
 
 #slice: Image, rotation_key: int, color_process: int,
 #		is_flipped := false
-func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate: float):
+func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate: float, overlap_rate: float = 0.0):
 	var random_center_index: int = 0
 	var center_image: Image = input_tiles[0][random_center_index]
 	var gen_pieces: Array = data["generate_piece_indexes"]
@@ -439,6 +444,7 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 		piece_index += 1
 
 	overlay_texture_in_viewport.material.set_shader_param("overlay_rate", overlay_rate)
+	overlay_texture_in_viewport.material.set_shader_param("overlap", overlap_rate)
 	var is_flow_map: bool = get_color_process() == Const.COLOR_PROCESS_TYPES.FLOW_MAP
 	overlay_texture_in_viewport.material.set_shader_param("is_flow_map", is_flow_map)
 #	var is_flow_map: bool = color_process == Const.COLOR_PROCESS_TYPES.FLOW_MAP
@@ -477,6 +483,8 @@ func generate_overlayed_tiles():
 	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY) * 2
 	debug_image.create(int(debug_texture_size.x), int(debug_texture_size.y), false, image_fmt)
 	var overlay_rate: float = overlay_rate_slider.value
+	var overlap_rate: float = overlay_overlap_slider.value
+		
 	var preset: Array = generation_data.get_preset()
 	
 	var input_tiles: Array = []
@@ -493,7 +501,7 @@ func generate_overlayed_tiles():
 	overlay_texture_in_viewport.show()
 	var index: int = 0 
 	for data in preset:
-		start_overlay_processing(data, input_tiles, overlay_rate)
+		start_overlay_processing(data, input_tiles, overlay_rate, overlap_rate)
 		yield(VisualServer, 'frame_post_draw')
 		var overlayed_tile: Image = get_from_overlay_viewport(image_fmt, resize_factor)
 		# warning-ignore:integer_division		
@@ -857,3 +865,7 @@ func _on_ExampleButton_pressed():
 func _notification(what):
 	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
 		exit()
+
+func _on_OverlapSlider_released(value):
+	if not is_ui_blocked:
+		preprocess_input_image()
