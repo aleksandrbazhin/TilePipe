@@ -282,12 +282,27 @@ func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: i
 	itex.create_from_image(debug_image)
 	debug_input_texture.texture = itex
 
+# snap to closest bigger power of 2, for less than 1 x returns snapped fraction
+func snap_up_to_po2(x: float) -> float:
+	if x >= 1.0:
+		return float(nearest_po2(int(ceil(x))))
+	else:
+		return 1.0/float(nearest_po2(int(floor(1.0/x))))
+
+func snap_down_to_po2(x: float) -> float:
+	if x >= 1.0:
+		return float(nearest_po2(int(ceil(x)))) / 2.0
+	else:
+		return 1.0/float(nearest_po2(int(ceil(1.0/x))))
+
+
 func set_input_tile_size(input_tile_size: int, input_image: Image):
 	input_tile_size_vector = Vector2(input_tile_size, input_tile_size)
 	var input_size: Vector2 = input_image.get_size()
 	var x_scale: float = texure_input_container.rect_size.x / input_size.x
 	var y_scale: float = texure_input_container.rect_size.y / input_size.y
 	var scale_factor: float = min(x_scale, y_scale)
+	scale_factor = snap_down_to_po2(scale_factor)
 	texture_in.rect_scale = Vector2(scale_factor, scale_factor)
 	var bg_scale = scale_factor * float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
 	texture_input_bg.rect_size = texure_input_container.rect_size / bg_scale

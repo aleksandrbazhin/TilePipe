@@ -43,9 +43,11 @@ vec4 get_color_from_rotated(vec2 uv, vec4 bg_color, sampler2D overlay,float rota
 	vec4 pixel_color;
 	vec2 new_uv = rotate_around_center(uv, rotation);
 	pixel_color =  texture(overlay, new_uv);
-	if (is_overlap && pixel_color.a == 0.0) {
-		pixel_color =  mix(pixel_color, bg_color, 1.0);
-//		pixel_color = vec4(1, 1, 1, 1);
+//	if (is_overlap && pixel_color.a == 0.0) {
+//		pixel_color =  mix(pixel_color, bg_color, 1.0);
+//	}
+	if (is_overlap) {
+		pixel_color =  mix(pixel_color, bg_color, 1.0 - pixel_color.a);
 	}
 	if (is_flow_map) {
 		pixel_color.rg = rotate_around_center(pixel_color.rg, rotation);
@@ -61,21 +63,25 @@ void fragment() {
 	float plus_overlap = (1.0 - overlay_rate) + overlay_rate * overlap * 2.0;
 	float minus_overlap = overlay_rate - overlay_rate * overlap * 2.0;
 	if (out_x_plus) {
+		COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV),  overlay_texture_4, rotation_4, plus_overlap > UV.x);
 		if (out_y_plus) {
 			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_8, rotation_8, plus_overlap > UV.x && plus_overlap > UV.y);
 		} else if (out_y_minus) {
 			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_2, rotation_2, plus_overlap > UV.x && minus_overlap < UV.y);
-		} else {
-			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV),  overlay_texture_4, rotation_4, plus_overlap > UV.x);
 		}
+//		 else {
+//			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV),  overlay_texture_4, rotation_4, plus_overlap > UV.x);
+//		}
 	} else if (out_x_minus) {
+		COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_64, rotation_64, minus_overlap < UV.x);
 		if (out_y_plus) {
 			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_32, rotation_32, minus_overlap < UV.x && plus_overlap > UV.y);
 		} else if (out_y_minus) {
 			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_128, rotation_128, minus_overlap < UV.x && minus_overlap < UV.y);
-		} else {
-			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_64, rotation_64, minus_overlap < UV.x);
 		}
+//		 else {
+//			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_64, rotation_64, minus_overlap < UV.x);
+//		}
 	} else {
 		if (out_y_plus) {
 			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_16, rotation_16, plus_overlap > UV.y);
