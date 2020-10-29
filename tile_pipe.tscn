@@ -154,12 +154,12 @@ __meta__ = {
 
 [node name="VBoxInput" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 44.0
-margin_right = 337.0
+margin_right = 364.0
 margin_bottom = 300.0
 size_flags_horizontal = 3
 
 [node name="LoadButtonBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxInput"]
-margin_right = 293.0
+margin_right = 320.0
 margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -168,7 +168,7 @@ __meta__ = {
 [node name="LoadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=[
 "blockable",
 ]]
-margin_right = 249.0
+margin_right = 276.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
@@ -180,17 +180,17 @@ __meta__ = {
 [node name="ReloadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=[
 "blockable",
 ]]
-margin_left = 253.0
-margin_right = 293.0
+margin_left = 280.0
+margin_right = 320.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
 text = "↻"
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/VBoxInput"]
 margin_top = 44.0
-margin_right = 293.0
+margin_right = 320.0
 margin_bottom = 300.0
-rect_min_size = Vector2( 192, 192 )
+rect_min_size = Vector2( 320, 256 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -228,8 +228,8 @@ __meta__ = {
 }
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 341.0
-margin_right = 591.0
+margin_left = 368.0
+margin_right = 618.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 250, 0 )
 custom_constants/margin_right = 12
@@ -347,8 +347,8 @@ expand = true
 stretch_mode = 1
 
 [node name="VBoxSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 595.0
-margin_right = 815.0
+margin_left = 622.0
+margin_right = 842.0
 margin_bottom = 300.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings"]
@@ -457,7 +457,7 @@ placeholder_text = "Integer value"
 placeholder_alpha = 0.4
 
 [node name="WorkTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 819.0
+margin_left = 846.0
 margin_right = 1112.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 256, 256 )
@@ -468,7 +468,7 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/WorkTextureContainer"]
-margin_right = 293.0
+margin_right = 266.0
 margin_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3

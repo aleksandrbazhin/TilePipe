@@ -2,7 +2,7 @@ extends Control
 
 signal input_image_processed()
 
-const INPUT_COONTAINER_DEFAULT_SIZE := Vector2(192, 192)
+#const INPUT_COONTAINER_DEFAULT_SIZE := Vector2(192, 192)
 
 onready var texture_file_dialog: FileDialog = $TextureDialog
 onready var template_file_dialog: FileDialog = $TemplateDialog
@@ -10,9 +10,9 @@ onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
 
 onready var input_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxInput
-onready var texture_in_container: Control = input_container.get_node("Control")
-onready var texture_in: TextureRect = texture_in_container.get_node("InputTextureRect")
-onready var texture_input_bg: TextureRect = texture_in_container.get_node("BGTextureRect")
+onready var texure_input_container: Control = input_container.get_node("Control")
+onready var texture_in: TextureRect = texure_input_container.get_node("InputTextureRect")
+onready var texture_input_bg: TextureRect = texure_input_container.get_node("BGTextureRect")
 onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/InputType
 onready var example_texture: TextureRect = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/ExampleBox/TextureRect
 
@@ -139,7 +139,6 @@ func save_settings(store_defaults: bool = false):
 
 func load_input_texture(path: String):
 	texture_in.texture = load_image_texture(last_input_texture_path)
-	resize_input_container()
 
 func apply_settings(data: Dictionary):
 	last_input_texture_path = data["last_texture_path"]
@@ -284,14 +283,19 @@ func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: i
 
 func set_input_tile_size(input_tile_size: int, input_image: Image):
 	input_tile_size_vector = Vector2(input_tile_size, input_tile_size)
-	var input_scale_factor: float = float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
-	var input_scale := Vector2(input_scale_factor, input_scale_factor)
-	var input_size = input_image.get_size()
-	texture_in_container.rect_size.x = max(input_size.x / input_scale.x, INPUT_COONTAINER_DEFAULT_SIZE.x)
-	texture_in_container.rect_size.y = max(input_size.y / input_scale.y, INPUT_COONTAINER_DEFAULT_SIZE.y)
-	texture_input_bg.rect_size = texture_in_container.rect_size / input_scale_factor
-	texture_input_bg.rect_scale = input_scale
-	texture_in_container.get_node("TileSizeLabel").text = "%sx%s" % [input_tile_size, input_tile_size]
+	var input_size: Vector2 = input_image.get_size()
+	var dx: float = texure_input_container.rect_size.x - input_size.x
+	var dy: float = texure_input_container.rect_size.y - input_size.y
+	var scale_factor: float = 0.0
+	if dx <= dy:
+		scale_factor = texure_input_container.rect_size.x / input_size.x
+	else:
+		scale_factor = texure_input_container.rect_size.y / input_size.y
+	texture_in.rect_scale = Vector2(scale_factor, scale_factor)
+	var bg_scale = scale_factor * float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
+	texture_input_bg.rect_size = texure_input_container.rect_size / bg_scale
+	texture_input_bg.rect_scale = Vector2(bg_scale, bg_scale)
+	texure_input_container.get_node("TileSizeLabel").text = "%sx%s" % [input_tile_size, input_tile_size]
 
 func get_output_tile_size() -> int:
 	return Const.OUTPUT_SIZES.keys()[output_size_select.selected]
@@ -463,7 +467,6 @@ func generate_overlayed_tiles():
 	
 	var resize_factor: float = float(output_tile_size) / float(input_tile_size)
 	var new_viewport_size := Vector2(input_tile_size, input_tile_size)
-#	print(new_viewport_size)
 	if overlay_viewport.size != new_viewport_size:
 		overlay_viewport.size = new_viewport_size
 		overlay_texture_in_viewport.rect_size = new_viewport_size
@@ -514,14 +517,10 @@ func make_from_overlayed():
 		return
 	var tile_size: int = get_output_tile_size()
 	var new_viewport_size := Vector2(tile_size, tile_size)
-#	print(new_viewport_size)
 	rotated_texture_in_viewport.show()
 	if rotate_viewport.size != new_viewport_size:
 		rotate_viewport.size = new_viewport_size
 		rotated_texture_in_viewport.rect_size = new_viewport_size
-#	print(rotate_viewport.size)
-#	print(rotated_texture_in_viewport.rect_size)
-#	print(rotated_texture_in_viewport.rect_scale)
 	
 #	var color_process: int = get_color_process()
 	
@@ -530,10 +529,8 @@ func make_from_overlayed():
 	var image_fmt: int = first_tile_image.get_format()
 	var out_image_fmt: int = rotate_viewport.get_texture().get_data().get_format()
 	out_image.create(tile_size * int(template_size.x), tile_size * int(template_size.y), false, image_fmt)
-#	print(out_image.get_size())
 	var preset: Array = generation_data.get_preset()
 	var tile_rect := Rect2(0, 0, tile_size, tile_size)
-#	print(input_overlayed_tiles)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image)
 	
@@ -671,14 +668,6 @@ func load_image_texture(path: String) -> Texture:
 		image_texture.create_from_image(image)
 		return image_texture
 
-func resize_input_container():
-	var prev_min_input_width: float = texture_in_container.rect_min_size.x
-	texture_in_container.rect_min_size = texture_in.texture.get_data().get_size()
-	var texture_width_increase: float = texture_in_container.rect_min_size.x - prev_min_input_width
-	if texture_width_increase > 0:
-		debug_input_control.rect_size.x -= texture_width_increase
-		debug_input_scroll.rect_min_size.x = debug_input_control.rect_size.x
-	
 func _on_TextureDialog_file_selected(path):
 	last_input_texture_path = path
 	load_input_texture(path)
