@@ -3,12 +3,12 @@ extends Node
 class_name GodotExporter
 
 func save_resource(path: String, tile_size: int, tile_masks: Array, 
-		is_autotile: bool, texture_size := Vector2.ZERO, with_description: bool = false):
+		is_autotile: bool, texture_size: Vector2, with_description: bool, texture_path: String):
 	var output_string : String
 	if is_autotile:
-		output_string = make_autotile_resource_data(path, tile_size, tile_masks, texture_size)
+		output_string = make_autotile_resource_data(path, tile_size, tile_masks, texture_size, texture_path)
 	else:
-		output_string = make_manual_resource_data(path, tile_size, tile_masks, with_description)
+		output_string = make_manual_resource_data(path, tile_size, tile_masks, with_description, texture_path)
 	var tileset_resource_path: String = path.get_basename( ) + ".tres"
 	var file = File.new()
 	file.open(tileset_resource_path, File.WRITE)
@@ -18,10 +18,10 @@ func save_resource(path: String, tile_size: int, tile_masks: Array,
 func tile_name_from_position(pos: Vector2) -> String:
 	return "%d_%d" % [pos.x, pos.y]
 
-func make_manual_resource_data(path: String, tile_size: int, tile_masks: Array, with_description: bool) -> String:
+func make_manual_resource_data(path: String, tile_size: int, tile_masks: Array, with_description: bool, texture_path: String) -> String:
 #	var tile_size: int = get_output_size()
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
-	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % (path.get_basename( ) + ".png")
+	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % (texture_path)
 #	if export_manual_resource_type_select.pressed:
 	if with_description:
 		out_string += "[ext_resource path=\"res://addons/TilePipe/tilesheet_description.gd\" type=\"Script\" id=2]\n"
@@ -55,9 +55,9 @@ func make_manual_resource_data(path: String, tile_size: int, tile_masks: Array, 
 		out_string += "\n}"
 	return out_string
 
-func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array, texture_size: Vector2) -> String:
+func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array, texture_size: Vector2, texture_path: String) -> String:
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
-	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % path.get_basename( ) + ".png"
+	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % texture_path
 	out_string += "\n[resource]\n"
 #	var texture_size: Vector2 = out_texture.texture.get_data().get_size()
 	var mask_out_array: PoolStringArray = []

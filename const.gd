@@ -35,8 +35,8 @@ enum CORNERS_INPUT_PRESETS {
 #	NO
 }
 const CORNERS_INPUT_PRESETS_NAMES: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "5 quarters for 47-tile blob",
-	CORNERS_INPUT_PRESETS.FOUR: "4 quarters for 47-tile blob",
+	CORNERS_INPUT_PRESETS.FIVE: "5 quarters, symmety: full",
+	CORNERS_INPUT_PRESETS.FOUR: "4 quarters, symmety: full",
 #	CORNERS_INPUT_PRESETS.NO: "Custom preset",
 }
 const CORNERS_INPUT_PRESETS_DATA_PATH: Dictionary = {
@@ -50,14 +50,16 @@ enum OVERLAY_INPUT_PRESETS {
 #	TOP_DOWN_3, 
 	TOP_DOWN_4, 
 #	SIDEVIEW_6, 
-	SIDEVIEW_8
+	SIDEVIEW_8,
+	SIDEVIEW_13
 }
 const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
 #	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "Top down without corners (2 tiles)",
 #	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "Top down with corners (3 tiles)",
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "Top down full (4)",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "4 tiles, symmetry: topdown",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "Sideview (6 tiles)",
-	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "Sideview full (8)"
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "8 tiles, symmetry: sideview",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_13:"13 tiles, symmetry: no"
 }
 
 const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
@@ -65,6 +67,7 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 #	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/overlay_3.json",
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/overlay_4.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "res://generation_data/overlay_8.json",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_13: "res://generation_data/overlay_13.json",
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
 const TEMPLATE_47_PATH: String = "res://generation_data/template_47.png"

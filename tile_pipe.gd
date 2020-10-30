@@ -721,7 +721,8 @@ func _on_SaveTextureDialog2_file_selected(path: String):
 	resource_exporter.save_resource(path, get_output_tile_size(), tile_masks,
 		export_type_select.pressed, 
 		out_texture.texture.get_data().get_size(),
-		export_manual_resource_type_select.pressed
+		export_manual_resource_type_select.pressed,
+		save_file_dialog.current_path
 	)
 	save_settings()
 
