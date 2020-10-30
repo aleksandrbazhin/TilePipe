@@ -38,7 +38,7 @@ onready var rotate_viewport: Viewport = debug_input_control.get_node("InViewport
 onready var rotated_texture_in_viewport: TextureRect = rotate_viewport.get_node("TextureRect")
 onready var overlay_viewport: Viewport = debug_input_control.get_node("OverlayViewportContainer/Viewport")
 onready var overlay_texture_in_viewport: TextureRect = overlay_viewport.get_node("TextureRect")
-onready var overlay_rate_slider: HSlider = settings_container.get_node("HSliderContainer/RateSlider")
+onready var overlay_merge_rate_slider: HSlider = settings_container.get_node("HSliderContainer/RateSlider")
 onready var overlay_overlap_slider: HSlider = settings_container.get_node("OverlapSliderContainer/OverlapSlider")
 
 onready var template_load_button : Button = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
@@ -51,9 +51,10 @@ onready var out_texture: TextureRect = output_scroll.get_node("Control/OutTextur
 onready var out_bg_texture: TextureRect = output_scroll.get_node("Control/BGTextureRect")
 
 onready var output_size_select: OptionButton = $Panel/HBox/Settings/SizeOptionButton
-onready var pixel_snap: CheckButton = $Panel/HBox/Settings/Resourse2/PixelSnap
+onready var smoothing_check: CheckButton = $Panel/HBox/Settings/SmoothingContainer/Smoothing
 
-onready var export_type_select: CheckButton = $Panel/HBox/Settings/Resourse/AutotileSelect
+
+onready var autotile_select: CheckButton = $Panel/HBox/Settings/Resourse/AutotileSelect
 onready var description_select_box: HBoxContainer = $Panel/HBox/Settings/DescriptionResourse
 onready var export_manual_resource_type_select: CheckButton = $Panel/HBox/Settings/DescriptionResourse/Select
 
@@ -128,7 +129,13 @@ func capture_setting_values() -> Dictionary:
 		"output_tile_size": get_output_tile_size(),
 		"input_type": generation_type_select.selected,
 		"corner_preset": corners_merge_type_select.selected,
-		"overlay_preset": overlay_merge_type_select.selected
+		"overlay_preset": overlay_merge_type_select.selected,
+		"smoothing": smoothing_check.pressed,
+		"autotile": autotile_select.pressed,
+		"merge_level": overlay_merge_rate_slider.value,
+		"overlap_level": overlay_overlap_slider.value,
+		"use_random_seed": rand_seed_check.pressed,
+		"random_seed_value": int(rand_seed_value.text)
 	}
 
 func save_settings(store_defaults: bool = false):
@@ -156,6 +163,12 @@ func apply_settings(data: Dictionary):
 	generation_type_select.selected = data["input_type"]
 	corners_merge_type_select.selected = data["corner_preset"]
 	overlay_merge_type_select.selected = data["overlay_preset"]
+	smoothing_check.pressed = data["smoothing"]
+	autotile_select.pressed = data["autotile"]
+	overlay_merge_rate_slider.value = data["merge_level"]
+	overlay_overlap_slider.value = data["overlap_level"]
+	rand_seed_check.pressed = data["use_random_seed"]
+	rand_seed_value.text = str(data["random_seed_value"])
 	setup_input_type(generation_type_select.selected)
 	update_output_bg_texture_scale()
 	
@@ -268,7 +281,7 @@ func get_from_rotation_viewport(image_fmt: int, resize_factor: float = 1.0) -> I
 		Rect2(Vector2.ZERO, size), 
 		Vector2.ZERO)
 	if resize_factor != 1.0:
-		var interpolation: int = Image.INTERPOLATE_NEAREST if not pixel_snap.pressed else Image.INTERPOLATE_TRILINEAR
+		var interpolation: int = Image.INTERPOLATE_NEAREST if not smoothing_check.pressed else Image.INTERPOLATE_TRILINEAR
 		image.resize(int(size.x * resize_factor), int(size.y * resize_factor), interpolation)
 	return image
 
@@ -484,7 +497,7 @@ func get_from_overlay_viewport(image_fmt: int, resize_factor: float = 1.0) -> Im
 		Rect2(Vector2.ZERO, size), 
 		Vector2.ZERO)
 	if resize_factor != 1.0:
-		var interpolation: int = Image.INTERPOLATE_NEAREST if not pixel_snap.pressed else Image.INTERPOLATE_TRILINEAR
+		var interpolation: int = Image.INTERPOLATE_NEAREST if not smoothing_check.pressed else Image.INTERPOLATE_TRILINEAR
 		image.resize(int(size.x * resize_factor), int(size.y * resize_factor), interpolation)
 	return image
 
@@ -514,7 +527,7 @@ func generate_overlayed_tiles():
 	var color_process: int = get_color_process()
 	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY) * 2
 	debug_image.create(int(debug_texture_size.x) * max_random_variants, int(debug_texture_size.y), false, image_fmt)
-	var overlay_rate: float = overlay_rate_slider.value
+	var overlay_rate: float = overlay_merge_rate_slider.value
 	var overlap_rate: float = overlay_overlap_slider.value
 		
 	var preset: Array = generation_data.get_preset()
@@ -698,7 +711,7 @@ func _on_Save_pressed():
 func _on_Save2_pressed():
 	save_resource_dialog.popup_centered()
 
-func load_image_texture(path: String) -> Texture:
+func load_image_texture(path: String) -> Texture:	
 	if path.begins_with("res://"):
 		var texture: Texture = load(path)
 		return texture
@@ -742,7 +755,7 @@ func _on_SaveTextureDialog2_file_selected(path: String):
 #	save_texture_png(path)
 	var resource_exporter: GodotExporter = GodotExporter.new()
 	resource_exporter.save_resource(path, get_output_tile_size(), tile_masks,
-		export_type_select.pressed, 
+		autotile_select.pressed, 
 		out_texture.texture.get_data().get_size(),
 		export_manual_resource_type_select.pressed,
 		save_file_dialog.current_path
@@ -876,16 +889,17 @@ func unblock_ui():
 func _on_RateSlider_released(value):
 	if not is_ui_blocked:
 		preprocess_input_image()
+		save_settings()
 #	else:
 #		is_slider_changed = true
 		
-
-
 func _on_CheckButton_toggled(button_pressed):
 	rand_seed_value.editable = button_pressed
 	if not button_pressed:
 		rng.randomize()
 		rand_seed_value.text = ""
+		rebuild_output()
+		save_settings()
 
 func rebuild_output():
 	var generation_type: int = generation_type_select.selected
@@ -900,7 +914,7 @@ func _on_RemakeButton_pressed():
 
 func _on_LineEdit_text_entered(new_text):
 	rebuild_output()
-
+	save_settings()
 
 func _on_ExampleButton_pressed():
 	last_input_texture_path = generation_data.get_example_path()
@@ -915,7 +929,8 @@ func _notification(what):
 func _on_OverlapSlider_released(value):
 	if not is_ui_blocked:
 		preprocess_input_image()
-
+		save_settings()
 
 func _on_PixelSnap_toggled(button_pressed):
 	preprocess_input_image()
+	save_settings()

@@ -889,7 +889,7 @@ align = 1
 items = [ "8x8", null, false, 0, null, "16x16", null, false, 1, null, "32x32", null, false, 2, null, "64x64", null, false, 3, null, "128x128", null, false, 4, null, "8x8", null, false, 5, null, "16x16", null, false, 6, null, "32x32", null, false, 7, null, "64x64", null, false, 8, null, "128x128", null, false, 9, null ]
 selected = 3
 
-[node name="Resourse2" type="HBoxContainer" parent="Panel/HBox/Settings"]
+[node name="SmoothingContainer" type="HBoxContainer" parent="Panel/HBox/Settings"]
 margin_top = 120.0
 margin_right = 220.0
 margin_bottom = 160.0
@@ -900,7 +900,7 @@ __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="Label" type="Label" parent="Panel/HBox/Settings/Resourse2"]
+[node name="Label" type="Label" parent="Panel/HBox/Settings/SmoothingContainer"]
 margin_right = 140.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
@@ -912,7 +912,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PixelSnap" type="CheckButton" parent="Panel/HBox/Settings/Resourse2"]
+[node name="Smoothing" type="CheckButton" parent="Panel/HBox/Settings/SmoothingContainer"]
 margin_left = 144.0
 margin_right = 220.0
 margin_bottom = 40.0
@@ -1023,6 +1023,7 @@ margin_right = 220.0
 margin_bottom = 332.0
 rect_min_size = Vector2( 0, 40 )
 rect_pivot_offset = Vector2( 227, -255 )
+hint_tooltip = "Resulting tileset uses last saved image, so save image first"
 text = "Export Godot resource"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1047,7 +1048,7 @@ __meta__ = {
 [connection signal="pressed" from="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/RemakeButton" to="." method="_on_RemakeButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Settings/SizeOptionButton" to="." method="_on_SizeOptionButton_item_selected"]
-[connection signal="toggled" from="Panel/HBox/Settings/Resourse2/PixelSnap" to="." method="_on_PixelSnap_toggled"]
+[connection signal="toggled" from="Panel/HBox/Settings/SmoothingContainer/Smoothing" to="." method="_on_PixelSnap_toggled"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save" to="." method="_on_Save_pressed"]
 [connection signal="toggled" from="Panel/HBox/Settings/Resourse/AutotileSelect" to="." method="_on_AutotileSelect_toggled"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save2" to="." method="_on_Save2_pressed"]

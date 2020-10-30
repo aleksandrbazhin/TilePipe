@@ -1,5 +1,7 @@
 extends Node
 
+const VERSION: String = "0.1"
+
 const OUTPUT_SIZES: Dictionary = {
 	8: "8x8",
 	10: "10x10",
@@ -83,7 +85,7 @@ const TEMPLATE_PATHS : Dictionary = {
 	TEMPLATE_TYPES.CUSTOM: "res://"
 }
 
-const SETTINGS_PATH: String = "user://settings.sav"
+const SETTINGS_PATH: String = "user://settings_v%s.sav" % VERSION
 
 const MASK_TOP_LEFT := Vector2(4, 4)
 const MASK_TOP := Vector2(16, 4)
@@ -149,8 +151,12 @@ const TEMPLATE_MASK_CHECK_POINTS := {
 	MY_MASK["TOP_LEFT"]: MASK_TOP_LEFT
 }
 
+const DEFAULT_MERGE: float = 0.25
+const DEFAULT_OVERLAP: float = 0.25
+const DEFAULT_INPUT_TEXTURE_PATH: String = "res://generation_data/quarters_5.png"
+
 const DEFAULT_SETTINGS: Dictionary = {
-	"last_texture_path": "",
+	"last_texture_path": DEFAULT_INPUT_TEXTURE_PATH,
 	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
 	"last_template_path": TEMPLATE_PATHS[TEMPLATE_TYPES.TEMPLATE_47],
 	"last_save_texture_path": "res://generated.png",
@@ -158,7 +164,13 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"output_tile_size": DEFAULT_OUTPUT_SIZE,
 	"input_type": 0,
 	"corner_preset": 0,
-	"overlay_preset": 0
+	"overlay_preset": 0,
+	"smoothing": false,
+	"autotile": true,
+	"merge_level": DEFAULT_MERGE,
+	"overlap_level": DEFAULT_OVERLAP,
+	"use_random_seed": false,
+	"random_seed_value": 0
 }
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
