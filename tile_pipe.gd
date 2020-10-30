@@ -507,7 +507,13 @@ func generate_overlayed_tiles():
 	var input_image: Image = texture_in.texture.get_data()
 	var min_input_tiles: Vector2 = generation_data.get_min_input_size()
 	var input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
+	
 	set_input_tile_size(input_tile_size, input_image)
+	# warning-ignore:integer_division
+	overlay_merge_rate_slider.quantize(int(input_tile_size / 2))
+	# warning-ignore:integer_division
+	overlay_overlap_slider.quantize(int(input_tile_size / 2))
+	
 	
 	var max_random_variants: int = get_input_image_random_max_variants()
 	setup_randomize_controls(max_random_variants > 1)
@@ -521,10 +527,10 @@ func generate_overlayed_tiles():
 	if overlay_viewport.size != new_viewport_size:
 		overlay_viewport.size = new_viewport_size
 		overlay_texture_in_viewport.rect_size = new_viewport_size
-	var image_input_fmt: int = input_image.get_format()
+#	var image_input_fmt: int = input_image.get_format()
 	var image_fmt: int = overlay_viewport.get_texture().get_data().get_format()
 	var debug_image := Image.new()
-	var color_process: int = get_color_process()
+#	var color_process: int = get_color_process()
 	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY) * 2
 	debug_image.create(int(debug_texture_size.x) * max_random_variants, int(debug_texture_size.y), false, image_fmt)
 	var overlay_rate: float = overlay_merge_rate_slider.value
@@ -590,7 +596,7 @@ func make_from_overlayed():
 	var image_fmt: int = first_tile_image.get_format()
 	var out_image_fmt: int = rotate_viewport.get_texture().get_data().get_format()
 	out_image.create(tile_size * int(template_size.x), tile_size * int(template_size.y), false, image_fmt)
-	var preset: Array = generation_data.get_preset()
+#	var preset: Array = generation_data.get_preset()
 	var tile_rect := Rect2(0, 0, tile_size, tile_size)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image, 0)
@@ -644,7 +650,6 @@ func set_output_texture(texture: Texture):
 		output_control.rect_min_size = image_size
 	else:
 		output_control.rect_min_size = Vector2.ZERO
-	
 
 func make_output_texture():
 	var generation_type: int = generation_type_select.selected
@@ -844,7 +849,7 @@ func get_debug_image_rect_size(input_type: int) -> Vector2:
 			size.x = slice_size * min_size.x
 			size.y = slice_size * min_size.y * 8
 		Const.INPUT_TYPES.OVERLAY:
-			var min_size: Vector2 = generation_data.get_min_input_size()
+#			var min_size: Vector2 = generation_data.get_min_input_size()
 			size.x = 4 * output_tile_size # input_tile_size_vector.x
 			size.y = 4 * output_tile_size * 3
 	return size

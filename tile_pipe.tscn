@@ -895,7 +895,7 @@ selected = 3
 margin_top = 120.0
 margin_right = 220.0
 margin_bottom = 160.0
-hint_tooltip = "Apply smothing on resize"
+hint_tooltip = "Disable for pixelart, enable for anitaliased."
 alignment = 2
 __meta__ = {
 "_edit_use_anchors_": false,
@@ -920,7 +920,7 @@ __meta__ = {
 margin_left = 144.0
 margin_right = 220.0
 margin_bottom = 40.0
-hint_tooltip = "Apply smothing on resize"
+hint_tooltip = "Disable for pixelart, enable for anitaliased."
 __meta__ = {
 "_edit_use_anchors_": false
 }
