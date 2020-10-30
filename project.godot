@@ -54,9 +54,36 @@ window/size/width=1366
 window/size/height=768
 window/dpi/allow_hidpi=true
 
+[filesystem]
+
+import/open_asset_import/use_fbx=false
+
 [gui]
 
 timers/tooltip_delay_sec=0.25
+
+[importer_defaults]
+
+texture={
+"compress/bptc_ldr": 0,
+"compress/hdr_mode": 0,
+"compress/lossy_quality": 0.7,
+"compress/mode": 0,
+"compress/normal_map": 0,
+"detect_3d": true,
+"flags/anisotropic": false,
+"flags/filter": false,
+"flags/mipmaps": false,
+"flags/repeat": 0,
+"flags/srgb": 2,
+"process/HDR_as_SRGB": false,
+"process/fix_alpha_border": true,
+"process/invert_color": false,
+"process/premult_alpha": false,
+"size_limit": 0,
+"stream": false,
+"svg/scale": 1.0
+}
 
 [logging]
 
@@ -65,9 +92,8 @@ file_logging/enable_file_logging=true
 [rendering]
 
 quality/driver/driver_name="GLES2"
+quality/2d/use_nvidia_rect_flicker_workaround=true
 quality/intended_usage/framebuffer_allocation=0
 quality/intended_usage/framebuffer_allocation.mobile=0
 quality/2d/use_pixel_snap=true
-quality/filters/use_nearest_mipmap_filter=true
-quality/filters/msaa=3
-quality/depth/hdr=false
+quality/shadows/filter_mode=0

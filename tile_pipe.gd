@@ -51,6 +51,8 @@ onready var out_texture: TextureRect = output_scroll.get_node("Control/OutTextur
 onready var out_bg_texture: TextureRect = output_scroll.get_node("Control/BGTextureRect")
 
 onready var output_size_select: OptionButton = $Panel/HBox/Settings/SizeOptionButton
+onready var pixel_snap: CheckButton = $Panel/HBox/Settings/Resourse2/PixelSnap
+
 onready var export_type_select: CheckButton = $Panel/HBox/Settings/Resourse/AutotileSelect
 onready var description_select_box: HBoxContainer = $Panel/HBox/Settings/DescriptionResourse
 onready var export_manual_resource_type_select: CheckButton = $Panel/HBox/Settings/DescriptionResourse/Select
@@ -63,7 +65,7 @@ export var is_godot_plugin: bool = false
 
 var template_size: Vector2
 var input_slices: Dictionary = {}
-var input_tile_size_vector := Vector2.ZERO
+#var input_tile_size_vector := Vector2.ZERO
 var input_overlayed_tiles: Array = []
 # tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
 var tile_masks: Array = []
@@ -249,7 +251,7 @@ func put_to_rotation_viewport(slice: Image, rotation_key: int, is_flipped := fal
 			flip_y = true
 	var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_key]['angle']
 	var itex = ImageTexture.new()
-	itex.create_from_image(slice)
+	itex.create_from_image(slice, 0)
 	rotated_texture_in_viewport.texture = itex
 	rotated_texture_in_viewport.material.set_shader_param("rotation", -rotation_angle)
 	rotated_texture_in_viewport.material.set_shader_param("is_flipped_x", flip_x)
@@ -266,7 +268,8 @@ func get_from_rotation_viewport(image_fmt: int, resize_factor: float = 1.0) -> I
 		Rect2(Vector2.ZERO, size), 
 		Vector2.ZERO)
 	if resize_factor != 1.0:
-		image.resize(int(size.x * resize_factor), int(size.y * resize_factor))
+		var interpolation: int = Image.INTERPOLATE_NEAREST if pixel_snap.pressed else Image.INTERPOLATE_TRILINEAR
+		image.resize(int(size.x * resize_factor), int(size.y * resize_factor), interpolation)
 	return image
 
 func get_color_process() -> int:
@@ -279,7 +282,7 @@ func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: i
 		slice_position
 	)
 	var itex = ImageTexture.new()
-	itex.create_from_image(debug_image)
+	itex.create_from_image(debug_image, 0)
 	debug_input_texture.texture = itex
 
 # snap to closest bigger power of 2, for less than 1 x returns snapped fraction
@@ -296,7 +299,7 @@ func snap_down_to_po2(x: float) -> float:
 		return 1.0/float(nearest_po2(int(ceil(1.0/x))))
 
 func set_input_tile_size(input_tile_size: int, input_image: Image):
-	input_tile_size_vector = Vector2(input_tile_size, input_tile_size)
+#	input_tile_size_vector = Vector2(input_tile_size, input_tile_size)
 	var input_size: Vector2 = input_image.get_size()
 	var x_scale: float = texure_input_container.rect_size.x / input_size.x
 	var y_scale: float = texure_input_container.rect_size.y / input_size.y
@@ -379,15 +382,11 @@ func generate_corner_slices():
 	rotated_texture_in_viewport.hide()
 	emit_signal("input_image_processed")
 
-
-
 func make_from_corners():
-	
 	if rand_seed_check.pressed:
 		var random_seed_int: int = int(rand_seed_value.text)
 		var random_seed = rand_seed(random_seed_int)
 		rng.seed = random_seed[1]
-	
 	if input_slices.size() == 0:
 		set_output_texture(null)
 		return
@@ -420,7 +419,7 @@ func make_from_corners():
 						intile_offset = Const.ROTATION_SHIFTS[rotate_cw(init_rotation)]["vector"] * slice_size
 					out_image.blit_rect(slice_image, slice_rect, tile_position + intile_offset)
 	var itex = ImageTexture.new()
-	itex.create_from_image(out_image)
+	itex.create_from_image(out_image, 0)
 	set_output_texture(itex)
 	unblock_ui()
 
@@ -436,7 +435,7 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 
 	assert (gen_pieces.size() == 8 && gen_rotations.size() == 8)
 	var itex = ImageTexture.new()
-	itex.create_from_image(center_image)
+	itex.create_from_image(center_image, 0)
 	overlay_texture_in_viewport.texture = itex
 	var piece_index: int = 0
 
@@ -447,11 +446,10 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 		var input_index: int = gen_pieces[piece_index]
 		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[data["generate_piece_rotations"][piece_index]]
 		var itex2 = ImageTexture.new()
-		itex2.create_from_image(input_tiles[input_index][random_tile_index])
+		itex2.create_from_image(input_tiles[input_index][random_tile_index], 0)
 		overlay_texture_in_viewport.material.set_shader_param("overlay_texture_%s" % mask_key, itex2)
 		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -Const.ROTATION_SHIFTS[rotation_shift]["angle"])
-#		print(generation_data.is_piece_corner(input_index))
-		overlay_texture_in_viewport.material.set_shader_param("is_corner_%s" % mask_key, generation_data.is_piece_corner(input_index))
+
 #		print("ovelap_direction_%s" % mask_key, gen_overlap_vectors[piece_index])
 #		print(gen_overlap_vectors[piece_index])
 		var overlap_dir := Vector2(gen_overlap_vectors[piece_index][0], gen_overlap_vectors[piece_index][1])
@@ -477,7 +475,8 @@ func get_from_overlay_viewport(image_fmt: int, resize_factor: float = 1.0) -> Im
 		Rect2(Vector2.ZERO, size), 
 		Vector2.ZERO)
 	if resize_factor != 1.0:
-		image.resize(int(size.x * resize_factor), int(size.y * resize_factor))
+		var interpolation: int = Image.INTERPOLATE_NEAREST if pixel_snap.pressed else Image.INTERPOLATE_TRILINEAR
+		image.resize(int(size.x * resize_factor), int(size.y * resize_factor), interpolation)
 	return image
 
 func generate_overlayed_tiles():
@@ -557,7 +556,7 @@ func make_from_overlayed():
 	var preset: Array = generation_data.get_preset()
 	var tile_rect := Rect2(0, 0, tile_size, tile_size)
 	var itex = ImageTexture.new()
-	itex.create_from_image(out_image)
+	itex.create_from_image(out_image, 0)
 	
 	for mask in tile_masks:
 		var tile_position: Vector2 = mask["position"] * tile_size
@@ -568,24 +567,14 @@ func make_from_overlayed():
 			if variant_index != -1:
 				var rotation_key: int = Const.ROTATION_SHIFTS.keys()[tile_data["variant_rotations"][variant_index]]
 				if rotation_key != 0:
-#					print(tile_data["tile_image"].get_size())
 					put_to_rotation_viewport(tile_data["tile_image"], rotation_key, false)
 					yield(VisualServer, 'frame_post_draw')
 					var tile_image: Image = get_from_rotation_viewport(out_image_fmt)
 					out_image.blit_rect(tile_image, tile_rect, tile_position)
-#					out_image.blit_rect(tile_data["tile_image"], tile_rect, tile_position)
 				else:
 					out_image.blit_rect(tile_data["tile_image"], tile_rect, tile_position)
 				itex.set_data(out_image)
-				
 				set_output_texture(itex)
-#		for rotation in Const.ROTATION_SHIFTS:
-#			if 
-#			pass
-	
-				
-#	
-		
 	rotated_texture_in_viewport.hide()
 	unblock_ui()
 
@@ -690,7 +679,7 @@ func load_image_texture(path: String) -> Texture:
 			print("Error loading the image: " + path)
 			return null
 		var image_texture = ImageTexture.new()
-		image_texture.create_from_image(image)
+		image_texture.create_from_image(image, 0)
 		return image_texture
 
 func _on_TextureDialog_file_selected(path):
@@ -816,8 +805,8 @@ func get_debug_image_rect_size(input_type: int) -> Vector2:
 			size.y = slice_size * min_size.y * 8
 		Const.INPUT_TYPES.OVERLAY:
 			var min_size: Vector2 = generation_data.get_min_input_size()
-			size.x = 4 * input_tile_size_vector.x
-			size.y = 4 * input_tile_size_vector.y
+			size.x = 4 * output_tile_size # input_tile_size_vector.x
+			size.y = 4 * output_tile_size # input_tile_size_vector.y
 	return size
 
 func update_output_bg_texture_scale():
@@ -886,3 +875,7 @@ func _notification(what):
 func _on_OverlapSlider_released(value):
 	if not is_ui_blocked:
 		preprocess_input_image()
+
+
+func _on_PixelSnap_toggled(button_pressed):
+	preprocess_input_image()

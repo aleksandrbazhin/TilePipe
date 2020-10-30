@@ -30,14 +30,6 @@ uniform vec2 ovelap_direction_32;
 uniform vec2 ovelap_direction_64;
 uniform vec2 ovelap_direction_128;
 
-////uniform float is_corner_1;
-//uniform bool is_corner_2;
-////uniform float is_corner_4;
-//uniform bool is_corner_8;
-////uniform float is_corner_16;
-//uniform bool is_corner_32;
-////uniform float is_corner_64;
-//uniform bool is_corner_128;
 
 uniform float overlay_rate;
 uniform float overlap;
