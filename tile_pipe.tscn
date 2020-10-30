@@ -489,7 +489,7 @@ rect_min_size = Vector2( 0, 26 )
 text = "Use random seed"
 valign = 1
 
-[node name="CheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/HBoxContainer" groups=[
+[node name="RandomCheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/HBoxContainer" groups=[
 "blockable",
 ]]
 margin_left = 115.0
@@ -819,7 +819,9 @@ margin_right = 1352.0
 margin_bottom = 750.0
 rect_min_size = Vector2( 220, 0 )
 
-[node name="CloseButton" type="Button" parent="Panel/HBox/Settings"]
+[node name="CloseButton" type="Button" parent="Panel/HBox/Settings" groups=[
+"blockable",
+]]
 margin_right = 220.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 80, 40 )
@@ -912,7 +914,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Smoothing" type="CheckButton" parent="Panel/HBox/Settings/SmoothingContainer"]
+[node name="Smoothing" type="CheckButton" parent="Panel/HBox/Settings/SmoothingContainer" groups=[
+"blockable",
+]]
 margin_left = 144.0
 margin_right = 220.0
 margin_bottom = 40.0
@@ -974,7 +978,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="AutotileSelect" type="CheckButton" parent="Panel/HBox/Settings/Resourse"]
+[node name="AutotileSelect" type="CheckButton" parent="Panel/HBox/Settings/Resourse" groups=[
+"blockable",
+]]
 margin_left = 144.0
 margin_right = 220.0
 margin_bottom = 40.0
@@ -1041,14 +1047,14 @@ __meta__ = {
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxSettings/ColorProcessContainer/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
 [connection signal="released" from="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer/RateSlider" to="." method="_on_RateSlider_released"]
 [connection signal="released" from="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer/OverlapSlider" to="." method="_on_OverlapSlider_released"]
-[connection signal="toggled" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/HBoxContainer/CheckButton" to="." method="_on_CheckButton_toggled"]
+[connection signal="button_up" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/HBoxContainer/RandomCheckButton" to="." method="_on_RandomCheckButton_button_up"]
 [connection signal="text_entered" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/RemakeButton" to="." method="_on_RemakeButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Settings/SizeOptionButton" to="." method="_on_SizeOptionButton_item_selected"]
-[connection signal="toggled" from="Panel/HBox/Settings/SmoothingContainer/Smoothing" to="." method="_on_PixelSnap_toggled"]
+[connection signal="button_up" from="Panel/HBox/Settings/SmoothingContainer/Smoothing" to="." method="_on_Smoothing_button_up"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save" to="." method="_on_Save_pressed"]
-[connection signal="toggled" from="Panel/HBox/Settings/Resourse/AutotileSelect" to="." method="_on_AutotileSelect_toggled"]
+[connection signal="button_up" from="Panel/HBox/Settings/Resourse/AutotileSelect" to="." method="_on_AutotileSelect_button_up"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save2" to="." method="_on_Save2_pressed"]

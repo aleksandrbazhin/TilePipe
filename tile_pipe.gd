@@ -21,7 +21,7 @@ onready var corners_merge_type_select: OptionButton = corners_merge_container.ge
 
 onready var settings_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxSettings
 onready var rand_seed_container: VBoxContainer = settings_container.get_node("RandomContainer")
-onready var rand_seed_check: CheckButton = rand_seed_container.get_node("HBoxContainer/CheckButton")
+onready var rand_seed_check: CheckButton = rand_seed_container.get_node("HBoxContainer/RandomCheckButton")
 onready var rand_seed_value: LineEdit = rand_seed_container.get_node("LineEdit")
 
 onready var overlay_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/OverlaySettings
@@ -52,7 +52,6 @@ onready var out_bg_texture: TextureRect = output_scroll.get_node("Control/BGText
 
 onready var output_size_select: OptionButton = $Panel/HBox/Settings/SizeOptionButton
 onready var smoothing_check: CheckButton = $Panel/HBox/Settings/SmoothingContainer/Smoothing
-
 
 onready var autotile_select: CheckButton = $Panel/HBox/Settings/Resourse/AutotileSelect
 onready var description_select_box: HBoxContainer = $Panel/HBox/Settings/DescriptionResourse
@@ -336,7 +335,8 @@ func get_input_image_random_max_variants() -> int:
 
 func setup_randomize_controls(is_enabled: bool):
 	if is_enabled:
-		rand_seed_check.disabled = false
+		if not is_ui_blocked:
+			rand_seed_check.disabled = false
 		if rand_seed_check.is_in_group("really_disabled"):
 			rand_seed_check.remove_from_group("really_disabled")
 	else:
@@ -762,10 +762,6 @@ func _on_SaveTextureDialog2_file_selected(path: String):
 	)
 	save_settings()
 
-func _on_AutotileSelect_toggled(button_pressed):
-	if is_godot_plugin:
-		description_select_box.visible = not button_pressed
-
 func setup_input_type(index: int):
 	match index:
 		Const.INPUT_TYPES.CORNERS:
@@ -870,7 +866,6 @@ func _on_SizeOptionButton_item_selected(index):
 	preprocess_input_image()
 	save_settings()
 
-	
 func block_ui():
 	is_ui_blocked = true
 	for node in get_tree().get_nodes_in_group("blockable"):
@@ -893,14 +888,6 @@ func _on_RateSlider_released(value):
 #	else:
 #		is_slider_changed = true
 		
-func _on_CheckButton_toggled(button_pressed):
-	rand_seed_value.editable = button_pressed
-	if not button_pressed:
-		rng.randomize()
-		rand_seed_value.text = ""
-		rebuild_output()
-		save_settings()
-
 func rebuild_output():
 	var generation_type: int = generation_type_select.selected
 	match generation_type:
@@ -931,6 +918,19 @@ func _on_OverlapSlider_released(value):
 		preprocess_input_image()
 		save_settings()
 
-func _on_PixelSnap_toggled(button_pressed):
+func _on_Smoothing_button_up():
 	preprocess_input_image()
+	save_settings()
+
+func _on_RandomCheckButton_button_up():
+#		print(rand_seed_check.get_groups())
+	var button_pressed: bool = rand_seed_check.pressed
+	rand_seed_value.editable = button_pressed
+	if not button_pressed:
+		rng.randomize()
+		rand_seed_value.text = ""
+		rebuild_output()
+		save_settings()
+
+func _on_AutotileSelect_button_up():
 	save_settings()
