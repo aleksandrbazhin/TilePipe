@@ -21,7 +21,7 @@ func tile_name_from_position(pos: Vector2) -> String:
 func make_manual_resource_data(path: String, tile_size: int, tile_masks: Array, with_description: bool) -> String:
 #	var tile_size: int = get_output_size()
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
-	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % path.get_basename( ) + ".png"
+	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % (path.get_basename( ) + ".png")
 #	if export_manual_resource_type_select.pressed:
 	if with_description:
 		out_string += "[ext_resource path=\"res://addons/TilePipe/tilesheet_description.gd\" type=\"Script\" id=2]\n"

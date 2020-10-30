@@ -431,6 +431,8 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 	var center_image: Image = input_tiles[0][random_center_index]
 	var gen_pieces: Array = data["generate_piece_indexes"]
 	var gen_rotations: Array = data["generate_piece_rotations"]
+#	var gen_flip_x: Array = 
+#	var gen_flip_y: Array = data["generate_piece_flip_y"]
 	assert (gen_pieces.size() == 8 && gen_rotations.size() == 8)
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image, 0)
@@ -443,8 +445,14 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 		var piece_rot_index: int = data["generate_piece_rotations"][rot_index]
 		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[piece_rot_index]
 		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
+		var overlay_image := Image.new()
+		overlay_image.copy_from(input_tiles[piece_index][random_tile_index])
+		if bool(data["generate_piece_flip_x"][rot_index]):
+			overlay_image.flip_x()
+		if bool(data["generate_piece_flip_y"][rot_index]):
+			overlay_image.flip_y()
 		var itex2 = ImageTexture.new()
-		itex2.create_from_image(input_tiles[piece_index][random_tile_index], 0)
+		itex2.create_from_image(overlay_image, 0)
 		overlay_texture_in_viewport.material.set_shader_param("overlay_texture_%s" % mask_key, itex2)
 		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
 
