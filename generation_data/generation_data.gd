@@ -30,6 +30,19 @@ func get_name() -> String:
 
 func get_min_input_size() -> Vector2:
 	return Vector2(data.min_size.x, data.min_size.y)
+	
+func get_overlap_vectors() -> Array:
+	var vecs := []
+	for vec in data["piece_overlap_vectors"]:
+		vecs.append(Vector2(vec[0], vec[1]))
+	return vecs
+
+func get_overlap_vector_rotations() -> Array:
+	var bools := []
+	for is_rotated in data["piece_overlap_vectors_rotate"]:
+		bools.append(bool(is_rotated))
+	return bools
+
 
 func get_example_path() -> String:
 	return get_script().get_path().get_base_dir() + "/" + data["example"]

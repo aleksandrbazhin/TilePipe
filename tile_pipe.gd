@@ -425,38 +425,35 @@ func make_from_corners():
 
 #slice: Image, rotation_key: int, color_process: int,
 #		is_flipped := false
-func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate: float, overlap_rate: float = 0.0):
+func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate: float, overlap_rate: float, 
+		overlap_vectors: Array, overlap_vectors_is_rotatable: Array):
 	var random_center_index: int = 0
 	var center_image: Image = input_tiles[0][random_center_index]
 	var gen_pieces: Array = data["generate_piece_indexes"]
 	var gen_rotations: Array = data["generate_piece_rotations"]
-	var gen_overlap_vectors: Array = data["generate_overlap_vectors"]
-	
-
 	assert (gen_pieces.size() == 8 && gen_rotations.size() == 8)
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image, 0)
 	overlay_texture_in_viewport.texture = itex
-	var piece_index: int = 0
-
-#	print(data)
+	var rot_index: int = 0
 	for mask_name in Const.MY_MASK:
 		var mask_key: int = Const.MY_MASK[mask_name]
 		var random_tile_index: int = 0
-		var input_index: int = gen_pieces[piece_index]
-		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[data["generate_piece_rotations"][piece_index]]
+		var piece_index: int = gen_pieces[rot_index]
+		var piece_rot_index: int = data["generate_piece_rotations"][rot_index]
+		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[piece_rot_index]
+		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
 		var itex2 = ImageTexture.new()
-		itex2.create_from_image(input_tiles[input_index][random_tile_index], 0)
+		itex2.create_from_image(input_tiles[piece_index][random_tile_index], 0)
 		overlay_texture_in_viewport.material.set_shader_param("overlay_texture_%s" % mask_key, itex2)
-		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -Const.ROTATION_SHIFTS[rotation_shift]["angle"])
+		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
 
-#		print("ovelap_direction_%s" % mask_key, gen_overlap_vectors[piece_index])
-#		print(gen_overlap_vectors[piece_index])
-		var overlap_dir := Vector2(gen_overlap_vectors[piece_index][0], gen_overlap_vectors[piece_index][1])
-		overlay_texture_in_viewport.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_dir)
-		
-#		overlay_texture_in_viewport.material.set_shader_param("rotation_%s_key" % mask_key, -Const.ROTATION_SHIFTS[rotation_shift]["angle"])
-		piece_index += 1
+		var overlap_vec: Vector2 = overlap_vectors[piece_index]
+		if overlap_vectors_is_rotatable[piece_index] and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
+			overlap_vec.x = 0.0 if overlap_vec.x == 1.0 else 1.0
+			overlap_vec.y = 0.0 if overlap_vec.y == 1.0 else 1.0
+		overlay_texture_in_viewport.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_vec)
+		rot_index += 1
 
 	overlay_texture_in_viewport.material.set_shader_param("overlay_rate", overlay_rate)
 	overlay_texture_in_viewport.material.set_shader_param("overlap", overlap_rate)
@@ -515,9 +512,11 @@ func generate_overlayed_tiles():
 		input_tiles.append(tile_alternatives)
 	
 	overlay_texture_in_viewport.show()
+	var overlap_vectors: Array = generation_data.get_overlap_vectors()
+	var overlap_vector_rotations: Array = generation_data.get_overlap_vector_rotations()
 	var index: int = 0 
 	for data in preset:
-		start_overlay_processing(data, input_tiles, overlay_rate, overlap_rate)
+		start_overlay_processing(data, input_tiles, overlay_rate, overlap_rate, overlap_vectors, overlap_vector_rotations)
 		yield(VisualServer, 'frame_post_draw')
 		var overlayed_tile: Image = get_from_overlay_viewport(image_fmt, resize_factor)
 		# warning-ignore:integer_division		
