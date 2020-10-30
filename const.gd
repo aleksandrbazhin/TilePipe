@@ -70,18 +70,16 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_13: "res://generation_data/overlay_13.json",
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
-const TEMPLATE_47_PATH: String = "res://generation_data/template_47.png"
-const TEMPLATE_256_PATH: String = "res://generation_data/template_256.png"
-enum TEMPLATE_TYPES {TEMPLATE_47, CUSTOM}
-#enum TEMPLATE_TYPES {TEMPLATE_47, TEMPLATE_256, CUSTOM}
+
+enum TEMPLATE_TYPES {TEMPLATE_47, TEMPLATE_47_2, CUSTOM}
 const TEMPLATE_TYPE_NAMES : Dictionary = {
 	TEMPLATE_TYPES.TEMPLATE_47: "Standard 3x3: 47",
-#	TEMPLATE_TYPES.TEMPLATE_256: "Full 3x3: 256",
-	TEMPLATE_TYPES.CUSTOM: "Custom 3x3"
+	TEMPLATE_TYPES.TEMPLATE_47_2: "Double 3x3: 47 (for more random)",
+	TEMPLATE_TYPES.CUSTOM: "Custom blob 3x3"
 }
 const TEMPLATE_PATHS : Dictionary = {
-	TEMPLATE_TYPES.TEMPLATE_47: TEMPLATE_47_PATH,
-#	TEMPLATE_TYPES.TEMPLATE_256: TEMPLATE_256_PATH,
+	TEMPLATE_TYPES.TEMPLATE_47: "res://generation_data/template_47.png",
+	TEMPLATE_TYPES.TEMPLATE_47_2: "res://generation_data/template_47_double.png",
 	TEMPLATE_TYPES.CUSTOM: "res://"
 }
 
@@ -154,7 +152,7 @@ const TEMPLATE_MASK_CHECK_POINTS := {
 const DEFAULT_SETTINGS: Dictionary = {
 	"last_texture_path": "",
 	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
-	"last_template_path": TEMPLATE_47_PATH,
+	"last_template_path": TEMPLATE_PATHS[TEMPLATE_TYPES.TEMPLATE_47],
 	"last_save_texture_path": "res://generated.png",
 	"last_save_texture_resource_path": "res://generated.tres",
 	"output_tile_size": DEFAULT_OUTPUT_SIZE,

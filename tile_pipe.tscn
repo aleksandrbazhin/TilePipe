@@ -461,6 +461,7 @@ margin_bottom = 46.0
 focus_mode = 0
 max_value = 0.5
 step = 0.01
+value = 0.25
 scrollable = false
 tick_count = 11
 ticks_on_borders = true
@@ -468,6 +469,7 @@ script = ExtResource( 3 )
 
 [node name="RandomContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings" groups=[
 "corners_settings",
+"overlay_settings",
 ]]
 margin_top = 136.0
 margin_right = 220.0
@@ -903,7 +905,7 @@ margin_right = 140.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
-text = "Pixel snap"
+text = "Smoothing"
 align = 1
 valign = 1
 __meta__ = {

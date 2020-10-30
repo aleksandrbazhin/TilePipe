@@ -116,7 +116,7 @@ func get_template_path() -> String:
 	if custom_template_path != "":
 		return custom_template_path
 	else:
-		return Const.TEMPLATE_47_PATH
+		return Const.TEMPLATE_PATHS[Const.TEMPLATE_TYPES.TEMPLATE_47]
 
 func capture_setting_values() -> Dictionary:
 	return {
@@ -268,12 +268,13 @@ func get_from_rotation_viewport(image_fmt: int, resize_factor: float = 1.0) -> I
 		Rect2(Vector2.ZERO, size), 
 		Vector2.ZERO)
 	if resize_factor != 1.0:
-		var interpolation: int = Image.INTERPOLATE_NEAREST if pixel_snap.pressed else Image.INTERPOLATE_TRILINEAR
+		var interpolation: int = Image.INTERPOLATE_NEAREST if not pixel_snap.pressed else Image.INTERPOLATE_TRILINEAR
 		image.resize(int(size.x * resize_factor), int(size.y * resize_factor), interpolation)
 	return image
 
 func get_color_process() -> int:
 	return color_process_select.selected
+
 
 func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: int, slice_position: Vector2):
 	debug_image.blit_rect(
@@ -320,6 +321,16 @@ func get_input_image_random_max_variants() -> int:
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
 	return int(max(1, input_image.get_size().y / input_slice_size))
 
+func setup_randomize_controls(is_enabled: bool):
+	if is_enabled:
+		rand_seed_check.disabled = false
+		if rand_seed_check.is_in_group("really_disabled"):
+			rand_seed_check.remove_from_group("really_disabled")
+	else:
+		rand_seed_check.add_to_group("really_disabled")
+		rand_seed_check.disabled = true
+		rand_seed_value.editable = false
+
 func generate_corner_slices():
 	input_slices = {}
 	var output_tile_size: int = get_output_tile_size()
@@ -328,14 +339,7 @@ func generate_corner_slices():
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
 	set_input_tile_size(input_slice_size * 2, input_image)
 	var input_max_random_variants: int = get_input_image_random_max_variants()
-	if input_max_random_variants > 1:
-		rand_seed_check.disabled = false
-		if rand_seed_check.is_in_group("really_disabled"):
-			rand_seed_check.remove_from_group("really_disabled")
-	else:
-		rand_seed_check.add_to_group("really_disabled")
-		rand_seed_check.disabled = true
-		rand_seed_value.editable = false
+	setup_randomize_controls(input_max_random_variants > 1)
 	var output_slice_size: int = int(output_tile_size / 2.0)
 	var resize_factor: float = float(output_slice_size) / float(input_slice_size)
 	var new_viewport_size := Vector2(input_slice_size, input_slice_size)
@@ -439,9 +443,8 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 	overlay_texture_in_viewport.texture = itex
 	var rot_index: int = 0
 	for mask_name in Const.MY_MASK:
-		var mask_key: int = Const.MY_MASK[mask_name]
-		var random_tile_index: int = 0
 		var piece_index: int = gen_pieces[rot_index]
+		var random_tile_index: int = rng.randi_range(0, input_tiles[piece_index].size()-1)
 		var piece_rot_index: int = data["generate_piece_rotations"][rot_index]
 		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[piece_rot_index]
 		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
@@ -453,6 +456,7 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 			overlay_image.flip_y()
 		var itex2 = ImageTexture.new()
 		itex2.create_from_image(overlay_image, 0)
+		var mask_key: int = Const.MY_MASK[mask_name]
 		overlay_texture_in_viewport.material.set_shader_param("overlay_texture_%s" % mask_key, itex2)
 		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
 
@@ -480,7 +484,7 @@ func get_from_overlay_viewport(image_fmt: int, resize_factor: float = 1.0) -> Im
 		Rect2(Vector2.ZERO, size), 
 		Vector2.ZERO)
 	if resize_factor != 1.0:
-		var interpolation: int = Image.INTERPOLATE_NEAREST if pixel_snap.pressed else Image.INTERPOLATE_TRILINEAR
+		var interpolation: int = Image.INTERPOLATE_NEAREST if not pixel_snap.pressed else Image.INTERPOLATE_TRILINEAR
 		image.resize(int(size.x * resize_factor), int(size.y * resize_factor), interpolation)
 	return image
 
@@ -492,6 +496,13 @@ func generate_overlayed_tiles():
 	var input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
 	set_input_tile_size(input_tile_size, input_image)
 	
+	var max_random_variants: int = get_input_image_random_max_variants()
+	setup_randomize_controls(max_random_variants > 1)
+	if rand_seed_check.pressed:
+		var random_seed_int: int = int(rand_seed_value.text)
+		var random_seed = rand_seed(random_seed_int)
+		rng.seed = random_seed[1]
+
 	var resize_factor: float = float(output_tile_size) / float(input_tile_size)
 	var new_viewport_size := Vector2(input_tile_size, input_tile_size)
 	if overlay_viewport.size != new_viewport_size:
@@ -502,16 +513,17 @@ func generate_overlayed_tiles():
 	var debug_image := Image.new()
 	var color_process: int = get_color_process()
 	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY) * 2
-	debug_image.create(int(debug_texture_size.x), int(debug_texture_size.y), false, image_fmt)
+	debug_image.create(int(debug_texture_size.x) * max_random_variants, int(debug_texture_size.y), false, image_fmt)
 	var overlay_rate: float = overlay_rate_slider.value
 	var overlap_rate: float = overlay_overlap_slider.value
 		
 	var preset: Array = generation_data.get_preset()
 	
+	# input tile variants
 	var input_tiles: Array = []
 	for x in range(min_input_tiles.x):
 		var tile_alternatives: Array = []
-		for y in range(min_input_tiles.y):
+		for y in range(max_random_variants):
 			var tile := Image.new()
 			tile.create(input_tile_size, input_tile_size, false, image_fmt)
 			var copy_rect := Rect2(x * input_tile_size, y * input_tile_size, input_tile_size, input_tile_size)
@@ -524,17 +536,22 @@ func generate_overlayed_tiles():
 	var overlap_vector_rotations: Array = generation_data.get_overlap_vector_rotations()
 	var index: int = 0 
 	for data in preset:
-		start_overlay_processing(data, input_tiles, overlay_rate, overlap_rate, overlap_vectors, overlap_vector_rotations)
-		yield(VisualServer, 'frame_post_draw')
-		var overlayed_tile: Image = get_from_overlay_viewport(image_fmt, resize_factor)
-		# warning-ignore:integer_division		
-		append_to_debug_image(debug_image, overlayed_tile, output_tile_size, 
-			Vector2((index % 4) * output_tile_size, (index / 4) * output_tile_size))
 		var int_variants: Array = []
 		for variant in data["mask_variants"]:
 			int_variants.append(int(variant))
+		# TODO: fix - на самом деле это не зависит от max_random_variants
+		# переделать - генерировать каждый тайл отдельно, а не предгененировать
+		var result_tile_variants: Array = []
+		for random_variant_index in range(max_random_variants):
+			start_overlay_processing(data, input_tiles, overlay_rate, overlap_rate, overlap_vectors, overlap_vector_rotations)
+			yield(VisualServer, 'frame_post_draw')
+			var overlayed_tile: Image = get_from_overlay_viewport(image_fmt, resize_factor)
+			result_tile_variants.append(overlayed_tile)
+			# warning-ignore:integer_division		
+			append_to_debug_image(debug_image, overlayed_tile, output_tile_size, 
+				Vector2((index % 4 + 4 * random_variant_index) * output_tile_size, (index / 4) * output_tile_size))
 		input_overlayed_tiles.append({
-			"tile_image": overlayed_tile,
+			"tile_image_variants": result_tile_variants,
 			"mask_variants": int_variants,
 			"variant_rotations": data["variant_rotations"]
 		})
@@ -556,7 +573,7 @@ func make_from_overlayed():
 #	var color_process: int = get_color_process()
 	
 	var out_image := Image.new()
-	var first_tile_image: Image = input_overlayed_tiles[0]["tile_image"]
+	var first_tile_image: Image = input_overlayed_tiles[0]["tile_image_variants"][0]
 	var image_fmt: int = first_tile_image.get_format()
 	var out_image_fmt: int = rotate_viewport.get_texture().get_data().get_format()
 	out_image.create(tile_size * int(template_size.x), tile_size * int(template_size.y), false, image_fmt)
@@ -564,22 +581,28 @@ func make_from_overlayed():
 	var tile_rect := Rect2(0, 0, tile_size, tile_size)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image, 0)
-	
+	var masks_use_count: Dictionary = {}
 	for mask in tile_masks:
-		var tile_position: Vector2 = mask["position"] * tile_size
 		if mask["godot_mask"] == 0:
 			continue
+		var mask_value = mask["mask"]
+		if masks_use_count.has(mask_value):
+			masks_use_count[mask_value] += 1
+		else:
+			masks_use_count[mask_value] = 0
+		var tile_variant_index: int = masks_use_count[mask_value]
+		var tile_position: Vector2 = mask["position"] * tile_size
 		for tile_data in input_overlayed_tiles:
-			var variant_index: int = tile_data["mask_variants"].find(mask["mask"])
+			var variant_index: int = tile_data["mask_variants"].find(mask_value)
 			if variant_index != -1:
 				var rotation_key: int = Const.ROTATION_SHIFTS.keys()[tile_data["variant_rotations"][variant_index]]
 				if rotation_key != 0:
-					put_to_rotation_viewport(tile_data["tile_image"], rotation_key, false)
+					put_to_rotation_viewport(tile_data["tile_image_variants"][tile_variant_index], rotation_key, false)
 					yield(VisualServer, 'frame_post_draw')
 					var tile_image: Image = get_from_rotation_viewport(out_image_fmt)
 					out_image.blit_rect(tile_image, tile_rect, tile_position)
 				else:
-					out_image.blit_rect(tile_data["tile_image"], tile_rect, tile_position)
+					out_image.blit_rect(tile_data["tile_image_variants"][tile_variant_index], tile_rect, tile_position)
 				itex.set_data(out_image)
 				set_output_texture(itex)
 	rotated_texture_in_viewport.hide()
@@ -814,7 +837,7 @@ func get_debug_image_rect_size(input_type: int) -> Vector2:
 		Const.INPUT_TYPES.OVERLAY:
 			var min_size: Vector2 = generation_data.get_min_input_size()
 			size.x = 4 * output_tile_size # input_tile_size_vector.x
-			size.y = 4 * output_tile_size # input_tile_size_vector.y
+			size.y = 4 * output_tile_size * 3
 	return size
 
 func update_output_bg_texture_scale():
@@ -824,7 +847,7 @@ func update_output_bg_texture_scale():
 	out_bg_texture.rect_scale = output_scale
 	out_bg_texture.rect_size = output_control.rect_size / output_scale_factor
 	output_control.get_node("TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size]
-	debug_input_control.rect_min_size = get_debug_image_rect_size(Const.INPUT_TYPES.CORNERS)
+	debug_input_control.rect_min_size = get_debug_image_rect_size(generation_type_select.selected)
 	debug_input_texture_bg.rect_scale = output_scale
 	debug_input_texture_bg.rect_size = debug_input_control.rect_size / output_scale_factor
 	debug_input_control.get_node("TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size]
@@ -864,11 +887,20 @@ func _on_CheckButton_toggled(button_pressed):
 		rng.randomize()
 		rand_seed_value.text = ""
 
+func rebuild_output():
+	var generation_type: int = generation_type_select.selected
+	match generation_type:
+		Const.INPUT_TYPES.CORNERS:
+			make_from_corners()
+		Const.INPUT_TYPES.OVERLAY:
+			preprocess_input_image()
+
 func _on_RemakeButton_pressed():
-	make_output_texture()
+	rebuild_output()
 
 func _on_LineEdit_text_entered(new_text):
-	make_output_texture()
+	rebuild_output()
+
 
 func _on_ExampleButton_pressed():
 	last_input_texture_path = generation_data.get_example_path()
