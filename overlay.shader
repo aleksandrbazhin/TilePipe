@@ -20,6 +20,15 @@ uniform float rotation_16;
 uniform float rotation_32;
 uniform float rotation_64;
 uniform float rotation_128;
+//
+//uniform float flip_1;
+//uniform float flip_2;
+//uniform float rotation_4;
+//uniform float rotation_8;
+//uniform float rotation_16;
+//uniform float rotation_32;
+//uniform float rotation_64;
+//uniform float rotation_128;
 
 uniform vec2 ovelap_direction_1;
 uniform vec2 ovelap_direction_2;
