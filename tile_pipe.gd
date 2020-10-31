@@ -607,6 +607,8 @@ func make_from_overlayed():
 		var mask_value = mask["mask"]
 		if masks_use_count.has(mask_value):
 			masks_use_count[mask_value] += 1
+			if masks_use_count[mask_value] > input_overlayed_tiles[0]["tile_image_variants"].size() - 1:
+				masks_use_count[mask_value] = 0
 		else:
 			masks_use_count[mask_value] = 0
 		var tile_variant_index: int = masks_use_count[mask_value]
