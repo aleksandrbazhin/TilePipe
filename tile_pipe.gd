@@ -53,16 +53,10 @@ onready var out_bg_texture: TextureRect = output_scroll.get_node("Control/BGText
 onready var output_size_select: OptionButton = $Panel/HBox/Settings/SizeOptionButton
 onready var smoothing_check: CheckButton = $Panel/HBox/Settings/SmoothingContainer/Smoothing
 
-onready var autotile_select: CheckButton = $Panel/HBox/Settings/Resourse/AutotileSelect
-onready var description_select_box: HBoxContainer = $Panel/HBox/Settings/DescriptionResourse
-onready var export_manual_resource_type_select: CheckButton = $Panel/HBox/Settings/DescriptionResourse/Select
 
 var is_ui_blocked: bool = false
 var is_slider_changed: bool = false
 var generation_data: GenerationData
-
-export var is_godot_plugin: bool = false
-
 var template_size: Vector2
 var input_slices: Dictionary = {}
 #var input_tile_size_vector := Vector2.ZERO
@@ -71,6 +65,9 @@ var input_overlayed_tiles: Array = []
 var tile_masks: Array = []
 var rng = RandomNumberGenerator.new()
 var last_input_texture_path: String = ""
+var last_tile_name: String = ""
+var saved_texture_rects: Array = []
+var saved_tile_names: Array = []
 
 func _ready():
 #	rand_seed_check.disabled = true
@@ -130,7 +127,6 @@ func capture_setting_values() -> Dictionary:
 		"corner_preset": corners_merge_type_select.selected,
 		"overlay_preset": overlay_merge_type_select.selected,
 		"smoothing": smoothing_check.pressed,
-		"autotile": autotile_select.pressed,
 		"merge_level": overlay_merge_rate_slider.value,
 		"overlap_level": overlay_overlap_slider.value,
 		"use_random_seed": rand_seed_check.pressed,
@@ -148,6 +144,8 @@ func save_settings(store_defaults: bool = false):
 
 func load_input_texture(path: String):
 	texture_in.texture = load_image_texture(last_input_texture_path)
+	last_tile_name = last_input_texture_path.get_file().split(".")[0]
+	output_control.get_node("TileNameLabel").text = last_tile_name
 
 func apply_settings(data: Dictionary):
 	last_input_texture_path = data["last_texture_path"]
@@ -163,7 +161,6 @@ func apply_settings(data: Dictionary):
 	corners_merge_type_select.selected = data["corner_preset"]
 	overlay_merge_type_select.selected = data["overlay_preset"]
 	smoothing_check.pressed = data["smoothing"]
-	autotile_select.pressed = data["autotile"]
 	overlay_merge_rate_slider.value = data["merge_level"]
 	overlay_overlap_slider.value = data["overlap_level"]
 	rand_seed_check.pressed = data["use_random_seed"]
@@ -590,7 +587,6 @@ func make_from_overlayed():
 		rotated_texture_in_viewport.rect_size = new_viewport_size
 	
 #	var color_process: int = get_color_process()
-	
 	var out_image := Image.new()
 	var first_tile_image: Image = input_overlayed_tiles[0]["tile_image_variants"][0]
 	var image_fmt: int = first_tile_image.get_format()
@@ -760,12 +756,11 @@ func _on_SaveTextureDialog_file_selected(path):
 
 func _on_SaveTextureDialog2_file_selected(path: String):
 #	save_texture_png(path)
-	var resource_exporter: GodotExporter = GodotExporter.new()
+	var resource_exporter := GodotExporter.new()
 	resource_exporter.save_resource(path, get_output_tile_size(), tile_masks,
-		autotile_select.pressed, 
 		out_texture.texture.get_data().get_size(),
-		export_manual_resource_type_select.pressed,
-		save_file_dialog.current_path
+		save_file_dialog.current_path,
+		last_tile_name
 	)
 	save_settings()
 
@@ -905,6 +900,7 @@ func rebuild_output():
 
 func _on_RemakeButton_pressed():
 	rebuild_output()
+	reset_saved()
 
 func _on_LineEdit_text_entered(new_text):
 	rebuild_output()
@@ -939,5 +935,11 @@ func _on_RandomCheckButton_button_up():
 		rebuild_output()
 		save_settings()
 
-func _on_AutotileSelect_button_up():
-	save_settings()
+func reset_saved():
+	saved_tile_names = []
+	saved_texture_rects = []
+
+func _on_Freeze_pressed():
+	saved_tile_names.append(last_tile_name)
+	saved_texture_rects.append(last_tile_name)
+	pass # Replace with function body.

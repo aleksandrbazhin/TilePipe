@@ -1,6 +1,6 @@
 extends Node
 
-const VERSION: String = "0.1"
+const VERSION: String = "0.1.2"
 
 const OUTPUT_SIZES: Dictionary = {
 	8: "8x8",
@@ -166,7 +166,6 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"corner_preset": 0,
 	"overlay_preset": 0,
 	"smoothing": false,
-	"autotile": true,
 	"merge_level": DEFAULT_MERGE,
 	"overlap_level": DEFAULT_OVERLAP,
 	"use_random_seed": false,

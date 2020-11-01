@@ -3,59 +3,20 @@ extends Node
 class_name GodotExporter
 
 func save_resource(path: String, tile_size: int, tile_masks: Array, 
-		is_autotile: bool, texture_size: Vector2, with_description: bool, texture_path: String):
+		texture_size: Vector2, texture_path: String, tile_base_name: String):
 	var output_string : String
-	if is_autotile:
-		output_string = make_autotile_resource_data(path, tile_size, tile_masks, texture_size, texture_path)
-	else:
-		output_string = make_manual_resource_data(path, tile_size, tile_masks, with_description, texture_path)
+	output_string = make_autotile_resource_data(path, tile_size, tile_masks, texture_size, texture_path, tile_base_name)
 	var tileset_resource_path: String = path.get_basename( ) + ".tres"
 	var file = File.new()
 	file.open(tileset_resource_path, File.WRITE)
 	file.store_string(output_string)
 	file.close()
 
-func tile_name_from_position(pos: Vector2) -> String:
-	return "%d_%d" % [pos.x, pos.y]
+func tile_name_from_position(pos: Vector2, tile_base_name: String) -> String:
+	return "%s_%d_%d" % [tile_base_name, pos.x, pos.y]
 
-func make_manual_resource_data(path: String, tile_size: int, tile_masks: Array, with_description: bool, texture_path: String) -> String:
-#	var tile_size: int = get_output_size()
-	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
-	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % (texture_path)
-#	if export_manual_resource_type_select.pressed:
-	if with_description:
-		out_string += "[ext_resource path=\"res://addons/TilePipe/tilesheet_description.gd\" type=\"Script\" id=2]\n"
-	out_string += "\n[resource]\n"
-	var count: int = 0
-	var tile_lines: PoolStringArray = []
-	var tile_description_lines: PoolStringArray = []
-	for mask in tile_masks:
-		var pos: Vector2 = mask["position"]
-		tile_lines.append("%d/name = \"%s\"" % [count, tile_name_from_position(pos)])
-		tile_lines.append("%d/texture = ExtResource( 1 )" % count)
-		tile_lines.append("%d/tex_offset = Vector2( 0, 0 )" % count)
-		tile_lines.append("%d/modulate = Color( 1, 1, 1, 1 )" % count)
-		tile_lines.append("%d/region = Rect2( %d, %d, %d, %d )" % [count, 
-						tile_size * pos.x, tile_size * pos.y, tile_size, tile_size])
-		tile_lines.append("%d/tile_mode = 0" % count)
-		tile_lines.append("%d/occluder_offset = Vector2( 0, 0 )" % count)
-		tile_lines.append("%d/navigation_offset = Vector2( 0, 0 )" % count)
-		tile_lines.append("%d/shape_offset = Vector2( 0, 0 )" % count)
-		tile_lines.append("%d/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )" % count)
-		tile_lines.append("%d/shape_one_way = false" % count)
-		tile_lines.append("%d/shape_one_way_margin = 0.0" % count)
-		tile_lines.append("%d/shapes = [  ]" % count)
-		tile_lines.append("%d/z_index = 0" % count)
-		count += 1
-		tile_description_lines.append("%d: \"%s\"" % [mask['godot_mask'], tile_name_from_position(pos)])
-	out_string += tile_lines.join("\n")
-	if with_description:
-		out_string += "\nscript = ExtResource( 2 )\nreplacements_table = {\n"
-		out_string += tile_description_lines.join(",\n")
-		out_string += "\n}"
-	return out_string
-
-func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array, texture_size: Vector2, texture_path: String) -> String:
+func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array, 
+		texture_size: Vector2, texture_path: String, tile_base_name: String) -> String:
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
 	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % texture_path
 	out_string += "\n[resource]\n"
@@ -64,7 +25,7 @@ func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array
 	for mask in tile_masks:
 		mask_out_array.append("Vector2 ( %d, %d )" % [mask['position'].x, mask['position'].y])
 		mask_out_array.append(mask['godot_mask'])
-	out_string += "0/name = \"0_0\"\n"
+	out_string += "0/name = \"%s\"\n" % tile_base_name
 	out_string += "0/texture = ExtResource( 1 )\n"
 	out_string += "0/tex_offset = Vector2( 0, 0 )\n"
 	out_string += "0/modulate = Color( 1, 1, 1, 1 )\n"
@@ -88,11 +49,3 @@ func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array
 	out_string += "0/shapes = [  ]\n"
 	out_string += "0/z_index = 0\n"
 	return out_string
-
-#const IGNORE_GODOT_MASK: int = Const.GODOT_MASK["TOP_LEFT"] | Const.GODOT_MASK["TOP_RIGHT"] | \
-#			Const.GODOT_MASK["BOTTOM_LEFT"] | Const.GODOT_MASK["BOTTOM_LEFT"] | Const.GODOT_MASK["CENTER"]
-#func compute_tile_replacement_data() -> Dictionary:
-#	var data: Dictionary = {}
-#	for mask in tile_masks:
-#		data[mask["godot_mask"]] = tile_name_from_position(mask["position"])
-#	return data
