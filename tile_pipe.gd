@@ -47,11 +47,12 @@ onready var template_texture: TextureRect = $Panel/HBox/Images/TemplateContainer
 
 onready var output_scroll: ScrollContainer = $Panel/HBox/Images/OutputContainer/ScrollContainer
 onready var output_control: Control = output_scroll.get_node("Control")
-onready var out_texture: TextureRect = output_scroll.get_node("Control/OutTextureRect")
-onready var out_bg_texture: TextureRect = output_scroll.get_node("Control/BGTextureRect")
+onready var out_texture: TextureRect = output_control.get_node("OutTextureRect")
+onready var out_bg_texture: TextureRect = output_control.get_node("BGTextureRect")
 
-onready var output_size_select: OptionButton = $Panel/HBox/Settings/SizeOptionButton
-onready var smoothing_check: CheckButton = $Panel/HBox/Settings/SmoothingContainer/Smoothing
+onready var output_settings: VBoxContainer = output_scroll.get_node("Control/OutputControlContainer")
+onready var output_size_select: OptionButton = output_settings.get_node("SizeOptionButton")
+onready var smoothing_check: CheckButton = output_settings.get_node("SmoothingContainer/Smoothing")
 
 
 var is_ui_blocked: bool = false
@@ -277,7 +278,7 @@ func get_from_rotation_viewport(image_fmt: int, resize_factor: float = 1.0) -> I
 		Rect2(Vector2.ZERO, size), 
 		Vector2.ZERO)
 	if resize_factor != 1.0:
-		var interpolation: int = Image.INTERPOLATE_NEAREST if not smoothing_check.pressed else Image.INTERPOLATE_TRILINEAR
+		var interpolation: int = Image.INTERPOLATE_NEAREST if not smoothing_check.pressed else Image.INTERPOLATE_LANCZOS
 		image.resize(int(size.x * resize_factor), int(size.y * resize_factor), interpolation)
 	return image
 
@@ -757,7 +758,10 @@ func _on_SaveTextureDialog_file_selected(path):
 func _on_SaveTextureDialog2_file_selected(path: String):
 #	save_texture_png(path)
 	var resource_exporter := GodotExporter.new()
-	resource_exporter.save_resource(path, get_output_tile_size(), tile_masks,
+	resource_exporter.save_resource(
+		path, 
+		get_output_tile_size(),
+		tile_masks,
 		out_texture.texture.get_data().get_size(),
 		save_file_dialog.current_path,
 		last_tile_name
@@ -942,4 +946,3 @@ func reset_saved():
 func _on_Freeze_pressed():
 	saved_tile_names.append(last_tile_name)
 	saved_texture_rects.append(last_tile_name)
-	pass # Replace with function body.
