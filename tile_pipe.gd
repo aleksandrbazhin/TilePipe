@@ -145,7 +145,7 @@ func save_settings(store_defaults: bool = false):
 
 func load_input_texture(path: String):
 	texture_in.texture = load_image_texture(last_input_texture_path)
-	last_tile_name = last_input_texture_path.get_basename()
+	last_tile_name = last_input_texture_path.get_file().split(".")[0]
 	output_control.get_node("TileNameLabel").text = last_tile_name
 
 func apply_settings(data: Dictionary):

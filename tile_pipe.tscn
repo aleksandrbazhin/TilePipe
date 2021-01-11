@@ -880,6 +880,7 @@ __meta__ = {
 [node name="Freeze" type="Button" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer" groups=[
 "blockable",
 ]]
+visible = false
 margin_top = 112.0
 margin_right = 170.0
 margin_bottom = 152.0
@@ -894,9 +895,9 @@ __meta__ = {
 "blockable",
 ]]
 visible = false
-margin_top = 44.0
-margin_right = 100.0
-margin_bottom = 84.0
+margin_top = 112.0
+margin_right = 170.0
+margin_bottom = 152.0
 rect_min_size = Vector2( 100, 40 )
 text = "Unfreeze last"
 __meta__ = {
@@ -906,9 +907,10 @@ __meta__ = {
 [node name="RemakeButton" type="Button" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer" groups=[
 "blockable",
 ]]
-margin_top = 156.0
+visible = false
+margin_top = 112.0
 margin_right = 170.0
-margin_bottom = 196.0
+margin_bottom = 152.0
 rect_min_size = Vector2( 100, 40 )
 text = "Reset ↻"
 __meta__ = {
@@ -1006,7 +1008,8 @@ margin_right = 220.0
 margin_bottom = 224.0
 rect_min_size = Vector2( 0, 40 )
 rect_pivot_offset = Vector2( 227, -255 )
-hint_tooltip = "Resulting tileset uses last saved image, so save image first"
+hint_tooltip = "Resulting tileset uses last saved image, so save image first.
+IMPORTANT! Both last saved texture and path for export must lie within godot project structure!"
 text = "Export for Godot"
 __meta__ = {
 "_edit_use_anchors_": false
