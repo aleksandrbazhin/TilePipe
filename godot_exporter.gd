@@ -15,10 +15,50 @@ func save_resource(path: String, tile_size: int, tile_masks: Array,
 func tile_name_from_position(pos: Vector2, tile_base_name: String) -> String:
 	return "%s_%d_%d" % [tile_base_name, pos.x, pos.y]
 
+func path_in_project(path: String) -> bool:
+	var path_array := path.get_base_dir().split("/")
+	var current_test_dir: String = ""
+	for dir in path_array:
+		current_test_dir += dir + "/"
+		var godot_project = File.new()
+		if godot_project.file_exists(current_test_dir + "project.godot"):
+			return true
+	return false
+
+func check_paths(resource_path: String, texture_path: String) -> bool:
+	if not path_in_project(resource_path):
+		print ("ERROR: resource not in any Godot project path")
+		return false
+	if not path_in_project(texture_path):
+		print ("ERROR: last saved texture not in any Godot project path")
+		return false
+	return true
+
+func project_export_relative_path(path: String) -> String:
+	var path_array := path.get_base_dir().split("/")
+	var current_test_dir: String = ""
+	var project_found: bool = false
+	var project_dir_index = 0
+	for dir in path_array:
+		current_test_dir += dir + "/"
+		project_dir_index += 1
+		var godot_project = File.new()
+		if godot_project.file_exists(current_test_dir + "project.godot"):
+			project_found = true
+			break
+	if project_found:
+		var relative_path_array: Array = Array(path_array).slice(project_dir_index, len(path_array))
+		relative_path_array.append(path.get_file())
+		var relative_path: String = "res://" 
+		relative_path += PoolStringArray(relative_path_array).join("/")
+		return relative_path
+	return ""
+
 func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array, 
 		texture_size: Vector2, texture_path: String, tile_base_name: String) -> String:
+	var texture_relative_path := project_export_relative_path(texture_path)
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
-	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % texture_path
+	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % texture_relative_path
 	out_string += "\n[resource]\n"
 #	var texture_size: Vector2 = out_texture.texture.get_data().get_size()
 	var mask_out_array: PoolStringArray = []

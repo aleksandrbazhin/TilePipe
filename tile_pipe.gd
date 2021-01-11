@@ -145,7 +145,7 @@ func save_settings(store_defaults: bool = false):
 
 func load_input_texture(path: String):
 	texture_in.texture = load_image_texture(last_input_texture_path)
-	last_tile_name = last_input_texture_path.get_file().split(".")[0]
+	last_tile_name = last_input_texture_path.get_basename()
 	output_control.get_node("TileNameLabel").text = last_tile_name
 
 func apply_settings(data: Dictionary):
@@ -758,14 +758,16 @@ func _on_SaveTextureDialog_file_selected(path):
 func _on_SaveTextureDialog2_file_selected(path: String):
 #	save_texture_png(path)
 	var resource_exporter := GodotExporter.new()
-	resource_exporter.save_resource(
-		path, 
-		get_output_tile_size(),
-		tile_masks,
-		out_texture.texture.get_data().get_size(),
-		save_file_dialog.current_path,
-		last_tile_name
-	)
+	var texture_path: String = save_file_dialog.current_path
+	if resource_exporter.check_paths(path, texture_path):
+		resource_exporter.save_resource(
+			path, 
+			get_output_tile_size(),
+			tile_masks,
+			out_texture.texture.get_data().get_size(),
+			save_file_dialog.current_path,
+			last_tile_name
+		)
 	save_settings()
 
 func setup_input_type(index: int):
