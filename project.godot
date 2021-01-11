@@ -38,6 +38,7 @@ run/main_scene="res://tile_pipe.tscn"
 boot_splash/image="res://boot_splash.png"
 boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 1 )
 config/icon="res://icon.png"
+config/windows_native_icon="res://icon.ico"
 
 [autoload]
 
