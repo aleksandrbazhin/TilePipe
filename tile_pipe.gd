@@ -110,12 +110,15 @@ func get_generator_preset_path() -> String:
 			path = Const.OVERLAY_INPUT_PRESETS_DATA_PATH[overlay_preset]
 	return path
 
+func get_default_template() -> String:
+	return Const.TEMPLATE_PATHS[Const.TEMPLATE_TYPES.TEMPLATE_47]
+
 var custom_template_path: String = ""
 func get_template_path() -> String:
 	if custom_template_path != "":
 		return custom_template_path
 	else:
-		return Const.TEMPLATE_PATHS[Const.TEMPLATE_TYPES.TEMPLATE_47]
+		return get_default_template()
 
 func capture_setting_values() -> Dictionary:
 	return {
@@ -144,18 +147,31 @@ func save_settings(store_defaults: bool = false):
 	save.store_line(to_json(data))
 	save.close()
 
+
 func load_input_texture(path: String):
-	texture_in.texture = load_image_texture(last_input_texture_path)
-	last_tile_name = last_input_texture_path.get_file().split(".")[0]
+	var loaded_texture: Texture = load_image_texture(path)
+	if loaded_texture == null:
+		path = generation_data.get_example_path()
+		loaded_texture = load_image_texture(path)
+	last_input_texture_path = path
+	texture_in.texture = loaded_texture
+	last_tile_name = path.get_file().split(".")[0]
 	output_control.get_node("TileNameLabel").text = last_tile_name
 
+func load_template_texture(path: String):
+	var loaded_texture: Texture = load_image_texture(path)
+	if loaded_texture == null:
+		path = get_default_template()
+		loaded_texture = load_image_texture(path)
+	custom_template_path = path
+	template_texture.texture = loaded_texture
+
 func apply_settings(data: Dictionary):
-	last_input_texture_path = data["last_texture_path"]
-	texture_file_dialog.current_path = last_input_texture_path
-	load_input_texture(last_input_texture_path)
 	generation_data = GenerationData.new(data["last_gen_preset_path"])
+	load_input_texture(data["last_texture_path"])
+	texture_file_dialog.current_path = data["last_texture_path"]
+	load_template_texture(data["last_template_path"])
 	template_file_dialog.current_path = data["last_template_path"]
-	template_texture.texture = load_image_texture(data["last_template_path"])
 	save_file_dialog.current_path = data["last_save_texture_path"]
 	save_resource_dialog.current_path = data["last_save_texture_resource_path"]
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
@@ -181,9 +197,9 @@ func load_settings():
 	save.open(Const.SETTINGS_PATH, File.READ)
 #	print(save.get_line())
 	var save_data: Dictionary = parse_json(save.get_line())
-	
-	apply_settings(save_data)
 	save.close()
+	apply_settings(save_data)
+	
 
 func check_input_texture() -> bool:
 	if not is_instance_valid(texture_in.texture):
@@ -735,14 +751,14 @@ func load_image_texture(path: String) -> Texture:
 		return image_texture
 
 func _on_TextureDialog_file_selected(path):
-	last_input_texture_path = path
 	load_input_texture(path)
 	preprocess_input_image()
 	save_settings()
 
 func _on_TemplateDialog_file_selected(path):
-	custom_template_path = path
-	template_texture.texture = load_image_texture(path)
+#	custom_template_path = path
+#	template_texture.texture = load_image_texture(path)
+	load_template_texture(path)
 	generate_tile_masks()
 	make_output_texture()
 	save_settings()
@@ -808,7 +824,6 @@ func _on_ColorProcessType_item_selected(index):
 
 func _on_ReloadButton_pressed():
 	load_input_texture(last_input_texture_path)
-#	load_input_texture(texture_file_dialog.current_path)
 	preprocess_input_image()
 
 func _on_TemplateOption_item_selected(index):
@@ -918,7 +933,6 @@ func _on_LineEdit_text_entered(new_text):
 	save_settings()
 
 func _on_ExampleButton_pressed():
-	last_input_texture_path = generation_data.get_example_path()
 	load_input_texture(generation_data.get_example_path())
 	preprocess_input_image()
 	save_settings()

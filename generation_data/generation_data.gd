@@ -43,7 +43,6 @@ func get_overlap_vector_rotations() -> Array:
 		bools.append(bool(is_rotated))
 	return bools
 
-
 func get_example_path() -> String:
 	return get_script().get_path().get_base_dir() + "/" + data["example"]
 	
