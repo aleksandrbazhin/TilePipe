@@ -117,6 +117,18 @@ current_dir = "/Users/user/Documents/TilePipe"
 current_file = "generated.tres"
 current_path = "/Users/user/Documents/TilePipe/generated.tres"
 
+[node name="PopupDialog" type="AcceptDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -41.5
+margin_top = -34.0
+margin_right = 98.5
+margin_bottom = 34.0
+popup_exclusive = true
+window_title = "Errors occured"
+
 [node name="Panel" type="PanelContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -127,18 +139,18 @@ __meta__ = {
 [node name="HBox" type="HBoxContainer" parent="Panel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 1582.0
+margin_right = 1359.0
 margin_bottom = 761.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
-margin_right = 1335.0
+margin_right = 1112.0
 margin_bottom = 754.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
-margin_right = 1335.0
+margin_right = 1112.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 0, 300 )
 custom_constants/separation = 5
@@ -502,7 +514,7 @@ placeholder_alpha = 0.4
 
 [node name="WorkTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 824.0
-margin_right = 1335.0
+margin_right = 1112.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 256, 256 )
 size_flags_horizontal = 3
@@ -512,7 +524,7 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/WorkTextureContainer"]
-margin_right = 511.0
+margin_right = 288.0
 margin_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -612,12 +624,12 @@ stretch_mode = 3
 
 [node name="HSeparator" type="HSeparator" parent="Panel/HBox/Images"]
 margin_top = 304.0
-margin_right = 1335.0
+margin_right = 1112.0
 margin_bottom = 316.0
 
 [node name="TemplateContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 320.0
-margin_right = 1335.0
+margin_right = 1112.0
 margin_bottom = 450.0
 size_flags_horizontal = 3
 
@@ -684,7 +696,7 @@ text = "Reload ↻"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/TemplateContainer"]
 margin_left = 372.0
-margin_right = 1335.0
+margin_right = 1112.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 390, 130 )
 hint_tooltip = "Template image"
@@ -700,13 +712,13 @@ __meta__ = {
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/HBox/Images"]
 margin_top = 454.0
-margin_right = 1335.0
+margin_right = 1112.0
 margin_bottom = 466.0
 size_flags_horizontal = 3
 
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 470.0
-margin_right = 1335.0
+margin_right = 1112.0
 margin_bottom = 754.0
 rect_min_size = Vector2( 0, 280 )
 size_flags_horizontal = 3
@@ -737,7 +749,7 @@ __meta__ = {
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 44.0
-margin_right = 1335.0
+margin_right = 1112.0
 margin_bottom = 284.0
 rect_min_size = Vector2( 900, 280 )
 size_flags_horizontal = 3
@@ -747,7 +759,7 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/ScrollContainer"]
-margin_right = 1291.0
+margin_right = 1068.0
 margin_bottom = 284.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -922,13 +934,13 @@ __meta__ = {
 }
 
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
-margin_left = 1339.0
-margin_right = 1351.0
+margin_left = 1116.0
+margin_right = 1128.0
 margin_bottom = 754.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
-margin_left = 1355.0
-margin_right = 1575.0
+margin_left = 1132.0
+margin_right = 1352.0
 margin_bottom = 754.0
 rect_min_size = Vector2( 220, 0 )
 
@@ -1009,6 +1021,7 @@ __meta__ = {
 [connection signal="file_selected" from="TemplateDialog" to="." method="_on_TemplateDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureDialog" to="." method="_on_SaveTextureDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureResourceDialog" to="." method="_on_SaveTextureDialog2_file_selected"]
+[connection signal="confirmed" from="PopupDialog" to="." method="_on_PopupDialog_confirmed"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxContainer/InputType" to="." method="_on_InputType_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxContainer/CornersMergeSettings/CornersOptionButton" to="." method="_on_CornersOptionButton_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxContainer/OverlaySettings/OverlayOptionButton" to="." method="_on_OverlayOptionButton_item_selected"]

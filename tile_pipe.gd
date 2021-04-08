@@ -8,6 +8,7 @@ onready var texture_file_dialog: FileDialog = $TextureDialog
 onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
 onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
+onready var popup_dialog: AcceptDialog = $PopupDialog
 
 onready var input_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxInput
 onready var texure_input_container: Control = input_container.get_node("Control")
@@ -239,7 +240,7 @@ func mark_template_tile(mask_value: int, mask_position: Vector2, is_text: bool =
 func generate_tile_masks():
 	clear_generation_mask()
 	if not check_template_texture():
-		print("WRONG template texture")
+		report_error("Error: Wrong template texture")
 		return
 	template_size = compute_template_size()
 	var template_image: Image = template_texture.texture.get_data()
@@ -630,7 +631,7 @@ func preprocess_input_image():
 	block_ui()
 	rotated_texture_in_viewport.show()
 	if not check_input_texture():
-		print("WRONG input texture")
+		report_error("Error: Wrong input texture")
 		return
 	debug_input_texture.texture = null
 	var generation_type: int = generation_type_select.selected
@@ -715,15 +716,19 @@ func _on_Save_pressed():
 func _on_Save2_pressed():
 	save_resource_dialog.popup_centered()
 
-func load_image_texture(path: String) -> Texture:	
+func load_image_texture(path: String) -> Texture:
 	if path.begins_with("res://"):
 		var texture: Texture = load(path)
 		return texture
 	else:
 		var image = Image.new()
+		var directory = Directory.new();
+		if not directory.file_exists(path):
+			report_error("Error: Image does not exist: %s, reverting to default" % path)
+			return null
 		var err = image.load(path)
 		if(err != 0):
-			print("Error loading the image: " + path)
+			report_error("Error loading the image: %s" % path)
 			return null
 		var image_texture = ImageTexture.new()
 		image_texture.create_from_image(image, 0)
@@ -948,3 +953,11 @@ func reset_saved():
 func _on_Freeze_pressed():
 	saved_tile_names.append(last_tile_name)
 	saved_texture_rects.append(last_tile_name)
+
+func report_error(error_text: String):
+	print(error_text)
+	popup_dialog.dialog_text += error_text + "\n"
+	popup_dialog.popup_centered()
+
+func _on_PopupDialog_confirmed():
+	popup_dialog.dialog_text = ""
