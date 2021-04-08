@@ -53,7 +53,7 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1366
 window/size/height=768
-window/dpi/allow_hidpi=true
+window/stretch/aspect="expand"
 
 [filesystem]
 

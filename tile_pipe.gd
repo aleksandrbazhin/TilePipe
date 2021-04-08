@@ -13,10 +13,10 @@ onready var input_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBox
 onready var texure_input_container: Control = input_container.get_node("Control")
 onready var texture_in: TextureRect = texure_input_container.get_node("InputTextureRect")
 onready var texture_input_bg: TextureRect = texure_input_container.get_node("BGTextureRect")
-onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/InputType
-onready var example_texture: TextureRect = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/ExampleBox/TextureRect
+onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxContainer/InputType
+onready var example_texture: TextureRect = $Panel/HBox/Images/InContainer/VBoxContainer/ExampleBox/TextureRect
 
-onready var corners_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/CornersMergeSettings
+onready var corners_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxContainer/CornersMergeSettings
 onready var corners_merge_type_select: OptionButton = corners_merge_container.get_node("CornersOptionButton")
 
 onready var settings_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxSettings
@@ -24,7 +24,7 @@ onready var rand_seed_container: VBoxContainer = settings_container.get_node("Ra
 onready var rand_seed_check: CheckButton = rand_seed_container.get_node("HBoxContainer/RandomCheckButton")
 onready var rand_seed_value: LineEdit = rand_seed_container.get_node("LineEdit")
 
-onready var overlay_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/MarginContainer/VBoxContainer/OverlaySettings
+onready var overlay_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxContainer/OverlaySettings
 onready var overlay_merge_type_select: OptionButton = overlay_merge_container.get_node("OverlayOptionButton")
 
 onready var color_process_select: OptionButton = settings_container.get_node("ColorProcessContainer/ColorProcessType")
