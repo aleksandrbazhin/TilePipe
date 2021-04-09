@@ -212,6 +212,8 @@ margin_top = 66.0
 margin_right = 224.0
 margin_bottom = 98.0
 rect_min_size = Vector2( 0, 32 )
+hint_tooltip = "\"Quarters merge\" makes each tile from 4 quarters
+\"Overlay\" creates tiles from a center part, 4 sides and 4 corners"
 text = "Type"
 align = 1
 
@@ -234,7 +236,9 @@ margin_top = 30.0
 margin_right = 224.0
 margin_bottom = 62.0
 rect_min_size = Vector2( 180, 32 )
-text = "Preset"
+__meta__ = {
+"_editor_description_": "Presets have different amount of input tile fragments"
+}
 
 [node name="OverlaySettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
 margin_top = 168.0
@@ -255,6 +259,7 @@ margin_top = 30.0
 margin_right = 224.0
 margin_bottom = 62.0
 rect_min_size = Vector2( 180, 32 )
+hint_tooltip = "Presets need different amount of input tile fragments and can use them differently"
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
 visible = false
@@ -440,7 +445,9 @@ valign = 2
 margin_top = 30.0
 margin_right = 220.0
 margin_bottom = 46.0
-hint_tooltip = "How much of the corners and sides “hover” over the central part."
+hint_tooltip = "How much of the corners and sides \"take\" of  the central part:
+maximum - no central part used,
+minimum - only central part is used"
 focus_mode = 0
 max_value = 0.5
 step = 0.01
@@ -472,7 +479,8 @@ valign = 2
 margin_top = 30.0
 margin_right = 220.0
 margin_bottom = 46.0
-hint_tooltip = "How much of the central part will be “shoved” under the corners and side. Only matters if sides have some transparency."
+hint_tooltip = "How much of the central part will be “shoved” under the corners and side. 
+Only matters if sides have some transparency."
 focus_mode = 0
 max_value = 0.5
 step = 0.01
@@ -490,7 +498,7 @@ margin_top = 136.0
 margin_right = 220.0
 margin_bottom = 209.0
 hint_tooltip = "If you have multiple rows in your input image, the result will be randomized. 
-Use seed to get same results."
+Randomisation is enabled if the aspect ratio of the input image suggests multiple rows with the chosen preset."
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer"]
 margin_right = 220.0
@@ -517,6 +525,7 @@ margin_bottom = 40.0
 margin_top = 44.0
 margin_right = 220.0
 margin_bottom = 73.0
+hint_tooltip = "Use the same seed to get same results of randomization. "
 max_length = 20
 editable = false
 placeholder_text = "Integer value"

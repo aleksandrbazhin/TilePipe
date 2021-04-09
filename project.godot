@@ -61,7 +61,7 @@ import/open_asset_import/use_fbx=false
 
 [gui]
 
-timers/tooltip_delay_sec=0.25
+timers/tooltip_delay_sec=0.02
 
 [importer_defaults]
 
