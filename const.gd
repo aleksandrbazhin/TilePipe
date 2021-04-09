@@ -1,6 +1,7 @@
 extends Node
 
 const VERSION: String = "0.1.3"
+const SETTINGS_PATH: String = "user://settings_v%s.sav" % VERSION
 
 const OUTPUT_SIZES: Dictionary = {
 	8: "8x8",
@@ -84,8 +85,6 @@ const TEMPLATE_PATHS : Dictionary = {
 	TEMPLATE_TYPES.TEMPLATE_47_2: "res://generation_data/template_47_double.png",
 	TEMPLATE_TYPES.CUSTOM: "res://"
 }
-
-const SETTINGS_PATH: String = "user://settings_v%s.sav" % VERSION
 
 const MASK_TOP_LEFT := Vector2(4, 4)
 const MASK_TOP := Vector2(16, 4)

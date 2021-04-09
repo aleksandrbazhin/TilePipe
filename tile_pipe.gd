@@ -96,7 +96,18 @@ func _ready():
 
 func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
-		exit()
+		if texture_file_dialog.visible:
+			texture_file_dialog.hide()
+		elif template_file_dialog.visible:
+			template_file_dialog.hide()
+		elif save_file_dialog.visible:
+			save_file_dialog.hide()
+		elif save_resource_dialog.visible:
+			save_resource_dialog.hide()
+		elif popup_dialog.visible:
+			popup_dialog.hide()
+		else:
+			exit()
 
 var last_generator_preset_path: String = ""
 func get_generator_preset_path() -> String:
