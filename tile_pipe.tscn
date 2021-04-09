@@ -151,13 +151,13 @@ size_flags_vertical = 3
 
 [node name="InContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_right = 1112.0
-margin_bottom = 300.0
+margin_bottom = 304.0
 rect_min_size = Vector2( 0, 300 )
 custom_constants/separation = 5
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/InContainer"]
 margin_right = 40.0
-margin_bottom = 300.0
+margin_bottom = 304.0
 rect_min_size = Vector2( 40, 32 )
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/BlockLabel"]
@@ -180,7 +180,7 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 45.0
 margin_right = 269.0
-margin_bottom = 300.0
+margin_bottom = 304.0
 
 [node name="HeaderLabel" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
 margin_right = 224.0
@@ -261,46 +261,45 @@ margin_bottom = 62.0
 rect_min_size = Vector2( 180, 32 )
 hint_tooltip = "Presets need different amount of input tile fragments and can use them differently"
 
-[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
-visible = false
-margin_top = 234.0
-margin_right = 226.0
-margin_bottom = 238.0
-rect_min_size = Vector2( 0, 4 )
-
-[node name="ExampleBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
 margin_top = 234.0
 margin_right = 224.0
-margin_bottom = 274.0
+margin_bottom = 260.0
+rect_min_size = Vector2( 0, 26 )
+text = "Preset input texture example"
+valign = 2
+
+[node name="ExampleBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
+margin_top = 264.0
+margin_right = 224.0
+margin_bottom = 304.0
 __meta__ = {
 "_edit_use_anchors_": false,
 "_editor_description_": ""
 }
 
-[node name="ExampleButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxContainer/ExampleBox" groups=[
-"blockable",
-]]
-margin_right = 40.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-hint_tooltip = "
-Load the example texture
-"
-text = "→"
-
 [node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxContainer/ExampleBox"]
-margin_left = 44.0
-margin_right = 224.0
+margin_right = 180.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 180, 40 )
 hint_tooltip = "Example input"
 expand = true
 stretch_mode = 5
 
+[node name="ExampleButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxContainer/ExampleBox" groups=[
+"blockable",
+]]
+margin_left = 184.0
+margin_right = 224.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "Use the example texture for generation"
+text = "→"
+
 [node name="VBoxInput" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 274.0
 margin_right = 594.0
-margin_bottom = 300.0
+margin_bottom = 304.0
 
 [node name="LoadButtonBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxInput"]
 margin_right = 320.0
@@ -383,7 +382,7 @@ __meta__ = {
 [node name="VBoxSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 599.0
 margin_right = 819.0
-margin_bottom = 300.0
+margin_bottom = 304.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings"]
 margin_right = 220.0
@@ -462,7 +461,7 @@ script = ExtResource( 3 )
 ]]
 margin_top = 86.0
 margin_right = 220.0
-margin_bottom = 132.0
+margin_bottom = 162.0
 size_flags_horizontal = 3
 alignment = 2
 
@@ -490,15 +489,22 @@ tick_count = 11
 ticks_on_borders = true
 script = ExtResource( 3 )
 
+[node name="Separator" type="Control" parent="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer"]
+margin_top = 50.0
+margin_right = 220.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 24, 26 )
+
 [node name="RandomContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings" groups=[
 "corners_settings",
 "overlay_settings",
 ]]
-margin_top = 136.0
+margin_top = 166.0
 margin_right = 220.0
-margin_bottom = 209.0
+margin_bottom = 239.0
 hint_tooltip = "If you have multiple rows in your input image, the result will be randomized. 
-Randomisation is enabled if the aspect ratio of the input image suggests multiple rows with the chosen preset."
+Randomisation is enabled if the aspect ratio of the input image together with  the chosen preset
+suggest that the input image has multiple rows."
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer"]
 margin_right = 220.0
@@ -534,7 +540,7 @@ placeholder_alpha = 0.4
 [node name="WorkTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 824.0
 margin_right = 1112.0
-margin_bottom = 300.0
+margin_bottom = 304.0
 rect_min_size = Vector2( 256, 256 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -544,7 +550,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/WorkTextureContainer"]
 margin_right = 288.0
-margin_bottom = 300.0
+margin_bottom = 304.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -642,14 +648,14 @@ material = SubResource( 3 )
 stretch_mode = 3
 
 [node name="HSeparator" type="HSeparator" parent="Panel/HBox/Images"]
-margin_top = 304.0
+margin_top = 308.0
 margin_right = 1112.0
-margin_bottom = 316.0
+margin_bottom = 320.0
 
 [node name="TemplateContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
-margin_top = 320.0
+margin_top = 324.0
 margin_right = 1112.0
-margin_bottom = 450.0
+margin_bottom = 454.0
 size_flags_horizontal = 3
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/TemplateContainer"]
@@ -733,13 +739,13 @@ __meta__ = {
 }
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/HBox/Images"]
-margin_top = 454.0
+margin_top = 458.0
 margin_right = 1112.0
-margin_bottom = 466.0
+margin_bottom = 470.0
 size_flags_horizontal = 3
 
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
-margin_top = 470.0
+margin_top = 474.0
 margin_right = 1112.0
 margin_bottom = 754.0
 rect_min_size = Vector2( 0, 280 )
@@ -748,7 +754,7 @@ size_flags_vertical = 3
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
-margin_bottom = 284.0
+margin_bottom = 280.0
 rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
@@ -774,7 +780,7 @@ __meta__ = {
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 44.0
 margin_right = 1112.0
-margin_bottom = 284.0
+margin_bottom = 280.0
 rect_min_size = Vector2( 900, 280 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -784,7 +790,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/ScrollContainer"]
 margin_right = 1068.0
-margin_bottom = 284.0
+margin_bottom = 280.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
