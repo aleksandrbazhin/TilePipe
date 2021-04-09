@@ -4,6 +4,8 @@ signal input_image_processed()
 
 #const INPUT_COONTAINER_DEFAULT_SIZE := Vector2(192, 192)
 
+onready var resource_exporter := GodotExporter.new()
+
 onready var texture_file_dialog: FileDialog = $TextureDialog
 onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
@@ -76,6 +78,7 @@ func _ready():
 	rng.randomize()
 #	save_settings(true) # uncomment on change of save file structure
 	connect("input_image_processed", self, "make_output_texture")
+	resource_exporter.connect("exporter_error", self, "report_error")
 	output_size_select.clear()
 	for size in Const.OUTPUT_SIZES:
 		output_size_select.add_item(Const.OUTPUT_SIZES[size])
@@ -788,8 +791,6 @@ func _on_SaveTextureDialog_file_selected(path):
 	save_settings()
 
 func _on_SaveTextureDialog2_file_selected(path: String):
-#	save_texture_png(path)
-	var resource_exporter := GodotExporter.new()
 	var texture_path: String = save_file_dialog.current_path
 	if resource_exporter.check_paths(path, texture_path):
 		resource_exporter.save_resource(

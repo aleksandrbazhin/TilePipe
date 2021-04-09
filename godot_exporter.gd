@@ -2,6 +2,8 @@ extends Node
 
 class_name GodotExporter
 
+signal exporter_error(message)
+
 func save_resource(path: String, tile_size: int, tile_masks: Array, 
 		texture_size: Vector2, texture_path: String, tile_base_name: String):
 	var output_string : String
@@ -15,22 +17,25 @@ func save_resource(path: String, tile_size: int, tile_masks: Array,
 func tile_name_from_position(pos: Vector2, tile_base_name: String) -> String:
 	return "%s_%d_%d" % [tile_base_name, pos.x, pos.y]
 
-func path_in_project(path: String) -> bool:
+func get_godot_project_name(path: String) -> String:
 	var path_array := path.get_base_dir().split("/")
 	var current_test_dir: String = ""
 	for dir in path_array:
 		current_test_dir += dir + "/"
 		var godot_project = File.new()
 		if godot_project.file_exists(current_test_dir + "project.godot"):
-			return true
-	return false
+			return dir
+	return ""
 
+# return error string 
 func check_paths(resource_path: String, texture_path: String) -> bool:
-	if not path_in_project(resource_path):
-		print ("ERROR: resource not in any Godot project path")
+	var resource_parent_project_name := get_godot_project_name(resource_path)
+	var texture_parent_project_name := get_godot_project_name(texture_path)
+	if resource_parent_project_name == "":
+		emit_signal("exporter_error", "Error: resource not in any Godot project path")
 		return false
-	if not path_in_project(texture_path):
-		print ("ERROR: last saved texture not in any Godot project path")
+	if texture_parent_project_name == "" or resource_parent_project_name != resource_parent_project_name:
+		emit_signal("exporter_error", "Error: last saved texture is not in the same Godot project with the resource")
 		return false
 	return true
 
