@@ -74,6 +74,7 @@ var saved_texture_rects: Array = []
 var saved_tile_names: Array = []
 
 func _ready():
+#	OS.window_maximized = true
 #	rand_seed_check.disabled = true
 	rng.randomize()
 #	save_settings(true) # uncomment on change of save file structure
@@ -96,8 +97,17 @@ func _ready():
 	load_settings()
 	generate_tile_masks()
 	preprocess_input_image()
+	
+	adjust_for_small_resolution()
+
+func adjust_for_small_resolution():
+	if OS.get_screen_size().x < OS.window_size.x:
+		settings_container.rect_min_size = Vector2.ZERO
+		OS.window_maximized = true
+	
 
 func _process(_delta: float):
+	
 	if Input.is_action_just_pressed("ui_cancel"):
 		if texture_file_dialog.visible:
 			texture_file_dialog.hide()
