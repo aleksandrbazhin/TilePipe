@@ -98,8 +98,9 @@ func _ready():
 	generate_tile_masks()
 	preprocess_input_image()
 	
-	adjust_for_small_resolution()
+#	adjust_for_small_resolution()
 
+# nihua eto ne rabotaet
 func adjust_for_small_resolution():
 	if OS.get_screen_size().x < OS.window_size.x:
 		settings_container.rect_min_size = Vector2.ZERO
