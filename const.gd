@@ -13,6 +13,9 @@ const OUTPUT_SIZES: Dictionary = {
 	40: "40x40",
 	48: "48x48",
 	64: "64x64",
+	80: "80x80",
+	96: "96x96",
+	100: "100x100",
 	128: "128x128"
 }
 const TEMPLATE_TILE_SIZE: int = 32
