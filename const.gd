@@ -1,7 +1,7 @@
 extends Node
 
-const VERSION: String = "0.1.3"
-const SETTINGS_PATH: String = "user://settings_v%s.sav" % VERSION
+var VERSION: String = ProjectSettings.get_setting("application/config/version")
+var SETTINGS_PATH: String = "user://settings_v%s.sav" % VERSION
 
 const OUTPUT_SIZES: Dictionary = {
 	8: "8x8",
