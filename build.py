@@ -56,10 +56,16 @@ def prepare_uploads():
     shutil.rmtree("%s/examples" % EXPORT_PATH, ignore_errors=True)
     Path("%s/examples" % EXPORT_PATH).mkdir(parents=True, exist_ok=True)
     os.system("ROBOCOPY  generation_data %s/examples *.png" % EXPORT_PATH)
+    
+    os.remove('%(path)s/%(app_name)s_win64.zip' % WIN_PARAMS)
     os.system('7z a -r -tzip %(path)s/%(app_name)s_win64.zip %(build_path)s/* %(path)s/examples' % WIN_PARAMS)
+    
+    os.remove('%(path)s/%(app_name)s_linux.zip' % LINUX_PARAMS)
     os.system('7z a -r -tzip %(path)s/%(app_name)s_linux.zip %(build_path)s/* %(path)s/examples' % LINUX_PARAMS)
+    
     os.system('7z a -r -tzip %(build_path)s/%(binary)s %(path)s/examples' % MAC_PARAMS)
-    os.system('ROBOCOPY %(build_path)s %(path)s %(binary)s' % MAC_PARAMS)
+    shutil.copyfile('%(build_path)s/%(binary)s' % MAC_PARAMS, '%(path)s/%(app_name)s_mac.zip' % MAC_PARAMS)
+    # os.system('ROBOCOPY )
 
 if __name__ == "__main__":
     import argparse
@@ -80,7 +86,7 @@ if __name__ == "__main__":
     if args.build:
         print("\n____________________TilePipe______________________\nBuilding with debug=%s\n" % str(args.debug))
         update_godot_export_templates()
-        # build()
+        build()
 
     if args.upload:
         print("\n____________________TilePipe______________________\nPreparing uppload with debug=%s\n" % str(args.debug))
@@ -95,11 +101,18 @@ if __name__ == "__main__":
         
         prepare_uploads()
 
-        itchio_project = ""
+        print("\n____________________TilePipe______________________\nUploading build to itch.io")
+        
         if args.debug:
-            itchio_project = "debug_project" 
+            os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe-testing:windows-debug' % WIN_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe-testing:linux-debug' % LINUX_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe-testing:mac-debug' % MAC_PARAMS)
             
         else:
-            itchio_project = "release_project"
+            # here upload to public TilePipe
+            pass 
+            # os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe-testing:windows' % WIN_PARAMS)
+            # os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe-testing:linux' % LINUX_PARAMS)
+            # os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe-testing:mac' % MAC_PARAMS)
         
 
