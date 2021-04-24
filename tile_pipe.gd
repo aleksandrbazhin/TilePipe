@@ -74,6 +74,7 @@ var saved_texture_rects: Array = []
 var saved_tile_names: Array = []
 
 func _ready():
+	print("TilePipe v.%s running in Debug mode" % Const.VERSION)
 #	OS.window_maximized = true
 #	rand_seed_check.disabled = true
 	rng.randomize()
