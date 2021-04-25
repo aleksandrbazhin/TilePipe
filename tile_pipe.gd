@@ -174,7 +174,7 @@ func save_settings(store_defaults: bool = false):
 	save.close()
 
 
-func load_input_texture(path: String):
+func load_input_texture(path: String) -> String:
 	var loaded_texture: Texture = load_image_texture(path)
 	if loaded_texture == null:
 		path = generation_data.get_example_path()
@@ -183,23 +183,28 @@ func load_input_texture(path: String):
 	texture_in.texture = loaded_texture
 	last_tile_name = path.get_file().split(".")[0]
 	output_control.get_node("TileNameLabel").text = last_tile_name
+	return path
 
-func load_template_texture(path: String):
+func load_template_texture(path: String) -> String:
 	var loaded_texture: Texture = load_image_texture(path)
 	if loaded_texture == null:
 		path = get_default_template()
 		loaded_texture = load_image_texture(path)
 	custom_template_path = path
 	template_texture.texture = loaded_texture
+	return path
 
+func clear_path(path:String) -> String:
+	return path if not path.begins_with("res://") else OS.get_executable_path()
+	
 func apply_settings(data: Dictionary):
 	generation_data = GenerationData.new(data["last_gen_preset_path"])
-	load_input_texture(data["last_texture_path"])
-	texture_file_dialog.current_path = data["last_texture_path"]
-	load_template_texture(data["last_template_path"])
-	template_file_dialog.current_path = data["last_template_path"]
-	save_file_dialog.current_path = data["last_save_texture_path"]
-	save_resource_dialog.current_path = data["last_save_texture_resource_path"]
+	var texture_path = load_input_texture(data["last_texture_path"])
+	texture_file_dialog.current_path = clear_path(texture_path)
+	var template_path = load_template_texture(data["last_template_path"])
+	template_file_dialog.current_path = clear_path(template_path)
+	save_file_dialog.current_path = clear_path(data["last_save_texture_path"])
+	save_resource_dialog.current_path = clear_path(data["last_save_texture_resource_path"])
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
 	generation_type_select.selected = data["input_type"]
 	corners_merge_type_select.selected = data["corner_preset"]
