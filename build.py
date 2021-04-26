@@ -52,20 +52,25 @@ def build():
     os.system('%(godot)s %(godot_params)s "Linux/X11" %(build_path)s/%(binary)s' % LINUX_PARAMS)
     os.system('%(godot)s %(godot_params)s "Mac OSX" %(build_path)s/%(binary)s' % MAC_PARAMS)
     
+def make_zip(target, source, is_mac: bool = False):
+    if not is_mac:
+        try:
+            os.remove(target)
+        except:
+            pass
+    os.system('7z a -r -tzip %s %s' % (target, source))
+
+
 def prepare_uploads():
     shutil.rmtree("%s/examples" % EXPORT_PATH, ignore_errors=True)
     Path("%s/examples" % EXPORT_PATH).mkdir(parents=True, exist_ok=True)
     os.system("ROBOCOPY  generation_data %s/examples *.png" % EXPORT_PATH)
-    
-    os.remove('%(path)s/%(app_name)s_win64.zip' % WIN_PARAMS)
-    os.system('7z a -r -tzip %(path)s/%(app_name)s_win64.zip %(build_path)s/* %(path)s/examples' % WIN_PARAMS)
-    
-    os.remove('%(path)s/%(app_name)s_linux.zip' % LINUX_PARAMS)
-    os.system('7z a -r -tzip %(path)s/%(app_name)s_linux.zip %(build_path)s/* %(path)s/examples' % LINUX_PARAMS)
-    
-    os.system('7z a -r -tzip %(build_path)s/%(binary)s %(path)s/examples' % MAC_PARAMS)
+    make_zip('%s/examples.zip' % EXPORT_PATH, '%s/examples' % EXPORT_PATH)
+    make_zip('%(path)s/%(app_name)s_win64.zip' % WIN_PARAMS,  '%(build_path)s/* %(path)s/examples' % WIN_PARAMS)
+    make_zip('%(path)s/%(app_name)s_linux.zip' % LINUX_PARAMS,  '%(build_path)s/* %(path)s/examples' % LINUX_PARAMS)
+    make_zip('%(build_path)s/%(binary)s' % MAC_PARAMS,  '%(path)s/examples' % MAC_PARAMS, is_mac=True)
     shutil.copyfile('%(build_path)s/%(binary)s' % MAC_PARAMS, '%(path)s/%(app_name)s_mac.zip' % MAC_PARAMS)
-    # os.system('ROBOCOPY )
+
 
 if __name__ == "__main__":
     import argparse
@@ -111,8 +116,9 @@ if __name__ == "__main__":
         else:
             # here upload to public TilePipe
             pass 
-            # os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe-testing:windows' % WIN_PARAMS)
-            # os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe-testing:linux' % LINUX_PARAMS)
-            # os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe-testing:mac' % MAC_PARAMS)
+            # os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe:windows' % WIN_PARAMS)
+            # os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe:linux' % LINUX_PARAMS)
+            # os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe:mac' % MAC_PARAMS)
+            # os.system('butler push %(path)s/%examples.zip  aleksandrbazhin/TilePipe:examples' % % {"path": EXPORT_PATH})
         
 
