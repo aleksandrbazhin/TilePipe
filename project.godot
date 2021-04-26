@@ -39,6 +39,7 @@ boot_splash/image="res://boot_splash.png"
 boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
+config/version="0.2"
 
 [autoload]
 
@@ -61,7 +62,7 @@ import/open_asset_import/use_fbx=false
 
 [gui]
 
-timers/tooltip_delay_sec=0.02
+timers/tooltip_delay_sec=0.15
 
 [importer_defaults]
 
