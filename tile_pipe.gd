@@ -867,6 +867,7 @@ func _on_TemplateOption_item_selected(index):
 		output_scroll.get_v_scrollbar().rect_size.y = 0
 		clear_generation_mask()
 	else:
+		custom_template_path = ""
 		template_load_button.disabled = true
 		template_texture.texture = load_image_texture(Const.TEMPLATE_PATHS[index])
 		generate_tile_masks()
