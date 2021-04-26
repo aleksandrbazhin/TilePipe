@@ -25,7 +25,8 @@ onready var corners_merge_type_select: OptionButton = corners_merge_container.ge
 onready var settings_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxSettings
 onready var rand_seed_container: VBoxContainer = settings_container.get_node("RandomContainer")
 onready var rand_seed_check: CheckButton = rand_seed_container.get_node("HBoxContainer/RandomCheckButton")
-onready var rand_seed_value: LineEdit = rand_seed_container.get_node("LineEdit")
+onready var rand_seed_value: LineEdit = rand_seed_container.get_node("EditContainer/SeedLineEdit")
+onready var rand_seed_use_button: Button = rand_seed_container.get_node("EditContainer/SeedButton")
 
 onready var overlay_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxContainer/OverlaySettings
 onready var overlay_merge_type_select: OptionButton = overlay_merge_container.get_node("OverlayOptionButton")
@@ -213,7 +214,10 @@ func apply_settings(data: Dictionary):
 	overlay_merge_rate_slider.value = data["merge_level"]
 	overlay_overlap_slider.value = data["overlap_level"]
 	rand_seed_check.pressed = data["use_random_seed"]
-	rand_seed_value.text = str(data["random_seed_value"])
+	if rand_seed_check.pressed:
+		rand_seed_use_button.disabled = false
+		rand_seed_value.editable = true
+		rand_seed_value.text = str(data["random_seed_value"])
 	setup_input_type(generation_type_select.selected)
 	update_output_bg_texture_scale()
 	
@@ -961,9 +965,16 @@ func _on_RemakeButton_pressed():
 	rebuild_output()
 	reset_saved()
 
-func _on_LineEdit_text_entered(new_text):
+func apply_seed(new_seed: String):
+	rand_seed_value.text = str(int(new_seed))
 	rebuild_output()
 	save_settings()
+
+func _on_SeedLineEdit_text_entered(new_text):
+	apply_seed(new_text)
+	
+func _on_SeedButton_pressed():
+	apply_seed(rand_seed_value.text)
 
 func _on_ExampleButton_pressed():
 	load_input_texture(generation_data.get_example_path())
@@ -984,14 +995,13 @@ func _on_Smoothing_button_up():
 	save_settings()
 
 func _on_RandomCheckButton_button_up():
-#		print(rand_seed_check.get_groups())
 	var button_pressed: bool = rand_seed_check.pressed
 	rand_seed_value.editable = button_pressed
+	rand_seed_use_button.disabled = not button_pressed
 	if not button_pressed:
 		rng.randomize()
-		rand_seed_value.text = ""
-		rebuild_output()
-		save_settings()
+	rebuild_output()
+	save_settings()
 
 func reset_saved():
 	saved_tile_names = []
@@ -1008,3 +1018,4 @@ func report_error(error_text: String):
 
 func _on_PopupDialog_confirmed():
 	popup_dialog.dialog_text = ""
+

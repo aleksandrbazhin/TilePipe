@@ -536,17 +536,33 @@ margin_left = 115.0
 margin_right = 191.0
 margin_bottom = 40.0
 
-[node name="LineEdit" type="LineEdit" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer" groups=[
-"blockable",
-]]
+[node name="EditContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer"]
 margin_top = 44.0
 margin_right = 220.0
 margin_bottom = 73.0
-hint_tooltip = "Use the same seed to get same results of randomization. "
-max_length = 20
+custom_constants/separation = 0
+
+[node name="SeedLineEdit" type="LineEdit" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/EditContainer" groups=[
+"blockable",
+]]
+margin_right = 149.0
+margin_bottom = 29.0
+hint_tooltip = "Use some interger seed to have consistent randomization result. "
+size_flags_horizontal = 3
+max_length = 16
 editable = false
 placeholder_text = "Integer value"
 placeholder_alpha = 0.4
+
+[node name="SeedButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/EditContainer"]
+margin_left = 149.0
+margin_right = 220.0
+margin_bottom = 29.0
+disabled = true
+text = "Use seed"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="WorkTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer"]
 margin_left = 824.0
@@ -1076,7 +1092,8 @@ __meta__ = {
 [connection signal="released" from="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer/RateSlider" to="." method="_on_RateSlider_released"]
 [connection signal="released" from="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer/OverlapSlider" to="." method="_on_OverlapSlider_released"]
 [connection signal="button_up" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/HBoxContainer/RandomCheckButton" to="." method="_on_RandomCheckButton_button_up"]
-[connection signal="text_entered" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
+[connection signal="text_entered" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/EditContainer/SeedLineEdit" to="." method="_on_SeedLineEdit_text_entered"]
+[connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/EditContainer/SeedButton" to="." method="_on_SeedButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer/SizeOptionButton" to="." method="_on_SizeOptionButton_item_selected"]
