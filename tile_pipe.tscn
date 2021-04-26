@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://tile_pipe.gd" type="Script" id=1]
 [ext_resource path="res://overlay.shader" type="Shader" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://IBMPlexSans-Medium.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://ui_theme.tres" type="Theme" id=6]
 [ext_resource path="res://checkers.png" type="Texture" id=7]
+[ext_resource path="res://Load.svg" type="Texture" id=8]
+[ext_resource path="res://Save.svg" type="Texture" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 5 )
@@ -324,7 +326,8 @@ rect_min_size = Vector2( 0, 40 )
 hint_tooltip = "Select the image with which all the manipulations will be done. 
 To get a hint how to create an image, look at the examples."
 size_flags_horizontal = 3
-text = "Select input texture"
+text = "Load input texture"
+icon = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -710,6 +713,7 @@ rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 disabled = true
 text = "Load template"
+icon = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1018,6 +1022,7 @@ margin_right = 220.0
 margin_bottom = 132.0
 rect_min_size = Vector2( 0, 40 )
 text = "Save texture"
+icon = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1051,6 +1056,7 @@ rect_pivot_offset = Vector2( 227, -255 )
 hint_tooltip = "Resulting tileset uses last saved image, so save image first.
 IMPORTANT! Both last saved texture and path for export must lie within godot project structure!"
 text = "Export for Godot"
+icon = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
