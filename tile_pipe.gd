@@ -33,7 +33,7 @@ onready var overlay_merge_type_select: OptionButton = overlay_merge_container.ge
 
 onready var color_process_select: OptionButton = settings_container.get_node("ColorProcessContainer/ColorProcessType")
 
-onready var debug_preview:Control = $Panel/HBox/Images/InContainer/Preview
+onready var debug_preview: Control = $Panel/HBox/Images/InContainer/Preview
 onready var debug_input_scroll: ScrollContainer = debug_preview.get_node("WorkTextureContainer")
 onready var debug_input_control: Control = debug_input_scroll.get_node("Control")
 onready var debug_input_texture: TextureRect = debug_input_control.get_node("DebugTexture")
@@ -583,7 +583,8 @@ func generate_overlayed_tiles():
 	var image_fmt: int = overlay_viewport.get_texture().get_data().get_format()
 	var debug_image := Image.new()
 #	var color_process: int = get_color_process()
-	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY) * 2
+	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY)
+#	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY) * 2
 	debug_image.create(int(debug_texture_size.x) * max_random_variants, int(debug_texture_size.y), false, image_fmt)
 	var overlay_rate: float = overlay_merge_rate_slider.value
 	var overlap_rate: float = overlay_overlap_slider.value
@@ -909,9 +910,9 @@ func get_debug_image_rect_size(input_type: int) -> Vector2:
 			size.x = slice_size * min_size.x
 			size.y = slice_size * min_size.y * 8
 		Const.INPUT_TYPES.OVERLAY:
-#			var min_size: Vector2 = generation_data.get_min_input_size()
-			size.x = 4 * output_tile_size # input_tile_size_vector.x
-			size.y = 4 * output_tile_size * 3
+			size.x = 4 * output_tile_size
+#			size.y = 4 * output_tile_size * 3 
+			size.y = 4 * output_tile_size  
 	return size
 
 func update_output_bg_texture_scale():

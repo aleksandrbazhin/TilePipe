@@ -383,8 +383,10 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -44.0
-margin_top = -19.0
+margin_top = -20.0
+margin_bottom = -1.0
 text = "64x64"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -729,10 +731,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -44.0
-margin_top = -19.0
+margin_left = -48.0
+margin_top = -20.0
+margin_right = -4.00003
+margin_bottom = -1.0
 grow_horizontal = 0
 text = "64x64"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -977,8 +982,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -87.0
-margin_top = -42.0
+margin_left = -91.0
+margin_top = -44.0
+margin_right = -4.0
+margin_bottom = -2.0
 grow_horizontal = 0
 
 [node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/Labels"]
@@ -998,8 +1005,9 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -87.0
+margin_left = -85.0
 margin_top = -19.0
+margin_right = 2.0
 grow_horizontal = 0
 text = "Tile file name"
 align = 2
