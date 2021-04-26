@@ -564,9 +564,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WorkTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer"]
+[node name="Preview" type="Control" parent="Panel/HBox/Images/InContainer"]
 margin_left = 824.0
 margin_right = 1112.0
+margin_bottom = 304.0
+size_flags_horizontal = 3
+
+[node name="WorkTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer/Preview"]
+margin_left = 5.0
+margin_right = 288.0
 margin_bottom = 304.0
 rect_min_size = Vector2( 256, 256 )
 size_flags_horizontal = 3
@@ -575,13 +581,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/WorkTextureContainer"]
-margin_right = 288.0
+[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer"]
+margin_right = 283.0
 margin_bottom = 304.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
+[node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
@@ -594,7 +600,7 @@ __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="DebugTexture" type="TextureRect" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
+[node name="DebugTexture" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
 margin_right = 133.345
 margin_bottom = 124.436
 rect_min_size = Vector2( 128, 128 )
@@ -606,22 +612,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -41.3303
-margin_top = -20.3348
-margin_right = 2.66968
-margin_bottom = -1.33484
-grow_horizontal = 0
-text = "64x64"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="InViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
+[node name="InViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = 34.0
@@ -632,7 +623,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Viewport" type="Viewport" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control/InViewportContainer"]
+[node name="Viewport" type="Viewport" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control/InViewportContainer"]
 size = Vector2( 32, 32 )
 size_override_stretch = true
 transparent_bg = true
@@ -642,13 +633,13 @@ usage = 1
 render_target_v_flip = true
 render_target_update_mode = 3
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control/InViewportContainer/Viewport"]
+[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control/InViewportContainer/Viewport"]
 material = SubResource( 2 )
 margin_right = 64.0
 margin_bottom = 64.0
 stretch_mode = 3
 
-[node name="OverlayViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control"]
+[node name="OverlayViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -658,7 +649,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Viewport" type="Viewport" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control/OverlayViewportContainer"]
+[node name="Viewport" type="Viewport" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control/OverlayViewportContainer"]
 size = Vector2( 32, 32 )
 size_override_stretch = true
 transparent_bg = true
@@ -669,9 +660,82 @@ render_target_v_flip = true
 render_target_update_mode = 3
 gui_disable_input = true
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/WorkTextureContainer/Control/OverlayViewportContainer/Viewport"]
+[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control/OverlayViewportContainer/Viewport"]
 material = SubResource( 3 )
 stretch_mode = 3
+
+[node name="ImageSettings" type="ColorRect" parent="Panel/HBox/Images/InContainer/Preview"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -172.0
+margin_top = 4.0
+margin_right = -12.0
+margin_bottom = 124.0
+color = Color( 0.141176, 0.168627, 0.203922, 0.866667 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OutputControlContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 10.0
+margin_right = -3.0
+margin_bottom = -7.0
+custom_constants/separation = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer"]
+margin_right = 149.0
+margin_bottom = 19.0
+size_flags_vertical = 1
+text = "Output tile size:"
+align = 1
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SizeOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer" groups=[
+"blockable",
+]]
+margin_top = 25.0
+margin_right = 149.0
+margin_bottom = 57.0
+rect_min_size = Vector2( 0, 32 )
+hint_tooltip = "Output tile are scaled up or down."
+text = "64x64"
+align = 1
+items = [ "8x8", null, false, 0, null, "16x16", null, false, 1, null, "32x32", null, false, 2, null, "64x64", null, false, 3, null, "128x128", null, false, 4, null, "8x8", null, false, 5, null, "16x16", null, false, 6, null, "32x32", null, false, 7, null, "64x64", null, false, 8, null, "128x128", null, false, 9, null ]
+selected = 3
+
+[node name="Smoothing" type="CheckButton" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer" groups=[
+"blockable",
+]]
+margin_top = 63.0
+margin_right = 149.0
+margin_bottom = 103.0
+hint_tooltip = "Disable for pixelart, enable for anitaliased."
+text = "Smoothing"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/InContainer/Preview"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -44.0
+margin_top = -19.0
+grow_horizontal = 0
+text = "64x64"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="HSeparator" type="HSeparator" parent="Panel/HBox/Images"]
 margin_top = 308.0
@@ -804,10 +868,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer"]
+[node name="Output" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 44.0
 margin_right = 1112.0
 margin_bottom = 280.0
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer/Output"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_min_size = Vector2( 900, 280 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -815,13 +884,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/ScrollContainer"]
+[node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer"]
 margin_right = 1068.0
 margin_bottom = 280.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control"]
+[node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 7 )
@@ -832,7 +901,7 @@ __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="OutTextureRect" type="TextureRect" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control"]
+[node name="OutTextureRect" type="TextureRect" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer/Control"]
 margin_right = 400.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 400, 200 )
@@ -844,106 +913,33 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -44.0
-margin_top = -19.0
-grow_horizontal = 0
-text = "64x64"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextureRect" type="ColorRect" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control"]
+[node name="TextureRect" type="ColorRect" parent="Panel/HBox/Images/OutputContainer/Output"]
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -184.0
-margin_right = 11.0
+margin_left = -195.0
 margin_bottom = 205.0
 color = Color( 0.0901961, 0.109804, 0.133333, 0.556863 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OutputControlContainer" type="VBoxContainer" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control"]
+[node name="OutputControlContainer" type="VBoxContainer" parent="Panel/HBox/Images/OutputContainer/Output/TextureRect"]
 anchor_left = 0.993
 anchor_right = 0.993
-margin_left = -170.0
+margin_left = -187.111
+margin_right = -17.1111
 margin_bottom = 188.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer"]
-margin_right = 170.0
-margin_bottom = 28.0
-rect_min_size = Vector2( 0, 28 )
-size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "Output tile size:"
-align = 1
-valign = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SizeOptionButton" type="OptionButton" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer" groups=[
-"blockable",
-]]
-margin_top = 32.0
-margin_right = 170.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 0, 32 )
-hint_tooltip = "Output tile are scaled up or down."
-text = "64x64"
-align = 1
-items = [ "8x8", null, false, 0, null, "16x16", null, false, 1, null, "32x32", null, false, 2, null, "64x64", null, false, 3, null, "128x128", null, false, 4, null, "8x8", null, false, 5, null, "16x16", null, false, 6, null, "32x32", null, false, 7, null, "64x64", null, false, 8, null, "128x128", null, false, 9, null ]
-selected = 3
-
-[node name="SmoothingContainer" type="HBoxContainer" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer"]
-margin_top = 68.0
-margin_right = 170.0
-margin_bottom = 108.0
-hint_tooltip = "Disable for pixelart, enable for anitaliased."
-alignment = 2
-__meta__ = {
-"_edit_use_anchors_": false,
-"_editor_description_": ""
-}
-
-[node name="Label" type="Label" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer/SmoothingContainer"]
-margin_right = 90.0
-margin_bottom = 40.0
-size_flags_horizontal = 3
-size_flags_vertical = 7
-text = "Smoothing"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Smoothing" type="CheckButton" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer/SmoothingContainer" groups=[
-"blockable",
-]]
-margin_left = 94.0
-margin_right = 170.0
-margin_bottom = 40.0
-hint_tooltip = "Disable for pixelart, enable for anitaliased."
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Freeze" type="Button" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer" groups=[
+[node name="Freeze" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/TextureRect/OutputControlContainer" groups=[
 "blockable",
 ]]
 visible = false
-margin_top = 112.0
 margin_right = 170.0
-margin_bottom = 152.0
+margin_bottom = 40.0
 rect_min_size = Vector2( 170, 40 )
 hint_tooltip = "Freeze existing to append more below"
 text = "Ξ Freeze Ξ"
@@ -951,41 +947,62 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RemakeButton2" type="Button" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer" groups=[
+[node name="RemakeButton2" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/TextureRect/OutputControlContainer" groups=[
 "blockable",
 ]]
 visible = false
-margin_top = 112.0
+margin_top = 44.0
 margin_right = 170.0
-margin_bottom = 152.0
+margin_bottom = 84.0
 rect_min_size = Vector2( 100, 40 )
 text = "Unfreeze last"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RemakeButton" type="Button" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer" groups=[
+[node name="RemakeButton" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/TextureRect/OutputControlContainer" groups=[
 "blockable",
 ]]
 visible = false
-margin_top = 112.0
 margin_right = 170.0
-margin_bottom = 152.0
+margin_bottom = 40.0
 rect_min_size = Vector2( 100, 40 )
 text = "Reset ↻"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TileNameLabel" type="Label" parent="Panel/HBox/Images/OutputContainer/ScrollContainer/Control"]
+[node name="Labels" type="Control" parent="Panel/HBox/Images/OutputContainer/Output"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -87.0
-margin_top = -41.0
+margin_top = -42.0
+grow_horizontal = 0
+
+[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/Labels"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -87.0
+margin_bottom = 19.0
+grow_horizontal = 0
+text = "64x64"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileNameLabel" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/Labels"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -87.0
+margin_top = -19.0
 grow_horizontal = 0
 text = "Tile file name"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1094,12 +1111,12 @@ __meta__ = {
 [connection signal="button_up" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/HBoxContainer/RandomCheckButton" to="." method="_on_RandomCheckButton_button_up"]
 [connection signal="text_entered" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/EditContainer/SeedLineEdit" to="." method="_on_SeedLineEdit_text_entered"]
 [connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/EditContainer/SeedButton" to="." method="_on_SeedButton_pressed"]
+[connection signal="item_selected" from="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer/SizeOptionButton" to="." method="_on_SizeOptionButton_item_selected"]
+[connection signal="button_up" from="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer/Smoothing" to="." method="_on_Smoothing_button_up"]
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
-[connection signal="item_selected" from="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer/SizeOptionButton" to="." method="_on_SizeOptionButton_item_selected"]
-[connection signal="button_up" from="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer/SmoothingContainer/Smoothing" to="." method="_on_Smoothing_button_up"]
-[connection signal="pressed" from="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer/Freeze" to="." method="_on_Freeze_pressed"]
-[connection signal="pressed" from="Panel/HBox/Images/OutputContainer/ScrollContainer/Control/OutputControlContainer/RemakeButton" to="." method="_on_RemakeButton_pressed"]
+[connection signal="pressed" from="Panel/HBox/Images/OutputContainer/Output/TextureRect/OutputControlContainer/Freeze" to="." method="_on_Freeze_pressed"]
+[connection signal="pressed" from="Panel/HBox/Images/OutputContainer/Output/TextureRect/OutputControlContainer/RemakeButton" to="." method="_on_RemakeButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save2" to="." method="_on_Save2_pressed"]

@@ -33,7 +33,8 @@ onready var overlay_merge_type_select: OptionButton = overlay_merge_container.ge
 
 onready var color_process_select: OptionButton = settings_container.get_node("ColorProcessContainer/ColorProcessType")
 
-onready var debug_input_scroll: Control = $Panel/HBox/Images/InContainer/WorkTextureContainer
+onready var debug_preview:Control = $Panel/HBox/Images/InContainer/Preview
+onready var debug_input_scroll: ScrollContainer = debug_preview.get_node("WorkTextureContainer")
 onready var debug_input_control: Control = debug_input_scroll.get_node("Control")
 onready var debug_input_texture: TextureRect = debug_input_control.get_node("DebugTexture")
 onready var debug_input_texture_bg: TextureRect = debug_input_control.get_node("BGTextureRect")
@@ -49,14 +50,15 @@ onready var template_load_button : Button = $Panel/HBox/Images/TemplateContainer
 onready var template_type_select: OptionButton = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption
 onready var template_texture: TextureRect = $Panel/HBox/Images/TemplateContainer/ScrollContainer/TemplateTextureRect
 
-onready var output_scroll: ScrollContainer = $Panel/HBox/Images/OutputContainer/ScrollContainer
+onready var output_block: Control = $Panel/HBox/Images/OutputContainer/Output
+onready var output_scroll: ScrollContainer = output_block.get_node("ScrollContainer")
 onready var output_control: Control = output_scroll.get_node("Control")
 onready var out_texture: TextureRect = output_control.get_node("OutTextureRect")
 onready var out_bg_texture: TextureRect = output_control.get_node("BGTextureRect")
 
-onready var output_settings: VBoxContainer = output_scroll.get_node("Control/OutputControlContainer")
-onready var output_size_select: OptionButton = output_settings.get_node("SizeOptionButton")
-onready var smoothing_check: CheckButton = output_settings.get_node("SmoothingContainer/Smoothing")
+onready var image_settings: VBoxContainer = debug_preview.get_node("ImageSettings/OutputControlContainer")
+onready var output_size_select: OptionButton = image_settings.get_node("SizeOptionButton")
+onready var smoothing_check: CheckButton = image_settings.get_node("Smoothing")
 
 
 var is_ui_blocked: bool = false
@@ -183,7 +185,7 @@ func load_input_texture(path: String) -> String:
 	last_input_texture_path = path
 	texture_in.texture = loaded_texture
 	last_tile_name = path.get_file().split(".")[0]
-	output_control.get_node("TileNameLabel").text = last_tile_name
+	output_block.get_node("Labels/TileNameLabel").text = last_tile_name
 	return path
 
 func load_template_texture(path: String) -> String:
@@ -763,8 +765,6 @@ func _on_CloseButton_pressed():
 	exit()
 	
 func _on_Save_pressed():
-#	if Const.DE
-	
 	save_file_dialog.popup_centered()
 
 func _on_Save2_pressed():
@@ -920,11 +920,12 @@ func update_output_bg_texture_scale():
 	var output_scale := Vector2(output_scale_factor, output_scale_factor)
 	out_bg_texture.rect_scale = output_scale
 	out_bg_texture.rect_size = output_control.rect_size / output_scale_factor
-	output_control.get_node("TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size]
+	output_block.get_node("Labels/TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size]
+	output_block.get_node("Labels").rect_size.x = output_block.get_node("Labels/TileSizeLabel").rect_size.x
 	debug_input_control.rect_min_size = get_debug_image_rect_size(generation_type_select.selected)
 	debug_input_texture_bg.rect_scale = output_scale
 	debug_input_texture_bg.rect_size = debug_input_control.rect_size / output_scale_factor
-	debug_input_control.get_node("TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size]
+	debug_preview.get_node("TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size]
 
 func _on_SizeOptionButton_item_selected(index):
 	update_output_bg_texture_scale()
