@@ -153,7 +153,7 @@ func get_template_path() -> String:
 	if custom_template_path != "":
 		return custom_template_path
 	else:
-		return get_default_template()
+		return Const.TEMPLATE_PATHS[template_type_select.selected]
 
 func capture_setting_values() -> Dictionary:
 	return {
