@@ -954,6 +954,11 @@ func block_ui():
 			node.disabled = true
 		if node is LineEdit:
 			node.editable = false
+		if node is Slider:
+			node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if node is Label:
+			node.add_color_override("font_color", Color(0.5,0.5,0.5))
+#			font_color = Color(0.5, 0.5, 0.5, 0.5)
 	
 func unblock_ui():
 	is_ui_blocked = false
@@ -963,6 +968,10 @@ func unblock_ui():
 				node.disabled = false
 			if node is LineEdit:
 				node.editable = true
+			if node is Slider:
+				node.mouse_filter = Control.MOUSE_FILTER_STOP
+			if node is Label:
+				node.add_color_override("font_color", Color(1.0, 1.0, 1.0))
 		if is_slider_changed:
 			preprocess_input_image()
 	is_slider_changed = false

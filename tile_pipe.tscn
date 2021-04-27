@@ -449,7 +449,9 @@ minimum - only central part is used"
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer"]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer" groups=[
+"blockable",
+]]
 margin_right = 210.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
@@ -482,7 +484,9 @@ Only matters if sides have some transparency."
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer"]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer" groups=[
+"blockable",
+]]
 margin_right = 210.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
