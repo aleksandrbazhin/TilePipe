@@ -77,15 +77,17 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
 
-enum TEMPLATE_TYPES {TEMPLATE_47, TEMPLATE_47_2, CUSTOM}
+enum TEMPLATE_TYPES {BLOB_47, BLOB_47x2, BLOB_47_MR_MICHAEL, CUSTOM}
 const TEMPLATE_TYPE_NAMES : Dictionary = {
-	TEMPLATE_TYPES.TEMPLATE_47: "Standard 3x3: 47",
-	TEMPLATE_TYPES.TEMPLATE_47_2: "Double 3x3: 47 (for more random)",
+	TEMPLATE_TYPES.BLOB_47: "Default blob 47",
+	TEMPLATE_TYPES.BLOB_47x2: "Double blob for random",
+	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "Big blob from @MrMichael",
 	TEMPLATE_TYPES.CUSTOM: "Custom blob 3x3"
 }
 const TEMPLATE_PATHS : Dictionary = {
-	TEMPLATE_TYPES.TEMPLATE_47: "res://generation_data/template_47.png",
-	TEMPLATE_TYPES.TEMPLATE_47_2: "res://generation_data/template_47_double.png",
+	TEMPLATE_TYPES.BLOB_47: "res://generation_data/template_47.png",
+	TEMPLATE_TYPES.BLOB_47x2: "res://generation_data/template_47_double.png",
+	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "res://generation_data/template_47_with_duplicates.png",
 	TEMPLATE_TYPES.CUSTOM: "res://"
 }
 
@@ -160,11 +162,11 @@ const DEFAULT_INPUT_TEXTURE_PATH: String = "res://generation_data/quarters_5.png
 const DEFAULT_SETTINGS: Dictionary = {
 	"last_texture_path": DEFAULT_INPUT_TEXTURE_PATH,
 	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
-	"last_template_path": TEMPLATE_PATHS[TEMPLATE_TYPES.TEMPLATE_47],
+	"last_template_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
 	"last_save_texture_path": "res://generated_tileset.png",
 	"last_save_texture_resource_path": "res://generated_tileset.tres",
 	"last_texture_file_dialog_path": DEFAULT_INPUT_TEXTURE_PATH,
-	"last_template_file_dialog_path": TEMPLATE_PATHS[TEMPLATE_TYPES.TEMPLATE_47],
+	"last_template_file_dialog_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
 	"output_tile_size": DEFAULT_OUTPUT_SIZE,
 	"input_type": 0,
 	"corner_preset": 0,

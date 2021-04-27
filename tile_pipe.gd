@@ -146,7 +146,7 @@ func get_generator_preset_path() -> String:
 	return path
 
 func get_default_template() -> String:
-	return Const.TEMPLATE_PATHS[Const.TEMPLATE_TYPES.TEMPLATE_47]
+	return Const.TEMPLATE_PATHS[Const.TEMPLATE_TYPES.BLOB_47]
 
 var custom_template_path: String = ""
 func get_template_path() -> String:
