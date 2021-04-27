@@ -109,10 +109,8 @@ func adjust_for_small_resolution():
 	if OS.get_screen_size().x < OS.window_size.x:
 		settings_container.rect_min_size = Vector2.ZERO
 		OS.window_maximized = true
-	
 
 func _process(_delta: float):
-	
 	if Input.is_action_just_pressed("ui_cancel"):
 		if texture_file_dialog.visible:
 			texture_file_dialog.hide()
@@ -216,10 +214,8 @@ func apply_settings(data: Dictionary):
 	overlay_merge_rate_slider.value = data["merge_level"]
 	overlay_overlap_slider.value = data["overlap_level"]
 	rand_seed_check.pressed = data["use_random_seed"]
-	if rand_seed_check.pressed:
-		rand_seed_use_button.disabled = false
-		rand_seed_value.editable = true
-		rand_seed_value.text = str(data["random_seed_value"])
+	set_random_ui_enabled(rand_seed_check.pressed)
+	rand_seed_value.text = str(int(data["random_seed_value"]))
 	setup_input_type(generation_type_select.selected)
 	update_output_bg_texture_scale()
 	
@@ -236,7 +232,6 @@ func load_settings():
 	var save_data: Dictionary = parse_json(save.get_line())
 	save.close()
 	apply_settings(save_data)
-	
 
 func check_input_texture() -> bool:
 	if not is_instance_valid(texture_in.texture):
@@ -385,17 +380,6 @@ func get_input_image_random_max_variants() -> int:
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
 	return int(max(1, input_image.get_size().y / input_slice_size))
 
-func setup_randomize_controls(is_enabled: bool):
-	if is_enabled:
-		if not is_ui_blocked:
-			rand_seed_check.disabled = false
-		if rand_seed_check.is_in_group("really_disabled"):
-			rand_seed_check.remove_from_group("really_disabled")
-	else:
-		rand_seed_check.add_to_group("really_disabled")
-		rand_seed_check.disabled = true
-		rand_seed_value.editable = false
-
 func generate_corner_slices():
 	input_slices = {}
 	var output_tile_size: int = get_output_tile_size()
@@ -404,7 +388,8 @@ func generate_corner_slices():
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
 	set_input_tile_size(input_slice_size * 2, input_image)
 	var input_max_random_variants: int = get_input_image_random_max_variants()
-	setup_randomize_controls(input_max_random_variants > 1)
+	var has_random: bool = input_max_random_variants > 1
+	set_random_ui_enabled(has_random)
 	var output_slice_size: int = int(output_tile_size / 2.0)
 	var resize_factor: float = float(output_slice_size) / float(input_slice_size)
 	var new_viewport_size := Vector2(input_slice_size, input_slice_size)
@@ -568,7 +553,8 @@ func generate_overlayed_tiles():
 	
 	
 	var max_random_variants: int = get_input_image_random_max_variants()
-	setup_randomize_controls(max_random_variants > 1)
+	var has_random: bool = max_random_variants > 1
+	set_random_ui_enabled(has_random)
 	if rand_seed_check.pressed:
 		var random_seed_int: int = int(rand_seed_value.text)
 		var random_seed = rand_seed(random_seed_int)
@@ -938,12 +924,17 @@ func block_ui():
 	for node in get_tree().get_nodes_in_group("blockable"):
 		if node is Button:
 			node.disabled = true
+		if node is LineEdit:
+			node.editable = false
 	
 func unblock_ui():
 	is_ui_blocked = false
 	for node in get_tree().get_nodes_in_group("blockable"):
-		if node is Button and not node.is_in_group("really_disabled"):
-			node.disabled = false
+		if not node.is_in_group("really_disabled"):
+			if node is Button:
+				node.disabled = false
+			if node is LineEdit:
+				node.editable = true
 		if is_slider_changed:
 			preprocess_input_image()
 	is_slider_changed = false
@@ -996,11 +987,36 @@ func _on_Smoothing_button_up():
 	preprocess_input_image()
 	save_settings()
 
+func set_random_ui_enabled(has_random: bool):
+	if has_random:
+		if not is_ui_blocked:
+			rand_seed_check.disabled = false
+		if rand_seed_check.is_in_group("really_disabled"):
+			rand_seed_check.remove_from_group("really_disabled")
+		set_random_seed_ui_enabled(rand_seed_check.pressed)
+	else:
+		rand_seed_check.disabled = true
+		rand_seed_check.add_to_group("really_disabled")
+		set_random_seed_ui_enabled(false)
+
+func set_random_seed_ui_enabled(is_enabled: bool):
+	if is_enabled:
+		if rand_seed_value.is_in_group("really_disabled"):
+			rand_seed_value.remove_from_group("really_disabled")
+		if rand_seed_use_button.is_in_group("really_disabled"):
+			rand_seed_use_button.remove_from_group("really_disabled")
+		if not is_ui_blocked:
+			rand_seed_value.editable = true
+			rand_seed_use_button.disabled = false
+	else:
+		rand_seed_value.editable = false
+		rand_seed_value.add_to_group("really_disabled")
+		rand_seed_use_button.disabled = true
+		rand_seed_use_button.add_to_group("really_disabled")
+
 func _on_RandomCheckButton_button_up():
-	var button_pressed: bool = rand_seed_check.pressed
-	rand_seed_value.editable = button_pressed
-	rand_seed_use_button.disabled = not button_pressed
-	if not button_pressed:
+	set_random_seed_ui_enabled(rand_seed_check.pressed)
+	if not rand_seed_check.pressed:
 		rng.randomize()
 	rebuild_output()
 	save_settings()

@@ -560,7 +560,9 @@ editable = false
 placeholder_text = "Integer value"
 placeholder_alpha = 0.4
 
-[node name="SeedButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/EditContainer"]
+[node name="SeedButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/EditContainer" groups=[
+"blockable",
+]]
 margin_left = 139.0
 margin_right = 210.0
 margin_bottom = 29.0
@@ -707,9 +709,10 @@ __meta__ = {
 
 [node name="SizeOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer" groups=[
 "blockable",
+"really_disabled",
 ]]
 margin_top = 25.0
-margin_right = 149.0
+margin_right = 145.0
 margin_bottom = 57.0
 rect_min_size = Vector2( 0, 32 )
 hint_tooltip = "Output tile are scaled up or down."
@@ -787,7 +790,7 @@ margin_left = 48.0
 margin_right = 904.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 390, 130 )
-hint_tooltip = "Template image"
+hint_tooltip = "Template image, numbers over tiles are recognized neighbour bitmasks (clockwise bits)"
 size_flags_horizontal = 3
 
 [node name="TemplateTextureRect" type="TextureRect" parent="Panel/HBox/Images/TemplateContainer/ScrollContainer"]
