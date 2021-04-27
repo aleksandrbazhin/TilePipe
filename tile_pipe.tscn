@@ -109,7 +109,7 @@ filters = PoolStringArray( "*.png ; PNG Images" )
 current_dir = "/Users/user/Documents/TilePipe"
 current_path = "/Users/user/Documents/TilePipe/"
 
-[node name="SaveTextureResourceDialog" type="FileDialog" parent="."]
+[node name="SaveGodotResourceDialog" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 600, 440 )
@@ -1127,7 +1127,7 @@ __meta__ = {
 [connection signal="file_selected" from="TextureDialog" to="." method="_on_TextureDialog_file_selected"]
 [connection signal="file_selected" from="TemplateDialog" to="." method="_on_TemplateDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureDialog" to="." method="_on_SaveTextureDialog_file_selected"]
-[connection signal="file_selected" from="SaveTextureResourceDialog" to="." method="_on_SaveTextureDialog2_file_selected"]
+[connection signal="file_selected" from="SaveGodotResourceDialog" to="." method="_on_SaveGodotResourceDialog_file_selected"]
 [connection signal="confirmed" from="PopupDialog" to="." method="_on_PopupDialog_confirmed"]
 [connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/LoadButton" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/ReloadButton" to="." method="_on_ReloadButton_pressed"]

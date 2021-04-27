@@ -9,7 +9,7 @@ onready var godot_resource_exporter := GodotExporter.new()
 onready var texture_file_dialog: FileDialog = $TextureDialog
 onready var template_file_dialog: FileDialog = $TemplateDialog
 onready var save_file_dialog: FileDialog = $SaveTextureDialog
-onready var save_resource_dialog: FileDialog = $SaveTextureResourceDialog
+onready var save_resource_dialog: FileDialog = $SaveGodotResourceDialog
 onready var popup_dialog: AcceptDialog = $PopupDialog
 
 onready var input_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxInput
@@ -75,6 +75,11 @@ var last_input_texture_path: String = ""
 var last_tile_name: String = ""
 var saved_texture_rects: Array = []
 var saved_tile_names: Array = []
+
+var input_file_dialog_path: String = ""
+var template_file_dialog_path: String = ""
+var save_png_file_dialog_path: String = ""
+var save_godot_tres_file_dialog_path: String = ""
 
 func _ready():
 	print("TilePipe v.%s running in Debug mode" % Const.VERSION)
@@ -150,10 +155,12 @@ func get_template_path() -> String:
 func capture_setting_values() -> Dictionary:
 	return {
 		"last_texture_path": last_input_texture_path,
+		"last_texture_file_dialog_path": input_file_dialog_path,
 		"last_gen_preset_path": get_generator_preset_path(),
 		"last_template_path": get_template_path(),
-		"last_save_texture_path": save_file_dialog.current_path,
-		"last_save_texture_resource_path": save_resource_dialog.current_path,
+		"last_template_file_dialog_path": template_file_dialog_path,
+		"last_save_texture_path": save_png_file_dialog_path,
+		"last_save_texture_resource_path": save_godot_tres_file_dialog_path,
 		"output_tile_size": get_output_tile_size(),
 		"input_type": generation_type_select.selected,
 		"corner_preset": corners_merge_type_select.selected,
@@ -195,17 +202,27 @@ func load_template_texture(path: String) -> String:
 	template_texture.texture = loaded_texture
 	return path
 
-func clear_path(path:String) -> String:
-	return path if not path.begins_with("res://") else OS.get_executable_path()
+func clear_path(path: String) -> String:
+	if path.begins_with("res://"):
+		return OS.get_executable_path().get_base_dir() + "/" + path.get_file()
+	else:
+		return path 
 	
-func apply_settings(data: Dictionary):
+func apply_saved_settings(data: Dictionary):
 	generation_data = GenerationData.new(data["last_gen_preset_path"])
-	var texture_path = load_input_texture(data["last_texture_path"])
-	texture_file_dialog.current_path = clear_path(texture_path)
-	var template_path = load_template_texture(data["last_template_path"])
-	template_file_dialog.current_path = clear_path(template_path)
+
+	# file dialogs
+	load_input_texture(data["last_texture_path"])
+	input_file_dialog_path = data["last_texture_file_dialog_path"]
+	texture_file_dialog.current_path = clear_path(data["last_texture_file_dialog_path"])
+	load_template_texture(data["last_template_path"])
+	template_file_dialog_path = data["last_template_path"]
+	template_file_dialog.current_path = clear_path(data["last_template_file_dialog_path"])
+	save_png_file_dialog_path = data["last_save_texture_path"]
 	save_file_dialog.current_path = clear_path(data["last_save_texture_path"])
+	save_godot_tres_file_dialog_path = data["last_save_texture_resource_path"]
 	save_resource_dialog.current_path = clear_path(data["last_save_texture_resource_path"])
+	
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
 	generation_type_select.selected = data["input_type"]
 	corners_merge_type_select.selected = data["corner_preset"]
@@ -218,7 +235,14 @@ func apply_settings(data: Dictionary):
 	rand_seed_value.text = str(int(data["random_seed_value"]))
 	setup_input_type(generation_type_select.selected)
 	update_output_bg_texture_scale()
-	
+
+func fix_settings_with_defaults(loaded_settings: Dictionary, defaults: Dictionary) -> Dictionary:
+	var fixed_settings: Dictionary = loaded_settings.duplicate(true)
+	for key in defaults.keys():
+		if not key in fixed_settings:
+			fixed_settings[key] = defaults[key]
+	return fixed_settings
+
 func settings_exist() -> bool:
 	var save = File.new()
 	return save.file_exists(Const.SETTINGS_PATH)
@@ -226,12 +250,16 @@ func settings_exist() -> bool:
 func load_settings():
 	if not settings_exist():
 		save_settings(true)
-	var save = File.new()
+	var save := File.new()
 	save.open(Const.SETTINGS_PATH, File.READ)
-#	print(save.get_line())
-	var save_data: Dictionary = parse_json(save.get_line())
+	var saved_data: Dictionary = Const.DEFAULT_SETTINGS
+	if save.get_len() > 0:
+		var settings = parse_json(save.get_line())
+		if typeof(settings) == TYPE_DICTIONARY:
+			saved_data = Dictionary(settings)
 	save.close()
-	apply_settings(save_data)
+	saved_data = fix_settings_with_defaults(saved_data, Const.DEFAULT_SETTINGS)
+	apply_saved_settings(saved_data)
 
 func check_input_texture() -> bool:
 	if not is_instance_valid(texture_in.texture):
@@ -776,13 +804,13 @@ func load_image_texture(path: String) -> Texture:
 		return image_texture
 
 func _on_TextureDialog_file_selected(path):
+	input_file_dialog_path = clear_path(path)
 	load_input_texture(path)
 	preprocess_input_image()
 	save_settings()
 
 func _on_TemplateDialog_file_selected(path):
-#	custom_template_path = path
-#	template_texture.texture = load_image_texture(path)
+	template_file_dialog_path = clear_path(path)
 	load_template_texture(path)
 	generate_tile_masks()
 	make_output_texture()
@@ -798,11 +826,13 @@ func save_texture_png(path: String):
 	out_texture.texture.get_data().save_png(path)
 
 func _on_SaveTextureDialog_file_selected(path):
+	save_png_file_dialog_path = path
 	save_texture_png(path)
 	save_settings()
 
-func _on_SaveTextureDialog2_file_selected(path: String):
-	var texture_path: String = save_file_dialog.current_path
+func _on_SaveGodotResourceDialog_file_selected(path):
+	save_godot_tres_file_dialog_path = path
+	var texture_path: String = save_png_file_dialog_path
 	if godot_resource_exporter.check_paths(path, texture_path):
 		godot_resource_exporter.save_resource(
 			path, 
@@ -833,8 +863,6 @@ func setup_input_type(index: int):
 				node.hide()
 			for node in get_tree().get_nodes_in_group("overlay_settings"):
 				node.show()
-
-
 	
 func _on_InputType_item_selected(index):
 	setup_input_type(index)
@@ -1036,4 +1064,3 @@ func report_error(error_text: String):
 
 func _on_PopupDialog_confirmed():
 	popup_dialog.dialog_text = ""
-
