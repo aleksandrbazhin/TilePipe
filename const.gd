@@ -1,7 +1,7 @@
 extends Node
 
 var VERSION: String = ProjectSettings.get_setting("application/config/version")
-var SETTINGS_PATH: String = "user://settings_v%s.sav" % VERSION
+var SETTINGS_PATH: String = "user://settings_v.%s.sav" % VERSION
 
 const OUTPUT_SIZES: Dictionary = {
 	8: "8x8",
@@ -20,7 +20,6 @@ const OUTPUT_SIZES: Dictionary = {
 }
 const TEMPLATE_TILE_SIZE: int = 32
 const DEFAULT_OUTPUT_SIZE: int = 64
-
 
 enum COLOR_PROCESS_TYPES {NO, FLOW_MAP}#, NORMAL_MAP
 const COLOR_PROCESS_TYPE_NAMES: Dictionary = {
@@ -62,9 +61,9 @@ enum OVERLAY_INPUT_PRESETS {
 const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
 #	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "Top down without corners (2 tiles)",
 #	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "Top down with corners (3 tiles)",
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "4 tiles, symmetry: topdown",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "4 tiles, symmetry: full",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "Sideview (6 tiles)",
-	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "8 tiles, symmetry: sideview",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "8 tiles, symmetry: left/right",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_13:"13 tiles, symmetry: no"
 }
 
