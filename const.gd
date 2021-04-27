@@ -169,6 +169,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"input_type": 0,
 	"corner_preset": 0,
 	"overlay_preset": 0,
+	"template_type": 0,
 	"smoothing": false,
 	"merge_level": DEFAULT_MERGE,
 	"overlap_level": DEFAULT_OVERLAP,

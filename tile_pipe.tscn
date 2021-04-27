@@ -809,30 +809,31 @@ __meta__ = {
 margin_left = 912.0
 margin_right = 1112.0
 margin_bottom = 130.0
+custom_constants/separation = 8
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/TemplateContainer/ButtonBox"]
 margin_right = 200.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 0, 32 )
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
 text = "Select template "
 align = 1
-valign = 1
+valign = 2
 
 [node name="TemplateOption" type="OptionButton" parent="Panel/HBox/Images/TemplateContainer/ButtonBox" groups=[
 "blockable",
 ]]
-margin_top = 36.0
+margin_top = 38.0
 margin_right = 200.0
-margin_bottom = 68.0
-rect_min_size = Vector2( 200, 32 )
+margin_bottom = 74.0
+rect_min_size = Vector2( 200, 36 )
 hint_tooltip = "Select one of the provided templates or if you want to use your own"
 text = "Template type"
 align = 1
 
 [node name="TemplateButton" type="Button" parent="Panel/HBox/Images/TemplateContainer/ButtonBox"]
-margin_top = 72.0
+margin_top = 82.0
 margin_right = 200.0
-margin_bottom = 112.0
+margin_bottom = 122.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 disabled = true

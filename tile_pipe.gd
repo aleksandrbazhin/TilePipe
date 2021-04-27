@@ -165,6 +165,7 @@ func capture_setting_values() -> Dictionary:
 		"input_type": generation_type_select.selected,
 		"corner_preset": corners_merge_type_select.selected,
 		"overlay_preset": overlay_merge_type_select.selected,
+		"template_type": template_type_select.selected,
 		"smoothing": smoothing_check.pressed,
 		"merge_level": overlay_merge_rate_slider.value,
 		"overlap_level": overlay_overlap_slider.value,
@@ -215,9 +216,14 @@ func apply_saved_settings(data: Dictionary):
 	load_input_texture(data["last_texture_path"])
 	input_file_dialog_path = data["last_texture_file_dialog_path"]
 	texture_file_dialog.current_path = clear_path(data["last_texture_file_dialog_path"])
+	
 	load_template_texture(data["last_template_path"])
 	template_file_dialog_path = data["last_template_path"]
 	template_file_dialog.current_path = clear_path(data["last_template_file_dialog_path"])
+	template_type_select.selected = data["template_type"]
+	if template_type_select.selected == template_type_select.get_item_count() - 1:
+		template_load_button.disabled = false
+	
 	save_png_file_dialog_path = data["last_save_texture_path"]
 	save_file_dialog.current_path = clear_path(data["last_save_texture_path"])
 	save_godot_tres_file_dialog_path = data["last_save_texture_resource_path"]
