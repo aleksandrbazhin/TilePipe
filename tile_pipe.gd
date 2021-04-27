@@ -16,19 +16,22 @@ onready var input_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBox
 onready var texure_input_container: Control = input_container.get_node("Control")
 onready var texture_in: TextureRect = texure_input_container.get_node("InputTextureRect")
 onready var texture_input_bg: TextureRect = texure_input_container.get_node("BGTextureRect")
-onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxContainer/InputType
-onready var example_texture: TextureRect = $Panel/HBox/Images/InContainer/VBoxContainer/ExampleBox/TextureRect
 
-onready var corners_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxContainer/CornersMergeSettings
+onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxPreset/HBoxHeader/InputType
+onready var presets_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxPreset
+
+onready var example_texture: TextureRect = presets_container.get_node("HBox/VBoxContainer/ExampleBox/TextureRect")
+
+onready var corners_merge_container: VBoxContainer = presets_container.get_node("HBox/VBoxContainer/CornersMergeSettings")
 onready var corners_merge_type_select: OptionButton = corners_merge_container.get_node("CornersOptionButton")
 
-onready var settings_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxSettings
+onready var settings_container: VBoxContainer = presets_container.get_node("HBox/VBoxSettings")
 onready var rand_seed_container: VBoxContainer = settings_container.get_node("RandomContainer")
 onready var rand_seed_check: CheckButton = rand_seed_container.get_node("HBoxContainer/RandomCheckButton")
 onready var rand_seed_value: LineEdit = rand_seed_container.get_node("EditContainer/SeedLineEdit")
 onready var rand_seed_use_button: Button = rand_seed_container.get_node("EditContainer/SeedButton")
 
-onready var overlay_merge_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxContainer/OverlaySettings
+onready var overlay_merge_container: VBoxContainer = presets_container.get_node("HBox/VBoxContainer/OverlaySettings")
 onready var overlay_merge_type_select: OptionButton = overlay_merge_container.get_node("OverlayOptionButton")
 
 onready var color_process_select: OptionButton = settings_container.get_node("ColorProcessContainer/ColorProcessType")
@@ -86,7 +89,6 @@ func _ready():
 #	OS.window_maximized = true
 #	rand_seed_check.disabled = true
 	rng.randomize()
-#	save_settings(true) # uncomment on change of save file structure
 	connect("input_image_processed", self, "make_output_texture")
 	godot_resource_exporter.connect("exporter_error", self, "report_error")
 	output_size_select.clear()
@@ -95,8 +97,10 @@ func _ready():
 	for type in Const.COLOR_PROCESS_TYPES:
 		color_process_select.add_item(Const.COLOR_PROCESS_TYPE_NAMES[Const.COLOR_PROCESS_TYPES[type]])
 	for type in Const.INPUT_TYPES:
-		generation_type_select.add_item(Const.INPUT_TYPE_NAMES[Const.INPUT_TYPES[type]])
-#	setup_input_type(Const.DEFAULT_INPUT_TYPE)
+		var input_type_name: String = Const.INPUT_TYPE_NAMES[Const.INPUT_TYPES[type]]
+		var input_type_icon: Texture = load("res://%s.png" % input_type_name.to_lower())
+		generation_type_select.add_icon_item(input_type_icon, input_type_name)
+
 	for type in Const.TEMPLATE_TYPES:
 		template_type_select.add_item(Const.TEMPLATE_TYPE_NAMES[Const.TEMPLATE_TYPES[type]])
 	for index in Const.CORNERS_INPUT_PRESETS:
@@ -106,7 +110,6 @@ func _ready():
 	load_settings()
 	generate_tile_masks()
 	preprocess_input_image()
-	
 #	adjust_for_small_resolution()
 
 # nihua eto ne rabotaet

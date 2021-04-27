@@ -30,7 +30,7 @@ const COLOR_PROCESS_TYPE_NAMES: Dictionary = {
 }
 enum INPUT_TYPES {CORNERS, OVERLAY}
 const INPUT_TYPE_NAMES : Dictionary = {
-	INPUT_TYPES.CORNERS: "Quarters merge",
+	INPUT_TYPES.CORNERS: "Quarters",
 	INPUT_TYPES.OVERLAY: "Overlay"
 }
 const DEFAULT_INPUT_TYPE: int = INPUT_TYPES.CORNERS
