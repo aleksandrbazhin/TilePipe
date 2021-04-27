@@ -156,7 +156,7 @@ size_flags_vertical = 3
 margin_right = 1112.0
 margin_bottom = 304.0
 rect_min_size = Vector2( 0, 300 )
-custom_constants/separation = 5
+custom_constants/separation = 8
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/InContainer"]
 margin_right = 40.0
@@ -176,138 +176,14 @@ custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
 text = "Input"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 45.0
-margin_right = 269.0
-margin_bottom = 304.0
-
-[node name="HeaderLabel" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
-margin_right = 224.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 220, 32 )
-hint_tooltip = "Setup the generation type"
-mouse_filter = 0
-custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
-text = "Preset"
-align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
-margin_top = 36.0
-margin_right = 224.0
-margin_bottom = 62.0
-rect_min_size = Vector2( 0, 26 )
-hint_tooltip = "Compose tile from quaters or from center, sides, and corners"
-mouse_filter = 1
-text = "Generation type"
-valign = 2
-
-[node name="InputType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxContainer" groups=[
-"blockable",
-]]
-margin_top = 66.0
-margin_right = 224.0
-margin_bottom = 98.0
-rect_min_size = Vector2( 0, 32 )
-hint_tooltip = "\"Quarters merge\" makes each tile from 4 quarters
-\"Overlay\" creates tiles from a center part, 4 sides and 4 corners"
-text = "Type"
-align = 1
-
-[node name="CornersMergeSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
-margin_top = 102.0
-margin_right = 224.0
-margin_bottom = 164.0
-
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer/CornersMergeSettings"]
-margin_right = 224.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 0, 26 )
-hint_tooltip = "How exactly compose the tiles from quarters"
-mouse_filter = 1
-text = "Generation preset"
-valign = 2
-
-[node name="CornersOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxContainer/CornersMergeSettings" groups=[
-"blockable",
-]]
-margin_top = 30.0
-margin_right = 224.0
-margin_bottom = 62.0
-rect_min_size = Vector2( 180, 32 )
-__meta__ = {
-"_editor_description_": "Presets have different amount of input tile fragments"
-}
-
-[node name="OverlaySettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
-margin_top = 168.0
-margin_right = 224.0
-margin_bottom = 230.0
-
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer/OverlaySettings"]
-margin_right = 224.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 0, 26 )
-hint_tooltip = "How exactly compose the tiles from centers, sides, and corners"
-mouse_filter = 1
-text = "Generation preset"
-valign = 2
-
-[node name="OverlayOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxContainer/OverlaySettings" groups=[
-"blockable",
-]]
-margin_top = 30.0
-margin_right = 224.0
-margin_bottom = 62.0
-rect_min_size = Vector2( 180, 32 )
-hint_tooltip = "Presets need different amount of input tile fragments and can use them differently"
-
-[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
-margin_top = 234.0
-margin_right = 224.0
-margin_bottom = 260.0
-rect_min_size = Vector2( 0, 26 )
-text = "Preset input texture example"
-valign = 2
-
-[node name="ExampleBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
-margin_top = 264.0
-margin_right = 224.0
-margin_bottom = 304.0
-__meta__ = {
-"_edit_use_anchors_": false,
-"_editor_description_": ""
-}
-
-[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxContainer/ExampleBox"]
-margin_right = 180.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 180, 40 )
-hint_tooltip = "Example input"
-expand = true
-stretch_mode = 5
-
-[node name="ExampleButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxContainer/ExampleBox" groups=[
-"blockable",
-]]
-margin_left = 184.0
-margin_right = 224.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-hint_tooltip = "Use the example texture for generation"
-text = "→"
-
 [node name="VBoxInput" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 274.0
-margin_right = 594.0
+margin_left = 48.0
+margin_right = 368.0
 margin_bottom = 304.0
 
 [node name="LoadButtonBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxInput"]
@@ -385,21 +261,148 @@ anchor_bottom = 1.0
 margin_left = -44.0
 margin_top = -20.0
 margin_bottom = -1.0
+grow_horizontal = 0
+size_flags_vertical = 1
 text = "64x64"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
+margin_left = 376.0
+margin_right = 600.0
+margin_bottom = 304.0
+
+[node name="HeaderLabel" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
+margin_right = 224.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 220, 32 )
+hint_tooltip = "Setup the generation type"
+mouse_filter = 0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
+text = "Preset"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 224.0
+margin_bottom = 62.0
+rect_min_size = Vector2( 0, 26 )
+hint_tooltip = "Compose tile from quaters or from center, sides, and corners"
+mouse_filter = 1
+text = " Generation type"
+valign = 2
+
+[node name="InputType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxContainer" groups=[
+"blockable",
+]]
+margin_top = 66.0
+margin_right = 224.0
+margin_bottom = 98.0
+rect_min_size = Vector2( 0, 32 )
+hint_tooltip = "\"Quarters merge\" makes each tile from 4 quarters
+\"Overlay\" creates tiles from a center part, 4 sides and 4 corners"
+text = "Type"
+align = 1
+
+[node name="CornersMergeSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
+margin_top = 102.0
+margin_right = 224.0
+margin_bottom = 164.0
+
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer/CornersMergeSettings"]
+margin_right = 224.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 26 )
+hint_tooltip = "How exactly compose the tiles from quarters"
+mouse_filter = 1
+text = " Quarters merge preset"
+valign = 2
+
+[node name="CornersOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxContainer/CornersMergeSettings" groups=[
+"blockable",
+]]
+margin_top = 30.0
+margin_right = 224.0
+margin_bottom = 62.0
+rect_min_size = Vector2( 180, 32 )
+__meta__ = {
+"_editor_description_": "Presets have different amount of input tile fragments"
+}
+
+[node name="OverlaySettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
+margin_top = 168.0
+margin_right = 224.0
+margin_bottom = 230.0
+
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer/OverlaySettings"]
+margin_right = 224.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 26 )
+hint_tooltip = "How exactly compose the tiles from centers, sides, and corners"
+mouse_filter = 1
+text = " Overlay preset"
+valign = 2
+
+[node name="OverlayOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxContainer/OverlaySettings" groups=[
+"blockable",
+]]
+margin_top = 30.0
+margin_right = 224.0
+margin_bottom = 62.0
+rect_min_size = Vector2( 180, 32 )
+hint_tooltip = "Presets need different amount of input tile fragments and can use them differently"
+
+[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
+margin_top = 234.0
+margin_right = 224.0
+margin_bottom = 260.0
+rect_min_size = Vector2( 0, 26 )
+text = " Preset input texture example"
+valign = 2
+
+[node name="ExampleBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxContainer"]
+margin_top = 264.0
+margin_right = 224.0
+margin_bottom = 304.0
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": ""
+}
+
+[node name="ExampleButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxContainer/ExampleBox" groups=[
+"blockable",
+]]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+hint_tooltip = "Use the example texture for generation"
+text = "←"
+
+[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxContainer/ExampleBox"]
+margin_left = 44.0
+margin_right = 224.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 180, 40 )
+hint_tooltip = "Example input"
+expand = true
+stretch_mode = 5
+
 [node name="VBoxSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 599.0
-margin_right = 819.0
+margin_left = 608.0
+margin_right = 818.0
 margin_bottom = 304.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings"]
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 220, 32 )
+rect_min_size = Vector2( 210, 32 )
 hint_tooltip = "Setup the detail specific to the preset you've chosen"
 mouse_filter = 0
 custom_fonts/font = SubResource( 1 )
@@ -438,7 +441,7 @@ align = 1
 "overlay_settings",
 ]]
 margin_top = 36.0
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 82.0
 hint_tooltip = "How much of the corners and sides \"take\" of  the central part:
 maximum - no central part used,
@@ -447,17 +450,17 @@ size_flags_horizontal = 3
 alignment = 2
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer"]
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
-text = "Merge amount"
+text = " Merge amount"
 valign = 2
 
 [node name="RateSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer" groups=[
 "blockable",
 ]]
 margin_top = 30.0
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 46.0
 focus_mode = 0
 max_value = 0.5
@@ -472,7 +475,7 @@ script = ExtResource( 3 )
 "overlay_settings",
 ]]
 margin_top = 86.0
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 162.0
 hint_tooltip = "How much of the central part will be “shoved” under the corners and side. 
 Only matters if sides have some transparency."
@@ -480,17 +483,17 @@ size_flags_horizontal = 3
 alignment = 2
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer"]
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
-text = "Overlap amount"
+text = " Overlap amount"
 valign = 2
 
 [node name="OverlapSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer" groups=[
 "blockable",
 ]]
 margin_top = 30.0
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 46.0
 focus_mode = 0
 max_value = 0.5
@@ -503,7 +506,7 @@ script = ExtResource( 3 )
 
 [node name="Separator" type="Control" parent="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer"]
 margin_top = 50.0
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 76.0
 rect_min_size = Vector2( 24, 26 )
 
@@ -512,7 +515,7 @@ rect_min_size = Vector2( 24, 26 )
 "overlay_settings",
 ]]
 margin_top = 166.0
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 239.0
 hint_tooltip = "If you have multiple rows in your input image, the result will be randomized. 
 Randomisation is enabled if the aspect ratio of the input image together with the chosen preset
@@ -520,7 +523,7 @@ suggest that the input image has multiple rows.
 (i.e. more than 1:4 for 4-part preset)"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer"]
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 40.0
 
 [node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/HBoxContainer"]
@@ -537,17 +540,18 @@ valign = 1
 margin_left = 115.0
 margin_right = 191.0
 margin_bottom = 40.0
+shortcut_in_tooltip = false
 
 [node name="EditContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer"]
 margin_top = 44.0
-margin_right = 220.0
+margin_right = 210.0
 margin_bottom = 73.0
 custom_constants/separation = 0
 
 [node name="SeedLineEdit" type="LineEdit" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/EditContainer" groups=[
 "blockable",
 ]]
-margin_right = 149.0
+margin_right = 139.0
 margin_bottom = 29.0
 hint_tooltip = "Use some interger seed to have consistent randomization result. "
 size_flags_horizontal = 3
@@ -557,8 +561,8 @@ placeholder_text = "Integer value"
 placeholder_alpha = 0.4
 
 [node name="SeedButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxSettings/RandomContainer/EditContainer"]
-margin_left = 149.0
-margin_right = 220.0
+margin_left = 139.0
+margin_right = 210.0
 margin_bottom = 29.0
 disabled = true
 text = "Use seed"
@@ -567,7 +571,7 @@ __meta__ = {
 }
 
 [node name="Preview" type="Control" parent="Panel/HBox/Images/InContainer"]
-margin_left = 824.0
+margin_left = 826.0
 margin_right = 1112.0
 margin_bottom = 304.0
 size_flags_horizontal = 3
@@ -669,9 +673,9 @@ stretch_mode = 3
 [node name="ImageSettings" type="ColorRect" parent="Panel/HBox/Images/InContainer/Preview"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -172.0
+margin_left = -169.0
 margin_top = 4.0
-margin_right = -12.0
+margin_right = -9.0
 margin_bottom = 124.0
 color = Color( 0.141176, 0.168627, 0.203922, 0.866667 )
 __meta__ = {
@@ -721,6 +725,7 @@ margin_top = 63.0
 margin_right = 149.0
 margin_bottom = 103.0
 hint_tooltip = "Disable for pixelart, enable for anitaliased."
+shortcut_in_tooltip = false
 text = "Smoothing"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -752,6 +757,7 @@ margin_top = 324.0
 margin_right = 1112.0
 margin_bottom = 454.0
 size_flags_horizontal = 3
+custom_constants/separation = 8
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/TemplateContainer"]
 margin_right = 40.0
@@ -771,29 +777,55 @@ custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
 text = "Template"
 align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/TemplateContainer"]
+margin_left = 48.0
+margin_right = 904.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 390, 130 )
+hint_tooltip = "Template image"
+size_flags_horizontal = 3
+
+[node name="TemplateTextureRect" type="TextureRect" parent="Panel/HBox/Images/TemplateContainer/ScrollContainer"]
+margin_bottom = 130.0
+size_flags_vertical = 3
+theme = SubResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ButtonBox" type="VBoxContainer" parent="Panel/HBox/Images/TemplateContainer"]
-margin_left = 44.0
-margin_right = 244.0
+margin_left = 912.0
+margin_right = 1112.0
 margin_bottom = 130.0
+
+[node name="Label" type="Label" parent="Panel/HBox/Images/TemplateContainer/ButtonBox"]
+margin_right = 200.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "Select template "
+align = 1
+valign = 1
 
 [node name="TemplateOption" type="OptionButton" parent="Panel/HBox/Images/TemplateContainer/ButtonBox" groups=[
 "blockable",
 ]]
+margin_top = 36.0
 margin_right = 200.0
-margin_bottom = 32.0
+margin_bottom = 68.0
 rect_min_size = Vector2( 200, 32 )
 hint_tooltip = "Select one of the provided templates or if you want to use your own"
 text = "Template type"
 align = 1
 
 [node name="TemplateButton" type="Button" parent="Panel/HBox/Images/TemplateContainer/ButtonBox"]
-margin_top = 36.0
+margin_top = 72.0
 margin_right = 200.0
-margin_bottom = 76.0
+margin_bottom = 112.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 disabled = true
@@ -804,6 +836,7 @@ __meta__ = {
 }
 
 [node name="MoreTemplateControls" type="VBoxContainer" parent="Panel/HBox/Images/TemplateContainer"]
+visible = false
 margin_left = 248.0
 margin_right = 368.0
 margin_bottom = 130.0
@@ -818,22 +851,6 @@ margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 text = "Reload ↻"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/TemplateContainer"]
-margin_left = 372.0
-margin_right = 1112.0
-margin_bottom = 130.0
-rect_min_size = Vector2( 390, 130 )
-hint_tooltip = "Template image"
-size_flags_horizontal = 3
-
-[node name="TemplateTextureRect" type="TextureRect" parent="Panel/HBox/Images/TemplateContainer/ScrollContainer"]
-margin_bottom = 130.0
-size_flags_vertical = 3
-theme = SubResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="HSeparator2" type="HSeparator" parent="Panel/HBox/Images"]
 margin_top = 458.0
 margin_right = 1112.0
@@ -847,6 +864,7 @@ margin_bottom = 754.0
 rect_min_size = Vector2( 0, 280 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_constants/separation = 8
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
@@ -869,12 +887,13 @@ custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
 text = "Result"
 align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Output" type="Control" parent="Panel/HBox/Images/OutputContainer"]
-margin_left = 44.0
+margin_left = 48.0
 margin_right = 1112.0
 margin_bottom = 280.0
 size_flags_horizontal = 3
@@ -890,7 +909,7 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer"]
-margin_right = 1068.0
+margin_right = 1064.0
 margin_bottom = 280.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1107,12 +1126,12 @@ __meta__ = {
 [connection signal="file_selected" from="SaveTextureDialog" to="." method="_on_SaveTextureDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureResourceDialog" to="." method="_on_SaveTextureDialog2_file_selected"]
 [connection signal="confirmed" from="PopupDialog" to="." method="_on_PopupDialog_confirmed"]
+[connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/LoadButton" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/ReloadButton" to="." method="_on_ReloadButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxContainer/InputType" to="." method="_on_InputType_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxContainer/CornersMergeSettings/CornersOptionButton" to="." method="_on_CornersOptionButton_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxContainer/OverlaySettings/OverlayOptionButton" to="." method="_on_OverlayOptionButton_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxContainer/ExampleBox/ExampleButton" to="." method="_on_ExampleButton_pressed"]
-[connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/LoadButton" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/ReloadButton" to="." method="_on_ReloadButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxSettings/ColorProcessContainer/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
 [connection signal="released" from="Panel/HBox/Images/InContainer/VBoxSettings/HSliderContainer/RateSlider" to="." method="_on_RateSlider_released"]
 [connection signal="released" from="Panel/HBox/Images/InContainer/VBoxSettings/OverlapSliderContainer/OverlapSlider" to="." method="_on_OverlapSlider_released"]
