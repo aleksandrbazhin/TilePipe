@@ -13,9 +13,9 @@ onready var save_resource_dialog: FileDialog = $SaveGodotResourceDialog
 onready var popup_dialog: AcceptDialog = $PopupDialog
 
 onready var input_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxInput
-onready var texure_input_container: Control = input_container.get_node("Control")
-onready var texture_in: TextureRect = texure_input_container.get_node("InputTextureRect")
-onready var texture_input_bg: TextureRect = texure_input_container.get_node("BGTextureRect")
+onready var texture_input_container: Control = input_container.get_node("Control")
+onready var texture_in: TextureRect = texture_input_container.get_node("InputTextureRect")
+onready var texture_input_bg: TextureRect = texture_input_container.get_node("BGTextureRect")
 
 onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxPreset/HBoxHeader/InputType
 onready var presets_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxPreset
@@ -49,9 +49,12 @@ onready var overlay_texture_in_viewport: TextureRect = overlay_viewport.get_node
 onready var overlay_merge_rate_slider: HSlider = settings_container.get_node("HSliderContainer/RateSlider")
 onready var overlay_overlap_slider: HSlider = settings_container.get_node("OverlapSliderContainer/OverlapSlider")
 
-onready var template_load_button : Button = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton
-onready var template_type_select: OptionButton = $Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption
-onready var template_texture: TextureRect = $Panel/HBox/Images/TemplateContainer/ScrollContainer/TemplateTextureRect
+onready var template_container: HBoxContainer = $Panel/HBox/Images/TemplateContainer
+onready var template_load_button : Button = template_container.get_node("ButtonBox/TemplateButton")
+onready var template_type_select: OptionButton = template_container.get_node("ButtonBox/TemplateOption")
+onready var template_scroll: ScrollContainer = template_container.get_node("ScrollContainer")
+onready var template_texture: TextureRect = template_scroll.get_node("TemplateTextureRect")
+onready var template_texture_name: Label = template_container.get_node("NameControl/TemplateNameLabel")
 
 onready var output_block: Control = $Panel/HBox/Images/OutputContainer/Output
 onready var output_scroll: ScrollContainer = output_block.get_node("ScrollContainer")
@@ -204,6 +207,10 @@ func load_template_texture(path: String) -> String:
 		loaded_texture = load_image_texture(path)
 	custom_template_path = path
 	template_texture.texture = loaded_texture
+	var template_name: String = path.get_file()
+#	if path.begins_with("res://"):
+#		template_name = # we need to invert the path of loaded template to get name
+	template_texture_name.text =  template_name
 	return path
 
 func clear_path(path: String) -> String:
@@ -221,12 +228,17 @@ func apply_saved_settings(data: Dictionary):
 	texture_file_dialog.current_path = clear_path(data["last_texture_file_dialog_path"])
 	
 	load_template_texture(data["last_template_path"])
-	template_file_dialog_path = data["last_template_path"]
+	template_file_dialog_path = data["last_template_file_dialog_path"]
 	template_file_dialog.current_path = clear_path(data["last_template_file_dialog_path"])
 	template_type_select.selected = data["template_type"]
 	if template_type_select.selected == template_type_select.get_item_count() - 1:
 		template_load_button.disabled = false
-	
+		if template_load_button.is_in_group("really_disabled"):
+			template_load_button.remove_from_group("really_disabled")
+	else:
+		template_load_button.disabled = true
+		template_load_button.add_to_group("really_disabled")
+
 	save_png_file_dialog_path = data["last_save_texture_path"]
 	save_file_dialog.current_path = clear_path(data["last_save_texture_path"])
 	save_godot_tres_file_dialog_path = data["last_save_texture_resource_path"]
@@ -398,15 +410,15 @@ func snap_down_to_po2(x: float) -> float:
 func set_input_tile_size(input_tile_size: int, input_image: Image):
 #	input_tile_size_vector = Vector2(input_tile_size, input_tile_size)
 	var input_size: Vector2 = input_image.get_size()
-	var x_scale: float = texure_input_container.rect_size.x / input_size.x
-	var y_scale: float = texure_input_container.rect_size.y / input_size.y
+	var x_scale: float = texture_input_container.rect_size.x / input_size.x
+	var y_scale: float = texture_input_container.rect_size.y / input_size.y
 	var scale_factor: float = min(x_scale, y_scale)
 	scale_factor = snap_down_to_po2(scale_factor)
 	texture_in.rect_scale = Vector2(scale_factor, scale_factor)
 	var bg_scale = scale_factor * float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
-	texture_input_bg.rect_size = texure_input_container.rect_size / bg_scale
+	texture_input_bg.rect_size = texture_input_container.rect_size / bg_scale
 	texture_input_bg.rect_scale = Vector2(bg_scale, bg_scale)
-	texure_input_container.get_node("TileSizeLabel").text = "%sx%s" % [input_tile_size, input_tile_size]
+	texture_input_container.get_node("TileSizeLabel").text = "%sx%spx" % [input_tile_size, input_tile_size]
 
 func get_output_tile_size() -> int:
 	return Const.OUTPUT_SIZES.keys()[output_size_select.selected]
@@ -889,15 +901,20 @@ func _on_ReloadButton_pressed():
 func _on_TemplateOption_item_selected(index):
 	if index == Const.TEMPLATE_TYPES.CUSTOM:
 		template_load_button.disabled = false
-		template_texture.texture = null
-		template_texture.rect_size = Vector2.ZERO
-		output_scroll.get_v_scrollbar().rect_size.x = 0
-		output_scroll.get_v_scrollbar().rect_size.y = 0
-		clear_generation_mask()
+		if template_load_button.is_in_group("really_disabled"):
+			template_load_button.remove_from_group("really_disabled")
+#		template_texture.texture = null
+#		template_texture.rect_size = Vector2.ZERO
+#		output_scroll.get_v_scrollbar().rect_size.x = 0
+#		output_scroll.get_v_scrollbar().rect_size.y = 0
+#		clear_generation_mask()
+#		custom_template_path = ""
 	else:
-		custom_template_path = ""
 		template_load_button.disabled = true
-		template_texture.texture = load_image_texture(Const.TEMPLATE_PATHS[index])
+		template_load_button.add_to_group("really_disabled")
+		load_template_texture(Const.TEMPLATE_PATHS[index])
+#		custom_template_path = ""
+#		template_texture.texture = load_image_texture(Const.TEMPLATE_PATHS[index])
 		generate_tile_masks()
 	make_output_texture()
 	save_settings()
@@ -944,7 +961,7 @@ func update_output_bg_texture_scale():
 	var output_scale := Vector2(output_scale_factor, output_scale_factor)
 	out_bg_texture.rect_scale = output_scale
 	out_bg_texture.rect_size = output_control.rect_size / output_scale_factor
-	output_block.get_node("Labels/TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size]
+	output_block.get_node("Labels/TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size] + "px"
 	output_block.get_node("Labels").rect_size.x = output_block.get_node("Labels/TileSizeLabel").rect_size.x
 	debug_input_control.rect_min_size = get_debug_image_rect_size(generation_type_select.selected)
 	debug_input_texture_bg.rect_scale = output_scale

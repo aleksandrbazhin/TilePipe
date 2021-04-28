@@ -4,6 +4,7 @@ var VERSION: String = ProjectSettings.get_setting("application/config/version")
 var SETTINGS_PATH: String = "user://settings_v.%s.sav" % VERSION
 
 const OUTPUT_SIZES: Dictionary = {
+#	0: "No scaling",
 	8: "8x8",
 	10: "10x10",
 	16: "16x16",
@@ -78,10 +79,10 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 
 enum TEMPLATE_TYPES {BLOB_47, BLOB_47x2, BLOB_47_MR_MICHAEL, CUSTOM}
 const TEMPLATE_TYPE_NAMES : Dictionary = {
-	TEMPLATE_TYPES.BLOB_47: "Default blob 47",
+	TEMPLATE_TYPES.BLOB_47: "Default blob of 47",
 	TEMPLATE_TYPES.BLOB_47x2: "Double blob for random",
 	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "Big blob from @MrMichael",
-	TEMPLATE_TYPES.CUSTOM: "Custom blob 3x3"
+	TEMPLATE_TYPES.CUSTOM: "Custom"
 }
 const TEMPLATE_PATHS : Dictionary = {
 	TEMPLATE_TYPES.BLOB_47: "res://generation_data/template_47.png",
