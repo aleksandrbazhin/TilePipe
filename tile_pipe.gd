@@ -20,7 +20,7 @@ onready var texture_input_bg: TextureRect = texure_input_container.get_node("BGT
 onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxPreset/HBoxHeader/InputType
 onready var presets_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxPreset
 
-onready var example_texture: TextureRect = presets_container.get_node("HBox/VBoxContainer/ExampleBox/TextureRect")
+onready var example_texture: TextureRect = presets_container.get_node("HBox/VBoxContainer/ExampleContainer/ExampleBox/TextureRect")
 
 onready var corners_merge_container: VBoxContainer = presets_container.get_node("HBox/VBoxContainer/CornersMergeSettings")
 onready var corners_merge_type_select: OptionButton = corners_merge_container.get_node("CornersOptionButton")
