@@ -42,9 +42,9 @@ onready var debug_input_control: Control = debug_input_scroll.get_node("Control"
 onready var debug_input_texture: TextureRect = debug_input_control.get_node("DebugTexture")
 onready var debug_input_texture_bg: TextureRect = debug_input_control.get_node("BGTextureRect")
 
-onready var rotate_viewport: Viewport = debug_input_control.get_node("InViewportContainer/Viewport")
+onready var rotate_viewport: Viewport = debug_input_control.get_node("QuartersViewport")
 onready var rotated_texture_in_viewport: TextureRect = rotate_viewport.get_node("TextureRect")
-onready var overlay_viewport: Viewport = debug_input_control.get_node("OverlayViewportContainer/Viewport")
+onready var overlay_viewport: Viewport = debug_input_control.get_node("OverlayViewport")
 onready var overlay_texture_in_viewport: TextureRect = overlay_viewport.get_node("TextureRect")
 onready var overlay_merge_rate_slider: HSlider = settings_container.get_node("HSliderContainer/RateSlider")
 onready var overlay_overlap_slider: HSlider = settings_container.get_node("OverlapSliderContainer/OverlapSlider")
@@ -96,7 +96,7 @@ func _ready():
 	rng.randomize()
 	connect("input_image_processed", self, "make_output_texture")
 	output_offset_spinbox.get_line_edit().connect("text_entered", self, "offset_lineedit_enter")
-	
+
 	godot_resource_exporter.connect("exporter_error", self, "report_error")
 	output_size_select.clear()
 	for size in Const.OUTPUT_SIZES:
@@ -119,12 +119,6 @@ func _ready():
 	preprocess_input_image()
 #	adjust_for_small_resolution()
 
-# nihua eto ne rabotaet
-func adjust_for_small_resolution():
-	if OS.get_screen_size().x < OS.window_size.x:
-		settings_container.rect_min_size = Vector2.ZERO
-		OS.window_maximized = true
-
 func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
 		if texture_file_dialog.visible:
@@ -139,6 +133,16 @@ func _process(_delta: float):
 			popup_dialog.hide()
 		else:
 			exit()
+
+func _notification(what):
+	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
+		exit()
+
+# nihua eto ne rabotaet
+func adjust_for_small_resolution():
+	if OS.get_screen_size().x < OS.window_size.x:
+		settings_container.rect_min_size = Vector2.ZERO
+		OS.window_maximized = true
 
 var last_generator_preset_path: String = ""
 func get_generator_preset_path() -> String:
@@ -226,7 +230,7 @@ func clear_path(path: String) -> String:
 		return OS.get_executable_path().get_base_dir() + "/" + path.get_file()
 	else:
 		return path 
-	
+
 func apply_saved_settings(data: Dictionary):
 	generation_data = GenerationData.new(data["last_gen_preset_path"])
 
@@ -234,7 +238,7 @@ func apply_saved_settings(data: Dictionary):
 	load_input_texture(data["last_texture_path"])
 	input_file_dialog_path = data["last_texture_file_dialog_path"]
 	texture_file_dialog.current_path = clear_path(data["last_texture_file_dialog_path"])
-	
+
 	load_template_texture(data["last_template_path"])
 	template_file_dialog_path = data["last_template_file_dialog_path"]
 	template_file_dialog.current_path = clear_path(data["last_template_file_dialog_path"])
@@ -251,7 +255,7 @@ func apply_saved_settings(data: Dictionary):
 	save_file_dialog.current_path = clear_path(data["last_save_texture_path"])
 	save_godot_tres_file_dialog_path = data["last_save_texture_resource_path"]
 	save_resource_dialog.current_path = clear_path(data["last_save_texture_resource_path"])
-	
+
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
 	generation_type_select.selected = data["input_type"]
 	corners_merge_type_select.selected = data["corner_preset"]
@@ -264,7 +268,7 @@ func apply_saved_settings(data: Dictionary):
 	rand_seed_value.text = str(int(data["random_seed_value"]))
 	output_tile_offset = int(data["output_tile_offset"])
 	output_offset_spinbox.value = output_tile_offset
-	
+
 	setup_input_type(generation_type_select.selected)
 	update_output_bg_texture_scale()
 
@@ -627,7 +631,7 @@ func generate_overlayed_tiles():
 	var input_image: Image = texture_in.texture.get_data()
 	var min_input_tiles: Vector2 = generation_data.get_min_input_size()
 	var input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
-	
+
 	set_input_tile_size(input_tile_size, input_image)
 	# warning-ignore:integer_division
 	overlay_merge_rate_slider.quantize(int(input_tile_size / 2))
@@ -1070,10 +1074,6 @@ func _on_ExampleButton_pressed():
 	load_input_texture(generation_data.get_example_path())
 	preprocess_input_image()
 	save_settings()
-
-func _notification(what):
-	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
-		exit()
 
 func _on_OverlapSlider_released(value):
 	if not is_ui_blocked:

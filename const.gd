@@ -1,6 +1,5 @@
 extends Node
 
-
 const SETTINGS_PATH: String = "user://user_settings.sav"
 # version comparison works in godot due to str comparison (is_str_les() in ustring.h)
 const MIN_SETTINGS_COMPATIBLE_VERSION: String = "0.2"
