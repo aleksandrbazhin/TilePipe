@@ -1,7 +1,10 @@
 extends Node
 
-var VERSION: String = ProjectSettings.get_setting("application/config/version")
-var SETTINGS_PATH: String = "user://settings_v.%s.sav" % VERSION
+
+const SETTINGS_PATH: String = "user://user_settings.sav"
+# version comparison works in godot due to str comparison (is_str_les() in ustring.h)
+const MIN_SETTINGS_COMPATIBLE_VERSION: String = "0.2"
+
 
 const OUTPUT_SIZES: Dictionary = {
 #	0: "No scaling",
@@ -159,7 +162,12 @@ const DEFAULT_MERGE: float = 0.25
 const DEFAULT_OVERLAP: float = 0.25
 const DEFAULT_INPUT_TEXTURE_PATH: String = "res://generation_data/quarters_5.png"
 
+# IMPORTANT!
+# When some setting kind radically changes, 
+# change MIN_SETTINGS_COMPATIBLE_VERSION to current version from override.cfg.
+# Adding new setting does not require MIN_SETTINGS_COMPATIBLE_VERSION change
 const DEFAULT_SETTINGS: Dictionary = {
+	"program_version": "0.2",
 	"last_texture_path": DEFAULT_INPUT_TEXTURE_PATH,
 	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
 	"last_template_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],

@@ -2,7 +2,7 @@ extends Control
 
 signal input_image_processed()
 
-#const INPUT_COONTAINER_DEFAULT_SIZE := Vector2(192, 192)
+var VERSION: String = ProjectSettings.get_setting("application/config/version")
 
 onready var godot_resource_exporter := GodotExporter.new()
 
@@ -88,7 +88,7 @@ var save_png_file_dialog_path: String = ""
 var save_godot_tres_file_dialog_path: String = ""
 
 func _ready():
-	print("TilePipe v.%s running in Debug mode" % Const.VERSION)
+	print("TilePipe v.%s running in Debug mode" % VERSION)
 #	OS.window_maximized = true
 #	rand_seed_check.disabled = true
 	rng.randomize()
@@ -160,6 +160,7 @@ func get_template_path() -> String:
 
 func capture_setting_values() -> Dictionary:
 	return {
+		"program_version": VERSION,
 		"last_texture_path": last_input_texture_path,
 		"last_texture_file_dialog_path": input_file_dialog_path,
 		"last_gen_preset_path": get_generator_preset_path(),
@@ -183,8 +184,10 @@ func save_settings(store_defaults: bool = false):
 	var save = File.new()
 	save.open(Const.SETTINGS_PATH, File.WRITE)
 	var data := Const.DEFAULT_SETTINGS
-	if not store_defaults:
-		data = capture_setting_values() 
+	if store_defaults:
+		data["program_version"] = VERSION
+	else:
+		data = capture_setting_values()
 	save.store_line(to_json(data))
 	save.close()
 
@@ -268,18 +271,27 @@ func settings_exist() -> bool:
 	var save = File.new()
 	return save.file_exists(Const.SETTINGS_PATH)
 
+# User settings must have "program version" bigger than 
+# Const.MIN_SETTINGS_COMPATIBLE_VERSION otherwise Const.DEFAULT_SETTINGS are used.
+# If settings data doesn't have some value, then it is populated with 
+# value from Const.DEFAULT_SETTINGS, it is not considered incompatibility.
 func load_settings():
 	if not settings_exist():
 		save_settings(true)
 	var save := File.new()
 	save.open(Const.SETTINGS_PATH, File.READ)
-	var saved_data: Dictionary = Const.DEFAULT_SETTINGS
+	var saved_data: Dictionary = {}
 	if save.get_len() > 0:
 		var settings = parse_json(save.get_line())
 		if typeof(settings) == TYPE_DICTIONARY:
 			saved_data = Dictionary(settings)
 	save.close()
 	saved_data = fix_settings_with_defaults(saved_data, Const.DEFAULT_SETTINGS)
+	# settings are incompatible: revert to defaults
+	if saved_data["program_version"] < Const.MIN_SETTINGS_COMPATIBLE_VERSION:
+		saved_data = Const.DEFAULT_SETTINGS
+		save_settings(true)
+		print("Incopmatible settings: Reverting to default settings")
 	apply_saved_settings(saved_data)
 
 func check_input_texture() -> bool:
