@@ -639,6 +639,8 @@ size_flags_vertical = 3
 [node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 1.41425
+margin_bottom = 1.41425
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource( 7 )
@@ -773,23 +775,6 @@ margin_bottom = 103.0
 hint_tooltip = "Disable for pixelart, enable for anitaliased."
 shortcut_in_tooltip = false
 text = "Smoothing"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/InContainer/Preview"]
-visible = false
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -48.0
-margin_top = -20.0
-margin_right = -4.00003
-margin_bottom = -1.0
-grow_horizontal = 0
-text = "64x64"
-align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }

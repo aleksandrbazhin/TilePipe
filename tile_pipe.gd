@@ -432,8 +432,20 @@ func set_input_tile_size(input_tile_size: int, input_image: Image):
 	texture_input_bg.rect_scale = Vector2(bg_scale, bg_scale)
 	texture_input_container.get_node("TileSizeLabel").text = "%sx%spx" % [input_tile_size, input_tile_size]
 
+func get_output_size_with_no_scaling() -> int:
+	var input_image: Image = texture_in.texture.get_data()
+	var min_input_parts: Vector2 = generation_data.get_min_input_size()
+	var input_size: int = int(input_image.get_size().x / min_input_parts.x)
+	var generation_type: int = generation_type_select.selected
+	if generation_type == Const.INPUT_TYPES.CORNERS:
+		input_size *= 2
+	return input_size
+
 func get_output_tile_size() -> int:
-	return Const.OUTPUT_SIZES.keys()[output_size_select.selected]
+	var scale_to: int = Const.OUTPUT_SIZES.keys()[output_size_select.selected]
+	if scale_to == Const.NO_SCALING :
+		scale_to = get_output_size_with_no_scaling()
+	return scale_to
 
 func get_input_image_random_max_variants() -> int:
 	var input_image: Image = texture_in.texture.get_data()
@@ -730,6 +742,7 @@ func make_from_overlayed():
 
 func preprocess_input_image():
 	block_ui()
+	
 	rotated_texture_in_viewport.show()
 	if not check_input_texture():
 		report_error("Error: Wrong input texture")
@@ -760,6 +773,7 @@ func make_output_texture():
 			make_from_corners()
 		Const.INPUT_TYPES.OVERLAY:
 			make_from_overlayed()
+	update_output_bg_texture_scale()
 	
 	
 func rotate_ccw(in_rot: int, quarters: int = 1) -> int:
@@ -973,15 +987,14 @@ func update_output_bg_texture_scale():
 	var output_scale := Vector2(output_scale_factor, output_scale_factor)
 	out_bg_texture.rect_scale = output_scale
 	out_bg_texture.rect_size = output_control.rect_size / output_scale_factor
-	output_block.get_node("Labels/TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size] + "px"
+	output_block.get_node("Labels/TileSizeLabel").text = "%sx%spx" % [tile_size, tile_size]
 	output_block.get_node("Labels").rect_size.x = output_block.get_node("Labels/TileSizeLabel").rect_size.x
 	debug_input_control.rect_min_size = get_debug_image_rect_size(generation_type_select.selected)
 	debug_input_texture_bg.rect_scale = output_scale
 	debug_input_texture_bg.rect_size = debug_input_control.rect_size / output_scale_factor
-	debug_preview.get_node("TileSizeLabel").text = Const.OUTPUT_SIZES[tile_size]
 
 func _on_SizeOptionButton_item_selected(index):
-	update_output_bg_texture_scale()
+#	update_output_bg_texture_scale()
 	preprocess_input_image()
 	save_settings()
 

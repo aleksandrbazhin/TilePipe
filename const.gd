@@ -5,9 +5,10 @@ const SETTINGS_PATH: String = "user://user_settings.sav"
 # version comparison works in godot due to str comparison (is_str_les() in ustring.h)
 const MIN_SETTINGS_COMPATIBLE_VERSION: String = "0.2"
 
+const NO_SCALING: int = 0
 
 const OUTPUT_SIZES: Dictionary = {
-#	0: "No scaling",
+	NO_SCALING: "No scaling",
 	8: "8x8",
 	10: "10x10",
 	16: "16x16",
