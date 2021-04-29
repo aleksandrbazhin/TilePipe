@@ -212,7 +212,8 @@ func load_input_texture(path: String) -> String:
 	last_input_texture_path = path
 	texture_in.texture = loaded_texture
 	last_tile_name = path.get_file().split(".")[0]
-	output_block.get_node("Labels/TileNameLabel").text = last_tile_name
+#	output_block.get_node("Labels/TileNameLabel").text = last_tile_name
+	texture_input_container.get_node("InputInfo/InputNameLabel").text = path.get_file()
 	return path
 
 func load_template_texture(path: String) -> String:
@@ -445,7 +446,7 @@ func set_input_tile_size(input_tile_size: int, input_image: Image):
 	var bg_scale = scale_factor * float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
 	texture_input_bg.rect_size = texture_input_container.rect_size / bg_scale
 	texture_input_bg.rect_scale = Vector2(bg_scale, bg_scale)
-	texture_input_container.get_node("TileSizeLabel").text = "%sx%spx" % [input_tile_size, input_tile_size]
+	texture_input_container.get_node("InputInfo/TileSizeLabel").text = "%sx%spx" % [input_tile_size, input_tile_size]
 
 func get_output_size_with_no_scaling() -> int:
 	var input_image: Image = texture_in.texture.get_data()

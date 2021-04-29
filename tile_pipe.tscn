@@ -259,18 +259,41 @@ __meta__ = {
 "_editor_description_": "Input image"
 }
 
-[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
+[node name="InputInfo" type="Control" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InputNameLabel" type="Label" parent="Panel/HBox/Images/InContainer/VBoxInput/Control/InputInfo"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = -21.0
+margin_right = 65.0
+margin_bottom = -2.0
+custom_colors/font_color = Color( 0.666667, 0.686275, 0.72549, 1 )
+text = "FileName"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/InContainer/VBoxInput/Control/InputInfo"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -44.0
-margin_top = -20.0
-margin_bottom = -1.0
+margin_left = -56.0
+margin_top = -21.0
+margin_right = -2.0
+margin_bottom = -2.0
 grow_horizontal = 0
 size_flags_vertical = 1
 custom_colors/font_color = Color( 0.666667, 0.686275, 0.72549, 1 )
-text = "64x64"
+text = "64x64px"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1109,31 +1132,34 @@ margin_top = -44.0
 margin_right = -15.0
 margin_bottom = -2.0
 grow_horizontal = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/Labels"]
+[node name="TileNameLabel" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/Labels"]
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -87.0
 margin_bottom = 19.0
 grow_horizontal = 0
 custom_colors/font_color = Color( 0.666667, 0.686275, 0.72549, 1 )
-text = "64x64"
+text = "Tile file name"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TileNameLabel" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/Labels"]
+[node name="TileSizeLabel" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/Labels"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -85.0
+margin_left = -87.0
 margin_top = -19.0
-margin_right = 2.0
 grow_horizontal = 0
 custom_colors/font_color = Color( 0.666667, 0.686275, 0.72549, 1 )
-text = "Tile file name"
+text = "64x64px"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false
