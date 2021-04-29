@@ -87,6 +87,7 @@ var input_file_dialog_path: String = ""
 var template_file_dialog_path: String = ""
 var save_png_file_dialog_path: String = ""
 var save_godot_tres_file_dialog_path: String = ""
+var output_tile_offset: int = 0
 
 func _ready():
 	print("TilePipe v.%s running in Debug mode" % VERSION)
@@ -181,7 +182,7 @@ func capture_setting_values() -> Dictionary:
 		"overlap_level": overlay_overlap_slider.value,
 		"use_random_seed": rand_seed_check.pressed,
 		"random_seed_value": int(rand_seed_value.text),
-		"output_tile_offset": int(output_offset_spinbox.get_line_edit().text)
+		"output_tile_offset": output_tile_offset
 	}
 
 func save_settings(store_defaults: bool = false):
@@ -261,7 +262,8 @@ func apply_saved_settings(data: Dictionary):
 	rand_seed_check.pressed = data["use_random_seed"]
 	set_random_ui_enabled(rand_seed_check.pressed)
 	rand_seed_value.text = str(int(data["random_seed_value"]))
-	output_offset_spinbox.get_line_edit().text = str(int(data["output_tile_offset"]))
+	output_tile_offset = int(data["output_tile_offset"])
+	output_offset_spinbox.value = output_tile_offset
 	
 	setup_input_type(generation_type_select.selected)
 	update_output_bg_texture_scale()
@@ -529,10 +531,12 @@ func make_from_corners():
 	var image_fmt: int = input_slices[0][0][0][false].get_format()
 	var slice_rect := Rect2(0, 0, slice_size, slice_size)
 	var out_image := Image.new()
-	out_image.create(tile_size * int(template_size.x), tile_size * int(template_size.y), false, image_fmt)
+	var out_image_size: Vector2 = template_size * tile_size
+	out_image_size += (template_size - Vector2.ONE) * output_tile_offset
+	out_image.create(int(out_image_size.x), int(out_image_size.y), false, image_fmt)
 	var preset: Array = generation_data.get_preset()
 	for mask in tile_masks:
-		var tile_position: Vector2 = mask['position'] * tile_size
+		var tile_position: Vector2 = mask['position'] * (tile_size + output_tile_offset)
 		if mask["godot_mask"] != 0: # don't draw only center
 			for place_mask in preset:
 				var allowed_rotations: Array = get_allowed_mask_rotations(
@@ -712,7 +716,9 @@ func make_from_overlayed():
 	var first_tile_image: Image = input_overlayed_tiles[0]["tile_image_variants"][0]
 	var image_fmt: int = first_tile_image.get_format()
 	var out_image_fmt: int = rotate_viewport.get_texture().get_data().get_format()
-	out_image.create(tile_size * int(template_size.x), tile_size * int(template_size.y), false, image_fmt)
+	var out_image_size: Vector2 = template_size * tile_size
+	out_image_size += (template_size - Vector2.ONE) * output_tile_offset
+	out_image.create(int(out_image_size.x), int(out_image_size.y), false, image_fmt)
 #	var preset: Array = generation_data.get_preset()
 	var tile_rect := Rect2(0, 0, tile_size, tile_size)
 	var itex = ImageTexture.new()
@@ -729,7 +735,7 @@ func make_from_overlayed():
 		else:
 			masks_use_count[mask_value] = 0
 		var tile_variant_index: int = masks_use_count[mask_value]
-		var tile_position: Vector2 = mask["position"] * tile_size
+		var tile_position: Vector2 = mask["position"] * (tile_size + output_tile_offset)
 		for tile_data in input_overlayed_tiles:
 			var variant_index: int = tile_data["mask_variants"].find(mask_value)
 			if variant_index != -1:
@@ -893,7 +899,8 @@ func _on_SaveGodotResourceDialog_file_selected(path):
 			tile_masks,
 			out_texture.texture.get_data().get_size(),
 			save_file_dialog.current_path,
-			last_tile_name
+			last_tile_name,
+			output_tile_offset
 		)
 	save_settings()
 
@@ -1129,8 +1136,9 @@ func _on_PopupDialog_confirmed():
 
 func _on_OffsetButton_pressed():
 #	preprocess_input_image()
+	output_tile_offset = int(output_offset_spinbox.get_line_edit().text)
 	rebuild_output()
 	save_settings()
-
+	
 func offset_lineedit_enter(_value: String):
 	_on_OffsetButton_pressed()

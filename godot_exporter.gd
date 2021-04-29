@@ -5,9 +5,11 @@ class_name GodotExporter
 signal exporter_error(message)
 
 func save_resource(path: String, tile_size: int, tile_masks: Array, 
-		texture_size: Vector2, texture_path: String, tile_base_name: String):
+		texture_size: Vector2, texture_path: String, tile_base_name: String, 
+		tile_spacing: int):
 	var output_string : String
-	output_string = make_autotile_resource_data(path, tile_size, tile_masks, texture_size, texture_path, tile_base_name)
+	output_string = make_autotile_resource_data(path, tile_size, 
+		tile_masks, texture_size, texture_path, tile_base_name, tile_spacing)
 	var tileset_resource_path: String = path.get_basename( ) + ".tres"
 	var file = File.new()
 	file.open(tileset_resource_path, File.WRITE)
@@ -60,7 +62,8 @@ func project_export_relative_path(path: String) -> String:
 	return ""
 
 func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array, 
-		texture_size: Vector2, texture_path: String, tile_base_name: String) -> String:
+		texture_size: Vector2, texture_path: String, tile_base_name: String, 
+		tile_spacing: int) -> String:
 	var texture_relative_path := project_export_relative_path(texture_path)
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
 	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % texture_relative_path
@@ -80,7 +83,7 @@ func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array
 	out_string += "0/autotile/bitmask_flags = [%s]\n" % mask_out_array.join(", ")
 	out_string += "0/autotile/icon_coordinate = Vector2( 0, 0 )\n"
 	out_string += "0/autotile/tile_size = Vector2( %d, %d )\n" % [tile_size, tile_size]
-	out_string += "0/autotile/spacing = 0\n"
+	out_string += "0/autotile/spacing = %d\n" % tile_spacing
 	out_string += "0/autotile/occluder_map = [  ]\n"
 	out_string += "0/autotile/navpoly_map = [  ]\n"
 	out_string += "0/autotile/priority_map = [  ]\n"

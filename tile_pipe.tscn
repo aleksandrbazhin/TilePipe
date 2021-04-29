@@ -62,6 +62,7 @@ Label/styles/normal = null
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 1366, 768 )
+mouse_filter = 2
 theme = ExtResource( 6 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -136,6 +137,7 @@ window_title = "Errors occured"
 [node name="Panel" type="PanelContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -144,12 +146,14 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1359.0
-margin_bottom = 762.0
+margin_bottom = 761.0
+mouse_filter = 2
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
 margin_right = 1112.0
-margin_bottom = 755.0
+margin_bottom = 754.0
+mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 5
@@ -742,9 +746,9 @@ __meta__ = {
 [node name="OutputControlContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 8.0
+margin_left = 5.0
 margin_top = 10.0
-margin_right = -3.0
+margin_right = -6.0
 margin_bottom = -7.0
 mouse_filter = 2
 custom_constants/separation = 6
@@ -931,15 +935,16 @@ size_flags_horizontal = 3
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 474.0
 margin_right = 1112.0
-margin_bottom = 755.0
+margin_bottom = 754.0
 rect_min_size = Vector2( 0, 270 )
+mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 8
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
-margin_bottom = 281.0
+margin_bottom = 280.0
 rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
@@ -965,13 +970,15 @@ __meta__ = {
 [node name="Output" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 48.0
 margin_right = 1112.0
-margin_bottom = 281.0
+margin_bottom = 280.0
+mouse_filter = 2
 size_flags_horizontal = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer/Output"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 900, 270 )
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -980,7 +987,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer"]
 margin_right = 1064.0
-margin_bottom = 281.0
+margin_bottom = 280.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -989,6 +996,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -1.33484
 margin_bottom = -1.33484
+mouse_filter = 2
 texture = ExtResource( 7 )
 expand = true
 stretch_mode = 2
@@ -1024,9 +1032,9 @@ __meta__ = {
 [node name="OutputControlContainer" type="VBoxContainer" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 8.0
+margin_left = 5.0
 margin_top = 10.0
-margin_right = -3.0
+margin_right = -6.0
 margin_bottom = -7.0
 mouse_filter = 2
 custom_constants/separation = 6
@@ -1038,7 +1046,7 @@ __meta__ = {
 margin_right = 149.0
 margin_bottom = 19.0
 size_flags_vertical = 1
-text = "Offset between tiles:"
+text = "Tile spacing:"
 align = 1
 valign = 2
 __meta__ = {
@@ -1064,6 +1072,7 @@ __meta__ = {
 margin_top = 25.0
 margin_right = 149.0
 margin_bottom = 54.0
+mouse_filter = 2
 
 [node name="OffsetSpinBox" type="SpinBox" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" groups=[
 "blockable",
@@ -1073,6 +1082,7 @@ margin_bottom = 29.0
 size_flags_horizontal = 3
 max_value = 255.0
 rounded = true
+align = 1
 
 [node name="OffsetButton" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" groups=[
 "blockable",
@@ -1125,12 +1135,12 @@ __meta__ = {
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
 margin_left = 1116.0
 margin_right = 1128.0
-margin_bottom = 755.0
+margin_bottom = 754.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
 margin_left = 1132.0
 margin_right = 1352.0
-margin_bottom = 755.0
+margin_bottom = 754.0
 rect_min_size = Vector2( 220, 0 )
 
 [node name="CloseButton" type="Button" parent="Panel/HBox/Settings" groups=[
