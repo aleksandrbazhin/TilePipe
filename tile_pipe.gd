@@ -89,6 +89,8 @@ var save_png_file_dialog_path: String = ""
 var save_godot_tres_file_dialog_path: String = ""
 var output_tile_offset: int = 0
 
+var is_ready: bool = false
+
 func _ready():
 	print("TilePipe v.%s running in Debug mode" % VERSION)
 #	OS.window_maximized = true
@@ -117,6 +119,7 @@ func _ready():
 	load_settings()
 	generate_tile_masks()
 	preprocess_input_image()
+	is_ready = true
 #	adjust_for_small_resolution()
 
 func _process(_delta: float):
@@ -1003,12 +1006,14 @@ func update_output_bg_texture_scale():
 	var output_scale_factor: float = float(tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
 	var output_scale := Vector2(output_scale_factor, output_scale_factor)
 	out_bg_texture.rect_scale = output_scale
-	out_bg_texture.rect_size = output_control.rect_size / output_scale_factor
+#	out_bg_texture.rect_size = output_control.rect_size / output_scale_factor
+	out_bg_texture.rect_size = Const.FULL_HD / output_scale_factor
 	output_block.get_node("Labels/TileSizeLabel").text = "%sx%spx" % [tile_size, tile_size]
 	output_block.get_node("Labels").rect_size.x = output_block.get_node("Labels/TileSizeLabel").rect_size.x
 	debug_input_control.rect_min_size = get_debug_image_rect_size(generation_type_select.selected)
 	debug_input_texture_bg.rect_scale = output_scale
-	debug_input_texture_bg.rect_size = debug_input_control.rect_size / output_scale_factor
+#	debug_input_texture_bg.rect_size = debug_input_control.rect_size / output_scale_factor
+	debug_input_texture_bg.rect_size = Const.FULL_HD / output_scale_factor
 
 func _on_SizeOptionButton_item_selected(index):
 #	update_output_bg_texture_scale()

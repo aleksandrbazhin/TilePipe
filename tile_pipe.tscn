@@ -405,18 +405,18 @@ size_flags_vertical = 10
 margin_right = 224.0
 margin_bottom = 26.0
 
-[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HBoxContainer"]
-margin_right = 94.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 0, 26 )
-text = " Example input"
-valign = 1
-
 [node name="ExampleCheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HBoxContainer"]
 visible = false
 margin_left = 98.0
 margin_right = 174.0
 margin_bottom = 40.0
+
+[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HBoxContainer"]
+margin_right = 122.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 26 )
+text = " Use example input"
+valign = 1
 
 [node name="ExampleBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer"]
 margin_top = 30.0
@@ -635,10 +635,11 @@ margin_left = 824.0
 margin_right = 1112.0
 margin_bottom = 300.0
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="WorkTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer/Preview"]
-margin_right = 288.0
-margin_bottom = 300.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_min_size = Vector2( 256, 256 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -791,6 +792,7 @@ margin_top = 63.0
 margin_right = 149.0
 margin_bottom = 103.0
 hint_tooltip = "Disable for pixelart, enable for anitaliased."
+mouse_filter = 1
 shortcut_in_tooltip = false
 text = "Smoothing"
 __meta__ = {
@@ -977,6 +979,7 @@ margin_right = 1112.0
 margin_bottom = 280.0
 mouse_filter = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer/Output"]
 anchor_right = 1.0
@@ -998,9 +1001,9 @@ size_flags_vertical = 3
 [node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -1.33484
-margin_bottom = -1.33484
 mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 texture = ExtResource( 7 )
 expand = true
 stretch_mode = 2
