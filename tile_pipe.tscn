@@ -144,12 +144,12 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1359.0
-margin_bottom = 761.0
+margin_bottom = 762.0
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
 margin_right = 1112.0
-margin_bottom = 754.0
+margin_bottom = 755.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 5
@@ -397,12 +397,22 @@ margin_right = 224.0
 margin_bottom = 224.0
 size_flags_vertical = 10
 
-[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer"]
 margin_right = 224.0
+margin_bottom = 26.0
+
+[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HBoxContainer"]
+margin_right = 94.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
 text = " Example input"
-valign = 2
+valign = 1
+
+[node name="ExampleCheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HBoxContainer"]
+visible = false
+margin_left = 98.0
+margin_right = 174.0
+margin_bottom = 40.0
 
 [node name="ExampleBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer"]
 margin_top = 30.0
@@ -921,7 +931,7 @@ size_flags_horizontal = 3
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 474.0
 margin_right = 1112.0
-margin_bottom = 754.0
+margin_bottom = 755.0
 rect_min_size = Vector2( 0, 270 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -929,7 +939,7 @@ custom_constants/separation = 8
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
-margin_bottom = 280.0
+margin_bottom = 281.0
 rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
@@ -955,7 +965,7 @@ __meta__ = {
 [node name="Output" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 48.0
 margin_right = 1112.0
-margin_bottom = 280.0
+margin_bottom = 281.0
 size_flags_horizontal = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/OutputContainer/Output"]
@@ -970,7 +980,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer"]
 margin_right = 1064.0
-margin_bottom = 280.0
+margin_bottom = 281.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -999,33 +1009,50 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="ColorRect" parent="Panel/HBox/Images/OutputContainer/Output"]
-visible = false
+[node name="OutputSettings" type="ColorRect" parent="Panel/HBox/Images/OutputContainer/Output"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -195.0
-margin_bottom = 205.0
-color = Color( 0.0901961, 0.109804, 0.133333, 0.556863 )
+margin_left = -170.0
+margin_right = -10.0
+margin_bottom = 80.0
+mouse_filter = 2
+color = Color( 0.141176, 0.168627, 0.203922, 0.866667 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OutputControlContainer" type="VBoxContainer" parent="Panel/HBox/Images/OutputContainer/Output/TextureRect"]
-anchor_left = 0.993
-anchor_right = 0.993
-margin_left = -187.111
-margin_right = -17.1111
-margin_bottom = 188.0
+[node name="OutputControlContainer" type="VBoxContainer" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 10.0
+margin_right = -3.0
+margin_bottom = -7.0
+mouse_filter = 2
+custom_constants/separation = 6
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Freeze" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/TextureRect/OutputControlContainer" groups=[
+[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer"]
+margin_right = 149.0
+margin_bottom = 19.0
+size_flags_vertical = 1
+text = "Offset between tiles:"
+align = 1
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Freeze" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer" groups=[
 "blockable",
 ]]
 visible = false
-margin_right = 170.0
-margin_bottom = 40.0
+margin_left = -22.476
+margin_top = -170.0
+margin_right = 147.524
+margin_bottom = -130.0
 rect_min_size = Vector2( 170, 40 )
 hint_tooltip = "Freeze existing to append more below"
 text = "Ξ Freeze Ξ"
@@ -1033,30 +1060,27 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RemakeButton2" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/TextureRect/OutputControlContainer" groups=[
-"blockable",
-]]
-visible = false
-margin_top = 44.0
-margin_right = 170.0
-margin_bottom = 84.0
-rect_min_size = Vector2( 100, 40 )
-text = "Unfreeze last"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="SpinBoxContainer" type="HBoxContainer" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer"]
+margin_top = 25.0
+margin_right = 149.0
+margin_bottom = 54.0
 
-[node name="RemakeButton" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/TextureRect/OutputControlContainer" groups=[
+[node name="OffsetSpinBox" type="SpinBox" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" groups=[
 "blockable",
 ]]
-visible = false
-margin_right = 170.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 100, 40 )
-text = "Reset ↻"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_right = 97.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+max_value = 255.0
+rounded = true
+
+[node name="OffsetButton" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" groups=[
+"blockable",
+]]
+margin_left = 101.0
+margin_right = 149.0
+margin_bottom = 29.0
+text = "Apply"
 
 [node name="Labels" type="Control" parent="Panel/HBox/Images/OutputContainer/Output"]
 anchor_left = 1.0
@@ -1101,12 +1125,12 @@ __meta__ = {
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
 margin_left = 1116.0
 margin_right = 1128.0
-margin_bottom = 754.0
+margin_bottom = 755.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
 margin_left = 1132.0
 margin_right = 1352.0
-margin_bottom = 754.0
+margin_bottom = 755.0
 rect_min_size = Vector2( 220, 0 )
 
 [node name="CloseButton" type="Button" parent="Panel/HBox/Settings" groups=[
@@ -1206,8 +1230,8 @@ __meta__ = {
 [connection signal="button_up" from="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer/Smoothing" to="." method="_on_Smoothing_button_up"]
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
-[connection signal="pressed" from="Panel/HBox/Images/OutputContainer/Output/TextureRect/OutputControlContainer/Freeze" to="." method="_on_Freeze_pressed"]
-[connection signal="pressed" from="Panel/HBox/Images/OutputContainer/Output/TextureRect/OutputControlContainer/RemakeButton" to="." method="_on_RemakeButton_pressed"]
+[connection signal="pressed" from="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/Freeze" to="." method="_on_Freeze_pressed"]
+[connection signal="pressed" from="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer/OffsetButton" to="." method="_on_OffsetButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save2" to="." method="_on_Save2_pressed"]

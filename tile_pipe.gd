@@ -61,6 +61,7 @@ onready var output_scroll: ScrollContainer = output_block.get_node("ScrollContai
 onready var output_control: Control = output_scroll.get_node("Control")
 onready var out_texture: TextureRect = output_control.get_node("OutTextureRect")
 onready var out_bg_texture: TextureRect = output_control.get_node("BGTextureRect")
+onready var output_offset_spinbox: SpinBox = output_block.get_node("OutputSettings/OutputControlContainer/SpinBoxContainer/OffsetSpinBox")
 
 onready var image_settings: VBoxContainer = debug_preview.get_node("ImageSettings/OutputControlContainer")
 onready var output_size_select: OptionButton = image_settings.get_node("SizeOptionButton")
@@ -93,6 +94,8 @@ func _ready():
 #	rand_seed_check.disabled = true
 	rng.randomize()
 	connect("input_image_processed", self, "make_output_texture")
+	output_offset_spinbox.get_line_edit().connect("text_entered", self, "offset_lineedit_enter")
+	
 	godot_resource_exporter.connect("exporter_error", self, "report_error")
 	output_size_select.clear()
 	for size in Const.OUTPUT_SIZES:
@@ -177,7 +180,8 @@ func capture_setting_values() -> Dictionary:
 		"merge_level": overlay_merge_rate_slider.value,
 		"overlap_level": overlay_overlap_slider.value,
 		"use_random_seed": rand_seed_check.pressed,
-		"random_seed_value": int(rand_seed_value.text)
+		"random_seed_value": int(rand_seed_value.text),
+		"output_tile_offset": int(output_offset_spinbox.get_line_edit().text)
 	}
 
 func save_settings(store_defaults: bool = false):
@@ -257,6 +261,8 @@ func apply_saved_settings(data: Dictionary):
 	rand_seed_check.pressed = data["use_random_seed"]
 	set_random_ui_enabled(rand_seed_check.pressed)
 	rand_seed_value.text = str(int(data["random_seed_value"]))
+	output_offset_spinbox.get_line_edit().text = str(int(data["output_tile_offset"]))
+	
 	setup_input_type(generation_type_select.selected)
 	update_output_bg_texture_scale()
 
@@ -1003,9 +1009,9 @@ func block_ui():
 	for node in get_tree().get_nodes_in_group("blockable"):
 		if node is Button:
 			node.disabled = true
-		if node is LineEdit:
+		if node is LineEdit or node is SpinBox:
 			node.editable = false
-		if node is Slider:
+		if node is Slider or node is SpinBox:
 			node.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		if node is Label:
 			node.add_color_override("font_color", Color(0.5,0.5,0.5))
@@ -1017,9 +1023,9 @@ func unblock_ui():
 		if not node.is_in_group("really_disabled"):
 			if node is Button:
 				node.disabled = false
-			if node is LineEdit:
+			if node is LineEdit or node is SpinBox:
 				node.editable = true
-			if node is Slider:
+			if node is Slider or node is SpinBox:
 				node.mouse_filter = Control.MOUSE_FILTER_STOP
 			if node is Label:
 				node.add_color_override("font_color", Color(1.0, 1.0, 1.0))
@@ -1041,10 +1047,6 @@ func rebuild_output():
 			make_from_corners()
 		Const.INPUT_TYPES.OVERLAY:
 			preprocess_input_image()
-
-func _on_RemakeButton_pressed():
-	rebuild_output()
-	reset_saved()
 
 func apply_seed(new_seed: String):
 	rand_seed_value.text = str(int(new_seed))
@@ -1124,3 +1126,11 @@ func report_error(error_text: String):
 
 func _on_PopupDialog_confirmed():
 	popup_dialog.dialog_text = ""
+
+func _on_OffsetButton_pressed():
+#	preprocess_input_image()
+	rebuild_output()
+	save_settings()
+
+func offset_lineedit_enter(_value: String):
+	_on_OffsetButton_pressed()

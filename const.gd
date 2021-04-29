@@ -185,7 +185,8 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"merge_level": DEFAULT_MERGE,
 	"overlap_level": DEFAULT_OVERLAP,
 	"use_random_seed": false,
-	"random_seed_value": 0
+	"random_seed_value": 0,
+	"output_tile_offset": 0
 }
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
