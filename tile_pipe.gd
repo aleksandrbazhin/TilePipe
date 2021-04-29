@@ -179,7 +179,7 @@ func capture_setting_values() -> Dictionary:
 		"last_template_file_dialog_path": template_file_dialog_path,
 		"last_save_texture_path": save_png_file_dialog_path,
 		"last_save_texture_resource_path": save_godot_tres_file_dialog_path,
-		"output_tile_size": get_output_tile_size(),
+		"output_tile_size": Const.OUTPUT_SIZES.keys()[output_size_select.selected],
 		"input_type": generation_type_select.selected,
 		"corner_preset": corners_merge_type_select.selected,
 		"overlay_preset": overlay_merge_type_select.selected,
@@ -485,7 +485,6 @@ func generate_corner_slices():
 	if rotate_viewport.size != new_viewport_size:
 		rotate_viewport.size = new_viewport_size
 		rotated_texture_in_viewport.rect_size = new_viewport_size
-#	print(new_viewport_size)
 	var image_input_fmt: int = input_image.get_format()
 	var image_fmt: int = rotate_viewport.get_texture().get_data().get_format()
 	var debug_image := Image.new()
@@ -779,7 +778,6 @@ func set_output_texture(texture: Texture):
 	out_texture.texture = texture
 	if texture != null:
 		var image_size: Vector2 = out_texture.texture.get_data().get_size()
-#		print(image_size)
 		out_texture.rect_size = image_size
 		output_control.rect_min_size = image_size
 	else:
