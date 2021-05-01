@@ -143,13 +143,13 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1359.0
-margin_bottom = 768.0
+margin_bottom = 761.0
 mouse_filter = 2
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
 margin_right = 1112.0
-margin_bottom = 761.0
+margin_bottom = 754.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -244,7 +244,6 @@ __meta__ = {
 [node name="InputTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/VBoxInput/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 1.41422
 margin_right = -238.586
 margin_bottom = -192.0
 rect_scale = Vector2( 4, 4 )
@@ -300,7 +299,7 @@ __meta__ = {
 margin_left = 384.0
 margin_right = 782.0
 margin_bottom = 300.0
-custom_constants/separation = 22
+custom_constants/separation = 8
 
 [node name="HBoxHeader" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset"]
 margin_left = 57.0
@@ -338,7 +337,7 @@ text = "Type"
 align = 1
 
 [node name="HBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset"]
-margin_top = 62.0
+margin_top = 48.0
 margin_right = 398.0
 margin_bottom = 300.0
 size_flags_vertical = 3
@@ -346,23 +345,14 @@ custom_constants/separation = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox"]
 margin_right = 194.0
-margin_bottom = 238.0
+margin_bottom = 252.0
 rect_min_size = Vector2( 194, 0 )
 size_flags_vertical = 3
-custom_constants/separation = 0
-
-[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer"]
-margin_left = 97.0
-margin_right = 97.0
-margin_bottom = 9.0
-rect_min_size = Vector2( 0, 9 )
-size_flags_horizontal = 4
-size_flags_vertical = 0
+custom_constants/separation = 12
 
 [node name="CornersMergeSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer"]
-margin_top = 9.0
 margin_right = 194.0
-margin_bottom = 71.0
+margin_bottom = 62.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/CornersMergeSettings"]
 margin_right = 194.0
@@ -380,15 +370,16 @@ margin_top = 30.0
 margin_right = 194.0
 margin_bottom = 62.0
 rect_min_size = Vector2( 180, 32 )
+hint_tooltip = "Presets vary in the amount of tile fragments and the way they are combined"
 clip_text = true
 __meta__ = {
 "_editor_description_": "Presets have different amount of input tile fragments"
 }
 
 [node name="OverlaySettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer"]
-margin_top = 71.0
+margin_top = 74.0
 margin_right = 194.0
-margin_bottom = 133.0
+margin_bottom = 136.0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/OverlaySettings"]
 margin_right = 194.0
@@ -406,21 +397,19 @@ margin_top = 30.0
 margin_right = 194.0
 margin_bottom = 62.0
 rect_min_size = Vector2( 180, 32 )
-hint_tooltip = "Presets need different amount of input tile fragments and can use them differently"
+hint_tooltip = "Presets vary in the amount of tile fragments and the way they are combined"
 clip_text = true
 
 [node name="ExampleContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer"]
-margin_top = 133.0
+margin_top = 148.0
 margin_right = 194.0
-margin_bottom = 238.0
+margin_bottom = 252.0
 size_flags_vertical = 3
 custom_constants/separation = 0
-alignment = 2
 
 [node name="HeaderContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer"]
-margin_top = 21.0
 margin_right = 194.0
-margin_bottom = 61.0
+margin_bottom = 40.0
 custom_constants/separation = 0
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HeaderContainer"]
@@ -438,11 +427,12 @@ valign = 1
 margin_left = 86.0
 margin_right = 162.0
 margin_bottom = 40.0
+hint_tooltip = "Use preset example instead of selected texture"
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer"]
-margin_top = 61.0
+margin_top = 40.0
 margin_right = 194.0
-margin_bottom = 105.0
+margin_bottom = 84.0
 rect_min_size = Vector2( 180, 44 )
 
 [node name="ColorRect" type="ColorRect" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/Control"]
@@ -472,8 +462,16 @@ __meta__ = {
 [node name="VBoxSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox"]
 margin_left = 204.0
 margin_right = 398.0
-margin_bottom = 238.0
+margin_bottom = 252.0
 rect_min_size = Vector2( 194, 0 )
+custom_constants/separation = 8
+alignment = 2
+
+[node name="Separator2" type="Control" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings"]
+margin_top = 11.0
+margin_right = 194.0
+margin_bottom = 47.0
+rect_min_size = Vector2( 24, 36 )
 
 [node name="ColorProcessContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings"]
 visible = false
@@ -500,8 +498,9 @@ align = 1
 [node name="HSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=[
 "overlay_settings",
 ]]
+margin_top = 55.0
 margin_right = 194.0
-margin_bottom = 46.0
+margin_bottom = 101.0
 hint_tooltip = "How much of the corners and sides \"take\" of  the central part:
 maximum - no central part used,
 minimum - only central part is used"
@@ -536,9 +535,9 @@ script = ExtResource( 3 )
 [node name="OverlapSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=[
 "overlay_settings",
 ]]
-margin_top = 50.0
+margin_top = 109.0
 margin_right = 194.0
-margin_bottom = 116.0
+margin_bottom = 175.0
 hint_tooltip = "How much of the central part will be “shoved” under the corners and side. 
 Only matters if sides have some transparency."
 size_flags_horizontal = 3
@@ -579,9 +578,9 @@ rect_min_size = Vector2( 24, 16 )
 "corners_settings",
 "overlay_settings",
 ]]
-margin_top = 120.0
+margin_top = 183.0
 margin_right = 194.0
-margin_bottom = 189.0
+margin_bottom = 252.0
 hint_tooltip = "If you have multiple rows in your input image, the result will be randomized. 
 Randomisation is enabled if the aspect ratio of the input image together with the chosen preset
 suggest that the input image has multiple rows. 
@@ -748,8 +747,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -170.0
-margin_top = -120.0
+margin_top = -130.0
 margin_right = -10.0
+margin_bottom = -10.0
 mouse_filter = 2
 color = Color( 0.141176, 0.168627, 0.203922, 0.866667 )
 __meta__ = {
@@ -949,7 +949,7 @@ size_flags_horizontal = 3
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 474.0
 margin_right = 1112.0
-margin_bottom = 761.0
+margin_bottom = 754.0
 rect_min_size = Vector2( 0, 270 )
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -958,7 +958,7 @@ custom_constants/separation = 8
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
-margin_bottom = 287.0
+margin_bottom = 280.0
 rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
@@ -984,7 +984,7 @@ __meta__ = {
 [node name="Output" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 48.0
 margin_right = 1112.0
-margin_bottom = 287.0
+margin_bottom = 280.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1002,7 +1002,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer"]
 margin_right = 1064.0
-margin_bottom = 287.0
+margin_bottom = 280.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -1153,12 +1153,12 @@ __meta__ = {
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
 margin_left = 1116.0
 margin_right = 1128.0
-margin_bottom = 761.0
+margin_bottom = 754.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
 margin_left = 1132.0
 margin_right = 1352.0
-margin_bottom = 761.0
+margin_bottom = 754.0
 rect_min_size = Vector2( 220, 0 )
 
 [node name="CloseButton" type="Button" parent="Panel/HBox/Settings" groups=[
