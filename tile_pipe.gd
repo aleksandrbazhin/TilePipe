@@ -20,7 +20,8 @@ onready var texture_input_bg: TextureRect = texture_input_container.get_node("BG
 onready var generation_type_select: OptionButton = $Panel/HBox/Images/InContainer/VBoxPreset/HBoxHeader/InputType
 onready var presets_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxPreset
 
-onready var example_texture: TextureRect = presets_container.get_node("HBox/VBoxContainer/ExampleContainer/ExampleBox/TextureRect")
+onready var example_texture: TextureRect = presets_container.get_node("HBox/VBoxContainer/ExampleContainer/Control/TextureRect")
+onready var example_check: CheckButton = presets_container.get_node("HBox/VBoxContainer/ExampleContainer/HeaderContainer/ExampleCheckButton")
 
 onready var corners_merge_container: VBoxContainer = presets_container.get_node("HBox/VBoxContainer/CornersMergeSettings")
 onready var corners_merge_type_select: OptionButton = corners_merge_container.get_node("CornersOptionButton")
@@ -189,7 +190,8 @@ func capture_setting_values() -> Dictionary:
 		"overlap_level": overlay_overlap_slider.value,
 		"use_random_seed": rand_seed_check.pressed,
 		"random_seed_value": int(rand_seed_value.text),
-		"output_tile_offset": output_tile_offset
+		"output_tile_offset": output_tile_offset,
+		"use_example": example_check.pressed
 	}
 
 func save_settings(store_defaults: bool = false):
@@ -203,7 +205,6 @@ func save_settings(store_defaults: bool = false):
 	save.store_line(to_json(data))
 	save.close()
 
-
 func load_input_texture(path: String) -> String:
 	var loaded_texture: Texture = load_image_texture(path)
 	if loaded_texture == null:
@@ -212,7 +213,6 @@ func load_input_texture(path: String) -> String:
 	last_input_texture_path = path
 	texture_in.texture = loaded_texture
 	last_tile_name = path.get_file().split(".")[0]
-#	output_block.get_node("Labels/TileNameLabel").text = last_tile_name
 	texture_input_container.get_node("InputInfo/InputNameLabel").text = path.get_file()
 	return path
 
@@ -264,10 +264,10 @@ func apply_saved_settings(data: Dictionary):
 	generation_type_select.selected = data["input_type"]
 	corners_merge_type_select.selected = data["corner_preset"]
 	overlay_merge_type_select.selected = data["overlay_preset"]
-	smoothing_check.pressed = data["smoothing"]
+	smoothing_check.pressed = bool(data["smoothing"])
 	overlay_merge_rate_slider.value = data["merge_level"]
 	overlay_overlap_slider.value = data["overlap_level"]
-	rand_seed_check.pressed = data["use_random_seed"]
+	rand_seed_check.pressed = bool(data["use_random_seed"])
 	set_random_ui_enabled(rand_seed_check.pressed)
 	rand_seed_value.text = str(int(data["random_seed_value"]))
 	output_tile_offset = int(data["output_tile_offset"])
@@ -275,6 +275,8 @@ func apply_saved_settings(data: Dictionary):
 
 	setup_input_type(generation_type_select.selected)
 	update_output_bg_texture_scale()
+	
+	example_check.pressed = bool(data["use_example"])
 
 func fix_settings_with_defaults(loaded_settings: Dictionary, defaults: Dictionary) -> Dictionary:
 	var fixed_settings: Dictionary = loaded_settings.duplicate(true)
@@ -870,7 +872,8 @@ func load_image_texture(path: String) -> Texture:
 
 func _on_TextureDialog_file_selected(path):
 	input_file_dialog_path = clear_path(path)
-	load_input_texture(path)
+	if not example_check.pressed:
+		load_input_texture(path)
 	preprocess_input_image()
 	save_settings()
 
@@ -929,9 +932,13 @@ func setup_input_type(index: int):
 				node.hide()
 			for node in get_tree().get_nodes_in_group("overlay_settings"):
 				node.show()
-	
+
+
+
 func _on_InputType_item_selected(index):
 	setup_input_type(index)
+	if example_check.pressed:
+		load_input_texture(generation_data.get_example_path())
 	preprocess_input_image()
 	save_settings()
 
@@ -948,18 +955,10 @@ func _on_TemplateOption_item_selected(index):
 		template_load_button.disabled = false
 		if template_load_button.is_in_group("really_disabled"):
 			template_load_button.remove_from_group("really_disabled")
-#		template_texture.texture = null
-#		template_texture.rect_size = Vector2.ZERO
-#		output_scroll.get_v_scrollbar().rect_size.x = 0
-#		output_scroll.get_v_scrollbar().rect_size.y = 0
-#		clear_generation_mask()
-#		custom_template_path = ""
 	else:
 		template_load_button.disabled = true
 		template_load_button.add_to_group("really_disabled")
 		load_template_texture(Const.TEMPLATE_PATHS[index])
-#		custom_template_path = ""
-#		template_texture.texture = load_image_texture(Const.TEMPLATE_PATHS[index])
 		generate_tile_masks()
 	make_output_texture()
 	save_settings()
@@ -971,6 +970,8 @@ func set_corner_generation_data(index: int):
 
 func _on_CornersOptionButton_item_selected(index):
 	set_corner_generation_data(index)
+	if example_check.pressed:
+		load_input_texture(generation_data.get_example_path())
 	preprocess_input_image()
 	save_settings()
 
@@ -981,6 +982,8 @@ func set_overlay_generation_data(index: int):
 
 func _on_OverlayOptionButton_item_selected(index):
 	set_overlay_generation_data(index)
+	if example_check.pressed:
+		load_input_texture(generation_data.get_example_path())
 	preprocess_input_image()
 	save_settings()
 
@@ -1074,11 +1077,6 @@ func _on_SeedLineEdit_text_entered(new_text):
 func _on_SeedButton_pressed():
 	apply_seed(rand_seed_value.text)
 
-func _on_ExampleButton_pressed():
-	load_input_texture(generation_data.get_example_path())
-	preprocess_input_image()
-	save_settings()
-
 func _on_OverlapSlider_released(value):
 	if not is_ui_blocked:
 		preprocess_input_image()
@@ -1139,10 +1137,18 @@ func _on_PopupDialog_confirmed():
 	popup_dialog.dialog_text = ""
 
 func _on_OffsetButton_pressed():
-#	preprocess_input_image()
 	output_tile_offset = int(output_offset_spinbox.get_line_edit().text)
 	rebuild_output()
 	save_settings()
 	
 func offset_lineedit_enter(_value: String):
 	_on_OffsetButton_pressed()
+
+func _on_ExampleCheckButton_toggled(button_pressed: bool):
+#	if button_pressed or input_file_dialog_path.begins_with("res://"):
+	if button_pressed:
+		load_input_texture(generation_data.get_example_path())
+	else:
+		load_input_texture(input_file_dialog_path)
+	preprocess_input_image()
+	save_settings()

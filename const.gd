@@ -68,7 +68,7 @@ const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
 #	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "Top down with corners (3 tiles)",
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "4 tiles, symmetry: full",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "Sideview (6 tiles)",
-	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "8 tiles, symmetry: left/right",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "8 tiles, symmetry: sideway",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_13:"13 tiles, symmetry: no"
 }
 
@@ -186,7 +186,8 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"overlap_level": DEFAULT_OVERLAP,
 	"use_random_seed": false,
 	"random_seed_value": 0,
-	"output_tile_offset": 0
+	"output_tile_offset": 0,
+	"use_example": true
 }
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
