@@ -299,7 +299,7 @@ __meta__ = {
 margin_left = 384.0
 margin_right = 782.0
 margin_bottom = 300.0
-custom_constants/separation = 8
+custom_constants/separation = 10
 
 [node name="HBoxHeader" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset"]
 margin_left = 57.0
@@ -337,7 +337,7 @@ text = "Type"
 align = 1
 
 [node name="HBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset"]
-margin_top = 48.0
+margin_top = 50.0
 margin_right = 398.0
 margin_bottom = 300.0
 size_flags_vertical = 3
@@ -345,10 +345,10 @@ custom_constants/separation = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox"]
 margin_right = 194.0
-margin_bottom = 252.0
+margin_bottom = 250.0
 rect_min_size = Vector2( 194, 0 )
 size_flags_vertical = 3
-custom_constants/separation = 12
+custom_constants/separation = 10
 
 [node name="CornersMergeSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer"]
 margin_right = 194.0
@@ -377,6 +377,7 @@ __meta__ = {
 }
 
 [node name="OverlaySettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer"]
+visible = false
 margin_top = 74.0
 margin_right = 194.0
 margin_bottom = 136.0
@@ -401,9 +402,9 @@ hint_tooltip = "Presets vary in the amount of tile fragments and the way they ar
 clip_text = true
 
 [node name="ExampleContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer"]
-margin_top = 148.0
+margin_top = 72.0
 margin_right = 194.0
-margin_bottom = 252.0
+margin_bottom = 250.0
 size_flags_vertical = 3
 custom_constants/separation = 0
 
@@ -462,16 +463,16 @@ __meta__ = {
 [node name="VBoxSettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox"]
 margin_left = 204.0
 margin_right = 398.0
-margin_bottom = 252.0
+margin_bottom = 250.0
 rect_min_size = Vector2( 194, 0 )
-custom_constants/separation = 8
+custom_constants/separation = 10
 alignment = 2
 
 [node name="Separator2" type="Control" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings"]
-margin_top = 11.0
+margin_top = 19.0
 margin_right = 194.0
-margin_bottom = 47.0
-rect_min_size = Vector2( 24, 36 )
+margin_bottom = 59.0
+rect_min_size = Vector2( 24, 40 )
 
 [node name="ColorProcessContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings"]
 visible = false
@@ -498,9 +499,9 @@ align = 1
 [node name="HSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=[
 "overlay_settings",
 ]]
-margin_top = 55.0
+margin_top = 69.0
 margin_right = 194.0
-margin_bottom = 101.0
+margin_bottom = 115.0
 hint_tooltip = "How much of the corners and sides \"take\" of  the central part:
 maximum - no central part used,
 minimum - only central part is used"
@@ -535,9 +536,9 @@ script = ExtResource( 3 )
 [node name="OverlapSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=[
 "overlay_settings",
 ]]
-margin_top = 109.0
+margin_top = 125.0
 margin_right = 194.0
-margin_bottom = 175.0
+margin_bottom = 171.0
 hint_tooltip = "How much of the central part will be “shoved” under the corners and side. 
 Only matters if sides have some transparency."
 size_flags_horizontal = 3
@@ -569,6 +570,7 @@ ticks_on_borders = true
 script = ExtResource( 3 )
 
 [node name="Separator" type="Control" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/OverlapSliderContainer"]
+visible = false
 margin_top = 50.0
 margin_right = 194.0
 margin_bottom = 66.0
@@ -578,9 +580,9 @@ rect_min_size = Vector2( 24, 16 )
 "corners_settings",
 "overlay_settings",
 ]]
-margin_top = 183.0
+margin_top = 181.0
 margin_right = 194.0
-margin_bottom = 252.0
+margin_bottom = 250.0
 hint_tooltip = "If you have multiple rows in your input image, the result will be randomized. 
 Randomisation is enabled if the aspect ratio of the input image together with the chosen preset
 suggest that the input image has multiple rows. 
