@@ -143,13 +143,13 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1359.0
-margin_bottom = 762.0
+margin_bottom = 761.0
 mouse_filter = 2
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
 margin_right = 1112.0
-margin_bottom = 755.0
+margin_bottom = 754.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -967,7 +967,7 @@ size_flags_horizontal = 3
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 474.0
 margin_right = 1112.0
-margin_bottom = 755.0
+margin_bottom = 754.0
 rect_min_size = Vector2( 0, 270 )
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -976,7 +976,7 @@ custom_constants/separation = 8
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
-margin_bottom = 281.0
+margin_bottom = 280.0
 rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
@@ -1002,7 +1002,7 @@ __meta__ = {
 [node name="Output" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 48.0
 margin_right = 1112.0
-margin_bottom = 281.0
+margin_bottom = 280.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1020,7 +1020,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer"]
 margin_right = 1064.0
-margin_bottom = 281.0
+margin_bottom = 280.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -1173,12 +1173,12 @@ __meta__ = {
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
 margin_left = 1116.0
 margin_right = 1128.0
-margin_bottom = 755.0
+margin_bottom = 754.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
 margin_left = 1132.0
 margin_right = 1352.0
-margin_bottom = 755.0
+margin_bottom = 754.0
 rect_min_size = Vector2( 220, 0 )
 
 [node name="CloseButton" type="Button" parent="Panel/HBox/Settings" groups=[
