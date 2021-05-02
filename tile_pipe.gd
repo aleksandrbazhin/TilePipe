@@ -783,7 +783,7 @@ func make_from_overlayed():
 
 func preprocess_input_image():
 	block_ui()
-	
+	output_offset_spinbox.value = int(output_tile_offset)
 	rotated_texture_in_viewport.show()
 	if not check_input_texture():
 		report_error("Error: Wrong input texture")
