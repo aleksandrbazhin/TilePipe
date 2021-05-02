@@ -146,7 +146,6 @@ func _notification(what):
 
 func _input(event: InputEvent):
 	if event is InputEventKey and event.is_pressed() :
-#		print(get_focus_owner())
 		if get_focus_owner() == output_offset_spinbox.get_line_edit() and \
 				(event.scancode == KEY_UP or event.scancode == KEY_DOWN):
 			if output_offset_spinbox.get_line_edit().editable:

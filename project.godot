@@ -96,10 +96,10 @@ file_logging/enable_file_logging=true
 [rendering]
 
 quality/driver/driver_name="GLES2"
-quality/2d/use_nvidia_rect_flicker_workaround=true
+2d/options/use_nvidia_rect_flicker_workaround=true
 quality/intended_usage/framebuffer_allocation=0
 quality/intended_usage/framebuffer_allocation.mobile=0
-quality/2d/use_pixel_snap=true
-quality/shadows/filter_mode=0
-2d/options/use_nvidia_rect_flicker_workaround=true
 2d/snapping/use_gpu_pixel_snap=true
+quality/shadows/filter_mode=0
+quality/2d/use_nvidia_rect_flicker_workaround=true
+quality/2d/use_pixel_snap=true
