@@ -115,10 +115,9 @@ if __name__ == "__main__":
             
         else:
             # here upload to public TilePipe
-            pass 
-            # os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe:windows' % WIN_PARAMS)
-            # os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe:linux' % LINUX_PARAMS)
-            # os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe:mac' % MAC_PARAMS)
-            # os.system('butler push %(path)s/%examples.zip  aleksandrbazhin/TilePipe:examples' % % {"path": EXPORT_PATH})
+            os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe:windows' % WIN_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe:linux' % LINUX_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe:mac' % MAC_PARAMS)
+            os.system('butler push %(path)s/examples.zip  aleksandrbazhin/TilePipe:examples' % {"path": EXPORT_PATH})
         
 
