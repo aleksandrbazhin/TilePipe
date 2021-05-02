@@ -143,13 +143,13 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1359.0
-margin_bottom = 761.0
+margin_bottom = 762.0
 mouse_filter = 2
 alignment = 1
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
 margin_right = 1112.0
-margin_bottom = 754.0
+margin_bottom = 755.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -474,10 +474,10 @@ custom_constants/separation = 10
 alignment = 2
 
 [node name="Separator2" type="Control" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings"]
-margin_top = 19.0
+margin_top = 1.0
 margin_right = 194.0
-margin_bottom = 59.0
-rect_min_size = Vector2( 24, 40 )
+margin_bottom = 31.0
+rect_min_size = Vector2( 24, 30 )
 
 [node name="ColorProcessContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings"]
 visible = false
@@ -504,9 +504,9 @@ align = 1
 [node name="HSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=[
 "overlay_settings",
 ]]
-margin_top = 69.0
+margin_top = 41.0
 margin_right = 194.0
-margin_bottom = 115.0
+margin_bottom = 87.0
 hint_tooltip = "How much of the corners and sides \"take\" of  the central part:
 maximum - no central part used,
 minimum - only central part is used"
@@ -541,9 +541,9 @@ script = ExtResource( 3 )
 [node name="OverlapSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=[
 "overlay_settings",
 ]]
-margin_top = 125.0
+margin_top = 97.0
 margin_right = 194.0
-margin_bottom = 171.0
+margin_bottom = 143.0
 hint_tooltip = "How much of the central part will be “shoved” under the corners and side. 
 Only matters if sides have some transparency."
 size_flags_horizontal = 3
@@ -585,22 +585,26 @@ rect_min_size = Vector2( 24, 16 )
 "corners_settings",
 "overlay_settings",
 ]]
-margin_top = 181.0
+margin_top = 153.0
 margin_right = 194.0
 margin_bottom = 250.0
-hint_tooltip = "If you have multiple rows in your input image, the result will be randomized. 
-Randomisation is enabled if the aspect ratio of the input image together with the chosen preset
-suggest that the input image has multiple rows. 
-(i.e. more than 1:4 for 4-part preset)"
+hint_tooltip = "If you have multiple rows in your input image, the result can and will be randomized. 
+(If aspect ratio of a texture is more than 1:4 for a 4-part preset)"
 custom_constants/separation = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer"]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer"]
 margin_right = 194.0
-margin_bottom = 40.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 0, 28 )
+valign = 2
 
-[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/HBoxContainer" groups=[
-"blockable",
-]]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer"]
+margin_top = 28.0
+margin_right = 194.0
+margin_bottom = 68.0
+hint_tooltip = "Use some interger seed to have consistent randomization result"
+
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/HBoxContainer"]
 margin_top = 7.0
 margin_right = 114.0
 margin_bottom = 33.0
@@ -614,12 +618,13 @@ valign = 1
 margin_left = 118.0
 margin_right = 194.0
 margin_bottom = 40.0
+hint_tooltip = "Use some interger seed to have consistent randomization result"
 shortcut_in_tooltip = false
 
 [node name="EditContainer" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer"]
-margin_top = 40.0
+margin_top = 68.0
 margin_right = 194.0
-margin_bottom = 69.0
+margin_bottom = 97.0
 custom_constants/separation = 0
 
 [node name="SeedLineEdit" type="LineEdit" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/EditContainer" groups=[
@@ -627,7 +632,7 @@ custom_constants/separation = 0
 ]]
 margin_right = 146.0
 margin_bottom = 29.0
-hint_tooltip = "Use some interger seed to have consistent randomization result. "
+hint_tooltip = "Use some interger seed to have consistent randomization result"
 size_flags_horizontal = 3
 max_length = 16
 editable = false
@@ -962,7 +967,7 @@ size_flags_horizontal = 3
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 474.0
 margin_right = 1112.0
-margin_bottom = 754.0
+margin_bottom = 755.0
 rect_min_size = Vector2( 0, 270 )
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -971,7 +976,7 @@ custom_constants/separation = 8
 
 [node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_right = 40.0
-margin_bottom = 280.0
+margin_bottom = 281.0
 rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
@@ -997,7 +1002,7 @@ __meta__ = {
 [node name="Output" type="Control" parent="Panel/HBox/Images/OutputContainer"]
 margin_left = 48.0
 margin_right = 1112.0
-margin_bottom = 280.0
+margin_bottom = 281.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1015,7 +1020,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer"]
 margin_right = 1064.0
-margin_bottom = 280.0
+margin_bottom = 281.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -1168,12 +1173,12 @@ __meta__ = {
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
 margin_left = 1116.0
 margin_right = 1128.0
-margin_bottom = 754.0
+margin_bottom = 755.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
 margin_left = 1132.0
 margin_right = 1352.0
-margin_bottom = 754.0
+margin_bottom = 755.0
 rect_min_size = Vector2( 220, 0 )
 
 [node name="CloseButton" type="Button" parent="Panel/HBox/Settings" groups=[

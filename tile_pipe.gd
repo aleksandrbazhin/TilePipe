@@ -29,6 +29,8 @@ onready var corners_merge_type_select: OptionButton = corners_merge_container.ge
 onready var settings_container: VBoxContainer = presets_container.get_node("HBox/VBoxSettings")
 onready var rand_seed_container: VBoxContainer = settings_container.get_node("RandomContainer")
 onready var rand_seed_check: CheckButton = rand_seed_container.get_node("HBoxContainer/RandomCheckButton")
+onready var rand_seed_header: Label = rand_seed_container.get_node("Label")
+onready var rand_seed_label: Label = rand_seed_container.get_node("HBoxContainer/Label")
 onready var rand_seed_value: LineEdit = rand_seed_container.get_node("EditContainer/SeedLineEdit")
 onready var rand_seed_use_button: Button = rand_seed_container.get_node("EditContainer/SeedButton")
 
@@ -288,7 +290,7 @@ func apply_saved_settings(data: Dictionary):
 	overlay_merge_rate_slider.value = data["merge_level"]
 	overlay_overlap_slider.value = data["overlap_level"]
 	rand_seed_check.pressed = bool(data["use_random_seed"])
-	set_random_ui_enabled(rand_seed_check.pressed)
+#	set_random_ui_enabled(rand_seed_check.pressed)
 	rand_seed_value.text = str(int(data["random_seed_value"]))
 	output_tile_offset = int(data["output_tile_offset"])
 	output_offset_spinbox.value = output_tile_offset
@@ -499,8 +501,7 @@ func generate_corner_slices():
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
 	set_input_tile_size(input_slice_size * 2, input_image)
 	var input_max_random_variants: int = get_input_image_random_max_variants()
-	var has_random: bool = input_max_random_variants > 1
-	set_random_ui_enabled(has_random)
+	set_random_ui_enabled(input_max_random_variants)
 	var output_slice_size: int = int(output_tile_size / 2.0)
 	var resize_factor: float = float(output_slice_size) / float(input_slice_size)
 	var new_viewport_size := Vector2(input_slice_size, input_slice_size)
@@ -665,8 +666,7 @@ func generate_overlayed_tiles():
 	
 	
 	var max_random_variants: int = get_input_image_random_max_variants()
-	var has_random: bool = max_random_variants > 1
-	set_random_ui_enabled(has_random)
+	set_random_ui_enabled(max_random_variants)
 	if rand_seed_check.pressed:
 		var random_seed_int: int = int(rand_seed_value.text)
 		var random_seed = rand_seed(random_seed_int)
@@ -1106,16 +1106,21 @@ func _on_Smoothing_button_up():
 	preprocess_input_image()
 	save_settings()
 
-func set_random_ui_enabled(has_random: bool):
-	if has_random:
+func set_random_ui_enabled(tile_variants: int):
+	rand_seed_header.text = " Detected %s tile variants:" % str(tile_variants)
+	if tile_variants > 1:
 		if not is_ui_blocked:
 			rand_seed_check.disabled = false
 		if rand_seed_check.is_in_group("really_disabled"):
 			rand_seed_check.remove_from_group("really_disabled")
+		rand_seed_label.add_color_override("font_color", Color(1.0, 1.0, 1.0))
+#		rand_seed_header.add_color_override("font_color", Color(1.0, 1.0, 1.0))
 		set_random_seed_ui_enabled(rand_seed_check.pressed)
 	else:
 		rand_seed_check.disabled = true
 		rand_seed_check.add_to_group("really_disabled")
+		rand_seed_label.add_color_override("font_color", Color(0.5, 0.5, 0.5))
+#		rand_seed_header.add_color_override("font_color", Color(0.5, 0.5, 0.5))
 		set_random_seed_ui_enabled(false)
 
 func set_random_seed_ui_enabled(is_enabled: bool):
