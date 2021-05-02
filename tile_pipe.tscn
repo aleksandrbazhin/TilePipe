@@ -354,7 +354,9 @@ custom_constants/separation = 10
 margin_right = 194.0
 margin_bottom = 62.0
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/CornersMergeSettings"]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/CornersMergeSettings" groups=[
+"blockable",
+]]
 margin_right = 194.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
@@ -377,12 +379,13 @@ __meta__ = {
 }
 
 [node name="OverlaySettings" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer"]
-visible = false
-margin_top = 74.0
+margin_top = 72.0
 margin_right = 194.0
-margin_bottom = 136.0
+margin_bottom = 134.0
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/OverlaySettings"]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/OverlaySettings" groups=[
+"blockable",
+]]
 margin_right = 194.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
@@ -402,7 +405,7 @@ hint_tooltip = "Presets vary in the amount of tile fragments and the way they ar
 clip_text = true
 
 [node name="ExampleContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer"]
-margin_top = 72.0
+margin_top = 144.0
 margin_right = 194.0
 margin_bottom = 250.0
 size_flags_vertical = 3
@@ -413,7 +416,9 @@ margin_right = 194.0
 margin_bottom = 40.0
 custom_constants/separation = 0
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HeaderContainer"]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HeaderContainer" groups=[
+"blockable",
+]]
 margin_top = 7.0
 margin_right = 86.0
 margin_bottom = 33.0
@@ -593,7 +598,9 @@ custom_constants/separation = 0
 margin_right = 194.0
 margin_bottom = 40.0
 
-[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/HBoxContainer" groups=[
+"blockable",
+]]
 margin_top = 7.0
 margin_right = 114.0
 margin_bottom = 33.0
@@ -771,7 +778,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer"]
+[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer" groups=[
+"blockable",
+]]
 margin_right = 149.0
 margin_bottom = 19.0
 size_flags_vertical = 1
@@ -892,7 +901,9 @@ margin_right = 1112.0
 margin_bottom = 130.0
 custom_constants/separation = 8
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/TemplateContainer/ButtonBox"]
+[node name="Label" type="Label" parent="Panel/HBox/Images/TemplateContainer/ButtonBox" groups=[
+"blockable",
+]]
 margin_right = 200.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
@@ -1059,7 +1070,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer"]
+[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer" groups=[
+"blockable",
+]]
 margin_right = 149.0
 margin_bottom = 19.0
 size_flags_vertical = 1
