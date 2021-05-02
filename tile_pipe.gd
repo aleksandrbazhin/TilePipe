@@ -892,8 +892,8 @@ func load_image_texture(path: String) -> Texture:
 
 func _on_TextureDialog_file_selected(path):
 	input_file_dialog_path = clear_path(path)
-	if not example_check.pressed:
-		load_input_texture(path)
+	example_check.pressed = false
+	load_input_texture(path)
 	preprocess_input_image()
 	save_settings()
 
