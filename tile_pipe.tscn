@@ -11,14 +11,14 @@
 [ext_resource path="res://Save.svg" type="Texture" id=9]
 [ext_resource path="res://header_font.tres" type="DynamicFont" id=10]
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 4 )
 shader_param/rotation = 0.0
 shader_param/is_flipped_x = false
 shader_param/is_flipped_y = false
 shader_param/is_flow_map = false
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 2 )
 shader_param/rotation_1 = null
 shader_param/rotation_2 = null
@@ -40,11 +40,11 @@ shader_param/overlay_rate = null
 shader_param/overlap = null
 shader_param/is_flow_map = false
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=3]
 size = 11
 font_data = ExtResource( 5 )
 
-[sub_resource type="Theme" id=5]
+[sub_resource type="Theme" id=4]
 Label/colors/font_color = Color( 0.207843, 0.258824, 0.317647, 1 )
 Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
@@ -52,7 +52,7 @@ Label/constants/line_spacing = 3
 Label/constants/shadow_as_outline = 0
 Label/constants/shadow_offset_x = 1
 Label/constants/shadow_offset_y = 1
-Label/fonts/font = SubResource( 4 )
+Label/fonts/font = SubResource( 3 )
 Label/styles/normal = null
 
 [node name="Node" type="Control"]
@@ -218,7 +218,7 @@ margin_left = 280.0
 margin_right = 320.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
-hint_tooltip = "Reload input image, if you made any changes to it"
+hint_tooltip = "(F5) Reload input image, if you made any changes to it"
 text = "↻"
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/VBoxInput"]
@@ -712,7 +712,7 @@ render_target_v_flip = true
 render_target_update_mode = 3
 
 [node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control/QuartersViewport"]
-material = SubResource( 2 )
+material = SubResource( 1 )
 margin_right = 64.0
 margin_bottom = 64.0
 stretch_mode = 3
@@ -729,7 +729,7 @@ render_target_update_mode = 3
 gui_disable_input = true
 
 [node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control/OverlayViewport"]
-material = SubResource( 3 )
+material = SubResource( 2 )
 stretch_mode = 3
 
 [node name="InViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
@@ -863,13 +863,13 @@ margin_left = 48.0
 margin_right = 896.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 390, 130 )
-hint_tooltip = "Template image, numbers over tiles are recognized neighbour bitmasks (clockwise bits)"
+hint_tooltip = "Template image, numbers over tiles are recognized neighbour bitmasks (clockwise neighbor bits)"
 size_flags_horizontal = 3
 
 [node name="TemplateTextureRect" type="TextureRect" parent="Panel/HBox/Images/TemplateContainer/ScrollContainer"]
 margin_bottom = 130.0
 size_flags_vertical = 3
-theme = SubResource( 5 )
+theme = SubResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
