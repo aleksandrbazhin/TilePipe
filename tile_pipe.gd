@@ -145,17 +145,24 @@ func _notification(what):
 		exit()
 
 func _input(event: InputEvent):
-	if event is InputEventKey and event.is_pressed() :
-		if get_focus_owner() == output_offset_spinbox.get_line_edit() and \
-				(event.scancode == KEY_UP or event.scancode == KEY_DOWN):
-			if output_offset_spinbox.get_line_edit().editable:
-				if event.scancode == KEY_UP:
-					output_offset_spinbox.value += 1
-				else:
-					output_offset_spinbox.value -= 1
-			get_tree().set_input_as_handled()
-		elif get_focus_owner() == null and event.scancode == KEY_TAB:
-			$Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/LoadButton.grab_focus()
+	if event is InputEventKey and event.is_pressed():
+		match event.scancode:
+			KEY_UP, KEY_DOWN:
+				if get_focus_owner() == output_offset_spinbox.get_line_edit():
+		#		 and (event.scancode == KEY_UP or event.scancode == KEY_DOWN):
+					if output_offset_spinbox.get_line_edit().editable:
+						if event.scancode == KEY_UP:
+							output_offset_spinbox.value += 1
+						else:
+							output_offset_spinbox.value -= 1
+					get_tree().set_input_as_handled()
+			KEY_TAB:
+				if get_focus_owner() == null:
+					$Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/LoadButton.grab_focus()
+					get_tree().set_input_as_handled()
+			KEY_F5:
+				if not is_ui_blocked:
+					_on_ReloadButton_pressed()
 
 # nihua eto ne rabotaet
 func adjust_for_small_resolution():
