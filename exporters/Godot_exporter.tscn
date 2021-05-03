@@ -1,0 +1,234 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://ui_theme.tres" type="Theme" id=1]
+[ext_resource path="res://header_font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://assets/Save.svg" type="Texture" id=3]
+
+[node name="Control" type="PopupDialog"]
+visible = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -766.0
+margin_bottom = -368.0
+popup_exclusive = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 24.0
+margin_right = -24.0
+custom_constants/separation = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_right = 552.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+theme = ExtResource( 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
+text = "Godor resource exporter"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 42.0
+margin_right = 552.0
+margin_bottom = 74.0
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer3"]
+margin_right = 58.0
+margin_bottom = 32.0
+size_flags_vertical = 3
+text = "Autotiles"
+valign = 2
+
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer3"]
+margin_left = 62.0
+margin_right = 480.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3"]
+margin_left = 484.0
+margin_right = 516.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+text = "+"
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer3"]
+margin_left = 520.0
+margin_right = 552.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+text = "-"
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+margin_top = 76.0
+margin_right = 552.0
+margin_bottom = 272.0
+rect_min_size = Vector2( 0, 196 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 545.0
+margin_bottom = 189.0
+custom_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+margin_right = 538.0
+margin_bottom = 32.0
+custom_constants/separation = 10
+
+[node name="LineEditName" type="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_right = 120.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 0 )
+placeholder_text = "Tile name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 130.0
+margin_right = 239.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "3x3 minimal"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 249.0
+margin_right = 428.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+placeholder_text = "Generated texture"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 438.0
+margin_right = 538.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 100, 32 )
+text = "Select file"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+visible = false
+margin_top = 40.0
+margin_right = 538.0
+margin_bottom = 72.0
+custom_constants/separation = 10
+
+[node name="LineEditName" type="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+margin_right = 120.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 0 )
+placeholder_text = "Tile name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 130.0
+margin_right = 239.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "3x3 minimal"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 249.0
+margin_right = 428.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+placeholder_text = "Generated texture"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 438.0
+margin_right = 538.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 100, 32 )
+text = "Select file"
+
+[node name="Control" type="Control" parent="VBoxContainer"]
+margin_top = 274.0
+margin_right = 552.0
+margin_bottom = 276.0
+rect_min_size = Vector2( 0, 2 )
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 278.0
+margin_right = 552.0
+margin_bottom = 310.0
+custom_constants/separation = 16
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer2"]
+margin_top = 9.0
+margin_right = 92.0
+margin_bottom = 23.0
+text = "Save tileset as"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit2" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
+margin_left = 108.0
+margin_right = 436.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+placeholder_text = ".tres"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer2"]
+margin_left = 452.0
+margin_right = 552.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 100, 32 )
+text = "Select file"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 312.0
+margin_right = 552.0
+margin_bottom = 332.0
+custom_constants/separation = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 334.0
+margin_right = 552.0
+margin_bottom = 366.0
+custom_constants/separation = 16
+alignment = 2
+
+[node name="ButtonCancel" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 336.0
+margin_right = 436.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 100, 32 )
+text = "Cancel"
+
+[node name="ButtonOk" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 452.0
+margin_right = 552.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 100, 32 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
+text = "Save"
+icon = ExtResource( 3 )

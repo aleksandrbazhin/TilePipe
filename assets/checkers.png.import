@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/checkers.png-a51e2cc4329394762e59639b440832e6.stex"
+path="res://.import/checkers.png-12157415a72cabcec708bddb6aaa2368.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://checkers.png"
-dest_files=[ "res://.import/checkers.png-a51e2cc4329394762e59639b440832e6.stex" ]
+source_file="res://assets/checkers.png"
+dest_files=[ "res://.import/checkers.png-12157415a72cabcec708bddb6aaa2368.stex" ]
 
 [params]
 

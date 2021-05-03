@@ -110,7 +110,7 @@ func _ready():
 		color_process_select.add_item(Const.COLOR_PROCESS_TYPE_NAMES[Const.COLOR_PROCESS_TYPES[type]])
 	for type in Const.INPUT_TYPES:
 		var input_type_name: String = Const.INPUT_TYPE_NAMES[Const.INPUT_TYPES[type]]
-		var input_type_icon: Texture = load("res://%s.png" % input_type_name.to_lower())
+		var input_type_icon: Texture = load("res://assets/%s.png" % input_type_name.to_lower())
 		generation_type_select.add_icon_item(input_type_icon, input_type_name)
 
 	for type in Const.TEMPLATE_TYPES:
@@ -390,7 +390,7 @@ func mark_template_tile(mask_value: int, mask_position: Vector2, is_text: bool =
 					var mask_marker = TextureRect.new()
 					mask_marker.rect_position = mask_position * Const.TEMPLATE_TILE_SIZE + \
 						Vector2(x * 10.6 + 1, y * 10.6 + 1)
-					mask_marker.texture = preload("res://template_marker.png")
+					mask_marker.texture = preload("res://assets/template_marker.png")
 					template_texture.add_child(mask_marker)
 
 func generate_tile_masks():
@@ -1184,3 +1184,9 @@ func _on_ExampleCheckButton_toggled(button_pressed: bool):
 		load_input_texture(input_file_dialog_path)
 	preprocess_input_image()
 	save_settings()
+
+
+func _on_testpopupButton_pressed():
+	var test_popup: PopupDialog = preload("res://exporters/Godot_exporter.tscn").instance()
+	add_child(test_popup)
+	test_popup.popup_centered()

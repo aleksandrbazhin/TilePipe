@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/boot_splash.png-939509db304f9fb6a281cb6f13babf6e.stex"
+path="res://.import/Save.svg-43077090818635cebdf0bb1072564980.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://boot_splash.png"
-dest_files=[ "res://.import/boot_splash.png-939509db304f9fb6a281cb6f13babf6e.stex" ]
+source_file="res://assets/Save.svg"
+dest_files=[ "res://.import/Save.svg-43077090818635cebdf0bb1072564980.stex" ]
 
 [params]
 

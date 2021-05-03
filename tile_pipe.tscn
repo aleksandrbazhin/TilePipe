@@ -4,11 +4,11 @@
 [ext_resource path="res://overlay.shader" type="Shader" id=2]
 [ext_resource path="res://BlockableSlider.gd" type="Script" id=3]
 [ext_resource path="res://slice_process.shader" type="Shader" id=4]
-[ext_resource path="res://IBMPlexSans-Medium.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://assets/IBMPlexSans-Medium.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://ui_theme.tres" type="Theme" id=6]
-[ext_resource path="res://checkers.png" type="Texture" id=7]
-[ext_resource path="res://Load.svg" type="Texture" id=8]
-[ext_resource path="res://Save.svg" type="Texture" id=9]
+[ext_resource path="res://assets/checkers.png" type="Texture" id=7]
+[ext_resource path="res://assets/Load.svg" type="Texture" id=8]
+[ext_resource path="res://assets/Save.svg" type="Texture" id=9]
 [ext_resource path="res://header_font.tres" type="DynamicFont" id=10]
 
 [sub_resource type="ShaderMaterial" id=1]
@@ -981,6 +981,7 @@ rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/OutputContainer/BlockLabel"]
+margin_left = 2.0
 margin_top = 270.0
 margin_right = 270.0
 margin_bottom = 302.0
@@ -1257,6 +1258,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="testpopupButton" type="Button" parent="Panel/HBox/Settings"]
+margin_top = 228.0
+margin_right = 220.0
+margin_bottom = 278.0
+rect_min_size = Vector2( 0, 50 )
+text = "Popup!"
+
 [connection signal="file_selected" from="TextureDialog" to="." method="_on_TextureDialog_file_selected"]
 [connection signal="file_selected" from="TemplateDialog" to="." method="_on_TemplateDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureDialog" to="." method="_on_SaveTextureDialog_file_selected"]
@@ -1283,3 +1291,4 @@ __meta__ = {
 [connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save2" to="." method="_on_Save2_pressed"]
+[connection signal="pressed" from="Panel/HBox/Settings/testpopupButton" to="." method="_on_testpopupButton_pressed"]

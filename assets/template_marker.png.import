@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/quarters.png-fcb17421ef9ab28d58e505512edb7ddb.stex"
+path="res://.import/template_marker.png-b8c57092596b0f718b15aa796de59e35.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://quarters.png"
-dest_files=[ "res://.import/quarters.png-fcb17421ef9ab28d58e505512edb7ddb.stex" ]
+source_file="res://assets/template_marker.png"
+dest_files=[ "res://.import/template_marker.png-b8c57092596b0f718b15aa796de59e35.stex" ]
 
 [params]
 
