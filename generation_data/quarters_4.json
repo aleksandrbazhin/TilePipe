@@ -47,5 +47,5 @@
 		},
 		"rotation_offset" : 1,
 		"out_tile":  {"index": 0, "flip": false}
-	},
+	}
 ]}
