@@ -1,34 +1,36 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://ui_theme.tres" type="Theme" id=1]
 [ext_resource path="res://header_font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://assets/Save.svg" type="Texture" id=3]
+[ext_resource path="res://assets/Load.svg" type="Texture" id=4]
 
 [node name="Control" type="PopupDialog"]
 visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -766.0
+margin_right = -566.0
 margin_bottom = -368.0
 popup_exclusive = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 24.0
-margin_right = -24.0
-custom_constants/separation = 2
+margin_left = 20.0
+margin_right = -20.0
+margin_bottom = -20.0
+custom_constants/separation = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="VBoxContainer"]
-margin_right = 552.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 0, 40 )
+[node name="Header" type="Label" parent="VBox"]
+margin_right = 760.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 0, 48 )
 theme = ExtResource( 1 )
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
@@ -39,193 +41,324 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 42.0
-margin_right = 552.0
-margin_bottom = 74.0
-
-[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer3"]
-margin_right = 58.0
-margin_bottom = 32.0
-size_flags_vertical = 3
-text = "Autotiles"
-valign = 2
-
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer3"]
-margin_left = 62.0
-margin_right = 480.0
-margin_bottom = 32.0
-size_flags_horizontal = 3
-
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer3"]
-margin_left = 484.0
-margin_right = 516.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-text = "+"
-
-[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer3"]
-margin_left = 520.0
-margin_right = 552.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-text = "-"
-
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
-margin_top = 76.0
-margin_right = 552.0
-margin_bottom = 272.0
-rect_min_size = Vector2( 0, 196 )
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 545.0
-margin_bottom = 189.0
+[node name="HBoxTileset" type="HBoxContainer" parent="VBox"]
+margin_top = 48.0
+margin_right = 760.0
+margin_bottom = 88.0
 custom_constants/separation = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-margin_right = 538.0
-margin_bottom = 32.0
-custom_constants/separation = 10
+[node name="Control" type="Control" parent="VBox/HBoxTileset"]
+margin_right = 7.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 7, 0 )
 
-[node name="LineEditName" type="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_right = 120.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 120, 0 )
-placeholder_text = "Tile name"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 130.0
-margin_right = 239.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 0, 32 )
-text = "3x3 minimal"
-
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 249.0
-margin_right = 428.0
-margin_bottom = 32.0
-size_flags_horizontal = 3
-placeholder_text = "Generated texture"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Button" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
-margin_left = 438.0
-margin_right = 538.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 100, 32 )
-text = "Select file"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
-visible = false
-margin_top = 40.0
-margin_right = 538.0
-margin_bottom = 72.0
-custom_constants/separation = 10
-
-[node name="LineEditName" type="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-margin_right = 120.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 120, 0 )
-placeholder_text = "Tile name"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 130.0
-margin_right = 239.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 0, 32 )
-text = "3x3 minimal"
-
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 249.0
-margin_right = 428.0
-margin_bottom = 32.0
-size_flags_horizontal = 3
-placeholder_text = "Generated texture"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Button" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
-margin_left = 438.0
-margin_right = 538.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 100, 32 )
-text = "Select file"
-
-[node name="Control" type="Control" parent="VBoxContainer"]
-margin_top = 274.0
-margin_right = 552.0
-margin_bottom = 276.0
-rect_min_size = Vector2( 0, 2 )
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 278.0
-margin_right = 552.0
-margin_bottom = 310.0
-custom_constants/separation = 16
-
-[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer2"]
-margin_top = 9.0
-margin_right = 92.0
-margin_bottom = 23.0
+[node name="Label2" type="Label" parent="VBox/HBoxTileset"]
+margin_left = 15.0
+margin_right = 112.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 97, 0 )
+size_flags_vertical = 3
 text = "Save tileset as"
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LineEdit2" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
-margin_left = 108.0
-margin_right = 436.0
-margin_bottom = 32.0
+[node name="LineEdit2" type="LineEdit" parent="VBox/HBoxTileset"]
+margin_left = 120.0
+margin_right = 453.0
+margin_bottom = 40.0
 size_flags_horizontal = 3
 placeholder_text = ".tres"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer2"]
-margin_left = 452.0
-margin_right = 552.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 100, 32 )
+[node name="Button2" type="Button" parent="VBox/HBoxTileset"]
+margin_left = 461.0
+margin_right = 577.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 116, 32 )
 text = "Select file"
+icon = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 312.0
-margin_right = 552.0
-margin_bottom = 332.0
+[node name="Control2" type="Control" parent="VBox/HBoxTileset"]
+margin_left = 585.0
+margin_right = 585.0
+margin_bottom = 40.0
+
+[node name="Label" type="Label" parent="VBox/HBoxTileset"]
+visible = false
+margin_left = 676.0
+margin_top = 13.0
+margin_right = 676.0
+margin_bottom = 27.0
+
+[node name="CheckButton" type="CheckButton" parent="VBox/HBoxTileset"]
+margin_left = 593.0
+margin_right = 760.0
+margin_bottom = 40.0
+pressed = true
+text = "Overwrite file"
+
+[node name="Spacer" type="Control" parent="VBox"]
+margin_top = 88.0
+margin_right = 760.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 12 )
+
+[node name="TilesLabel" type="Label" parent="VBox"]
+margin_top = 100.0
+margin_right = 760.0
+margin_bottom = 114.0
+size_flags_vertical = 1
+text = "Tiles"
+valign = 2
+
+[node name="TilesPanelContainer" type="PanelContainer" parent="VBox"]
+margin_top = 114.0
+margin_right = 760.0
+margin_bottom = 326.0
+rect_min_size = Vector2( 0, 48 )
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="VBox/TilesPanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 753.0
+margin_bottom = 205.0
+custom_constants/separation = 8
+
+[node name="HBoxNewTile" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
+margin_right = 746.0
+margin_bottom = 32.0
+custom_constants/separation = 8
+
+[node name="Spacer" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
+margin_bottom = 32.0
+
+[node name="LineEditName" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
+margin_left = 8.0
+margin_right = 128.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 0 )
+placeholder_text = "Tile name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
+margin_left = 136.0
+margin_right = 256.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 0 )
+size_flags_vertical = 3
+text = "Save texture as"
+align = 2
+valign = 1
+
+[node name="LineEditTexture" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
+margin_left = 264.0
+margin_right = 458.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+placeholder_text = ".png"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
+margin_left = 466.0
+margin_right = 566.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 100, 32 )
+text = "Select file"
+
+[node name="Spacer3" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
+margin_left = 574.0
+margin_right = 579.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 5, 0 )
+
+[node name="Label2" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
+margin_left = 587.0
+margin_top = 9.0
+margin_right = 621.0
+margin_bottom = 23.0
+text = "Type:"
+
+[node name="OptionButton" type="OptionButton" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
+margin_left = 629.0
+margin_right = 738.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "3x3 minimal"
+
+[node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
+margin_left = 746.0
+margin_right = 746.0
+margin_bottom = 32.0
+
+[node name="HBoxExisiting" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
+margin_top = 40.0
+margin_right = 746.0
+margin_bottom = 72.0
+custom_constants/separation = 8
+
+[node name="Spacer" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+margin_bottom = 32.0
+
+[node name="NameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+margin_left = 8.0
+margin_right = 128.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 32 )
+size_flags_vertical = 3
+text = "Tile name"
+valign = 1
+clip_text = true
+
+[node name="TextureNameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+margin_left = 136.0
+margin_right = 256.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 32 )
+size_flags_vertical = 3
+text = "Texture"
+align = 2
+valign = 1
+clip_text = true
+
+[node name="LineEdit" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+margin_left = 264.0
+margin_right = 565.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+editable = false
+placeholder_text = "tile_texture1.png"
+
+[node name="Spacer3" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+margin_left = 573.0
+margin_right = 578.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 5, 0 )
+
+[node name="TypeLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+margin_left = 586.0
+margin_top = 9.0
+margin_right = 620.0
+margin_bottom = 23.0
+text = "Type:"
+
+[node name="Type" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+margin_left = 628.0
+margin_top = 9.0
+margin_right = 738.0
+margin_bottom = 23.0
+rect_min_size = Vector2( 110, 0 )
+text = "2x2"
+
+[node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+margin_left = 746.0
+margin_right = 746.0
+margin_bottom = 32.0
+
+[node name="HBoxExisiting2" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
+margin_top = 80.0
+margin_right = 746.0
+margin_bottom = 112.0
+custom_constants/separation = 8
+
+[node name="Spacer" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+margin_bottom = 32.0
+
+[node name="NameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+margin_left = 8.0
+margin_right = 128.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 32 )
+size_flags_vertical = 3
+text = "Tile name"
+valign = 1
+clip_text = true
+
+[node name="TextureNameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+margin_left = 136.0
+margin_right = 256.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 120, 32 )
+size_flags_vertical = 3
+text = "Texture"
+align = 2
+valign = 1
+clip_text = true
+
+[node name="LineEdit" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+margin_left = 264.0
+margin_right = 565.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+editable = false
+placeholder_text = "tile_texture1.png"
+
+[node name="Spacer3" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+margin_left = 573.0
+margin_right = 578.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 5, 0 )
+
+[node name="TypeLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+margin_left = 586.0
+margin_top = 9.0
+margin_right = 620.0
+margin_bottom = 23.0
+text = "Type:"
+
+[node name="Type" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+margin_left = 628.0
+margin_top = 9.0
+margin_right = 738.0
+margin_bottom = 23.0
+rect_min_size = Vector2( 110, 0 )
+text = "2x2"
+
+[node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+margin_left = 746.0
+margin_right = 746.0
+margin_bottom = 32.0
+
+[node name="Control" type="Control" parent="VBox"]
+margin_top = 326.0
+margin_right = 760.0
+margin_bottom = 328.0
+rect_min_size = Vector2( 0, 2 )
+
+[node name="HSeparator" type="HSeparator" parent="VBox"]
+margin_top = 328.0
+margin_right = 760.0
+margin_bottom = 348.0
 custom_constants/separation = 20
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 334.0
-margin_right = 552.0
-margin_bottom = 366.0
+[node name="HBoxContainer" type="HBoxContainer" parent="VBox"]
+margin_top = 348.0
+margin_right = 760.0
+margin_bottom = 380.0
 custom_constants/separation = 16
 alignment = 2
 
-[node name="ButtonCancel" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 336.0
-margin_right = 436.0
+[node name="ButtonCancel" type="Button" parent="VBox/HBoxContainer"]
+margin_left = 544.0
+margin_right = 644.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 100, 32 )
 text = "Cancel"
 
-[node name="ButtonOk" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 452.0
-margin_right = 552.0
+[node name="ButtonOk" type="Button" parent="VBox/HBoxContainer"]
+margin_left = 660.0
+margin_right = 760.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 100, 32 )
 custom_fonts/font = ExtResource( 2 )

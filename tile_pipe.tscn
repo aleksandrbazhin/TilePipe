@@ -1265,6 +1265,15 @@ margin_bottom = 278.0
 rect_min_size = Vector2( 0, 50 )
 text = "Popup!"
 
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.117647, 0.235294, 0.313726, 0.352941 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="file_selected" from="TextureDialog" to="." method="_on_TextureDialog_file_selected"]
 [connection signal="file_selected" from="TemplateDialog" to="." method="_on_TemplateDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureDialog" to="." method="_on_SaveTextureDialog_file_selected"]

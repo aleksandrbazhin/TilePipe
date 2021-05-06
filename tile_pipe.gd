@@ -96,6 +96,7 @@ var is_ready: bool = false
 
 func _ready():
 	print("TilePipe v.%s running in Debug mode" % VERSION)
+	OS.set_window_title("TilePipe v.%s" % VERSION)
 #	OS.window_maximized = true
 #	rand_seed_check.disabled = true
 	rng.randomize()
@@ -1190,3 +1191,4 @@ func _on_testpopupButton_pressed():
 	var test_popup: PopupDialog = preload("res://exporters/Godot_exporter.tscn").instance()
 	add_child(test_popup)
 	test_popup.popup_centered()
+	$ColorRect.show()
