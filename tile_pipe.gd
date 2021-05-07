@@ -67,7 +67,7 @@ onready var image_settings: VBoxContainer = debug_preview.get_node("ImageSetting
 onready var output_size_select: OptionButton = image_settings.get_node("SizeOptionButton")
 onready var smoothing_check: CheckButton = image_settings.get_node("Smoothing")
 
-onready var godot_export_dialog: PopupDialog = $GodotExportDialog
+onready var godot_export_dialog: GodotExporter = $GodotExportDialog
 
 var is_ui_blocked: bool = false
 var is_slider_changed: bool = false
@@ -80,14 +80,12 @@ var input_overlayed_tiles: Array = []
 var tile_masks: Array = []
 var rng = RandomNumberGenerator.new()
 var last_input_texture_path: String = ""
-var last_tile_name: String = ""
 var saved_texture_rects: Array = []
 var saved_tile_names: Array = []
 
 var input_file_dialog_path: String = ""
 var template_file_dialog_path: String = ""
 var save_png_file_dialog_path: String = ""
-var save_godot_tres_file_dialog_path: String = ""
 var output_tile_offset: int = 0
 
 var is_ready: bool = false
@@ -100,6 +98,9 @@ func _ready():
 	rng.randomize()
 	connect("input_image_processed", self, "make_output_texture")
 	output_offset_spinbox.get_line_edit().connect("text_entered", self, "offset_lineedit_enter")
+	godot_export_dialog.connect("exporter_error", self, "report_error")	
+	godot_export_dialog.connect("settings_saved", self, "save_settings")	
+	
 	godot_export_dialog.connect("about_to_show", self, "show_blocking_overlay")
 	godot_export_dialog.connect("popup_hide", self, "hide_blocking_overlay")
 	popup_dialog.connect("about_to_show", self, "show_blocking_overlay")
@@ -111,7 +112,6 @@ func _ready():
 	save_texture_dialog.connect("about_to_show", self, "show_blocking_overlay")
 	save_texture_dialog.connect("popup_hide", self, "hide_blocking_overlay")
 
-	godot_export_dialog.connect("exporter_error", self, "report_error")
 	output_size_select.clear()
 	for size in Const.OUTPUT_SIZES:
 		output_size_select.add_item(Const.OUTPUT_SIZES[size])
@@ -210,7 +210,6 @@ func capture_setting_values() -> Dictionary:
 		"last_template_path": get_template_path(),
 		"last_template_file_dialog_path": template_file_dialog_path,
 		"last_save_texture_path": save_png_file_dialog_path,
-		"last_save_texture_resource_path": save_godot_tres_file_dialog_path,
 		"output_tile_size": Const.OUTPUT_SIZES.keys()[output_size_select.selected],
 		"input_type": generation_type_select.selected,
 		"corner_preset": corners_merge_type_select.selected,
@@ -222,19 +221,26 @@ func capture_setting_values() -> Dictionary:
 		"use_random_seed": rand_seed_check.pressed,
 		"random_seed_value": int(rand_seed_value.text),
 		"output_tile_offset": output_tile_offset,
-		"use_example": example_check.pressed
+		"use_example": example_check.pressed,
+		"godot_export_resource_path": godot_export_dialog.resource_path,
+		"godot_export_texture_path": godot_export_dialog.texture_path,
+		"godot_export_tile_name": godot_export_dialog.tile_name,
+		"godot_export_last_generated_tile_name": godot_export_dialog.last_generated_tile_name,
+		"godot_autotile_type": godot_export_dialog.autotile_type
 	}
 
 func save_settings(store_defaults: bool = false):
-	var save = File.new()
-	save.open(Const.SETTINGS_PATH, File.WRITE)
-	var data := Const.DEFAULT_SETTINGS
-	if store_defaults:
-		data["program_version"] = VERSION
-	else:
-		data = capture_setting_values()
-	save.store_line(to_json(data))
-	save.close()
+	if is_ready:
+		var save = File.new()
+		save.open(Const.SETTINGS_PATH, File.WRITE)
+		var data := Const.DEFAULT_SETTINGS
+		if store_defaults:
+			data["program_version"] = VERSION
+		else:
+			data = capture_setting_values()
+		save.store_line(to_json(data))
+		save.close()
+		print("saveing - ", data["godot_export_tile_name"])
 
 func load_input_texture(path: String) -> String:
 	var loaded_texture: Texture = load_image_texture(path)
@@ -243,7 +249,6 @@ func load_input_texture(path: String) -> String:
 		loaded_texture = load_image_texture(path)
 	last_input_texture_path = path
 	texture_in.texture = loaded_texture
-	last_tile_name = path.get_file().split(".")[0]
 	texture_input_container.get_node("InputInfo/InputNameLabel").text = path.get_file()
 	return path
 
@@ -282,8 +287,6 @@ func apply_saved_settings(data: Dictionary):
 
 	save_png_file_dialog_path = data["last_save_texture_path"]
 	save_texture_dialog.current_path = Helpers.clear_path(data["last_save_texture_path"])
-	save_godot_tres_file_dialog_path = data["last_save_texture_resource_path"]
-#	save_resource_dialog.current_path = Helpers.clear_path(data["last_save_texture_resource_path"])
 
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
 	generation_type_select.selected = data["input_type"]
@@ -1150,10 +1153,6 @@ func reset_saved():
 	saved_tile_names = []
 	saved_texture_rects = []
 
-func _on_Freeze_pressed():
-	saved_tile_names.append(last_tile_name)
-	saved_texture_rects.append(last_tile_name)
-
 func report_error(error_text: String):
 	print(error_text)
 	popup_dialog.dialog_text += error_text + "\n"
@@ -1189,10 +1188,9 @@ func hide_blocking_overlay():
 	$BlockingOverlay.hide()
 
 func _on_GodotExportButton_pressed():
-	godot_export_dialog.start_export(
+	godot_export_dialog.start_export_dialog(
 		get_output_tile_size(),
 		tile_masks,
 		out_texture.texture.get_data().get_size(),
-		save_texture_dialog.current_path,
-		last_tile_name,
+		save_texture_dialog.current_path.get_basename(),
 		output_tile_offset)

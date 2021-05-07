@@ -3,19 +3,33 @@ extends PopupDialog
 class_name GodotExporter
 
 signal exporter_error(message)
+signal settings_saved()
 
-var current_tile_name: String
+#var last_saved_data := {
+#	"resource_path": "",
+#	"texture_name": "",
+#	"tile_name": "",
+#	"last_generated_tile_name": "",
+#	"autotile_type": Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
+#}
+
+var resource_path: String = ""
+var texture_path: String = ""
+var tile_name: String = ""
+var last_generated_tile_name: String = ""
+var autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
+
 onready var resource_name_edit: LineEdit = $VBox/HBoxTileset/ResourceNameEdit
-onready var current_tile_name_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditName
-onready var current_tile_texture_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditTexture
-
+onready var tile_name_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditName
+onready var tile_texture_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditTexture
+onready var autotile_type_select: OptionButton = $VBox/TilesPanelContainer/VBox/HBoxNewTile/OptionButton
 
 func save_resource(path: String, tile_size: int, tile_masks: Array, 
-		texture_size: Vector2, texture_path: String, tile_base_name: String, 
+		texture_size: Vector2, new_texture_path: String, tile_base_name: String, 
 		tile_spacing: int):
 	var output_string : String
 	output_string = make_autotile_resource_data(path, tile_size, 
-		tile_masks, texture_size, texture_path, tile_base_name, tile_spacing)
+		tile_masks, texture_size, new_texture_path, tile_base_name, tile_spacing)
 	var tileset_resource_path: String = path.get_basename( ) + ".tres"
 	var file = File.new()
 	file.open(tileset_resource_path, File.WRITE)
@@ -35,37 +49,26 @@ func get_godot_project_path(path: String) -> String:
 			return current_test_dir
 	return ""
 
-func cancel_action():
-	if $PopupDialog.visible:
-		$PopupDialog.hide()
-		_on_PopupDialog_confirmed()
-	elif $ResourceFileDialog.visible:
-		$ResourceFileDialog.hide()
-	elif $TextureFileDialog.visible:
-		$TextureFileDialog.hide()
-	else:
-		hide()
-
-func report_error_inside_dialog(text: String):
-	$PopupDialog.dialog_text = text
-	$PopupDialog.popup_centered()
-	$ColorRect.show()
-
-# return error string 
-func check_paths(resource_path: String, texture_path: String) -> bool:
-	var resource_parent_project_path := get_godot_project_path(resource_path)
-	var texture_parent_project_path := get_godot_project_path(texture_path)
-	print(resource_parent_project_path)
-	print(texture_parent_project_path)
-	if resource_parent_project_path.empty():
+func check_resource_path(test_resource_path: String):
+	var resource_project_path := get_godot_project_path(test_resource_path)
+	if resource_project_path.empty():
 		report_error_inside_dialog("Error: saving resource not in any Godot project path")
 #		emit_signal("exporter_error", "Error: saving resource not in any Godot project path")
 		return false
-	if texture_parent_project_path.empty() or resource_parent_project_path != resource_parent_project_path:
+	else:
+		return true
+
+func check_texture_path(test_texture_path: String, test_resource_path: String):
+	var resource_project_path := get_godot_project_path(test_resource_path)
+	var texture_project_path := get_godot_project_path(test_texture_path)
+	if texture_project_path.empty() or resource_project_path != resource_project_path:
 		report_error_inside_dialog("Error: last saved texture is not in the same Godot project with the resource")
-#		emit_signal("exporter_error", "Error: last saved texture is not in the same Godot project with the resource")
 		return false
-	return true
+	else:
+		return true
+
+func check_paths(test_resource_path: String, test_texture_path: String) -> bool:
+	return check_resource_path(test_resource_path) and check_texture_path(test_texture_path, test_resource_path)
 
 func project_export_relative_path(path: String) -> String:
 	var path_array := path.get_base_dir().split("/")
@@ -88,9 +91,9 @@ func project_export_relative_path(path: String) -> String:
 	return ""
 
 func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array, 
-		texture_size: Vector2, texture_path: String, tile_base_name: String, 
+		texture_size: Vector2, new_texture_path: String, tile_base_name: String, 
 		tile_spacing: int) -> String:
-	var texture_relative_path := project_export_relative_path(texture_path)
+	var texture_relative_path := project_export_relative_path(new_texture_path)
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
 	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % texture_relative_path
 	out_string += "\n[resource]\n"
@@ -124,47 +127,94 @@ func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array
 	out_string += "0/z_index = 0\n"
 	return out_string
 
-func start_export(tile_size: int, tile_masks: Array, 
-		texture_size: Vector2, texture_path: String, tile_base_name: String, 
-		tile_spacing: int):
-	popup_centered()
-	current_tile_name = tile_base_name + "_generated"
-	current_tile_name_edit.text = current_tile_name
-
-
 func _ready():
 	$ResourceFileDialog.connect("popup_hide", $ColorRect, "hide")
+	$ResourceFileDialog.connect("about_to_show", $ColorRect, "show")
 	$TextureFileDialog.connect("popup_hide", $ColorRect, "hide")
+	$TextureFileDialog.connect("about_to_show", $ColorRect, "show")
+	$ErrorDialog.connect("popup_hide", $ColorRect, "hide")
+	$ErrorDialog.connect("about_to_show", $ColorRect, "show")
+	for type in Const.GODOT_AUTOTILE_TYPE:
+		var type_id: int = Const.GODOT_AUTOTILE_TYPE[type]
+		autotile_type_select.add_item(Const.GODOT_AUTOTILE_TYPE_NAMES[type_id], type_id)
+	
+
+func start_export_dialog(new_tile_size: int, new_tile_masks: Array, 
+		new_texture_size: Vector2, _new_tile_base_name: String, 
+		new_tile_spacing: int):
+
+	$ResourceFileDialog.current_path = resource_path
+	resource_name_edit.text = resource_path
+
+	$TextureFileDialog.current_path = texture_path
+#	tile_name = new_tile_base_name + "_generated"
+	tile_name_edit.text = tile_name
+	autotile_type_select.selected = autotile_type
+	popup_centered()
 
 func load_defaults_from_settings(data: Dictionary):
-	$ResourceFileDialog.current_path = Helpers.clear_path(data["last_save_texture_resource_path"])
-	resource_name_edit.text = $ResourceFileDialog.current_path
-	$TextureFileDialog.current_path = Helpers.clear_path(data["last_save_texture_path"])
-#	current_tile_texture_edit.text = $TextureFileDialog.current_path 
+	
+	resource_path = Helpers.clear_path(data["godot_export_resource_path"])
+	texture_path = Helpers.clear_path(data["godot_export_texture_path"])
+	tile_name = data["godot_export_tile_name"]
+	last_generated_tile_name = data["godot_export_last_generated_tile_name"]
+	autotile_type = data["godot_autotile_type"]
+	print("loading %s" % tile_name)
+
+
+func cancel_action():
+	if $ErrorDialog.visible:
+		$ErrorDialog.hide()
+		_on_ErrorDialog_confirmed()
+	elif $ResourceFileDialog.visible:
+		$ResourceFileDialog.hide()
+	elif $TextureFileDialog.visible:
+		$TextureFileDialog.hide()
+	else:
+		print("cancel ", tile_name)
+		hide()
+
+func report_error_inside_dialog(text: String):
+	$ErrorDialog.dialog_text = text
+	$ErrorDialog.popup_centered()
+
+
+
+func save_settings():
+	emit_signal("settings_saved")
 
 func _on_ButtonCancel_pressed():
 	hide()
 
 func _on_SelectResourceButton_pressed():
 	$ResourceFileDialog.popup_centered()
-	$ColorRect.show()
 
 func _on_SelectTextureButton_pressed():
 	$TextureFileDialog.popup_centered()
-	$ColorRect.show()
 
 func _on_ResourceFileDialog_file_selected(path: String):
-	resource_name_edit.text = path
-	var texture_path: String = path.get_base_dir() + "/" + current_tile_name + ".png"
-	$TextureFileDialog.current_path = texture_path
-	current_tile_texture_edit.text = texture_path
+	if check_resource_path(path):
+#		var project_path := get_godot_project_path(path)
+		resource_path = path
+		resource_name_edit.text = resource_path
+		texture_path = resource_path.get_base_dir() + "/" + tile_name + ".png"
+		$TextureFileDialog.current_path = texture_path
+		tile_texture_edit.text = texture_path
+		save_settings()
+
+func _on_ErrorDialog_confirmed():
+	$ErrorDialog.dialog_text = ""
+
+func _on_LineEditName_text_changed(new_text):
+	tile_name = new_text
+	save_settings()
+
+func _on_OptionButton_item_selected(index):
+	autotile_type = index
+	save_settings()
 
 func _on_ButtonOk_pressed():
-	print($ResourceFileDialog.current_path)
-	print($TextureFileDialog.current_path)
 	check_paths($ResourceFileDialog.current_path, $TextureFileDialog.current_path)
-
-
-func _on_PopupDialog_confirmed():
-	$PopupDialog.dialog_text = ""
-	$ColorRect.hide()
+	print(tile_name)
+	save_settings()
+	hide()

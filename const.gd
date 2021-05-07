@@ -83,9 +83,9 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 
 enum TEMPLATE_TYPES {BLOB_47, CORNERS_2x2, BLOB_47x2, BLOB_47_MR_MICHAEL, CUSTOM}
 const TEMPLATE_TYPE_NAMES : Dictionary = {
-	TEMPLATE_TYPES.BLOB_47: "Default blob 47 (3x3)",
-	TEMPLATE_TYPES.CORNERS_2x2: "Default Wang 16 (2x2)",
-	TEMPLATE_TYPES.BLOB_47x2: "Double blob for random",
+	TEMPLATE_TYPES.BLOB_47: "Blob 47 (3x3min)",
+	TEMPLATE_TYPES.CORNERS_2x2: "Wang 16 (2x2)",
+	TEMPLATE_TYPES.BLOB_47x2: "Double blob (for random)",
 	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "Big blob from @MrMichael",
 	TEMPLATE_TYPES.CUSTOM: "Custom"
 }
@@ -96,6 +96,13 @@ const TEMPLATE_PATHS : Dictionary = {
 	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "res://generation_data/template_47_with_duplicates.png",
 	TEMPLATE_TYPES.CUSTOM: "res://"
 }
+
+enum GODOT_AUTOTILE_TYPE {BLOB_3x3, WANG_2x2}
+const GODOT_AUTOTILE_TYPE_NAMES: Dictionary = {
+	GODOT_AUTOTILE_TYPE.BLOB_3x3: "2X2",
+	GODOT_AUTOTILE_TYPE.WANG_2x2: "3X3 minimal"
+}
+
 
 const MASK_TOP_LEFT := Vector2(4, 4)
 const MASK_TOP := Vector2(16, 4)
@@ -175,7 +182,6 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
 	"last_template_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
 	"last_save_texture_path": "res://generated_tileset.png",
-	"last_save_texture_resource_path": "res://generated_tileset.tres",
 	"last_texture_file_dialog_path": DEFAULT_INPUT_TEXTURE_PATH,
 	"last_template_file_dialog_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
 	"output_tile_size": DEFAULT_OUTPUT_SIZE,
@@ -189,7 +195,13 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"use_random_seed": false,
 	"random_seed_value": 0,
 	"output_tile_offset": 0,
-	"use_example": true
+	"use_example": true,
+	"godot_export_resource_path": "res://generated_tileset.tres",
+	"godot_export_texture_path": "",
+	"godot_export_tile_name": "",
+	"godot_export_last_generated_tile_name": "",
+	"godot_autotile_type": GODOT_AUTOTILE_TYPE.BLOB_3x3
+
 }
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
