@@ -1,17 +1,18 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://ui_theme.tres" type="Theme" id=1]
 [ext_resource path="res://header_font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://assets/Save.svg" type="Texture" id=3]
 [ext_resource path="res://assets/Load.svg" type="Texture" id=4]
+[ext_resource path="res://exporters/godot_exporter.gd" type="Script" id=5]
 
-[node name="Control" type="PopupDialog"]
-visible = true
+[node name="GodotExportDialog" type="PopupDialog"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -566.0
+margin_right = -446.0
 margin_bottom = -368.0
 popup_exclusive = true
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -28,7 +29,7 @@ __meta__ = {
 }
 
 [node name="Header" type="Label" parent="VBox"]
-margin_right = 760.0
+margin_right = 880.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 0, 48 )
 theme = ExtResource( 1 )
@@ -43,7 +44,7 @@ __meta__ = {
 
 [node name="HBoxTileset" type="HBoxContainer" parent="VBox"]
 margin_top = 48.0
-margin_right = 760.0
+margin_right = 880.0
 margin_bottom = 88.0
 custom_constants/separation = 8
 
@@ -64,19 +65,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LineEdit2" type="LineEdit" parent="VBox/HBoxTileset"]
+[node name="ResourceNameEdit" type="LineEdit" parent="VBox/HBoxTileset"]
 margin_left = 120.0
-margin_right = 453.0
+margin_right = 550.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
+editable = false
 placeholder_text = ".tres"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button2" type="Button" parent="VBox/HBoxTileset"]
-margin_left = 461.0
-margin_right = 577.0
+[node name="SelectResourceButton" type="Button" parent="VBox/HBoxTileset"]
+margin_left = 558.0
+margin_right = 674.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 116, 32 )
 text = "Select file"
@@ -86,33 +88,26 @@ __meta__ = {
 }
 
 [node name="Control2" type="Control" parent="VBox/HBoxTileset"]
-margin_left = 585.0
-margin_right = 585.0
+margin_left = 682.0
+margin_right = 682.0
 margin_bottom = 40.0
-
-[node name="Label" type="Label" parent="VBox/HBoxTileset"]
-visible = false
-margin_left = 676.0
-margin_top = 13.0
-margin_right = 676.0
-margin_bottom = 27.0
 
 [node name="CheckButton" type="CheckButton" parent="VBox/HBoxTileset"]
-margin_left = 593.0
-margin_right = 760.0
+margin_left = 690.0
+margin_right = 880.0
 margin_bottom = 40.0
 pressed = true
-text = "Overwrite file"
+text = "Override if exists"
 
 [node name="Spacer" type="Control" parent="VBox"]
 margin_top = 88.0
-margin_right = 760.0
+margin_right = 880.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 0, 12 )
 
 [node name="TilesLabel" type="Label" parent="VBox"]
 margin_top = 100.0
-margin_right = 760.0
+margin_right = 880.0
 margin_bottom = 114.0
 size_flags_vertical = 1
 text = "Tiles"
@@ -120,7 +115,7 @@ valign = 2
 
 [node name="TilesPanelContainer" type="PanelContainer" parent="VBox"]
 margin_top = 114.0
-margin_right = 760.0
+margin_right = 880.0
 margin_bottom = 326.0
 rect_min_size = Vector2( 0, 48 )
 size_flags_vertical = 3
@@ -128,12 +123,12 @@ size_flags_vertical = 3
 [node name="VBox" type="VBoxContainer" parent="VBox/TilesPanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 753.0
+margin_right = 873.0
 margin_bottom = 205.0
 custom_constants/separation = 8
 
 [node name="HBoxNewTile" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
-margin_right = 746.0
+margin_right = 866.0
 margin_bottom = 32.0
 custom_constants/separation = 8
 
@@ -142,17 +137,18 @@ margin_bottom = 32.0
 
 [node name="LineEditName" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
 margin_left = 8.0
-margin_right = 128.0
+margin_right = 158.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 120, 0 )
+rect_min_size = Vector2( 150, 0 )
+hint_tooltip = "Tile name"
 placeholder_text = "Tile name"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 136.0
-margin_right = 256.0
+margin_left = 166.0
+margin_right = 286.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 120, 0 )
 size_flags_vertical = 3
@@ -161,48 +157,51 @@ align = 2
 valign = 1
 
 [node name="LineEditTexture" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 264.0
-margin_right = 458.0
+margin_left = 294.0
+margin_right = 567.0
 margin_bottom = 32.0
+hint_tooltip = "Texture file"
 size_flags_horizontal = 3
+editable = false
 placeholder_text = ".png"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 466.0
-margin_right = 566.0
+[node name="SelectTextureButton" type="Button" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
+margin_left = 575.0
+margin_right = 686.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 100, 32 )
-text = "Select file"
+text = "Select filename"
 
 [node name="Spacer3" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 574.0
-margin_right = 579.0
+margin_left = 694.0
+margin_right = 699.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 5, 0 )
 
 [node name="Label2" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 587.0
+margin_left = 707.0
 margin_top = 9.0
-margin_right = 621.0
+margin_right = 741.0
 margin_bottom = 23.0
 text = "Type:"
 
 [node name="OptionButton" type="OptionButton" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 629.0
-margin_right = 738.0
+margin_left = 749.0
+margin_right = 858.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 text = "3x3 minimal"
 
 [node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 746.0
-margin_right = 746.0
+margin_left = 866.0
+margin_right = 866.0
 margin_bottom = 32.0
 
 [node name="HBoxExisiting" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
+visible = false
 margin_top = 40.0
 margin_right = 746.0
 margin_bottom = 72.0
@@ -267,9 +266,10 @@ margin_right = 746.0
 margin_bottom = 32.0
 
 [node name="HBoxExisiting2" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
-margin_top = 80.0
+visible = false
+margin_top = 40.0
 margin_right = 746.0
-margin_bottom = 112.0
+margin_bottom = 72.0
 custom_constants/separation = 8
 
 [node name="Spacer" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
@@ -332,36 +332,84 @@ margin_bottom = 32.0
 
 [node name="Control" type="Control" parent="VBox"]
 margin_top = 326.0
-margin_right = 760.0
+margin_right = 880.0
 margin_bottom = 328.0
 rect_min_size = Vector2( 0, 2 )
 
 [node name="HSeparator" type="HSeparator" parent="VBox"]
 margin_top = 328.0
-margin_right = 760.0
+margin_right = 880.0
 margin_bottom = 348.0
 custom_constants/separation = 20
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBox"]
 margin_top = 348.0
-margin_right = 760.0
+margin_right = 880.0
 margin_bottom = 380.0
 custom_constants/separation = 16
 alignment = 2
 
 [node name="ButtonCancel" type="Button" parent="VBox/HBoxContainer"]
-margin_left = 544.0
-margin_right = 644.0
+margin_left = 664.0
+margin_right = 764.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 100, 32 )
 text = "Cancel"
 
 [node name="ButtonOk" type="Button" parent="VBox/HBoxContainer"]
-margin_left = 660.0
-margin_right = 760.0
+margin_left = 780.0
+margin_right = 880.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 100, 32 )
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
 text = "Save"
 icon = ExtResource( 3 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.117647, 0.235294, 0.313726, 0.352941 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ResourceFileDialog" type="FileDialog" parent="."]
+margin_right = 315.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 600, 440 )
+popup_exclusive = true
+access = 2
+filters = PoolStringArray( "*.tres ; Godot resouces" )
+current_dir = "/Users/user/Documents/TilePipe"
+current_path = "/Users/user/Documents/TilePipe/"
+
+[node name="TextureFileDialog" type="FileDialog" parent="."]
+margin_right = 315.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 600, 440 )
+popup_exclusive = true
+access = 2
+filters = PoolStringArray( "*.tres ; Godot resouces" )
+current_dir = "/Users/user/Documents/TilePipe"
+current_path = "/Users/user/Documents/TilePipe/"
+
+[node name="PopupDialog" type="AcceptDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -41.5
+margin_top = -34.0
+margin_right = 98.5
+margin_bottom = 34.0
+popup_exclusive = true
+window_title = "Errors occured"
+
+[connection signal="pressed" from="VBox/HBoxTileset/SelectResourceButton" to="." method="_on_SelectResourceButton_pressed"]
+[connection signal="pressed" from="VBox/TilesPanelContainer/VBox/HBoxNewTile/SelectTextureButton" to="." method="_on_SelectTextureButton_pressed"]
+[connection signal="pressed" from="VBox/HBoxContainer/ButtonCancel" to="." method="_on_ButtonCancel_pressed"]
+[connection signal="pressed" from="VBox/HBoxContainer/ButtonOk" to="." method="_on_ButtonOk_pressed"]
+[connection signal="file_selected" from="ResourceFileDialog" to="." method="_on_ResourceFileDialog_file_selected"]
+[connection signal="confirmed" from="PopupDialog" to="." method="_on_PopupDialog_confirmed"]

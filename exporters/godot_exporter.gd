@@ -1,8 +1,14 @@
-extends Node
+extends PopupDialog
 
 class_name GodotExporter
 
 signal exporter_error(message)
+
+var current_tile_name: String
+onready var resource_name_edit: LineEdit = $VBox/HBoxTileset/ResourceNameEdit
+onready var current_tile_name_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditName
+onready var current_tile_texture_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditTexture
+
 
 func save_resource(path: String, tile_size: int, tile_masks: Array, 
 		texture_size: Vector2, texture_path: String, tile_base_name: String, 
@@ -29,15 +35,35 @@ func get_godot_project_path(path: String) -> String:
 			return current_test_dir
 	return ""
 
+func cancel_action():
+	if $PopupDialog.visible:
+		$PopupDialog.hide()
+		_on_PopupDialog_confirmed()
+	elif $ResourceFileDialog.visible:
+		$ResourceFileDialog.hide()
+	elif $TextureFileDialog.visible:
+		$TextureFileDialog.hide()
+	else:
+		hide()
+
+func report_error_inside_dialog(text: String):
+	$PopupDialog.dialog_text = text
+	$PopupDialog.popup_centered()
+	$ColorRect.show()
+
 # return error string 
 func check_paths(resource_path: String, texture_path: String) -> bool:
 	var resource_parent_project_path := get_godot_project_path(resource_path)
 	var texture_parent_project_path := get_godot_project_path(texture_path)
-	if resource_parent_project_path == "":
-		emit_signal("exporter_error", "Error: resource not in any Godot project path")
+	print(resource_parent_project_path)
+	print(texture_parent_project_path)
+	if resource_parent_project_path.empty():
+		report_error_inside_dialog("Error: saving resource not in any Godot project path")
+#		emit_signal("exporter_error", "Error: saving resource not in any Godot project path")
 		return false
-	if texture_parent_project_path == "" or resource_parent_project_path != resource_parent_project_path:
-		emit_signal("exporter_error", "Error: last saved texture is not in the same Godot project with the resource")
+	if texture_parent_project_path.empty() or resource_parent_project_path != resource_parent_project_path:
+		report_error_inside_dialog("Error: last saved texture is not in the same Godot project with the resource")
+#		emit_signal("exporter_error", "Error: last saved texture is not in the same Godot project with the resource")
 		return false
 	return true
 
@@ -97,3 +123,48 @@ func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array
 	out_string += "0/shapes = [  ]\n"
 	out_string += "0/z_index = 0\n"
 	return out_string
+
+func start_export(tile_size: int, tile_masks: Array, 
+		texture_size: Vector2, texture_path: String, tile_base_name: String, 
+		tile_spacing: int):
+	popup_centered()
+	current_tile_name = tile_base_name + "_generated"
+	current_tile_name_edit.text = current_tile_name
+
+
+func _ready():
+	$ResourceFileDialog.connect("popup_hide", $ColorRect, "hide")
+	$TextureFileDialog.connect("popup_hide", $ColorRect, "hide")
+
+func load_defaults_from_settings(data: Dictionary):
+	$ResourceFileDialog.current_path = Helpers.clear_path(data["last_save_texture_resource_path"])
+	resource_name_edit.text = $ResourceFileDialog.current_path
+	$TextureFileDialog.current_path = Helpers.clear_path(data["last_save_texture_path"])
+#	current_tile_texture_edit.text = $TextureFileDialog.current_path 
+
+func _on_ButtonCancel_pressed():
+	hide()
+
+func _on_SelectResourceButton_pressed():
+	$ResourceFileDialog.popup_centered()
+	$ColorRect.show()
+
+func _on_SelectTextureButton_pressed():
+	$TextureFileDialog.popup_centered()
+	$ColorRect.show()
+
+func _on_ResourceFileDialog_file_selected(path: String):
+	resource_name_edit.text = path
+	var texture_path: String = path.get_base_dir() + "/" + current_tile_name + ".png"
+	$TextureFileDialog.current_path = texture_path
+	current_tile_texture_edit.text = texture_path
+
+func _on_ButtonOk_pressed():
+	print($ResourceFileDialog.current_path)
+	print($TextureFileDialog.current_path)
+	check_paths($ResourceFileDialog.current_path, $TextureFileDialog.current_path)
+
+
+func _on_PopupDialog_confirmed():
+	$PopupDialog.dialog_text = ""
+	$ColorRect.hide()

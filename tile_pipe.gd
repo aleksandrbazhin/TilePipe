@@ -4,12 +4,9 @@ signal input_image_processed()
 
 var VERSION: String = ProjectSettings.get_setting("application/config/version")
 
-onready var godot_resource_exporter := GodotExporter.new()
-
 onready var texture_file_dialog: FileDialog = $TextureDialog
 onready var template_file_dialog: FileDialog = $TemplateDialog
-onready var save_file_dialog: FileDialog = $SaveTextureDialog
-onready var save_resource_dialog: FileDialog = $SaveGodotResourceDialog
+onready var save_texture_dialog: FileDialog = $SaveTextureDialog
 onready var popup_dialog: AcceptDialog = $PopupDialog
 
 onready var input_container: VBoxContainer = $Panel/HBox/Images/InContainer/VBoxInput
@@ -70,6 +67,7 @@ onready var image_settings: VBoxContainer = debug_preview.get_node("ImageSetting
 onready var output_size_select: OptionButton = image_settings.get_node("SizeOptionButton")
 onready var smoothing_check: CheckButton = image_settings.get_node("Smoothing")
 
+onready var godot_export_dialog: PopupDialog = $GodotExportDialog
 
 var is_ui_blocked: bool = false
 var is_slider_changed: bool = false
@@ -102,8 +100,18 @@ func _ready():
 	rng.randomize()
 	connect("input_image_processed", self, "make_output_texture")
 	output_offset_spinbox.get_line_edit().connect("text_entered", self, "offset_lineedit_enter")
+	godot_export_dialog.connect("about_to_show", self, "show_blocking_overlay")
+	godot_export_dialog.connect("popup_hide", self, "hide_blocking_overlay")
+	popup_dialog.connect("about_to_show", self, "show_blocking_overlay")
+	popup_dialog.connect("popup_hide", self, "hide_blocking_overlay")
+	texture_file_dialog.connect("about_to_show", self, "show_blocking_overlay")
+	texture_file_dialog.connect("popup_hide", self, "hide_blocking_overlay")
+	template_file_dialog.connect("about_to_show", self, "show_blocking_overlay")
+	template_file_dialog.connect("popup_hide", self, "hide_blocking_overlay")
+	save_texture_dialog.connect("about_to_show", self, "show_blocking_overlay")
+	save_texture_dialog.connect("popup_hide", self, "hide_blocking_overlay")
 
-	godot_resource_exporter.connect("exporter_error", self, "report_error")
+	godot_export_dialog.connect("exporter_error", self, "report_error")
 	output_size_select.clear()
 	for size in Const.OUTPUT_SIZES:
 		output_size_select.add_item(Const.OUTPUT_SIZES[size])
@@ -128,16 +136,16 @@ func _ready():
 
 func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
-		if texture_file_dialog.visible:
+		if popup_dialog.visible:
+			popup_dialog.hide()
+		elif godot_export_dialog.visible:
+			godot_export_dialog.cancel_action()
+		elif texture_file_dialog.visible:
 			texture_file_dialog.hide()
 		elif template_file_dialog.visible:
 			template_file_dialog.hide()
-		elif save_file_dialog.visible:
-			save_file_dialog.hide()
-		elif save_resource_dialog.visible:
-			save_resource_dialog.hide()
-		elif popup_dialog.visible:
-			popup_dialog.hide()
+		elif save_texture_dialog.visible:
+			save_texture_dialog.hide()
 		else:
 			exit()
 
@@ -252,30 +260,17 @@ func load_template_texture(path: String) -> String:
 	template_texture_name.text =  template_name
 	return path
 
-func get_default_dir_path() -> String:
-#	report_error(OS.get_name()+"  "+OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS))
-	if OS.get_name() == "OSX":
-		return OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
-	else:
-		return OS.get_executable_path().get_base_dir()
-	
-func clear_path(path: String) -> String:
-	if path.begins_with("res://"):
-		return get_default_dir_path() + "/" + path.get_file()
-	else:
-		return path
-
 func apply_saved_settings(data: Dictionary):
 	generation_data = GenerationData.new(data["last_gen_preset_path"])
 
 	# file dialogs
 	load_input_texture(data["last_texture_path"])
 	input_file_dialog_path = data["last_texture_file_dialog_path"]
-	texture_file_dialog.current_path = clear_path(data["last_texture_file_dialog_path"])
+	texture_file_dialog.current_path = Helpers.clear_path(data["last_texture_file_dialog_path"])
 
 	load_template_texture(data["last_template_path"])
 	template_file_dialog_path = data["last_template_file_dialog_path"]
-	template_file_dialog.current_path = clear_path(data["last_template_file_dialog_path"])
+	template_file_dialog.current_path = Helpers.clear_path(data["last_template_file_dialog_path"])
 	template_type_select.selected = data["template_type"]
 	if template_type_select.selected == template_type_select.get_item_count() - 1:
 		template_load_button.disabled = false
@@ -286,9 +281,9 @@ func apply_saved_settings(data: Dictionary):
 		template_load_button.add_to_group("really_disabled")
 
 	save_png_file_dialog_path = data["last_save_texture_path"]
-	save_file_dialog.current_path = clear_path(data["last_save_texture_path"])
+	save_texture_dialog.current_path = Helpers.clear_path(data["last_save_texture_path"])
 	save_godot_tres_file_dialog_path = data["last_save_texture_resource_path"]
-	save_resource_dialog.current_path = clear_path(data["last_save_texture_resource_path"])
+#	save_resource_dialog.current_path = Helpers.clear_path(data["last_save_texture_resource_path"])
 
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
 	generation_type_select.selected = data["input_type"]
@@ -307,6 +302,8 @@ func apply_saved_settings(data: Dictionary):
 	update_output_bg_texture_scale()
 	
 	example_check.pressed = bool(data["use_example"])
+	
+	godot_export_dialog.load_defaults_from_settings(data)
 
 func fix_settings_with_defaults(loaded_settings: Dictionary, defaults: Dictionary) -> Dictionary:
 	var fixed_settings: Dictionary = loaded_settings.duplicate(true)
@@ -867,7 +864,6 @@ func get_allowed_mask_rotations(pos_check_mask: int, neg_check_mask: int, curren
 	return rotations
 
 func exit():
-	godot_resource_exporter.free()
 	tile_masks.empty()
 	get_tree().quit()
 
@@ -875,10 +871,7 @@ func _on_CloseButton_pressed():
 	exit()
 	
 func _on_Save_pressed():
-	save_file_dialog.popup_centered()
-
-func _on_Save2_pressed():
-	save_resource_dialog.popup_centered()
+	save_texture_dialog.popup_centered()
 
 func load_image_texture(path: String) -> Texture:
 	if path.begins_with("res://"):
@@ -899,14 +892,14 @@ func load_image_texture(path: String) -> Texture:
 		return image_texture
 
 func _on_TextureDialog_file_selected(path):
-	input_file_dialog_path = clear_path(path)
+	input_file_dialog_path = Helpers.clear_path(path)
 	example_check.pressed = false
 	load_input_texture(path)
 	preprocess_input_image()
 	save_settings()
 
 func _on_TemplateDialog_file_selected(path):
-	template_file_dialog_path = clear_path(path)
+	template_file_dialog_path = Helpers.clear_path(path)
 	load_template_texture(path)
 	generate_tile_masks()
 	make_output_texture()
@@ -926,20 +919,20 @@ func _on_SaveTextureDialog_file_selected(path):
 	save_texture_png(path)
 	save_settings()
 
-func _on_SaveGodotResourceDialog_file_selected(path):
-	save_godot_tres_file_dialog_path = path
-	var texture_path: String = save_png_file_dialog_path
-	if godot_resource_exporter.check_paths(path, texture_path):
-		godot_resource_exporter.save_resource(
-			path, 
-			get_output_tile_size(),
-			tile_masks,
-			out_texture.texture.get_data().get_size(),
-			save_file_dialog.current_path,
-			last_tile_name,
-			output_tile_offset
-		)
-	save_settings()
+#func _on_SaveGodotResourceDialog_file_selected(path):
+#	save_godot_tres_file_dialog_path = path
+#	var texture_path: String = save_png_file_dialog_path
+#	if godot_resource_exporter.check_paths(path, texture_path):
+#		godot_resource_exporter.save_resource(
+#			path, 
+#			get_output_tile_size(),
+#			tile_masks,
+#			out_texture.texture.get_data().get_size(),
+#			save_file_dialog.current_path,
+#			last_tile_name,
+#			output_tile_offset
+#		)
+#	save_settings()
 
 func setup_input_type(index: int):
 	match index:
@@ -1186,9 +1179,20 @@ func _on_ExampleCheckButton_toggled(button_pressed: bool):
 	preprocess_input_image()
 	save_settings()
 
-
 func _on_testpopupButton_pressed():
-	var test_popup: PopupDialog = preload("res://exporters/Godot_exporter.tscn").instance()
-	add_child(test_popup)
-	test_popup.popup_centered()
-	$ColorRect.show()
+	godot_export_dialog.popup_centered()
+
+func show_blocking_overlay():
+	$BlockingOverlay.show()
+
+func hide_blocking_overlay():
+	$BlockingOverlay.hide()
+
+func _on_GodotExportButton_pressed():
+	godot_export_dialog.start_export(
+		get_output_tile_size(),
+		tile_masks,
+		out_texture.texture.get_data().get_size(),
+		save_texture_dialog.current_path,
+		last_tile_name,
+		output_tile_offset)
