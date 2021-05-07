@@ -26,6 +26,8 @@ const OUTPUT_SIZES: Dictionary = {
 const TEMPLATE_TILE_SIZE: int = 32
 const DEFAULT_OUTPUT_SIZE: int = 64
 
+const TILE_SAVE_SUFFIX: String = "_generated"
+
 enum COLOR_PROCESS_TYPES {NO, FLOW_MAP}#, NORMAL_MAP
 const COLOR_PROCESS_TYPE_NAMES: Dictionary = {
 	COLOR_PROCESS_TYPES.NO: "No processing",
@@ -196,7 +198,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"random_seed_value": 0,
 	"output_tile_offset": 0,
 	"use_example": true,
-	"godot_export_resource_path": "res://generated_tileset.tres",
+	"godot_export_resource_path": "",
 	"godot_export_texture_path": "",
 	"godot_export_tile_name": "",
 	"godot_export_last_generated_tile_name": "",

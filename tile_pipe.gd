@@ -89,6 +89,7 @@ var save_png_file_dialog_path: String = ""
 var output_tile_offset: int = 0
 
 var is_ready: bool = false
+var current_texture_basename: String = ""
 
 func _ready():
 	print("TilePipe v.%s running in Debug mode" % VERSION)
@@ -240,7 +241,6 @@ func save_settings(store_defaults: bool = false):
 			data = capture_setting_values()
 		save.store_line(to_json(data))
 		save.close()
-		print("saveing - ", data["godot_export_tile_name"])
 
 func load_input_texture(path: String) -> String:
 	var loaded_texture: Texture = load_image_texture(path)
@@ -249,6 +249,7 @@ func load_input_texture(path: String) -> String:
 		loaded_texture = load_image_texture(path)
 	last_input_texture_path = path
 	texture_in.texture = loaded_texture
+	current_texture_basename = path.get_file().split(".")[0]
 	texture_input_container.get_node("InputInfo/InputNameLabel").text = path.get_file()
 	return path
 
@@ -917,10 +918,13 @@ func _on_Button_pressed():
 func save_texture_png(path: String):
 	out_texture.texture.get_data().save_png(path)
 
-func _on_SaveTextureDialog_file_selected(path):
-	save_png_file_dialog_path = path
-	save_texture_png(path)
+func _on_SaveTextureDialog_file_selected(path: String):
+	if not path.get_file().split(".")[0].empty() and path.get_file().is_valid_filename():
+		save_texture_png(path)
+	else:
+		report_error("Error: %s is not a valid filename" % path.get_file())
 	save_settings()
+	
 
 #func _on_SaveGodotResourceDialog_file_selected(path):
 #	save_godot_tres_file_dialog_path = path
@@ -1192,5 +1196,5 @@ func _on_GodotExportButton_pressed():
 		get_output_tile_size(),
 		tile_masks,
 		out_texture.texture.get_data().get_size(),
-		save_texture_dialog.current_path.get_basename(),
+		current_texture_basename,
 		output_tile_offset)

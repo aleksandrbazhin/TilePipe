@@ -49,27 +49,6 @@ func get_godot_project_path(path: String) -> String:
 			return current_test_dir
 	return ""
 
-func check_resource_path(test_resource_path: String):
-	var resource_project_path := get_godot_project_path(test_resource_path)
-	if resource_project_path.empty():
-		report_error_inside_dialog("Error: saving resource not in any Godot project path")
-#		emit_signal("exporter_error", "Error: saving resource not in any Godot project path")
-		return false
-	else:
-		return true
-
-func check_texture_path(test_texture_path: String, test_resource_path: String):
-	var resource_project_path := get_godot_project_path(test_resource_path)
-	var texture_project_path := get_godot_project_path(test_texture_path)
-	if texture_project_path.empty() or resource_project_path != resource_project_path:
-		report_error_inside_dialog("Error: last saved texture is not in the same Godot project with the resource")
-		return false
-	else:
-		return true
-
-func check_paths(test_resource_path: String, test_texture_path: String) -> bool:
-	return check_resource_path(test_resource_path) and check_texture_path(test_texture_path, test_resource_path)
-
 func project_export_relative_path(path: String) -> String:
 	var path_array := path.get_base_dir().split("/")
 	var current_test_dir: String = ""
@@ -127,6 +106,34 @@ func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array
 	out_string += "0/z_index = 0\n"
 	return out_string
 
+
+func check_resource_path(test_resource_path: String):
+	if test_resource_path.get_file().split(".")[0].empty() or not test_resource_path.get_file().is_valid_filename():
+		report_error_inside_dialog("Error: %s is not a valid filename" % test_resource_path.get_file())
+		return false
+	var resource_project_path := get_godot_project_path(test_resource_path)	
+	if resource_project_path.empty():
+		report_error_inside_dialog("Error: saving resource not in any Godot project path")
+		return false
+	else:
+		return true
+
+func check_texture_path(test_texture_path: String, test_resource_path: String):
+	if test_texture_path.get_file().split(".")[0].empty() or not test_texture_path.get_file().is_valid_filename():
+		report_error_inside_dialog("Error: %s is not a valid filename" % test_texture_path.get_file())
+		return false
+	var resource_project_path := get_godot_project_path(test_resource_path)
+	var texture_project_path := get_godot_project_path(test_texture_path)
+	if texture_project_path.empty() or resource_project_path != resource_project_path:
+		report_error_inside_dialog("Error: texture is not in the same Godot project with the resource")
+		return false
+	else:
+		return true
+
+func check_paths(test_resource_path: String, test_texture_path: String) -> bool:
+	return check_resource_path(test_resource_path) and check_texture_path(test_texture_path, test_resource_path)
+
+
 func _ready():
 	$ResourceFileDialog.connect("popup_hide", $ColorRect, "hide")
 	$ResourceFileDialog.connect("about_to_show", $ColorRect, "show")
@@ -140,27 +147,29 @@ func _ready():
 	
 
 func start_export_dialog(new_tile_size: int, new_tile_masks: Array, 
-		new_texture_size: Vector2, _new_tile_base_name: String, 
+		new_texture_size: Vector2, new_tile_base_name: String, 
 		new_tile_spacing: int):
 
 	$ResourceFileDialog.current_path = resource_path
-	resource_name_edit.text = resource_path
+	set_lineedit_text(resource_name_edit, resource_path)
 
+	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
+	if last_generated_tile_name != generated_tile_name:
+		tile_name = generated_tile_name
+		last_generated_tile_name = generated_tile_name
+		save_settings()
+	set_lineedit_text(tile_name_edit, tile_name)
 	$TextureFileDialog.current_path = texture_path
-#	tile_name = new_tile_base_name + "_generated"
-	tile_name_edit.text = tile_name
+	set_lineedit_text(tile_texture_edit, texture_path)
 	autotile_type_select.selected = autotile_type
 	popup_centered()
 
 func load_defaults_from_settings(data: Dictionary):
-	
 	resource_path = Helpers.clear_path(data["godot_export_resource_path"])
 	texture_path = Helpers.clear_path(data["godot_export_texture_path"])
 	tile_name = data["godot_export_tile_name"]
 	last_generated_tile_name = data["godot_export_last_generated_tile_name"]
 	autotile_type = data["godot_autotile_type"]
-	print("loading %s" % tile_name)
-
 
 func cancel_action():
 	if $ErrorDialog.visible:
@@ -171,14 +180,11 @@ func cancel_action():
 	elif $TextureFileDialog.visible:
 		$TextureFileDialog.hide()
 	else:
-		print("cancel ", tile_name)
 		hide()
 
 func report_error_inside_dialog(text: String):
 	$ErrorDialog.dialog_text = text
 	$ErrorDialog.popup_centered()
-
-
 
 func save_settings():
 	emit_signal("settings_saved")
@@ -192,21 +198,37 @@ func _on_SelectResourceButton_pressed():
 func _on_SelectTextureButton_pressed():
 	$TextureFileDialog.popup_centered()
 
+func set_lineedit_text(lineedit: LineEdit, text: String):
+	lineedit.text = text
+	lineedit.caret_position = text.length()
+
+func texture_path_auto_name(basedir: String, texture_file_name: String) -> String:
+	return basedir + "/" + texture_file_name + ".png"
+	
+func set_texture_path(basedir: String, texture_file_name: String):
+	texture_path = texture_path_auto_name(basedir, texture_file_name)
+	$TextureFileDialog.current_path = texture_path
+	set_lineedit_text(tile_texture_edit, texture_path)
+
 func _on_ResourceFileDialog_file_selected(path: String):
 	if check_resource_path(path):
 #		var project_path := get_godot_project_path(path)
 		resource_path = path
-		resource_name_edit.text = resource_path
-		texture_path = resource_path.get_base_dir() + "/" + tile_name + ".png"
-		$TextureFileDialog.current_path = texture_path
-		tile_texture_edit.text = texture_path
+		set_lineedit_text(resource_name_edit, resource_path)
+		set_texture_path(resource_path.get_base_dir(), tile_name)
 		save_settings()
+	else:
+		pass
 
 func _on_ErrorDialog_confirmed():
 	$ErrorDialog.dialog_text = ""
 
 func _on_LineEditName_text_changed(new_text):
+	var texture_autopath_before: String = texture_path_auto_name(resource_path.get_base_dir(), tile_name)
 	tile_name = new_text
+	if texture_path == texture_autopath_before:
+		set_texture_path(texture_path.get_base_dir(), tile_name)
+		tile_name_edit.grab_focus()
 	save_settings()
 
 func _on_OptionButton_item_selected(index):
@@ -214,7 +236,11 @@ func _on_OptionButton_item_selected(index):
 	save_settings()
 
 func _on_ButtonOk_pressed():
-	check_paths($ResourceFileDialog.current_path, $TextureFileDialog.current_path)
-	print(tile_name)
-	save_settings()
-	hide()
+	if check_paths(resource_path, texture_path):
+		save_settings()
+		hide()
+
+func _on_TextureFileDialog_file_selected(path: String):
+	if check_texture_path(path, resource_path):
+		set_texture_path(path.get_base_dir(), path.get_file().split(".")[0])
+		save_settings()

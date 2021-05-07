@@ -71,6 +71,7 @@ margin_left = 120.0
 margin_right = 550.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
+align = 3
 editable = false
 placeholder_text = ".tres"
 __meta__ = {
@@ -138,9 +139,9 @@ margin_bottom = 32.0
 
 [node name="LineEditName" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
 margin_left = 8.0
-margin_right = 158.0
+margin_right = 168.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 150, 0 )
+rect_min_size = Vector2( 160, 0 )
 hint_tooltip = "Tile name"
 placeholder_text = "Tile name"
 __meta__ = {
@@ -148,8 +149,8 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 166.0
-margin_right = 286.0
+margin_left = 176.0
+margin_right = 296.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 120, 0 )
 size_flags_vertical = 3
@@ -158,8 +159,8 @@ align = 2
 valign = 1
 
 [node name="LineEditTexture" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 294.0
-margin_right = 556.0
+margin_left = 304.0
+margin_right = 567.0
 margin_bottom = 32.0
 hint_tooltip = "Texture file"
 size_flags_horizontal = 3
@@ -170,11 +171,11 @@ __meta__ = {
 }
 
 [node name="SelectTextureButton" type="Button" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 564.0
+margin_left = 575.0
 margin_right = 675.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 100, 32 )
-text = "Select filename"
+text = "Select"
 
 [node name="Spacer3" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
 margin_left = 683.0
@@ -415,4 +416,5 @@ window_title = "Errors occured"
 [connection signal="pressed" from="VBox/HBoxContainer/ButtonCancel" to="." method="_on_ButtonCancel_pressed"]
 [connection signal="pressed" from="VBox/HBoxContainer/ButtonOk" to="." method="_on_ButtonOk_pressed"]
 [connection signal="file_selected" from="ResourceFileDialog" to="." method="_on_ResourceFileDialog_file_selected"]
+[connection signal="file_selected" from="TextureFileDialog" to="." method="_on_TextureFileDialog_file_selected"]
 [connection signal="confirmed" from="ErrorDialog" to="." method="_on_ErrorDialog_confirmed"]
