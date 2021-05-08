@@ -1197,4 +1197,5 @@ func _on_GodotExportButton_pressed():
 		tile_masks,
 		out_texture.texture.get_data().get_size(),
 		current_texture_basename,
-		output_tile_offset)
+		output_tile_offset,
+		out_texture.texture.get_data())

@@ -21,12 +21,21 @@ var tile_name: String = ""
 var last_generated_tile_name: String = ""
 var autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
 
+var current_texture_image := Image.new()
+var current_tile_size: int
+var current_tile_masks: Array
+var current_texture_size: Vector2
+var current_tile_spacing: int
+
+
 onready var resource_name_edit: LineEdit = $VBox/HBoxTileset/ResourceNameEdit
 onready var tile_name_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditName
 onready var tile_texture_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditTexture
 onready var autotile_type_select: OptionButton = $VBox/TilesPanelContainer/VBox/HBoxNewTile/OptionButton
 onready var new_tile_container: HBoxContainer = $VBox/TilesPanelContainer/VBox/HBoxNewTile
 onready var tiles_header: Label = $VBox/TilesLabel
+
+
 func save_resource(path: String, tile_size: int, tile_masks: Array, 
 		texture_size: Vector2, new_texture_path: String, tile_base_name: String, 
 		tile_spacing: int):
@@ -157,8 +166,14 @@ func clear_file_path(path: String) -> String:
 
 func start_export_dialog(new_tile_size: int, new_tile_masks: Array, 
 		new_texture_size: Vector2, new_tile_base_name: String, 
-		new_tile_spacing: int):
+		new_tile_spacing: int, texture_image: Image):
 
+	current_tile_size = new_tile_size
+	current_texture_size = new_texture_size
+	current_tile_spacing = new_tile_spacing
+	current_tile_masks = new_tile_masks.duplicate(true)
+	current_texture_image.copy_from(texture_image)
+	
 	var clean_resource_path := clear_file_path(resource_path)
 	$ResourceFileDialog.current_path = clean_resource_path
 	set_lineedit_text(resource_name_edit, clean_resource_path)
@@ -175,7 +190,9 @@ func start_export_dialog(new_tile_size: int, new_tile_masks: Array,
 	$TextureFileDialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
 	
-	autotile_type_select.selected = autotile_type
+#	autotile_type_select.selected = autotile_type
+	autotile_type_select.selected = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
+
 	popup_centered()
 
 func load_defaults_from_settings(data: Dictionary):
@@ -203,9 +220,6 @@ func report_error_inside_dialog(text: String):
 func save_settings():
 	emit_signal("settings_saved")
 
-func _on_ButtonCancel_pressed():
-	hide()
-
 func _on_SelectResourceButton_pressed():
 	$ResourceFileDialog.popup_centered()
 
@@ -223,6 +237,25 @@ func set_texture_path(basedir: String, texture_file_name: String):
 	texture_path = texture_path_auto_name(basedir, texture_file_name)
 	$TextureFileDialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
+
+func block_tiles_editing():
+	$TileBlockColorRect.show()
+	new_tile_container.hide()
+	tiles_header.text = DEFAULT_TILES_LABEL
+
+
+func enable_tiles_editing(current_tileset_path: String):
+	var tileset_name := current_tileset_path.get_file()
+	var project_path := get_godot_project_path(current_tileset_path)
+	var project_config := ConfigFile.new()
+	project_config.load(project_path + "/project.godot")
+	
+	var project_name: String = str(project_config.get_value("application", "config/name"))
+
+	new_tile_container.show()
+	$TileBlockColorRect.hide()
+	tiles_header.text = "Edit tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
+
 
 func _on_ResourceFileDialog_file_selected(path: String):
 	if check_resource_path(path):
@@ -250,29 +283,19 @@ func _on_OptionButton_item_selected(index):
 	autotile_type = index
 	save_settings()
 
-func _on_ButtonOk_pressed():
-	if check_paths(resource_path, texture_path):
-		save_settings()
-		hide()
-
 func _on_TextureFileDialog_file_selected(path: String):
 	if check_texture_path(path, resource_path):
 		set_texture_path(path.get_base_dir(), path.get_file().split(".")[0])
 		save_settings()
 
-func block_tiles_editing():
-	$TileBlockColorRect.show()
-	new_tile_container.hide()
-	tiles_header.text = DEFAULT_TILES_LABEL
+func _on_ButtonCancel_pressed():
+	hide()
 
-func enable_tiles_editing(current_tileset_path: String):
-	var tileset_name := current_tileset_path.get_file()
-	var project_path := get_godot_project_path(current_tileset_path)
-	var project_config := ConfigFile.new()
-	project_config.load(project_path + "/project.godot")
+func _on_ButtonOk_pressed():
+	if check_paths(resource_path, texture_path):
+		current_texture_image.save_png(texture_path)
+		save_resource(resource_path, current_tile_size, current_tile_masks, 
+			current_texture_size, texture_path, tile_name, current_tile_spacing)
+		save_settings()
+		hide()
 	
-	var project_name: String = str(project_config.get_value("application", "config/name"))
-
-	new_tile_container.show()
-	$TileBlockColorRect.hide()
-	tiles_header.text = "Edit tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
