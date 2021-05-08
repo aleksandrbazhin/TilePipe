@@ -12,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -446.0
 margin_bottom = -368.0
+theme = ExtResource( 1 )
 popup_exclusive = true
 script = ExtResource( 5 )
 __meta__ = {
@@ -68,7 +69,7 @@ __meta__ = {
 
 [node name="ResourceNameEdit" type="LineEdit" parent="VBox/HBoxTileset"]
 margin_left = 120.0
-margin_right = 550.0
+margin_right = 531.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 align = 3
@@ -79,8 +80,8 @@ __meta__ = {
 }
 
 [node name="SelectResourceButton" type="Button" parent="VBox/HBoxTileset"]
-margin_left = 558.0
-margin_right = 674.0
+margin_left = 539.0
+margin_right = 655.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 116, 32 )
 text = "Select file"
@@ -90,33 +91,34 @@ __meta__ = {
 }
 
 [node name="Control2" type="Control" parent="VBox/HBoxTileset"]
-margin_left = 682.0
-margin_right = 682.0
+margin_left = 663.0
+margin_right = 663.0
 margin_bottom = 40.0
 
 [node name="CheckButton" type="CheckButton" parent="VBox/HBoxTileset"]
-margin_left = 690.0
+margin_left = 671.0
 margin_right = 880.0
 margin_bottom = 40.0
+disabled = true
 pressed = true
-text = "Override if exists"
+text = "Override completely"
 
 [node name="Spacer" type="Control" parent="VBox"]
 margin_top = 88.0
 margin_right = 880.0
-margin_bottom = 100.0
-rect_min_size = Vector2( 0, 12 )
+margin_bottom = 104.0
+rect_min_size = Vector2( 0, 16 )
 
 [node name="TilesLabel" type="Label" parent="VBox"]
-margin_top = 100.0
+margin_top = 104.0
 margin_right = 880.0
-margin_bottom = 114.0
+margin_bottom = 123.0
 size_flags_vertical = 1
-text = "Tiles"
+text = "Select tileset to edit tiles ↑"
 valign = 2
 
 [node name="TilesPanelContainer" type="PanelContainer" parent="VBox"]
-margin_top = 114.0
+margin_top = 123.0
 margin_right = 880.0
 margin_bottom = 326.0
 rect_min_size = Vector2( 0, 48 )
@@ -126,10 +128,11 @@ size_flags_vertical = 3
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 873.0
-margin_bottom = 205.0
+margin_bottom = 196.0
 custom_constants/separation = 8
 
 [node name="HBoxNewTile" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
+visible = false
 margin_right = 866.0
 margin_bottom = 32.0
 custom_constants/separation = 8
@@ -160,7 +163,7 @@ valign = 1
 
 [node name="LineEditTexture" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
 margin_left = 304.0
-margin_right = 567.0
+margin_right = 566.0
 margin_bottom = 32.0
 hint_tooltip = "Texture file"
 size_flags_horizontal = 3
@@ -171,23 +174,23 @@ __meta__ = {
 }
 
 [node name="SelectTextureButton" type="Button" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 575.0
-margin_right = 675.0
+margin_left = 574.0
+margin_right = 674.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 100, 32 )
 text = "Select"
 
 [node name="Spacer3" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 683.0
-margin_right = 688.0
+margin_left = 682.0
+margin_right = 687.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 5, 0 )
 
 [node name="Label2" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 696.0
-margin_top = 9.0
+margin_left = 695.0
+margin_top = 6.0
 margin_right = 730.0
-margin_bottom = 23.0
+margin_bottom = 25.0
 text = "Type:"
 
 [node name="OptionButton" type="OptionButton" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
@@ -202,17 +205,20 @@ margin_left = 866.0
 margin_right = 866.0
 margin_bottom = 32.0
 
-[node name="HBoxExisiting" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
+[node name="VBoxExisting" type="VBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
 visible = false
-margin_top = 40.0
-margin_right = 746.0
-margin_bottom = 72.0
+margin_right = 866.0
+
+[node name="HBoxExisiting1" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox/VBoxExisting"]
+visible = false
+margin_right = 866.0
+margin_bottom = 32.0
 custom_constants/separation = 8
 
-[node name="Spacer" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+[node name="Spacer" type="Control" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting1"]
 margin_bottom = 32.0
 
-[node name="NameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+[node name="NameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting1"]
 margin_left = 8.0
 margin_right = 128.0
 margin_bottom = 32.0
@@ -222,7 +228,7 @@ text = "Tile name"
 valign = 1
 clip_text = true
 
-[node name="TextureNameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+[node name="TextureNameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting1"]
 margin_left = 136.0
 margin_right = 256.0
 margin_bottom = 32.0
@@ -233,51 +239,50 @@ align = 2
 valign = 1
 clip_text = true
 
-[node name="LineEdit" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
+[node name="LineEdit" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting1"]
 margin_left = 264.0
-margin_right = 565.0
+margin_right = 684.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 editable = false
 placeholder_text = "tile_texture1.png"
 
-[node name="Spacer3" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
-margin_left = 573.0
-margin_right = 578.0
+[node name="Spacer3" type="Control" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting1"]
+margin_left = 692.0
+margin_right = 697.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 5, 0 )
 
-[node name="TypeLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
-margin_left = 586.0
-margin_top = 9.0
-margin_right = 620.0
-margin_bottom = 23.0
+[node name="TypeLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting1"]
+margin_left = 705.0
+margin_top = 6.0
+margin_right = 740.0
+margin_bottom = 25.0
 text = "Type:"
 
-[node name="Type" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
-margin_left = 628.0
-margin_top = 9.0
-margin_right = 738.0
-margin_bottom = 23.0
+[node name="Type" type="Label" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting1"]
+margin_left = 748.0
+margin_top = 6.0
+margin_right = 858.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 110, 0 )
 text = "2x2"
 
-[node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting"]
-margin_left = 746.0
-margin_right = 746.0
+[node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting1"]
+margin_left = 866.0
+margin_right = 866.0
 margin_bottom = 32.0
 
-[node name="HBoxExisiting2" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
+[node name="HBoxExisiting2" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox/VBoxExisting"]
 visible = false
-margin_top = 40.0
-margin_right = 746.0
-margin_bottom = 72.0
+margin_right = 866.0
+margin_bottom = 32.0
 custom_constants/separation = 8
 
-[node name="Spacer" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+[node name="Spacer" type="Control" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting2"]
 margin_bottom = 32.0
 
-[node name="NameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+[node name="NameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting2"]
 margin_left = 8.0
 margin_right = 128.0
 margin_bottom = 32.0
@@ -287,7 +292,7 @@ text = "Tile name"
 valign = 1
 clip_text = true
 
-[node name="TextureNameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+[node name="TextureNameLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting2"]
 margin_left = 136.0
 margin_right = 256.0
 margin_bottom = 32.0
@@ -298,38 +303,38 @@ align = 2
 valign = 1
 clip_text = true
 
-[node name="LineEdit" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
+[node name="LineEdit" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting2"]
 margin_left = 264.0
-margin_right = 565.0
+margin_right = 684.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 editable = false
 placeholder_text = "tile_texture1.png"
 
-[node name="Spacer3" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
-margin_left = 573.0
-margin_right = 578.0
+[node name="Spacer3" type="Control" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting2"]
+margin_left = 692.0
+margin_right = 697.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 5, 0 )
 
-[node name="TypeLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
-margin_left = 586.0
-margin_top = 9.0
-margin_right = 620.0
-margin_bottom = 23.0
+[node name="TypeLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting2"]
+margin_left = 705.0
+margin_top = 6.0
+margin_right = 740.0
+margin_bottom = 25.0
 text = "Type:"
 
-[node name="Type" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
-margin_left = 628.0
-margin_top = 9.0
-margin_right = 738.0
-margin_bottom = 23.0
+[node name="Type" type="Label" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting2"]
+margin_left = 748.0
+margin_top = 6.0
+margin_right = 858.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 110, 0 )
 text = "2x2"
 
-[node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxExisiting2"]
-margin_left = 746.0
-margin_right = 746.0
+[node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/VBoxExisting/HBoxExisiting2"]
+margin_left = 866.0
+margin_right = 866.0
 margin_bottom = 32.0
 
 [node name="Control" type="Control" parent="VBox"]
@@ -363,6 +368,7 @@ margin_left = 780.0
 margin_right = 880.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 100, 32 )
+hint_tooltip = "Saves changes  both to selected tileset and texture files"
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
 text = "Save"
@@ -373,6 +379,18 @@ visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.117647, 0.235294, 0.313726, 0.352941 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileBlockColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 22.0
+margin_top = 125.0
+margin_right = -22.0
+margin_bottom = -76.0
+color = Color( 0.0901961, 0.0980392, 0.101961, 0.780392 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

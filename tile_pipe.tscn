@@ -1247,7 +1247,6 @@ __meta__ = {
 }
 
 [node name="GodotExportDialog" parent="." instance=ExtResource( 11 )]
-visible = false
 
 [node name="PopupDialog" type="AcceptDialog" parent="."]
 anchor_left = 0.5
