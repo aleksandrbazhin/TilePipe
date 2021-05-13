@@ -105,6 +105,7 @@ margin_right = 600.0
 margin_bottom = 440.0
 rect_min_size = Vector2( 600, 440 )
 popup_exclusive = true
+window_title = "Save an autotile texture"
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
 current_dir = "/Users/user/Documents/TilePipe"
