@@ -230,15 +230,19 @@ func capture_setting_values() -> Dictionary:
 		"godot_autotile_type": godot_export_dialog.autotile_type
 	}
 
-func save_settings(store_defaults: bool = false):
-	if is_ready:
+func create_settings():
+	var save = File.new()
+	save.open(Const.SETTINGS_PATH, File.WRITE)
+	var data := Const.DEFAULT_SETTINGS
+	data["program_version"] = VERSION
+	save.store_line(to_json(data))
+	save.close()
+
+func save_settings():
+	if is_ready: #check for ready - not to save unchanged data
 		var save = File.new()
 		save.open(Const.SETTINGS_PATH, File.WRITE)
-		var data := Const.DEFAULT_SETTINGS
-		if store_defaults:
-			data["program_version"] = VERSION
-		else:
-			data = capture_setting_values()
+		var data := capture_setting_values()
 		save.store_line(to_json(data))
 		save.close()
 
@@ -316,31 +320,29 @@ func fix_settings_with_defaults(loaded_settings: Dictionary, defaults: Dictionar
 			fixed_settings[key] = defaults[key]
 	return fixed_settings
 
-func settings_exist() -> bool:
-	var save = File.new()
-	return save.file_exists(Const.SETTINGS_PATH)
-
 # User settings must have "program version" bigger than 
 # Const.MIN_SETTINGS_COMPATIBLE_VERSION otherwise Const.DEFAULT_SETTINGS are used.
 # If settings data doesn't have some value, then it is populated with 
 # value from Const.DEFAULT_SETTINGS, it is not considered incompatibility.
 func load_settings():
-	if not settings_exist():
-		save_settings(true)
 	var save := File.new()
-	save.open(Const.SETTINGS_PATH, File.READ)
+	if not save.file_exists(Const.SETTINGS_PATH):
+		create_settings()
 	var saved_data: Dictionary = {}
+	save.open(Const.SETTINGS_PATH, File.READ)
 	if save.get_len() > 0:
 		var settings = parse_json(save.get_line())
 		if typeof(settings) == TYPE_DICTIONARY:
 			saved_data = Dictionary(settings)
 	save.close()
-	saved_data = fix_settings_with_defaults(saved_data, Const.DEFAULT_SETTINGS)
+#	print(saved_data)
 	# settings are incompatible: revert to defaults
 	if saved_data["program_version"] < Const.MIN_SETTINGS_COMPATIBLE_VERSION:
 		saved_data = Const.DEFAULT_SETTINGS
-		save_settings(true)
+		create_settings()
 		print("Incopmatible settings: Reverting to default settings")
+	
+	saved_data = fix_settings_with_defaults(saved_data, Const.DEFAULT_SETTINGS)		
 	apply_saved_settings(saved_data)
 
 func check_input_texture() -> bool:
@@ -925,21 +927,6 @@ func _on_SaveTextureDialog_file_selected(path: String):
 		report_error("Error: %s is not a valid filename" % path.get_file())
 	save_settings()
 	
-
-#func _on_SaveGodotResourceDialog_file_selected(path):
-#	save_godot_tres_file_dialog_path = path
-#	var texture_path: String = save_png_file_dialog_path
-#	if godot_resource_exporter.check_paths(path, texture_path):
-#		godot_resource_exporter.save_resource(
-#			path, 
-#			get_output_tile_size(),
-#			tile_masks,
-#			out_texture.texture.get_data().get_size(),
-#			save_file_dialog.current_path,
-#			last_tile_name,
-#			output_tile_offset
-#		)
-#	save_settings()
 
 func setup_input_type(index: int):
 	match index:

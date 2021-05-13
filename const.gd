@@ -86,7 +86,7 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 enum TEMPLATE_TYPES {BLOB_47, CORNERS_2x2, BLOB_47x2, BLOB_47_MR_MICHAEL, CUSTOM}
 const TEMPLATE_TYPE_NAMES : Dictionary = {
 	TEMPLATE_TYPES.BLOB_47: "Blob 47 (3x3min)",
-	TEMPLATE_TYPES.CORNERS_2x2: "Wang 16 (2x2)",
+	TEMPLATE_TYPES.CORNERS_2x2: "Wang corners 16 (2x2)",
 	TEMPLATE_TYPES.BLOB_47x2: "Double blob (for random)",
 	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "Big blob from @MrMichael",
 	TEMPLATE_TYPES.CUSTOM: "Custom"
@@ -173,6 +173,8 @@ const TEMPLATE_MASK_CHECK_POINTS := {
 const DEFAULT_MERGE: float = 0.25
 const DEFAULT_OVERLAP: float = 0.25
 const DEFAULT_INPUT_TEXTURE_PATH: String = "res://generation_data/quarters_5.png"
+const DEFAULT_GODOT_RESOURCE_PATH := "res://tileset.tres"
+const DEFAULT_GODOT_TEXTURE_PATH := "res://generated_autotile.png"
 
 # IMPORTANT!
 # When some setting kind radically changes, 
@@ -183,7 +185,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"last_texture_path": DEFAULT_INPUT_TEXTURE_PATH,
 	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
 	"last_template_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
-	"last_save_texture_path": "res://generated_tileset.png",
+	"last_save_texture_path": "res://generated_autotile.png",
 	"last_texture_file_dialog_path": DEFAULT_INPUT_TEXTURE_PATH,
 	"last_template_file_dialog_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
 	"output_tile_size": DEFAULT_OUTPUT_SIZE,
@@ -198,13 +200,15 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"random_seed_value": 0,
 	"output_tile_offset": 0,
 	"use_example": true,
-	"godot_export_resource_path": "",
-	"godot_export_texture_path": "",
+	"godot_export_resource_path": DEFAULT_GODOT_RESOURCE_PATH,
+	"godot_export_texture_path": DEFAULT_GODOT_TEXTURE_PATH,
 	"godot_export_tile_name": "",
 	"godot_export_last_generated_tile_name": "",
 	"godot_autotile_type": GODOT_AUTOTILE_TYPE.BLOB_3x3
 
 }
+
+
 
 # key is bit lenght shift to rotate TEMPLATE_MASK_CHECK_POINTS to that angle
 #const ROTATION_SHIFTS := {

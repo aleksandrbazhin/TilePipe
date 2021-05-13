@@ -18,6 +18,7 @@ const DEFAULT_TILES_LABEL: String = "Select tileset to edit tiles ↑"
 var resource_path: String = ""
 var texture_path: String = ""
 var tile_name: String = ""
+# we need it to indentify tiles since it depends on input filename
 var last_generated_tile_name: String = ""
 var autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
 
@@ -34,7 +35,11 @@ onready var tile_texture_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNew
 onready var autotile_type_select: OptionButton = $VBox/TilesPanelContainer/VBox/HBoxNewTile/OptionButton
 onready var new_tile_container: HBoxContainer = $VBox/TilesPanelContainer/VBox/HBoxNewTile
 onready var tiles_header: Label = $VBox/TilesLabel
-
+onready var resource_dialog: FileDialog = $ResourceFileDialog
+onready var texture_dialog: FileDialog = $TextureFileDialog
+onready var error_dialog: AcceptDialog = $ErrorDialog
+onready var blocking_rect: ColorRect = $ColorRect
+onready var blocking_rect_tiles: ColorRect = $TileBlockColorRect
 
 func save_resource(path: String, tile_size: int, tile_masks: Array, 
 		texture_size: Vector2, new_texture_path: String, tile_base_name: String, 
@@ -119,18 +124,18 @@ func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array
 	return out_string
 
 
-func check_resource_path(test_resource_path: String):
+func is_a_valid_resource_path(test_resource_path: String):
 	if test_resource_path.get_file().split(".")[0].empty() or not test_resource_path.get_file().is_valid_filename():
 		report_error_inside_dialog("Error: %s is not a valid filename" % test_resource_path.get_file())
 		return false
 	var resource_project_path := get_godot_project_path(test_resource_path)	
 	if resource_project_path.empty():
-		report_error_inside_dialog("Error: saving resource not in any Godot project path")
+		report_error_inside_dialog("Error: saving resource not in any Godot project")
 		return false
 	else:
 		return true
 
-func check_texture_path(test_texture_path: String, test_resource_path: String):
+func is_a_valid_texture_path(test_texture_path: String, test_resource_path: String):
 	if test_texture_path.get_file().split(".")[0].empty() or not test_texture_path.get_file().is_valid_filename():
 		report_error_inside_dialog("Error: %s is not a valid filename" % test_texture_path.get_file())
 		return false
@@ -142,17 +147,13 @@ func check_texture_path(test_texture_path: String, test_resource_path: String):
 	else:
 		return true
 
-func check_paths(test_resource_path: String, test_texture_path: String) -> bool:
-	return check_resource_path(test_resource_path) and check_texture_path(test_texture_path, test_resource_path)
-
-
 func _ready():
-	$ResourceFileDialog.connect("popup_hide", $ColorRect, "hide")
-	$ResourceFileDialog.connect("about_to_show", $ColorRect, "show")
-	$TextureFileDialog.connect("popup_hide", $ColorRect, "hide")
-	$TextureFileDialog.connect("about_to_show", $ColorRect, "show")
-	$ErrorDialog.connect("popup_hide", $ColorRect, "hide")
-	$ErrorDialog.connect("about_to_show", $ColorRect, "show")
+	resource_dialog.connect("popup_hide", blocking_rect, "hide")
+	resource_dialog.connect("about_to_show", blocking_rect, "show")
+	texture_dialog.connect("popup_hide", blocking_rect, "hide")
+	texture_dialog.connect("about_to_show", blocking_rect, "show")
+	error_dialog.connect("popup_hide", blocking_rect, "hide")
+	error_dialog.connect("about_to_show", blocking_rect, "show")
 	for type in Const.GODOT_AUTOTILE_TYPE:
 		var type_id: int = Const.GODOT_AUTOTILE_TYPE[type]
 		autotile_type_select.add_item(Const.GODOT_AUTOTILE_TYPE_NAMES[type_id], type_id)
@@ -173,26 +174,32 @@ func start_export_dialog(new_tile_size: int, new_tile_masks: Array,
 	current_tile_spacing = new_tile_spacing
 	current_tile_masks = new_tile_masks.duplicate(true)
 	current_texture_image.copy_from(texture_image)
-	
-	var clean_resource_path := clear_file_path(resource_path)
-	$ResourceFileDialog.current_path = clean_resource_path
-	set_lineedit_text(resource_name_edit, clean_resource_path)
-	if clean_resource_path == resource_path:
-		enable_tiles_editing(clean_resource_path)
-
+	var file_checker := File.new()
+	if file_checker.file_exists(resource_path):
+		set_lineedit_text(resource_name_edit, resource_path)
+		resource_dialog.current_path = resource_path
+		if get_godot_project_path(resource_path) != "":
+			enable_tiles_editing(resource_path)
+		else:
+			report_error_inside_dialog("Error: loading resource not belonging to any Godot project")
+	else:
+		if resource_path == Helpers.clear_path(Const.DEFAULT_GODOT_RESOURCE_PATH):
+			set_lineedit_text(resource_name_edit, ".tres")
+			resource_dialog.current_path = resource_path
+		else:
+			report_error_inside_dialog("Error: previously saved Godot resource is deleted")
+			set_lineedit_text(resource_name_edit, resource_path.get_file())
+			resource_dialog.current_path = resource_path
 	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
-	if last_generated_tile_name != generated_tile_name:
+	if last_generated_tile_name != generated_tile_name: #
 		tile_name = generated_tile_name
 		last_generated_tile_name = generated_tile_name
 		save_settings()
 	set_lineedit_text(tile_name_edit, tile_name)
-	
-	$TextureFileDialog.current_path = texture_path
+	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
-	
 #	autotile_type_select.selected = autotile_type
 	autotile_type_select.selected = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
-
 	popup_centered()
 
 func load_defaults_from_settings(data: Dictionary):
@@ -203,28 +210,28 @@ func load_defaults_from_settings(data: Dictionary):
 	autotile_type = data["godot_autotile_type"]
 
 func cancel_action():
-	if $ErrorDialog.visible:
-		$ErrorDialog.hide()
+	if error_dialog.visible:
+		error_dialog.hide()
 		_on_ErrorDialog_confirmed()
-	elif $ResourceFileDialog.visible:
-		$ResourceFileDialog.hide()
-	elif $TextureFileDialog.visible:
-		$TextureFileDialog.hide()
+	elif resource_dialog.visible:
+		resource_dialog.hide()
+	elif texture_dialog.visible:
+		texture_dialog.hide()
 	else:
 		hide()
 
 func report_error_inside_dialog(text: String):
-	$ErrorDialog.dialog_text = text
-	$ErrorDialog.popup_centered()
+	error_dialog.dialog_text = text
+	error_dialog.popup_centered()
 
 func save_settings():
 	emit_signal("settings_saved")
 
 func _on_SelectResourceButton_pressed():
-	$ResourceFileDialog.popup_centered()
+	resource_dialog.popup_centered()
 
 func _on_SelectTextureButton_pressed():
-	$TextureFileDialog.popup_centered()
+	texture_dialog.popup_centered()
 
 func set_lineedit_text(lineedit: LineEdit, text: String):
 	lineedit.text = text
@@ -235,11 +242,11 @@ func texture_path_auto_name(basedir: String, texture_file_name: String) -> Strin
 	
 func set_texture_path(basedir: String, texture_file_name: String):
 	texture_path = texture_path_auto_name(basedir, texture_file_name)
-	$TextureFileDialog.current_path = texture_path
+	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
 
 func block_tiles_editing():
-	$TileBlockColorRect.show()
+	blocking_rect_tiles.show()
 	new_tile_container.hide()
 	tiles_header.text = DEFAULT_TILES_LABEL
 
@@ -253,23 +260,20 @@ func enable_tiles_editing(current_tileset_path: String):
 	var project_name: String = str(project_config.get_value("application", "config/name"))
 
 	new_tile_container.show()
-	$TileBlockColorRect.hide()
+	blocking_rect_tiles.hide()
 	tiles_header.text = "Edit tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
 
 
 func _on_ResourceFileDialog_file_selected(path: String):
-	if check_resource_path(path):
+	if is_a_valid_resource_path(path):
 		resource_path = path
 		set_lineedit_text(resource_name_edit, resource_path)
 		set_texture_path(resource_path.get_base_dir(), tile_name)
-		if clear_file_path(resource_path) == resource_path:
-			enable_tiles_editing(resource_path)
+		enable_tiles_editing(resource_path)
 		save_settings()
-	else:
-		pass
 
 func _on_ErrorDialog_confirmed():
-	$ErrorDialog.dialog_text = ""
+	error_dialog.dialog_text = ""
 
 func _on_LineEditName_text_changed(new_text):
 	var texture_autopath_before: String = texture_path_auto_name(resource_path.get_base_dir(), tile_name)
@@ -284,7 +288,7 @@ func _on_OptionButton_item_selected(index):
 	save_settings()
 
 func _on_TextureFileDialog_file_selected(path: String):
-	if check_texture_path(path, resource_path):
+	if is_a_valid_texture_path(path, resource_path):
 		set_texture_path(path.get_base_dir(), path.get_file().split(".")[0])
 		save_settings()
 
@@ -292,7 +296,7 @@ func _on_ButtonCancel_pressed():
 	hide()
 
 func _on_ButtonOk_pressed():
-	if check_paths(resource_path, texture_path):
+	if is_a_valid_resource_path(resource_path) and is_a_valid_texture_path(texture_path, resource_path):
 		current_texture_image.save_png(texture_path)
 		save_resource(resource_path, current_tile_size, current_tile_masks, 
 			current_texture_size, texture_path, tile_name, current_tile_spacing)
