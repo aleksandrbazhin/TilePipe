@@ -291,10 +291,7 @@ func apply_saved_settings(data: Dictionary):
 		template_load_button.add_to_group("really_disabled")
 
 	save_png_file_dialog_path = data["last_save_texture_path"]
-	print(save_png_file_dialog_path)
-	print(Helpers.clear_path(save_png_file_dialog_path))
 	save_texture_dialog.current_path = Helpers.clear_path(save_png_file_dialog_path)
-	print(save_texture_dialog.current_path)
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
 	generation_type_select.selected = data["input_type"]
 	corners_merge_type_select.selected = data["corner_preset"]
@@ -879,7 +876,7 @@ func _on_CloseButton_pressed():
 	exit()
 	
 func _on_Save_pressed():
-	print(save_texture_dialog.current_path)
+	save_texture_dialog.invalidate()
 	save_texture_dialog.popup_centered()
 
 func load_image_texture(path: String) -> Texture:
@@ -915,9 +912,11 @@ func _on_TemplateDialog_file_selected(path):
 	save_settings()
 
 func _on_TemplateButton_pressed():
+	template_file_dialog.invalidate()
 	template_file_dialog.popup_centered()
 
 func _on_Button_pressed():
+	texture_file_dialog.invalidate()
 	texture_file_dialog.popup_centered()
 
 func save_texture_png(path: String):
@@ -931,7 +930,6 @@ func _on_SaveTextureDialog_file_selected(path: String):
 		report_error("Error: %s is not a valid filename" % path.get_file())
 	save_settings()
 	
-
 func setup_input_type(index: int):
 	match index:
 		Const.INPUT_TYPES.CORNERS:
