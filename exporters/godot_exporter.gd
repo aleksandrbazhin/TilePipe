@@ -244,6 +244,7 @@ func start_export_dialog(new_tile_size: int, new_tile_masks: Array,
 	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
 	if last_generated_tile_name != generated_tile_name: #
 		tile_name = generated_tile_name
+		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
 		last_generated_tile_name = generated_tile_name
 		save_settings()
 	set_lineedit_text(tile_name_edit, tile_name)
