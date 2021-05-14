@@ -2,6 +2,8 @@ extends PopupDialog
 
 class_name GodotExporter
 
+
+
 signal exporter_error(message)
 signal settings_saved()
 
@@ -13,6 +15,24 @@ signal settings_saved()
 #	"autotile_type": Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
 #}
 
+const GODOT_MASK_3x3: Dictionary = {
+	"TOP_LEFT": 1,
+	"TOP": 2,
+	"TOP_RIGHT": 4,
+	"LEFT": 8,
+	"CENTER": 16,
+	"RIGHT": 32,
+	"BOTTOM_LEFT": 64,
+	"BOTTOM": 128,
+	"BOTTOM_RIGHT": 256
+}
+const GODOT_MASK_2x2: Dictionary = {
+	"TOP_LEFT": 1,
+	"TOP_RIGHT": 4,
+	"BOTTOM_LEFT": 64,
+	"BOTTOM_RIGHT": 256
+}
+
 const DEFAULT_TILES_LABEL: String = "Select tileset to edit tiles ↑"
 
 var resource_path: String = ""
@@ -22,12 +42,12 @@ var tile_name: String = ""
 var last_generated_tile_name: String = ""
 var autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
 
+# data passed from main window
 var current_texture_image := Image.new()
 var current_tile_size: int
 var current_tile_masks: Array
 var current_texture_size: Vector2
 var current_tile_spacing: int
-
 
 onready var resource_name_edit: LineEdit = $VBox/HBoxTileset/ResourceNameEdit
 onready var tile_name_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditName
@@ -41,12 +61,41 @@ onready var error_dialog: AcceptDialog = $ErrorDialog
 onready var blocking_rect: ColorRect = $ColorRect
 onready var blocking_rect_tiles: ColorRect = $TileBlockColorRect
 
+func convert_mask_to_godot(tile_mask: int, has_center: bool = true,
+		godot_autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3) -> int:
+	var godot_mask: int = 0
+	match autotile_type:
+		Const.GODOT_AUTOTILE_TYPE.BLOB_3x3:
+			for mask_name in GODOT_MASK_3x3.keys():
+				if mask_name == "CENTER":
+					if has_center:
+						godot_mask += GODOT_MASK_3x3["CENTER"]
+				else:
+					var check_bit: int = Const.TILE_MASK[mask_name]
+					if tile_mask & check_bit != 0:
+						godot_mask += GODOT_MASK_3x3[mask_name]
+		Const.GODOT_AUTOTILE_TYPE.WANG_2x2:
+			for mask_name in GODOT_MASK_2x2.keys():
+				var check_bit: int = Const.TILE_MASK[mask_name]
+				if tile_mask & check_bit != 0:
+					godot_mask += GODOT_MASK_2x2[mask_name]
+	return godot_mask
+
+# warn if there are not enough tiles for proper autotiling
+func check_masks_with_warning(masks, godot_autotile_type):
+	match godot_autotile_type:
+		Const.GODOT_AUTOTILE_TYPE.BLOB_3x3:
+			pass
+		Const.GODOT_AUTOTILE_TYPE.WANG_2x2:
+			pass
+
+
 func save_resource(path: String, tile_size: int, tile_masks: Array, 
 		texture_size: Vector2, new_texture_path: String, tile_base_name: String, 
-		tile_spacing: int):
+		tile_spacing: int, new_autotile_type: int):
 	var output_string : String
-	output_string = make_autotile_resource_data(path, tile_size, 
-		tile_masks, texture_size, new_texture_path, tile_base_name, tile_spacing)
+	output_string = make_autotile_resource_data(tile_size, tile_masks, texture_size, 
+		new_texture_path, tile_base_name, tile_spacing, new_autotile_type)
 	var tileset_resource_path: String = path.get_basename( ) + ".tres"
 	var file = File.new()
 	file.open(tileset_resource_path, File.WRITE)
@@ -86,25 +135,27 @@ func project_export_relative_path(path: String) -> String:
 		return relative_path
 	return ""
 
-func make_autotile_resource_data(path: String, tile_size: int, tile_masks: Array, 
+func make_autotile_resource_data(tile_size: int, tile_masks: Array, 
 		texture_size: Vector2, new_texture_path: String, tile_base_name: String, 
-		tile_spacing: int) -> String:
+		tile_spacing: int, new_autotile_type: int) -> String:
 	var texture_relative_path := project_export_relative_path(new_texture_path)
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
 	out_string += "\n[ext_resource path=\"%s\" type=\"Texture\" id=1]\n" % texture_relative_path
 	out_string += "\n[resource]\n"
 #	var texture_size: Vector2 = out_texture.texture.get_data().get_size()
 	var mask_out_array: PoolStringArray = []
+	check_masks_with_warning(tile_masks, new_autotile_type)
 	for mask in tile_masks:
 		mask_out_array.append("Vector2 ( %d, %d )" % [mask['position'].x, mask['position'].y])
-		mask_out_array.append(mask['godot_mask'])
+		var godot_mask: int = convert_mask_to_godot(mask['mask'], mask['has_tile'], new_autotile_type)
+		mask_out_array.append(str(godot_mask))
 	out_string += "0/name = \"%s\"\n" % tile_base_name
 	out_string += "0/texture = ExtResource( 1 )\n"
 	out_string += "0/tex_offset = Vector2( 0, 0 )\n"
 	out_string += "0/modulate = Color( 1, 1, 1, 1 )\n"
 	out_string += "0/region = Rect2( 0, 0, %d, %d )\n" % [texture_size.x, texture_size.y]
-	out_string += "0/tile_mode = 1\n"
-	out_string += "0/autotile/bitmask_mode = 1\n"
+	out_string += "0/tile_mode = 1\n" 
+	out_string += "0/autotile/bitmask_mode = %d\n" % Const.GODOT_AUTOTILE_GODOT_INDEXES[new_autotile_type]
 	out_string += "0/autotile/bitmask_flags = [%s]\n" % mask_out_array.join(", ")
 	out_string += "0/autotile/icon_coordinate = Vector2( 0, 0 )\n"
 	out_string += "0/autotile/tile_size = Vector2( %d, %d )\n" % [tile_size, tile_size]
@@ -198,8 +249,7 @@ func start_export_dialog(new_tile_size: int, new_tile_masks: Array,
 	set_lineedit_text(tile_name_edit, tile_name)
 	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
-#	autotile_type_select.selected = autotile_type
-	autotile_type_select.selected = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
+	autotile_type_select.selected = autotile_type
 	popup_centered()
 
 func load_defaults_from_settings(data: Dictionary):
@@ -299,7 +349,7 @@ func _on_ButtonOk_pressed():
 	if is_a_valid_resource_path(resource_path) and is_a_valid_texture_path(texture_path, resource_path):
 		current_texture_image.save_png(texture_path)
 		save_resource(resource_path, current_tile_size, current_tile_masks, 
-			current_texture_size, texture_path, tile_name, current_tile_spacing)
+			current_texture_size, texture_path, tile_name, current_tile_spacing, autotile_type)
 		save_settings()
 		hide()
 	

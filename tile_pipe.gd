@@ -361,13 +361,21 @@ func compute_template_size() -> Vector2:
 	var template_image: Image = template_texture.texture.get_data()
 	return template_image.get_size() / Const.TEMPLATE_TILE_SIZE
 
-func get_template_mask_value(template_image: Image, x: int, y: int, 
-		mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS) -> int:
+func get_template_has_tile(template_image: Image, x: int, y: int) -> bool:
+	template_image.lock()
+	var pixel_x: int = x * Const.TEMPLATE_TILE_SIZE + int(Const.MASK_CHECK_CENTER.x)
+	var pixel_y: int = y * Const.TEMPLATE_TILE_SIZE + int(Const.MASK_CHECK_CENTER.y)
+	var has_tile: bool = not template_image.get_pixel(pixel_x, pixel_y).is_equal_approx(Color.white)
+	template_image.unlock()
+	return has_tile
+
+func get_template_mask_value(template_image: Image, x: int, y: int) -> int:
+	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS
 	var mask_value: int = 0
 	template_image.lock()
 	for mask in mask_check_points:
 		var pixel_x: int = x * Const.TEMPLATE_TILE_SIZE + mask_check_points[mask].x
-		var pixel_y: int = y *Const.TEMPLATE_TILE_SIZE + mask_check_points[mask].y
+		var pixel_y: int = y * Const.TEMPLATE_TILE_SIZE + mask_check_points[mask].y
 		if not template_image.get_pixel(pixel_x, pixel_y).is_equal_approx(Color.white):
 			mask_value += mask
 	template_image.unlock()
@@ -405,9 +413,9 @@ func generate_tile_masks():
 	var template_image: Image = template_texture.texture.get_data()
 	for x in range(template_size.x):
 		for y in range(template_size.y):
-			var mask_value: int = get_template_mask_value(template_image, x, y) 
-			var godot_mask_value: int = get_template_mask_value(template_image, x, y, Const.GODOT_MASK_CHECK_POINTS)
-			tile_masks.append({"mask": mask_value, "position": Vector2(x, y), "godot_mask": godot_mask_value })
+			var mask_value: int = get_template_mask_value(template_image, x, y)
+			var has_tile: bool = get_template_has_tile(template_image, x, y)
+			tile_masks.append({"mask": mask_value, "position": Vector2(x, y), "has_tile": has_tile})
 			mark_template_tile(mask_value, Vector2(x, y), true)
 #			mark_template_tile(godot_mask_value, Vector2(x, y), false)
 
@@ -577,7 +585,7 @@ func make_from_corners():
 	var preset: Array = generation_data.get_preset()
 	for mask in tile_masks:
 		var tile_position: Vector2 = mask['position'] * (tile_size + output_tile_offset)
-		if mask["godot_mask"] != 0: # don't draw only center
+		if mask["has_tile"]: # don't draw only center
 			for place_mask in preset:
 				var allowed_rotations: Array = get_allowed_mask_rotations(
 						place_mask["in_mask"]["positive"], 
@@ -615,7 +623,7 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 	itex.create_from_image(center_image, 0)
 	overlay_texture_in_viewport.texture = itex
 	var rot_index: int = 0
-	for mask_name in Const.MY_MASK:
+	for mask_name in Const.TILE_MASK:
 		var piece_index: int = gen_pieces[rot_index]
 		var random_tile_index: int = rng.randi_range(0, input_tiles[piece_index].size()-1)
 		var piece_rot_index: int = data["generate_piece_rotations"][rot_index]
@@ -629,7 +637,7 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 			overlay_image.flip_y()
 		var itex2 = ImageTexture.new()
 		itex2.create_from_image(overlay_image, 0)
-		var mask_key: int = Const.MY_MASK[mask_name]
+		var mask_key: int = Const.TILE_MASK[mask_name]
 		overlay_texture_in_viewport.material.set_shader_param("overlay_texture_%s" % mask_key, itex2)
 		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
 
@@ -764,7 +772,7 @@ func make_from_overlayed():
 	itex.create_from_image(out_image, 0)
 	var masks_use_count: Dictionary = {}
 	for mask in tile_masks:
-		if mask["godot_mask"] == 0:
+		if not mask["has_tile"]:
 			continue
 		var mask_value = mask["mask"]
 		if masks_use_count.has(mask_value):

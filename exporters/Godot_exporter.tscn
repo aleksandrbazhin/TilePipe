@@ -200,7 +200,6 @@ margin_right = 858.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 120, 32 )
 hint_tooltip = "Only \"3x3 minimal\" type is implemented"
-disabled = true
 text = "3x3 minimal"
 
 [node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
