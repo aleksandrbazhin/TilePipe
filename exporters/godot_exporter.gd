@@ -174,6 +174,95 @@ func make_autotile_resource_data(tile_size: int, tile_masks: Array,
 	out_string += "0/z_index = 0\n"
 	return out_string
 
+func _parse_tileset(tileset_file_content: String, project_path: String) -> Dictionary:
+	var sections: PoolStringArray = tileset_file_content.split("[resource]", false, 1)
+	var header: String = sections[0]
+	var texture_regex := RegEx.new()
+	texture_regex.compile('\\[ext_resource path="(.+)" type="Texture" id=(\\d+)\\]')
+	var textures: Dictionary = {}
+	for texture_result in texture_regex.search_all(header):
+		var texture_path: String = texture_result.strings[1]
+		var texture_id: int = int(texture_result.strings[2])
+		textures[texture_id] = texture_path.replace("res://", project_path)
+	var parse_result: Dictionary = {
+		"textures": textures,
+		"tiles": [],
+		"error": false
+	}
+	var tiles_data: String = sections[1]
+	var tile_parse_regex := RegEx.new()
+	tile_parse_regex.compile('(\\d+)/name\\s*=\\s*"(.+)"\\s*' + 
+							'\\d+/texture\\s*=\\s*ExtResource\\(\\s*(\\d+)\\s*\\)\\s*' + 
+							'\\d+/tex_offset.*\\s*'+
+							'\\d+/modulate.*\\s*'+
+							'\\d+/region\\s*=\\s*Rect2\\(([0-9,\\s]+)\\)\\s*' + 
+							'\\d+/tile_mode\\s*=\\s*(\\d+)\\s*'+
+							'')
+	
+	for tile_parse_result in tile_parse_regex.search_all(tiles_data):
+		var tile_dict: Dictionary = {
+			"id": int(tile_parse_result.strings[1]),
+			"name": String(tile_parse_result.strings[2]),
+			"texture_id": int(tile_parse_result.strings[3]),
+			"tile_mode": int(tile_parse_result.strings[5]),
+			"icon_rect": Rect2()
+		}
+		#todo: спарсить нормальный icon rect для рисования миниатюры
+		match tile_dict["tile_mode"]:
+			TileSet.SINGLE_TILE:
+				var rect_string: String = tile_parse_result.strings[4]
+				var rect_coords := rect_string.split(",")
+				tile_dict["icon_rect"].position = Vector2(int(rect_coords[0]), int(rect_coords[1]))
+				tile_dict["icon_rect"].size = Vector2(int(rect_coords[2]), int(rect_coords[3]))
+				
+			TileSet.AUTO_TILE, TileSet.ATLAS_TILE:
+				var autotile_regex := RegEx.new()
+				autotile_regex.compile(
+					str(tile_dict["id"]) + '/autotile/icon_coordinate\\s*=\\s*Vector2\\(([0-9,\\s]+)\\)\\s*' +
+					str(tile_dict["id"]) + '/autotile/tile_size\\s*=\\s*Vector2\\(([0-9,\\s]+)\\)' )
+				var autotile_tile_size: RegExMatch = autotile_regex.search(tiles_data)
+				if autotile_tile_size != null:
+					var icon_coord_string: String = autotile_tile_size.strings[1]
+					var icon_coords := icon_coord_string.split(",")
+					tile_dict["icon_rect"].position = Vector2(int(icon_coords[0]), int(icon_coords[1]))
+					var tile_size_string: String = autotile_tile_size.strings[2]
+					var tile_sizes := tile_size_string.split(",")
+					tile_dict["icon_rect"].size = Vector2(int(tile_sizes[0]), int(tile_sizes[1]))
+				else: #error
+					parse_result["error"] = true
+					
+
+		parse_result["tiles"].append(tile_dict)
+#		print(parsed_tile_id, "  ", parsed_tile_name)
+		
+#		var tile_other_data: String = tile_name_result.strings[3]
+#		print(tile_other_data)
+#		tile_other_data = tile_other_data.replace("\\s", "")
+#		var tile_other_data_result := tile_data_regex.search(tile_other_data)
+#		print(tile_other_data_result.strings)
+	
+	return parse_result
+
+func load_tileset(tileset_path: String):
+	var project_path := get_godot_project_path(tileset_path)
+	var tileset_file := File.new()
+	if tileset_file.file_exists(tileset_path) and  is_a_valid_resource_path(tileset_path):
+		tileset_file.open(tileset_path, File.READ)
+		var tileset_content: String = tileset_file.get_as_text()
+		tileset_file.close()
+		var tileset_data := _parse_tileset(tileset_content, project_path)
+		print(tileset_data)
+	
+	var tileset_name := tileset_path.get_file()
+	var project_config := ConfigFile.new()
+	project_config.load(project_path + "/project.godot")
+	
+	var project_name: String = str(project_config.get_value("application", "config/name"))
+
+	new_tile_container.show()
+	blocking_rect_tiles.hide()
+	tiles_header.text = "Edit tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
+
 
 func is_a_valid_resource_path(test_resource_path: String):
 	if test_resource_path.get_file().split(".")[0].empty() or not test_resource_path.get_file().is_valid_filename():
@@ -210,8 +299,8 @@ func _ready():
 		autotile_type_select.add_item(Const.GODOT_AUTOTILE_TYPE_NAMES[type_id], type_id)
 
 func clear_file_path(path: String) -> String:
-	var dir := File.new()
-	if dir.file_exists(path):
+	var file := File.new()
+	if file.file_exists(path):
 		return path
 	else:
 		return Helpers.get_default_dir_path()
@@ -230,7 +319,7 @@ func start_export_dialog(new_tile_size: int, new_tile_masks: Array,
 		set_lineedit_text(resource_name_edit, resource_path)
 		resource_dialog.current_path = resource_path
 		if get_godot_project_path(resource_path) != "":
-			enable_tiles_editing(resource_path)
+			load_tileset(resource_path)
 		else:
 			report_error_inside_dialog("Error: loading resource not belonging to any Godot project")
 	else:
@@ -279,9 +368,11 @@ func save_settings():
 	emit_signal("settings_saved")
 
 func _on_SelectResourceButton_pressed():
+	resource_dialog.invalidate()
 	resource_dialog.popup_centered()
 
 func _on_SelectTextureButton_pressed():
+	texture_dialog.invalidate()
 	texture_dialog.popup_centered()
 
 func set_lineedit_text(lineedit: LineEdit, text: String):
@@ -302,25 +393,12 @@ func block_tiles_editing():
 	tiles_header.text = DEFAULT_TILES_LABEL
 
 
-func enable_tiles_editing(current_tileset_path: String):
-	var tileset_name := current_tileset_path.get_file()
-	var project_path := get_godot_project_path(current_tileset_path)
-	var project_config := ConfigFile.new()
-	project_config.load(project_path + "/project.godot")
-	
-	var project_name: String = str(project_config.get_value("application", "config/name"))
-
-	new_tile_container.show()
-	blocking_rect_tiles.hide()
-	tiles_header.text = "Edit tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
-
-
 func _on_ResourceFileDialog_file_selected(path: String):
 	if is_a_valid_resource_path(path):
 		resource_path = path
 		set_lineedit_text(resource_name_edit, resource_path)
 		set_texture_path(resource_path.get_base_dir(), tile_name)
-		enable_tiles_editing(resource_path)
+		load_tileset(resource_path)
 		save_settings()
 
 func _on_ErrorDialog_confirmed():
