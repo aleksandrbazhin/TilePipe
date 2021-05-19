@@ -49,6 +49,9 @@ var current_tile_masks: Array
 var current_texture_size: Vector2
 var current_tile_spacing: int
 
+var is_tile_match: bool = false
+var is_match_error_found: bool = false
+
 onready var resource_name_edit: LineEdit = $VBox/HBoxTileset/ResourceNameEdit
 onready var tile_name_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditName
 onready var tile_texture_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditTexture
@@ -281,20 +284,18 @@ func load_tileset(tileset_path: String):
 	tiles_header.text = "Edit tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
 	check_existing_for_matches()
 
-
 func check_existing_for_matches():
-#	var same_texture_count: int = 0
-#	for row in existing_tiles_container.get_children():
-#		if row.texture_path == tile_texture_edit.text:
-#			same_texture_count += 1
-#	if same_texture_count > 1:
+	is_tile_match = false
+	is_match_error_found = false
 	for row in existing_tiles_container.get_children():
-		if row.tile_name == tile_name_edit.text:
-			row.highlight_name(true)
-			row.highlight_path(row.texture_path == tile_texture_edit.text, false)
-		else:
-			row.highlight_name(false)
-			row.highlight_path(row.texture_path == tile_texture_edit.text, true)
+		var tile_match: bool = row.tile_name == tile_name_edit.text
+		is_tile_match = is_tile_match or tile_match
+		var texture_match: bool = row.texture_path == tile_texture_edit.text
+		var error_duplicate_textures: bool = (not tile_match) and texture_match
+		row.highlight_name(tile_match)
+		row.highlight_path(texture_match, error_duplicate_textures)
+		is_match_error_found = is_match_error_found or error_duplicate_textures
+
 
 func populate_from_exisiting_tile(row: Godot_tile_row):
 	tile_name_edit.text = row.tile_name
@@ -468,8 +469,15 @@ func _on_ButtonCancel_pressed():
 
 func _on_ButtonOk_pressed():
 	if is_a_valid_resource_path(resource_path) and is_a_valid_texture_path(texture_path, resource_path):
-		current_texture_image.save_png(texture_path)
-		save_resource(resource_path, current_tile_size, current_tile_masks, 
-			current_texture_size, texture_path, tile_name, current_tile_spacing, autotile_type)
-		save_settings()
-		hide()
+		if not is_match_error_found:
+			print("saving")
+#			current_texture_image.save_png(texture_path)
+#			save_resource(resource_path, current_tile_size, current_tile_masks, 
+#				current_texture_size, texture_path, tile_name, current_tile_spacing, autotile_type)
+#			save_settings()
+#			hide()
+		else:
+			report_error_inside_dialog("Error: you are about to damage the existing tileset\n" + 
+									"by overwriting texture that is used by another tile(s)")
+	else:
+		report_error_inside_dialog("Error: invalide resource or texture path")

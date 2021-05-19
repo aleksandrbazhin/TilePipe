@@ -27,7 +27,7 @@ func populate(new_tile_name: String, new_tile_id: int, new_texture_path: String,
 	$HBox/Path/HBox/Label.text = texture_path
 	if image != null and image is Image:
 		var icon_image := Image.new()
-		icon_image.create(icon_rect.size.x, icon_rect.size.y, false, Image.FORMAT_RGBA8)
+		icon_image.create(int(icon_rect.size.x), int(icon_rect.size.y), false, Image.FORMAT_RGBA8)
 		icon_image.blit_rect(image, icon_rect, Vector2.ZERO)
 		icon_image.resize($HBox/Icon.rect_size.x, $HBox/Icon.rect_size.y)
 		var icon_texture := ImageTexture.new()
