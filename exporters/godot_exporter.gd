@@ -283,10 +283,18 @@ func load_tileset(tileset_path: String):
 
 
 func check_existing_for_matches():
+#	var same_texture_count: int = 0
+#	for row in existing_tiles_container.get_children():
+#		if row.texture_path == tile_texture_edit.text:
+#			same_texture_count += 1
+#	if same_texture_count > 1:
 	for row in existing_tiles_container.get_children():
-		row.highlight_name(row.tile_name == tile_name_edit.text)
-		row.highlight_path(row.texture_path == tile_texture_edit.text)
-
+		if row.tile_name == tile_name_edit.text:
+			row.highlight_name(true)
+			row.highlight_path(row.texture_path == tile_texture_edit.text, false)
+		else:
+			row.highlight_name(false)
+			row.highlight_path(row.texture_path == tile_texture_edit.text, true)
 
 func populate_from_exisiting_tile(row: Godot_tile_row):
 	tile_name_edit.text = row.tile_name

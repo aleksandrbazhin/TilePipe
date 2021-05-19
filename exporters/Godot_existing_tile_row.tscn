@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://exporters/Godot_existing_tile_row.gd" type="Script" id=1]
+[ext_resource path="res://assets/NodeWarning.svg" type="Texture" id=2]
 
 [node name="Existing" type="ColorRect"]
 margin_right = 866.0
@@ -58,37 +59,70 @@ rect_min_size = Vector2( 32, 32 )
 
 [node name="TileMode" type="Label" parent="HBox"]
 margin_left = 256.0
-margin_right = 366.0
+margin_right = 356.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 110, 0 )
+rect_min_size = Vector2( 96, 0 )
 size_flags_vertical = 3
 text = "Unknown mode"
 align = 1
 valign = 1
 
 [node name="Path" type="ColorRect" parent="HBox"]
-margin_left = 378.0
+margin_left = 368.0
 margin_right = 866.0
 margin_bottom = 32.0
 mouse_filter = 2
 size_flags_horizontal = 3
-color = Color( 0.654902, 0.501961, 0, 1 )
+color = Color( 0.654902, 0.247059, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="HBox/Path"]
+[node name="HBox" type="HBoxContainer" parent="HBox/Path"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_right = -6.0
-rect_min_size = Vector2( 480, 0 )
 size_flags_horizontal = 3
-text = "Texture path"
-valign = 1
+size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Control2" type="Control" parent="HBox/Path/HBox"]
+margin_right = 32.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+mouse_filter = 2
+
+[node name="WarningSign" type="TextureRect" parent="HBox/Path/HBox/Control2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 32, 32 )
+hint_tooltip = "You will overwrite a texture that is used by other tiles, damaging the tileset. Select another texture name to save to."
+mouse_filter = 0
+texture = ExtResource( 2 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HBox/Path/HBox"]
+margin_left = 36.0
+margin_top = 9.0
+margin_right = 484.0
+margin_bottom = 23.0
+size_flags_horizontal = 3
+text = "Texture path"
+valign = 1
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="HBox/Path/HBox"]
+margin_left = 488.0
+margin_right = 498.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 10, 0 )
 
 [node name="Spacer2" type="Control" parent="HBox"]
 visible = false

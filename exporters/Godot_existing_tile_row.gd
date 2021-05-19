@@ -4,6 +4,9 @@ class_name Godot_tile_row
 
 signal clicked()
 
+const COLOR_WARNING := Color("#a73f00")
+const COLOR_SELECT := Color("#a78000")
+
 const MODE_NAMES := {
 	TileSet.SINGLE_TILE: "Single",
 	TileSet.AUTO_TILE: "Autotile",
@@ -21,7 +24,7 @@ func populate(new_tile_name: String, new_tile_id: int, new_texture_path: String,
 	tile_id = new_tile_id
 	texture_path = new_texture_path
 	$HBox/Name/Label.text = tile_name
-	$HBox/Path/Label.text = texture_path
+	$HBox/Path/HBox/Label.text = texture_path
 	if image != null and image is Image:
 		var icon_image := Image.new()
 		icon_image.create(icon_rect.size.x, icon_rect.size.y, false, Image.FORMAT_RGBA8)
@@ -41,10 +44,17 @@ func highlight_name(is_on: bool):
 		$HBox/Name.color.a = 0.0
 		color.a = 0.0
 
-func highlight_path(is_on: bool):
+func highlight_path(is_on: bool, is_warning: bool = false):
 	if is_on:
+		if is_warning:
+			$HBox/Path.color = COLOR_WARNING
+			$HBox/Path/HBox/Control2/WarningSign.show()
+		else:
+			$HBox/Path.color = COLOR_SELECT
+			$HBox/Path/HBox/Control2/WarningSign.hide()
 		$HBox/Path.color.a = 1.0
 	else:
+		$HBox/Path/HBox/Control2/WarningSign.hide()
 		$HBox/Path.color.a = 0.0
 
 func _on_Existing_gui_input(event):
