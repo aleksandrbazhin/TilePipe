@@ -271,16 +271,20 @@ func load_tileset(tileset_path: String):
 					report_error_inside_dialog("Error parsing tileset file")
 		else:
 			report_error_inside_dialog("Error parsing tileset file")
-	
 	var tileset_name := tileset_path.get_file()
 	var project_config := ConfigFile.new()
 	project_config.load(project_path + "/project.godot")
-	
 	var project_name: String = str(project_config.get_value("application", "config/name"))
-
 	new_tile_container.show()
 	blocking_rect_tiles.hide()
 	tiles_header.text = "Edit tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
+	check_existing_for_matches()
+
+
+func check_existing_for_matches():
+	for row in existing_tiles_container.get_children():
+		row.highlight_name(row.tile_name == tile_name_edit.text)
+		row.highlight_path(row.texture_path == tile_texture_edit.text)
 
 
 func is_a_valid_resource_path(test_resource_path: String):
@@ -327,12 +331,23 @@ func clear_file_path(path: String) -> String:
 func start_export_dialog(new_tile_size: int, new_tile_masks: Array, 
 		new_texture_size: Vector2, new_tile_base_name: String, 
 		new_tile_spacing: int, texture_image: Image):
-
 	current_tile_size = new_tile_size
 	current_texture_size = new_texture_size
 	current_tile_spacing = new_tile_spacing
 	current_tile_masks = new_tile_masks.duplicate(true)
 	current_texture_image.copy_from(texture_image)
+	
+	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
+	if last_generated_tile_name != generated_tile_name: #
+		tile_name = generated_tile_name
+		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
+		last_generated_tile_name = generated_tile_name
+		save_settings()
+	set_lineedit_text(tile_name_edit, tile_name)
+	texture_dialog.current_path = texture_path
+	set_lineedit_text(tile_texture_edit, texture_path)
+	autotile_type_select.selected = autotile_type	
+	
 	var file_checker := File.new()
 	if file_checker.file_exists(resource_path):
 		set_lineedit_text(resource_name_edit, resource_path)
@@ -349,16 +364,7 @@ func start_export_dialog(new_tile_size: int, new_tile_masks: Array,
 			report_error_inside_dialog("Error: previously saved Godot resource is deleted")
 			set_lineedit_text(resource_name_edit, resource_path.get_file())
 			resource_dialog.current_path = resource_path
-	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
-	if last_generated_tile_name != generated_tile_name: #
-		tile_name = generated_tile_name
-		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
-		last_generated_tile_name = generated_tile_name
-		save_settings()
-	set_lineedit_text(tile_name_edit, tile_name)
-	texture_dialog.current_path = texture_path
-	set_lineedit_text(tile_texture_edit, texture_path)
-	autotile_type_select.selected = autotile_type
+
 	popup_centered()
 
 func load_defaults_from_settings(data: Dictionary):
@@ -405,6 +411,7 @@ func set_texture_path(basedir: String, texture_file_name: String):
 	texture_path = texture_path_auto_name(basedir, texture_file_name)
 	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
+	
 
 func block_tiles_editing():
 	blocking_rect_tiles.show()
@@ -429,6 +436,7 @@ func _on_LineEditName_text_changed(new_text):
 	if texture_path == texture_autopath_before:
 		set_texture_path(texture_path.get_base_dir(), tile_name)
 		tile_name_edit.grab_focus()
+	check_existing_for_matches()
 	save_settings()
 
 func _on_OptionButton_item_selected(index):
@@ -438,6 +446,7 @@ func _on_OptionButton_item_selected(index):
 func _on_TextureFileDialog_file_selected(path: String):
 	if is_a_valid_texture_path(path, resource_path):
 		set_texture_path(path.get_base_dir(), path.get_file().split(".")[0])
+		check_existing_for_matches()
 		save_settings()
 
 func _on_ButtonCancel_pressed():
