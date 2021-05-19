@@ -318,7 +318,7 @@ margin_bottom = 34.0
 popup_exclusive = true
 window_title = "Errors occured"
 
-[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+[node name="SaveConfirmationDialog" type="ConfirmationDialog" parent="."]
 margin_left = 800.0
 margin_top = 468.0
 margin_right = 1000.0

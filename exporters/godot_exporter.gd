@@ -64,6 +64,7 @@ onready var error_dialog: AcceptDialog = $ErrorDialog
 onready var blocking_rect: ColorRect = $ColorRect
 onready var blocking_rect_tiles: ColorRect = $TileBlockColorRect
 onready var existing_tiles_container: VBoxContainer = $VBox/TilesPanelContainer/VBox/ScrollContainer/VBoxExistiingTiles
+onready var save_confirm_dialog: ConfirmationDialog = $SaveConfirmationDialog
 
 func convert_mask_to_godot(tile_mask: int, has_center: bool = true,
 		godot_autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3) -> int:
@@ -298,7 +299,8 @@ func check_existing_for_matches():
 
 
 func populate_from_exisiting_tile(row: Godot_tile_row):
-	tile_name_edit.text = row.tile_name
+	tile_name = row.tile_name
+	set_lineedit_text(tile_name_edit, tile_name)
 	set_texture_path(row.texture_path.get_base_dir(), row.texture_path.get_file().split(".")[0])
 	check_existing_for_matches()
 
@@ -332,6 +334,9 @@ func _ready():
 	texture_dialog.connect("about_to_show", blocking_rect, "show")
 	error_dialog.connect("popup_hide", blocking_rect, "hide")
 	error_dialog.connect("about_to_show", blocking_rect, "show")
+	save_confirm_dialog.connect("popup_hide", blocking_rect, "hide")
+	save_confirm_dialog.connect("about_to_show", blocking_rect, "show")
+	save_confirm_dialog.connect("confirmed", self, "save_all_and_exit")
 	for type in Const.GODOT_AUTOTILE_TYPE:
 		var type_id: int = Const.GODOT_AUTOTILE_TYPE[type]
 		autotile_type_select.add_item(Const.GODOT_AUTOTILE_TYPE_NAMES[type_id], type_id)
@@ -467,15 +472,32 @@ func _on_TextureFileDialog_file_selected(path: String):
 func _on_ButtonCancel_pressed():
 	hide()
 
+func save_all_and_exit():
+#	current_texture_image.save_png(texture_path)
+#	save_resource(resource_path, current_tile_size, current_tile_masks, 
+#		current_texture_size, texture_path, tile_name, current_tile_spacing, autotile_type)
+#	save_settings()
+	hide()
+
 func _on_ButtonOk_pressed():
 	if is_a_valid_resource_path(resource_path) and is_a_valid_texture_path(texture_path, resource_path):
 		if not is_match_error_found:
-			print("saving")
-#			current_texture_image.save_png(texture_path)
-#			save_resource(resource_path, current_tile_size, current_tile_masks, 
-#				current_texture_size, texture_path, tile_name, current_tile_spacing, autotile_type)
-#			save_settings()
-#			hide()
+			var tileset_file_exists := true
+			var texture_file_exists := true
+			if not tileset_file_exists and not texture_file_exists:
+				save_all_and_exit()
+			else:
+				save_confirm_dialog.window_title = "Confirm overwriting files"
+				save_confirm_dialog.dialog_text = "\nAre you sure you want to save tileset overwriting:"
+				if tileset_file_exists:
+					save_confirm_dialog.dialog_text += "\n\n - The tileset \"%s\", " % resource_path.get_file()
+				if is_tile_match:
+					save_confirm_dialog.dialog_text += "overwriting tile \"%s\"" % tile_name
+				else:
+					save_confirm_dialog.dialog_text += "adding tile \"%s\"" % tile_name
+				if texture_file_exists:
+					save_confirm_dialog.dialog_text += "\n\n - The texture \"%s\"\n" % texture_path.get_file()
+				save_confirm_dialog.popup_centered()
 		else:
 			report_error_inside_dialog("Error: you are about to damage the existing tileset\n" + 
 									"by overwriting texture that is used by another tile(s)")
