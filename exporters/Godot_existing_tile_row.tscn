@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://exporters/Godot_existing_tile_row.gd" type="Script" id=1]
+
+[node name="HBoxExisting" type="HBoxContainer"]
+margin_right = 866.0
+custom_constants/separation = 12
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacer" type="Control" parent="."]
+margin_bottom = 32.0
+
+[node name="NameLabel" type="Label" parent="."]
+margin_left = 12.0
+margin_right = 192.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 180, 32 )
+size_flags_vertical = 3
+text = "Tile name"
+valign = 1
+clip_text = true
+
+[node name="Icon" type="TextureRect" parent="."]
+margin_left = 204.0
+margin_right = 236.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+
+[node name="TileMode" type="Label" parent="."]
+margin_left = 248.0
+margin_top = 9.0
+margin_right = 358.0
+margin_bottom = 23.0
+rect_min_size = Vector2( 110, 0 )
+text = "Unknown mode"
+
+[node name="LineEdit" type="LineEdit" parent="."]
+margin_left = 370.0
+margin_right = 837.0
+margin_bottom = 32.0
+size_flags_horizontal = 3
+editable = false
+placeholder_text = "tile_texture1.png"
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="Spacer3" type="Control" parent="."]
+margin_left = 849.0
+margin_right = 854.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 5, 0 )
+
+[node name="ModeLabel" type="Label" parent="."]
+visible = false
+margin_left = 708.0
+margin_top = 9.0
+margin_right = 748.0
+margin_bottom = 23.0
+text = "Mode:"
+
+[node name="Spacer2" type="Control" parent="."]
+margin_left = 866.0
+margin_right = 866.0
+margin_bottom = 32.0

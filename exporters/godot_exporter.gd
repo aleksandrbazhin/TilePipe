@@ -60,6 +60,7 @@ onready var texture_dialog: FileDialog = $TextureFileDialog
 onready var error_dialog: AcceptDialog = $ErrorDialog
 onready var blocking_rect: ColorRect = $ColorRect
 onready var blocking_rect_tiles: ColorRect = $TileBlockColorRect
+onready var existing_tiles_container: VBoxContainer = $VBox/TilesPanelContainer/VBox/ScrollContainer/VBoxExistiingTiles
 
 func convert_mask_to_godot(tile_mask: int, has_center: bool = true,
 		godot_autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3) -> int:
@@ -179,16 +180,31 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 	var header: String = sections[0]
 	var texture_regex := RegEx.new()
 	texture_regex.compile('\\[ext_resource path="(.+)" type="Texture" id=(\\d+)\\]')
-	var textures: Dictionary = {}
-	for texture_result in texture_regex.search_all(header):
-		var texture_path: String = texture_result.strings[1]
-		var texture_id: int = int(texture_result.strings[2])
-		textures[texture_id] = texture_path.replace("res://", project_path)
 	var parse_result: Dictionary = {
-		"textures": textures,
+		"textures": {},
 		"tiles": [],
 		"error": false
 	}
+	var test_file := File.new()
+	var textures: Dictionary = {}
+	for texture_result in texture_regex.search_all(header):
+		var texture_parsed_path: String = texture_result.strings[1]
+		var texture_id: int = int(texture_result.strings[2])
+		var texture_absolute_path: String = texture_parsed_path.replace("res://", project_path)
+		textures[texture_id] = {
+			"path": texture_absolute_path,
+			"image": null,
+			"error": false
+		}
+		#TODO: check better
+		if test_file.file_exists(texture_absolute_path):
+			var exisiting_image: Image = Image.new()
+			exisiting_image.load(texture_absolute_path)
+			textures[texture_id]["image"] = exisiting_image
+		else:
+			textures[texture_id]["error"] = true
+	parse_result["textures"] = textures
+	
 	var tiles_data: String = sections[1]
 	var tile_parse_regex := RegEx.new()
 	tile_parse_regex.compile('(\\d+)/name\\s*=\\s*"(.+)"\\s*' + 
@@ -198,7 +214,6 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 							'\\d+/region\\s*=\\s*Rect2\\(([0-9,\\s]+)\\)\\s*' + 
 							'\\d+/tile_mode\\s*=\\s*(\\d+)\\s*'+
 							'')
-	
 	for tile_parse_result in tile_parse_regex.search_all(tiles_data):
 		var tile_dict: Dictionary = {
 			"id": int(tile_parse_result.strings[1]),
@@ -207,14 +222,12 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 			"tile_mode": int(tile_parse_result.strings[5]),
 			"icon_rect": Rect2()
 		}
-		#todo: спарсить нормальный icon rect для рисования миниатюры
 		match tile_dict["tile_mode"]:
 			TileSet.SINGLE_TILE:
 				var rect_string: String = tile_parse_result.strings[4]
 				var rect_coords := rect_string.split(",")
 				tile_dict["icon_rect"].position = Vector2(int(rect_coords[0]), int(rect_coords[1]))
 				tile_dict["icon_rect"].size = Vector2(int(rect_coords[2]), int(rect_coords[3]))
-				
 			TileSet.AUTO_TILE, TileSet.ATLAS_TILE:
 				var autotile_regex := RegEx.new()
 				autotile_regex.compile(
@@ -230,28 +243,34 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 					tile_dict["icon_rect"].size = Vector2(int(tile_sizes[0]), int(tile_sizes[1]))
 				else: #error
 					parse_result["error"] = true
-					
-
 		parse_result["tiles"].append(tile_dict)
-#		print(parsed_tile_id, "  ", parsed_tile_name)
-		
-#		var tile_other_data: String = tile_name_result.strings[3]
-#		print(tile_other_data)
-#		tile_other_data = tile_other_data.replace("\\s", "")
-#		var tile_other_data_result := tile_data_regex.search(tile_other_data)
-#		print(tile_other_data_result.strings)
-	
 	return parse_result
+
 
 func load_tileset(tileset_path: String):
 	var project_path := get_godot_project_path(tileset_path)
 	var tileset_file := File.new()
-	if tileset_file.file_exists(tileset_path) and  is_a_valid_resource_path(tileset_path):
+	if tileset_file.file_exists(tileset_path) and is_a_valid_resource_path(tileset_path):
 		tileset_file.open(tileset_path, File.READ)
 		var tileset_content: String = tileset_file.get_as_text()
 		tileset_file.close()
 		var tileset_data := _parse_tileset(tileset_content, project_path)
-		print(tileset_data)
+		if tileset_data["error"] == false:
+			for row in existing_tiles_container.get_children():
+				row.queue_free()
+			for tile in tileset_data["tiles"]:
+				var exisiting_tile: Godot_tile_row = preload("res://exporters/Godot_existing_tile_row.tscn").instance()
+				if tileset_data["textures"].has(tile["texture_id"]):
+					var exisiting_texture_path: String = tileset_data["textures"][tile["texture_id"]]["path"]
+					exisiting_tile.populate(tile["name"], tile["id"], 
+						exisiting_texture_path,
+						tile["icon_rect"], tile["tile_mode"],
+						tileset_data["textures"][tile["texture_id"]]["image"])
+					existing_tiles_container.add_child(exisiting_tile)
+				else: 
+					report_error_inside_dialog("Error parsing tileset file")
+		else:
+			report_error_inside_dialog("Error parsing tileset file")
 	
 	var tileset_name := tileset_path.get_file()
 	var project_config := ConfigFile.new()
