@@ -2,6 +2,8 @@ extends ColorRect
 
 class_name Godot_tile_row
 
+signal clicked()
+
 const MODE_NAMES := {
 	TileSet.SINGLE_TILE: "Single",
 	TileSet.AUTO_TILE: "Autotile",
@@ -33,15 +35,18 @@ func populate(new_tile_name: String, new_tile_id: int, new_texture_path: String,
 	
 func highlight_name(is_on: bool):
 	if is_on:
-		$HBox/Name.color.a = 0.3
-		color.a = 0.2
+		$HBox/Name.color.a = 1.0
+		color.a = 0.25
 	else:
 		$HBox/Name.color.a = 0.0
 		color.a = 0.0
 
 func highlight_path(is_on: bool):
 	if is_on:
-		$HBox/Path.color.a = 0.3
+		$HBox/Path.color.a = 1.0
 	else:
 		$HBox/Path.color.a = 0.0
 
+func _on_Existing_gui_input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+		emit_signal("clicked", self)

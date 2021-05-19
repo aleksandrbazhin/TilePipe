@@ -7,6 +7,9 @@ margin_right = 866.0
 rect_min_size = Vector2( 0, 32 )
 color = Color( 0.894118, 0.898039, 0.886275, 0.0627451 )
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="HBox" type="HBoxContainer" parent="."]
 anchor_right = 1.0
@@ -17,14 +20,16 @@ __meta__ = {
 }
 
 [node name="Spacer" type="Control" parent="HBox"]
+visible = false
 margin_bottom = 32.0
 
 [node name="Name" type="ColorRect" parent="HBox"]
-margin_left = 12.0
-margin_right = 192.0
+margin_right = 200.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 180, 0 )
-color = Color( 0.94902, 0.756863, 0.572549, 0.101961 )
+rect_min_size = Vector2( 200, 0 )
+mouse_filter = 2
+size_flags_vertical = 3
+color = Color( 0.654902, 0.501961, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -32,7 +37,11 @@ __meta__ = {
 [node name="Label" type="Label" parent="HBox/Name"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 6.0
+margin_left = 14.4719
+margin_top = 0.943878
+margin_right = -5.52806
+margin_bottom = 0.943878
+rect_min_size = Vector2( 180, 0 )
 size_flags_vertical = 3
 text = "Tile name"
 valign = 1
@@ -42,25 +51,28 @@ __meta__ = {
 }
 
 [node name="Icon" type="TextureRect" parent="HBox"]
-margin_left = 204.0
-margin_right = 236.0
+margin_left = 212.0
+margin_right = 244.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 
 [node name="TileMode" type="Label" parent="HBox"]
-margin_left = 248.0
-margin_top = 9.0
-margin_right = 358.0
-margin_bottom = 23.0
+margin_left = 256.0
+margin_right = 366.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 110, 0 )
+size_flags_vertical = 3
 text = "Unknown mode"
+align = 1
+valign = 1
 
 [node name="Path" type="ColorRect" parent="HBox"]
-margin_left = 370.0
-margin_right = 825.0
+margin_left = 378.0
+margin_right = 866.0
 margin_bottom = 32.0
+mouse_filter = 2
 size_flags_horizontal = 3
-color = Color( 0.94902, 0.756863, 0.572549, 0.101961 )
+color = Color( 0.654902, 0.501961, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -68,7 +80,9 @@ __meta__ = {
 [node name="Label" type="Label" parent="HBox/Path"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 6.0
+margin_left = 10.0
+margin_right = -6.0
+rect_min_size = Vector2( 480, 0 )
 size_flags_horizontal = 3
 text = "Texture path"
 valign = 1
@@ -76,26 +90,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spacer3" type="Control" parent="HBox"]
-margin_left = 837.0
-margin_right = 842.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 5, 0 )
-
-[node name="ModeLabel" type="Label" parent="HBox"]
-visible = false
-margin_left = 708.0
-margin_top = 9.0
-margin_right = 748.0
-margin_bottom = 23.0
-text = "Mode:"
-
 [node name="Spacer2" type="Control" parent="HBox"]
-margin_left = 854.0
-margin_right = 854.0
-margin_bottom = 32.0
-
-[node name="Control" type="Control" parent="HBox"]
+visible = false
 margin_left = 866.0
 margin_right = 866.0
 margin_bottom = 32.0
+
+[connection signal="gui_input" from="." to="." method="_on_Existing_gui_input"]

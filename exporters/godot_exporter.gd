@@ -267,6 +267,7 @@ func load_tileset(tileset_path: String):
 						tile["icon_rect"], tile["tile_mode"],
 						tileset_data["textures"][tile["texture_id"]]["image"])
 					existing_tiles_container.add_child(exisiting_tile)
+					exisiting_tile.connect("clicked", self, "populate_from_exisiting_tile")
 				else: 
 					report_error_inside_dialog("Error parsing tileset file")
 		else:
@@ -286,6 +287,11 @@ func check_existing_for_matches():
 		row.highlight_name(row.tile_name == tile_name_edit.text)
 		row.highlight_path(row.texture_path == tile_texture_edit.text)
 
+
+func populate_from_exisiting_tile(row: Godot_tile_row):
+	tile_name_edit.text = row.tile_name
+	set_texture_path(row.texture_path.get_base_dir(), row.texture_path.get_file().split(".")[0])
+	check_existing_for_matches()
 
 func is_a_valid_resource_path(test_resource_path: String):
 	if test_resource_path.get_file().split(".")[0].empty() or not test_resource_path.get_file().is_valid_filename():
@@ -459,4 +465,3 @@ func _on_ButtonOk_pressed():
 			current_texture_size, texture_path, tile_name, current_tile_spacing, autotile_type)
 		save_settings()
 		hide()
-	
