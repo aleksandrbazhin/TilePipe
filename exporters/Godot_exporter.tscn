@@ -99,9 +99,7 @@ margin_bottom = 40.0
 margin_left = 671.0
 margin_right = 880.0
 margin_bottom = 40.0
-hint_tooltip = "Multiple tiles per tileset and tileset editing are not implemented"
-disabled = true
-pressed = true
+hint_tooltip = "Override the new 1-tile tileset over the existing one or add a tile to it"
 text = "Override completely"
 
 [node name="Spacer" type="Control" parent="VBox"]
@@ -325,6 +323,7 @@ margin_right = 1000.0
 margin_bottom = 538.0
 
 [connection signal="pressed" from="VBox/HBoxTileset/SelectResourceButton" to="." method="_on_SelectResourceButton_pressed"]
+[connection signal="toggled" from="VBox/HBoxTileset/CheckButton" to="." method="_on_CheckButton_toggled"]
 [connection signal="text_changed" from="VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditName" to="." method="_on_LineEditName_text_changed"]
 [connection signal="pressed" from="VBox/TilesPanelContainer/VBox/HBoxNewTile/SelectTextureButton" to="." method="_on_SelectTextureButton_pressed"]
 [connection signal="item_selected" from="VBox/TilesPanelContainer/VBox/HBoxNewTile/OptionButton" to="." method="_on_OptionButton_item_selected"]
