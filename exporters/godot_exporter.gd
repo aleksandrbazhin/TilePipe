@@ -131,8 +131,20 @@ func save_tileset_resource() -> bool:
 						texture_insert_position = updated_content.find("\n[resource]", 0) - 1
 					var texture_string: String = make_texture_string(texture_path, tile_texture_id)
 					updated_content = updated_content.insert(texture_insert_position, texture_string)
-					# update load_steps here??????
-
+					# update load_steps here
+					# load steps is the total number of resources (gd_resource + ext_resource)
+					var load_steps: int = tileset_data["textures"].size() + 1 # existing textures + the top gd_resource
+					load_steps += 1 # add the new texture
+					var load_steps_regex := RegEx.new()
+					load_steps_regex.compile('\\[gd_resource\\s*type="TileSet"\\s*load_steps=(\\d+)')
+					var load_steps_match: RegExMatch = load_steps_regex.search(tileset_content)
+					if load_steps_match == null:
+						report_error_inside_dialog("Error parsing tileset: load_steps not found")
+						return false
+					else:
+						var previous_load_steps: int = int(load_steps_match.strings[1])
+						updated_content = updated_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % load_steps)
+					
 				print (updated_content)
 				var tile_id: int = 0
 				var tile_found: bool = false
