@@ -537,10 +537,10 @@ func _on_ErrorDialog_confirmed():
 
 func _on_LineEditName_text_changed(new_text):
 #	var texture_autopath_before: String = texture_path_auto_name(resource_path.get_base_dir(), tile_name)
-#	tile_name = new_text
 #	if texture_path == texture_autopath_before:
 #		set_texture_path(texture_path.get_base_dir(), tile_name)
 #		tile_name_edit.grab_focus()
+	tile_name = new_text
 	check_existing_for_matches()
 	save_settings()
 
