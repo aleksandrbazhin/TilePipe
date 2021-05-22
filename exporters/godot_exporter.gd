@@ -129,7 +129,6 @@ func save_tileset_resource() -> bool:
 			tile_texture_id = tileset_data["textures"].keys().max() + 1
 			var last_ext_resource_position: int = updated_content.find_last("[ext_resource")
 			var texture_insert_position: int = 0
-			print(last_ext_resource_position)
 			if last_ext_resource_position != -1: # has ext_resources in tileset
 				texture_insert_position = updated_content.find("\n", last_ext_resource_position) + 1
 			else:
@@ -146,10 +145,8 @@ func save_tileset_resource() -> bool:
 			if load_steps_match == null:
 				report_error_inside_dialog("Error parsing tileset: load_steps not found")
 				return false
-			else:
-				var previous_load_steps: int = int(load_steps_match.strings[1])
-				updated_content = updated_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % load_steps)
-		print (updated_content)
+			var previous_load_steps: int = int(load_steps_match.strings[1])
+			updated_content = updated_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % load_steps)
 		var tile_id: int = 0
 		var tile_found: bool = false
 		for tile in tileset_data["tiles"]:
@@ -157,22 +154,32 @@ func save_tileset_resource() -> bool:
 				tile_found = true
 				tile_id = tile["id"]
 				break
-		print(tile_name, "  ", tile_id)
-		if tile_found:
-			pass
-			#3. if we modify exsisting:
-			#find tile's id
-			#rewrite it's block fully
-		else:
-			pass
-			#4. else:
-			#find new_id = max_id + 1
-			#create a new block
-		
+			else:
+				tile_id = max(tile_id, tile["id"])
+		if not tile_found:
+			tile_id += 1 # id = max_id + 1
+		var new_tile_data: String = make_tile_data_string(current_tile_size, 
+				current_tile_masks, current_texture_size, tile_name, 
+				current_tile_spacing, autotile_type, tile_id, tile_texture_id)
+		if not tile_found: # we add new
+			updated_content += new_tile_data
+		else: #we modify exisiting
+			var replace_tile_block_start: int = updated_content.find("%d/name" % tile_id)
+			if replace_tile_block_start == -1:
+				report_error_inside_dialog("Error parsing tileset while replacing tile")
+				return false
+			var replace_tile_block_end: int = updated_content.find("%d/z_index" % tile_id, replace_tile_block_start)
+			if replace_tile_block_end == -1:
+				report_error_inside_dialog("Error parsing tileset while replacing tile")
+				return false
+			replace_tile_block_end = updated_content.find("\n", replace_tile_block_end)
+			if replace_tile_block_end == -1:
+				report_error_inside_dialog("Error parsing tileset while replacing tile")
+				return false
+			updated_content.erase(replace_tile_block_start, replace_tile_block_end - replace_tile_block_start)
+			updated_content = updated_content.insert(replace_tile_block_start, new_tile_data)
+		file.store_string(updated_content)
 		file.close()
-
-		
-
 	return true
 		
 
@@ -212,43 +219,54 @@ func project_export_relative_path(path: String) -> String:
 func make_texture_string(tile_texture_path: String, texture_id: int = 1) -> String:
 	return "[ext_resource path=\"%s\" type=\"Texture\" id=%d]\n" % [tile_texture_path, texture_id]
 
-func make_autotile_resource_data(tile_size: int, tile_masks: Array, 
-		texture_size: Vector2, new_texture_path: String, tile_base_name: String, 
-		tile_spacing: int, new_autotile_type: int) -> String:
-	var texture_relative_path := project_export_relative_path(new_texture_path)
-	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=2 format=2]\n"
-	out_string += "\n" + make_texture_string(texture_relative_path, 1)
-	out_string += "\n[resource]\n"
-#	var texture_size: Vector2 = out_texture.texture.get_data().get_size()
+func make_tile_data_string(tile_size: int, tile_masks: Array, 
+		texture_size: Vector2, new_tile_name: String, 
+		tile_spacing: int, new_autotile_type: int, 
+		tile_id: int, texture_id: int) -> String:
+	var out_string: String = ""
 	var mask_out_array: PoolStringArray = []
-	check_masks_with_warning(tile_masks, new_autotile_type)
+#	check_masks_with_warning(tile_masks, new_autotile_type)
+	var line_beginning := str(tile_id) + "/"
 	for mask in tile_masks:
 		mask_out_array.append("Vector2 ( %d, %d )" % [mask['position'].x, mask['position'].y])
 		var godot_mask: int = convert_mask_to_godot(mask['mask'], mask['has_tile'], new_autotile_type)
 		mask_out_array.append(str(godot_mask))
-	out_string += "0/name = \"%s\"\n" % tile_base_name
-	out_string += "0/texture = ExtResource( 1 )\n"
-	out_string += "0/tex_offset = Vector2( 0, 0 )\n"
-	out_string += "0/modulate = Color( 1, 1, 1, 1 )\n"
-	out_string += "0/region = Rect2( 0, 0, %d, %d )\n" % [texture_size.x, texture_size.y]
-	out_string += "0/tile_mode = 1\n" 
-	out_string += "0/autotile/bitmask_mode = %d\n" % Const.GODOT_AUTOTILE_GODOT_INDEXES[new_autotile_type]
-	out_string += "0/autotile/bitmask_flags = [ %s ]\n" % mask_out_array.join(", ")
-	out_string += "0/autotile/icon_coordinate = Vector2( 0, 0 )\n"
-	out_string += "0/autotile/tile_size = Vector2( %d, %d )\n" % [tile_size, tile_size]
-	out_string += "0/autotile/spacing = %d\n" % tile_spacing
-	out_string += "0/autotile/occluder_map = [  ]\n"
-	out_string += "0/autotile/navpoly_map = [  ]\n"
-	out_string += "0/autotile/priority_map = [  ]\n"
-	out_string += "0/autotile/z_index_map = [  ]\n"
-	out_string += "0/occluder_offset = Vector2( 0, 0 )\n"
-	out_string += "0/navigation_offset = Vector2( 0, 0 )\n"
-	out_string += "0/shape_offset = Vector2( 0, 0 )\n"
-	out_string += "0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )\n"
-	out_string += "0/shape_one_way = false\n"
-	out_string += "0/shape_one_way_margin = 0.0\n"
-	out_string += "0/shapes = [  ]\n"
-	out_string += "0/z_index = 0\n"
+	out_string += line_beginning + "name = \"%s\"\n" % new_tile_name
+	out_string += line_beginning + "texture = ExtResource( %d )\n" % texture_id
+	out_string += line_beginning + "tex_offset = Vector2( 0, 0 )\n"
+	out_string += line_beginning + "modulate = Color( 1, 1, 1, 1 )\n"
+	out_string += line_beginning + "region = Rect2( 0, 0, %d, %d )\n" % [texture_size.x, texture_size.y]
+	out_string += line_beginning + "tile_mode = 1\n" 
+	out_string += line_beginning + "autotile/bitmask_mode = %d\n" % Const.GODOT_AUTOTILE_GODOT_INDEXES[new_autotile_type]
+	out_string += line_beginning + "autotile/bitmask_flags = [ %s ]\n" % mask_out_array.join(", ")
+	out_string += line_beginning + "autotile/icon_coordinate = Vector2( 0, 0 )\n"
+	out_string += line_beginning + "autotile/tile_size = Vector2( %d, %d )\n" % [tile_size, tile_size]
+	out_string += line_beginning + "autotile/spacing = %d\n" % tile_spacing
+	out_string += line_beginning + "autotile/occluder_map = [  ]\n"
+	out_string += line_beginning + "autotile/navpoly_map = [  ]\n"
+	out_string += line_beginning + "autotile/priority_map = [  ]\n"
+	out_string += line_beginning + "autotile/z_index_map = [  ]\n"
+	out_string += line_beginning + "occluder_offset = Vector2( 0, 0 )\n"
+	out_string += line_beginning + "navigation_offset = Vector2( 0, 0 )\n"
+	out_string += line_beginning + "shape_offset = Vector2( 0, 0 )\n"
+	out_string += line_beginning + "shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )\n"
+	out_string += line_beginning + "shape_one_way = false\n"
+	out_string += line_beginning + "shape_one_way_margin = 0.0\n"
+	out_string += line_beginning + "shapes = [  ]\n"
+	out_string += line_beginning + "z_index = 0\n"
+	return out_string
+
+func make_autotile_resource_data(tile_size: int, tile_masks: Array, 
+		texture_size: Vector2, new_texture_path: String, new_tile_name: String, 
+		tile_spacing: int, new_autotile_type: int) -> String:
+	var texture_relative_path := project_export_relative_path(new_texture_path)
+	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=2 format=2]\n"
+	var texture_id: int = 1
+	var tile_id: int = 0
+	out_string += "\n" + make_texture_string(texture_relative_path, texture_id)
+	out_string += "\n[resource]\n"
+	out_string += make_tile_data_string(tile_size, tile_masks, texture_size, 
+		new_tile_name, tile_spacing, new_autotile_type, tile_id, texture_id)
 	return out_string
 
 func _parse_tileset(tileset_file_content: String, project_path: String) -> Dictionary:
@@ -536,10 +554,6 @@ func _on_ErrorDialog_confirmed():
 	error_dialog.dialog_text = ""
 
 func _on_LineEditName_text_changed(new_text):
-#	var texture_autopath_before: String = texture_path_auto_name(resource_path.get_base_dir(), tile_name)
-#	if texture_path == texture_autopath_before:
-#		set_texture_path(texture_path.get_base_dir(), tile_name)
-#		tile_name_edit.grab_focus()
 	tile_name = new_text
 	check_existing_for_matches()
 	save_settings()

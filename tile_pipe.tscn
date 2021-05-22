@@ -1232,7 +1232,7 @@ rect_min_size = Vector2( 0, 40 )
 rect_pivot_offset = Vector2( 227, -255 )
 hint_tooltip = "Resulting tileset uses last saved image, so save image first.
 IMPORTANT! Both last saved texture and path for export must lie within godot project structure!"
-text = "Export for Godot"
+text = "Export for Godot 3"
 icon = ExtResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1248,7 +1248,6 @@ __meta__ = {
 }
 
 [node name="GodotExportDialog" parent="." instance=ExtResource( 11 )]
-visible = false
 
 [node name="PopupDialog" type="AcceptDialog" parent="."]
 anchor_left = 0.5
