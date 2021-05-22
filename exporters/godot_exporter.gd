@@ -348,7 +348,7 @@ func load_tileset(tileset_path: String):
 		var project_name: String = str(project_config.get_value("application", "config/name"))
 		new_tile_container.show()
 		blocking_rect_tiles.hide()
-		tiles_header.text = "Edit tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
+		tiles_header.text = "Tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
 		check_existing_for_matches()
 	else:
 		overwrite_tileset_select.disabled = true
@@ -406,6 +406,7 @@ func _ready():
 	save_confirm_dialog.connect("popup_hide", blocking_rect, "hide")
 	save_confirm_dialog.connect("about_to_show", blocking_rect, "show")
 	save_confirm_dialog.connect("confirmed", self, "save_all_and_exit")
+	new_tile_container.hide()
 	for type in Const.GODOT_AUTOTILE_TYPE:
 		var type_id: int = Const.GODOT_AUTOTILE_TYPE[type]
 		autotile_type_select.add_item(Const.GODOT_AUTOTILE_TYPE_NAMES[type_id], type_id)
@@ -524,11 +525,11 @@ func _on_ErrorDialog_confirmed():
 	error_dialog.dialog_text = ""
 
 func _on_LineEditName_text_changed(new_text):
-	var texture_autopath_before: String = texture_path_auto_name(resource_path.get_base_dir(), tile_name)
-	tile_name = new_text
-	if texture_path == texture_autopath_before:
-		set_texture_path(texture_path.get_base_dir(), tile_name)
-		tile_name_edit.grab_focus()
+#	var texture_autopath_before: String = texture_path_auto_name(resource_path.get_base_dir(), tile_name)
+#	tile_name = new_text
+#	if texture_path == texture_autopath_before:
+#		set_texture_path(texture_path.get_base_dir(), tile_name)
+#		tile_name_edit.grab_focus()
 	check_existing_for_matches()
 	save_settings()
 
