@@ -107,73 +107,72 @@ func save_tileset_resource() -> bool:
 		file.store_string(output_string)
 		file.close()
 	else:
-		if file.file_exists(resource_path):
-			file.open(tileset_path, File.READ_WRITE)
-			var tileset_content := file.get_as_text()
-			var project_path := get_godot_project_path(tileset_path)
-			var tileset_data := _parse_tileset(tileset_content, project_path)
-			if tileset_data["error"] == false:
-				var updated_content: String = tileset_content
-				var is_texture_found := false
-				var tile_texture_id: int = 0
-				for texture_id in tileset_data["textures"]:
-					if tileset_data["textures"][texture_id]["path"] == texture_path:
-						is_texture_found = true
-						tile_texture_id = texture_id
-				if not is_texture_found: # add texture ext_resource
-					tile_texture_id = tileset_data["textures"].keys().max() + 1
-					var last_ext_resource_position: int = updated_content.find_last("[ext_resource")
-					var texture_insert_position: int = 0
-					print(last_ext_resource_position)
-					if last_ext_resource_position != -1: # has ext_resources in tileset
-						texture_insert_position = updated_content.find("\n", last_ext_resource_position) + 1
-					else:
-						texture_insert_position = updated_content.find("\n[resource]", 0) - 1
-					var texture_string: String = make_texture_string(texture_path, tile_texture_id)
-					updated_content = updated_content.insert(texture_insert_position, texture_string)
-					# update load_steps here
-					# load steps is the total number of resources (gd_resource + ext_resource)
-					var load_steps: int = tileset_data["textures"].size() + 1 # existing textures + the top gd_resource
-					load_steps += 1 # add the new texture
-					var load_steps_regex := RegEx.new()
-					load_steps_regex.compile('\\[gd_resource\\s*type="TileSet"\\s*load_steps=(\\d+)')
-					var load_steps_match: RegExMatch = load_steps_regex.search(tileset_content)
-					if load_steps_match == null:
-						report_error_inside_dialog("Error parsing tileset: load_steps not found")
-						return false
-					else:
-						var previous_load_steps: int = int(load_steps_match.strings[1])
-						updated_content = updated_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % load_steps)
-					
-				print (updated_content)
-				var tile_id: int = 0
-				var tile_found: bool = false
-				for tile in tileset_data["tiles"]:
-					if tile_name == tile["name"]:
-						tile_found = true
-						tile_id = tile["id"]
-						break
-				print(tile_name, "  ", tile_id)
-				if tile_found:
-					pass
-					#3. if we modify exsisting:
-					#find tile's id
-					#rewrite it's block fully
-				else:
-					pass
-					#4. else:
-					#find new_id = max_id + 1
-					#create a new block
-				
-				file.close()
-			else:
-				file.close()
-				report_error_inside_dialog("Error parsing tileset")
-				return false
-			
-		else:
+		if not file.file_exists(resource_path):
 			report_error_inside_dialog("Error: tileset file does not exisist on path: \n%s" % tileset_path)
 			return false
+		file.open(tileset_path, File.READ_WRITE)
+		var tileset_content := file.get_as_text()
+		var project_path := get_godot_project_path(tileset_path)
+		var tileset_data := _parse_tileset(tileset_content, project_path)
+		if tileset_data["error"] != false:
+			file.close()
+			report_error_inside_dialog("Error parsing tileset")
+			return false
+		var updated_content: String = tileset_content
+		var is_texture_found := false
+		var tile_texture_id: int = 0
+		for texture_id in tileset_data["textures"]:
+			if tileset_data["textures"][texture_id]["path"] == texture_path:
+				is_texture_found = true
+				tile_texture_id = texture_id
+		if not is_texture_found: # add texture ext_resource
+			tile_texture_id = tileset_data["textures"].keys().max() + 1
+			var last_ext_resource_position: int = updated_content.find_last("[ext_resource")
+			var texture_insert_position: int = 0
+			print(last_ext_resource_position)
+			if last_ext_resource_position != -1: # has ext_resources in tileset
+				texture_insert_position = updated_content.find("\n", last_ext_resource_position) + 1
+			else:
+				texture_insert_position = updated_content.find("\n[resource]", 0) - 1
+			var texture_string: String = make_texture_string(texture_path, tile_texture_id)
+			updated_content = updated_content.insert(texture_insert_position, texture_string)
+			# update load_steps here
+			# load steps is the total number of resources (gd_resource + ext_resource)
+			var load_steps: int = tileset_data["textures"].size() + 1 # existing textures + the top gd_resource
+			load_steps += 1 # add the new texture
+			var load_steps_regex := RegEx.new()
+			load_steps_regex.compile('\\[gd_resource\\s*type="TileSet"\\s*load_steps=(\\d+)')
+			var load_steps_match: RegExMatch = load_steps_regex.search(tileset_content)
+			if load_steps_match == null:
+				report_error_inside_dialog("Error parsing tileset: load_steps not found")
+				return false
+			else:
+				var previous_load_steps: int = int(load_steps_match.strings[1])
+				updated_content = updated_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % load_steps)
+		print (updated_content)
+		var tile_id: int = 0
+		var tile_found: bool = false
+		for tile in tileset_data["tiles"]:
+			if tile_name == tile["name"]:
+				tile_found = true
+				tile_id = tile["id"]
+				break
+		print(tile_name, "  ", tile_id)
+		if tile_found:
+			pass
+			#3. if we modify exsisting:
+			#find tile's id
+			#rewrite it's block fully
+		else:
+			pass
+			#4. else:
+			#find new_id = max_id + 1
+			#create a new block
+		
+		file.close()
+
+		
+
 	return true
 		
 
@@ -217,7 +216,7 @@ func make_autotile_resource_data(tile_size: int, tile_masks: Array,
 		texture_size: Vector2, new_texture_path: String, tile_base_name: String, 
 		tile_spacing: int, new_autotile_type: int) -> String:
 	var texture_relative_path := project_export_relative_path(new_texture_path)
-	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=3 format=2]\n"
+	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=2 format=2]\n"
 	out_string += "\n" + make_texture_string(texture_relative_path, 1)
 	out_string += "\n[resource]\n"
 #	var texture_size: Vector2 = out_texture.texture.get_data().get_size()
