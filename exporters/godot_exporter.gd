@@ -108,7 +108,7 @@ func save_tileset_resource() -> bool:
 		file.close()
 	else:
 		if not file.file_exists(resource_path):
-			report_error_inside_dialog("Error: tileset file does not exisist on path: \n%s" % tileset_path)
+			report_error_inside_dialog("Error: tileset file does not exist on path: \n%s" % tileset_path)
 			return false
 		file.open(tileset_path, File.READ_WRITE)
 		var tileset_content := file.get_as_text()
@@ -155,7 +155,7 @@ func save_tileset_resource() -> bool:
 				tile_id = tile["id"]
 				break
 			else:
-				tile_id = max(tile_id, tile["id"])
+				tile_id = int(max(tile_id, tile["id"]))
 		if not tile_found:
 			tile_id += 1 # id = max_id + 1
 		var new_tile_data: String = make_tile_data_string(current_tile_size, 
@@ -348,41 +348,43 @@ func free_loaded_tile_rows():
 func load_tileset(tileset_path: String):
 	var project_path := get_godot_project_path(tileset_path)
 	var tileset_file := File.new()
-	if tileset_file.file_exists(tileset_path) and is_a_valid_resource_path(tileset_path):
-		overwrite_tileset_select.disabled = false
-		overwrite_tileset_select.pressed = false
-		tileset_file.open(tileset_path, File.READ)
-		var tileset_content: String = tileset_file.get_as_text()
-		tileset_file.close()
-		var tileset_data := _parse_tileset(tileset_content, project_path)
-		if tileset_data["error"] == false:
-			free_loaded_tile_rows()
-			for tile in tileset_data["tiles"]:
-				var exisiting_tile: Godot_tile_row = preload("res://exporters/Godot_existing_tile_row.tscn").instance()
-				if tileset_data["textures"].has(tile["texture_id"]):
-					var exisiting_texture_path: String = tileset_data["textures"][tile["texture_id"]]["path"]
-					exisiting_tile.populate(tile["name"], tile["id"], 
-						exisiting_texture_path,
-						tile["icon_rect"], tile["tile_mode"],
-						tileset_data["textures"][tile["texture_id"]]["image"])
-					existing_tiles_container.add_child(exisiting_tile)
-					exisiting_tile.connect("clicked", self, "populate_from_exisiting_tile")
-				else: 
-					report_error_inside_dialog("Error parsing tileset file")
-		else:
-			report_error_inside_dialog("Error parsing tileset file")
+	if is_a_valid_resource_path(tileset_path):
 		var tileset_name := tileset_path.get_file()
 		var project_config := ConfigFile.new()
 		project_config.load(project_path + "/project.godot")
 		var project_name: String = str(project_config.get_value("application", "config/name"))
-		new_tile_container.show()
-		blocking_rect_tiles.hide()
-		tiles_header.text = "Tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
-		check_existing_for_matches()
+		if tileset_file.file_exists(tileset_path):
+			overwrite_tileset_select.disabled = false
+			overwrite_tileset_select.pressed = false
+			tileset_file.open(tileset_path, File.READ)
+			var tileset_content: String = tileset_file.get_as_text()
+			tileset_file.close()
+			var tileset_data := _parse_tileset(tileset_content, project_path)
+			if tileset_data["error"] == false:
+				free_loaded_tile_rows()
+				for tile in tileset_data["tiles"]:
+					var exisiting_tile: Godot_tile_row = preload("res://exporters/Godot_existing_tile_row.tscn").instance()
+					if tileset_data["textures"].has(tile["texture_id"]):
+						var exisiting_texture_path: String = tileset_data["textures"][tile["texture_id"]]["path"]
+						exisiting_tile.populate(tile["name"], tile["id"], 
+							exisiting_texture_path,
+							tile["icon_rect"], tile["tile_mode"],
+							tileset_data["textures"][tile["texture_id"]]["image"])
+						existing_tiles_container.add_child(exisiting_tile)
+						exisiting_tile.connect("clicked", self, "populate_from_exisiting_tile")
+					else: 
+						report_error_inside_dialog("Error parsing tileset file")
+			else:
+				report_error_inside_dialog("Error parsing tileset file")
+			enable_tiles_editing(tileset_name, project_name)
+			check_existing_for_matches()
+		else:
+			overwrite_tileset_select.disabled = true
+			overwrite_tileset_select.pressed = true
+			enable_tiles_editing(tileset_name, project_name)
+			free_loaded_tile_rows()
 	else:
-		overwrite_tileset_select.disabled = true
-		overwrite_tileset_select.pressed = true
-		free_loaded_tile_rows()
+		report_error_inside_dialog("Error: Invalid tileset path")
 		
 func check_existing_for_matches():
 	is_tile_match = false
@@ -408,7 +410,7 @@ func is_a_valid_resource_path(test_resource_path: String):
 		return false
 	var resource_project_path := get_godot_project_path(test_resource_path)	
 	if resource_project_path.empty():
-		report_error_inside_dialog("Error: saving resource not in any Godot project")
+#		report_error_inside_dialog("Error: saving resource not in any Godot project")
 		return false
 	else:
 		return true
@@ -456,7 +458,7 @@ func start_export_dialog(new_tile_size: int, new_tile_masks: Array,
 	current_tile_masks = new_tile_masks.duplicate(true)
 	current_texture_image.copy_from(texture_image)
 	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
-	if last_generated_tile_name != generated_tile_name and tile_name.is_valid_filename():
+	if last_generated_tile_name.empty() or (last_generated_tile_name != generated_tile_name and tile_name.is_valid_filename()):
 		tile_name = generated_tile_name
 		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
 		last_generated_tile_name = generated_tile_name
@@ -466,25 +468,18 @@ func start_export_dialog(new_tile_size: int, new_tile_masks: Array,
 	set_lineedit_text(tile_texture_edit, texture_path)
 	autotile_type_select.selected = autotile_type	
 	
-	var file_checker := File.new()
-	if file_checker.file_exists(resource_path):
+	if is_a_valid_resource_path(resource_path):
 		set_lineedit_text(resource_name_edit, resource_path)
 		resource_dialog.current_path = resource_path
-		if get_godot_project_path(resource_path) != "":
-			load_tileset(resource_path)
-		else:
-			report_error_inside_dialog("Error: loading resource not belonging to any Godot project")
+		var file_checker := File.new()
+		load_tileset(resource_path)
 	else:
+		if resource_path != Helpers.clear_path(Const.DEFAULT_GODOT_RESOURCE_PATH):
+			report_error_inside_dialog("Error: Godot tileset resource path is invalid,\npossibly loading a tilest not belonging to any Godot project")
+		set_lineedit_text(resource_name_edit, ".tres")
+		resource_dialog.current_path = resource_path
 		overwrite_tileset_select.pressed = true
 		overwrite_tileset_select.disabled = true
-		if resource_path == Helpers.clear_path(Const.DEFAULT_GODOT_RESOURCE_PATH):
-			set_lineedit_text(resource_name_edit, ".tres")
-			resource_dialog.current_path = resource_path
-		else:
-			load_tileset(resource_path)
-#			report_error_inside_dialog("Error: previously saved Godot resource is deleted")
-#			set_lineedit_text(resource_name_edit, resource_path.get_file())
-#			resource_dialog.current_path = resource_path
 	popup_centered()
 
 func load_defaults_from_settings(data: Dictionary):
@@ -535,6 +530,12 @@ func set_texture_path(basedir: String, texture_file_name: String):
 	else:
 		report_error_inside_dialog("Error: texture file name is invalid")
 	
+
+func enable_tiles_editing(tileset_name: String, project_name: String):
+	new_tile_container.show()
+	blocking_rect_tiles.hide()
+	tiles_header.text = "Tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
+
 
 func block_tiles_editing():
 	blocking_rect_tiles.show()

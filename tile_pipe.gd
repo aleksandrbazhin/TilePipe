@@ -101,7 +101,6 @@ func _ready():
 	output_offset_spinbox.get_line_edit().connect("text_entered", self, "offset_lineedit_enter")
 	godot_export_dialog.connect("exporter_error", self, "report_error")	
 	godot_export_dialog.connect("settings_saved", self, "save_settings")	
-	
 	godot_export_dialog.connect("about_to_show", self, "show_blocking_overlay")
 	godot_export_dialog.connect("popup_hide", self, "hide_blocking_overlay")
 	popup_dialog.connect("about_to_show", self, "show_blocking_overlay")
@@ -112,7 +111,6 @@ func _ready():
 	template_file_dialog.connect("popup_hide", self, "hide_blocking_overlay")
 	save_texture_dialog.connect("about_to_show", self, "show_blocking_overlay")
 	save_texture_dialog.connect("popup_hide", self, "hide_blocking_overlay")
-
 	output_size_select.clear()
 	for size in Const.OUTPUT_SIZES:
 		output_size_select.add_item(Const.OUTPUT_SIZES[size])
