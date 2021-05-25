@@ -12,3 +12,7 @@ func clear_path(path: String) -> String:
 		return get_default_dir_path() + "/" + path.get_file()
 	else:
 		return path
+
+func file_exists(path: String) -> bool:
+	var f := File.new()
+	return f.file_exists(path)
