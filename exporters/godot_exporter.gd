@@ -107,7 +107,7 @@ func save_tileset_resource() -> bool:
 		file.store_string(output_string)
 		file.close()
 	else:
-		if not file.file_exists(resource_path):
+		if not Helpers.file_exists(resource_path):
 			report_error_inside_dialog("Error: tileset file does not exist on path: \n%s" % tileset_path)
 			return false
 		file.open(tileset_path, File.READ_WRITE)
@@ -191,8 +191,7 @@ func get_godot_project_path(path: String) -> String:
 	var current_test_dir: String = ""
 	for dir in path_array:
 		current_test_dir += dir + "/"
-		var godot_project = File.new()
-		if godot_project.file_exists(current_test_dir + "project.godot"):
+		if Helpers.file_exists(current_test_dir + "project.godot"):
 			return current_test_dir
 	return ""
 
@@ -204,8 +203,7 @@ func project_export_relative_path(path: String) -> String:
 	for dir in path_array:
 		current_test_dir += dir + "/"
 		project_dir_index += 1
-		var godot_project = File.new()
-		if godot_project.file_exists(current_test_dir + "project.godot"):
+		if Helpers.file_exists(current_test_dir + "project.godot"):
 			project_found = true
 			break
 	if project_found:
@@ -279,7 +277,6 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 		"tiles": [],
 		"error": false # error during parsing tileset
 	}
-	var test_file := File.new()
 	var textures: Dictionary = {}
 	for texture_result in texture_regex.search_all(header):
 		var texture_parsed_path: String = texture_result.strings[1]
@@ -290,8 +287,7 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 			"image": null,
 			"error": false # error when miage does not exist
 		}
-		#TODO: check better
-		if test_file.file_exists(texture_absolute_path):
+		if Helpers.file_exists(texture_absolute_path):
 			var exisiting_image: Image = Image.new()
 			exisiting_image.load(texture_absolute_path)
 			textures[texture_id]["image"] = exisiting_image
@@ -353,7 +349,7 @@ func load_tileset(tileset_path: String):
 		var project_config := ConfigFile.new()
 		project_config.load(project_path + "/project.godot")
 		var project_name: String = str(project_config.get_value("application", "config/name"))
-		if tileset_file.file_exists(tileset_path):
+		if Helpers.file_exists(tileset_path):
 			overwrite_tileset_select.disabled = false
 			overwrite_tileset_select.pressed = false
 			tileset_file.open(tileset_path, File.READ)
@@ -366,6 +362,8 @@ func load_tileset(tileset_path: String):
 					var exisiting_tile: Godot_tile_row = preload("res://exporters/Godot_existing_tile_row.tscn").instance()
 					if tileset_data["textures"].has(tile["texture_id"]):
 						var exisiting_texture_path: String = tileset_data["textures"][tile["texture_id"]]["path"]
+						if not Helpers.file_exists(exisiting_texture_path):
+							report_error_inside_dialog("Texture used for tile \"%s\" is missing" % tile["name"])
 						exisiting_tile.populate(tile["name"], tile["id"], 
 							exisiting_texture_path,
 							tile["icon_rect"], tile["tile_mode"],
@@ -443,8 +441,7 @@ func _ready():
 		autotile_type_select.add_item(Const.GODOT_AUTOTILE_TYPE_NAMES[type_id], type_id)
 
 func clear_file_path(path: String) -> String:
-	var file := File.new()
-	if file.file_exists(path):
+	if Helpers.file_exists(path):
 		return path
 	else:
 		return Helpers.get_default_dir_path()
@@ -581,9 +578,8 @@ func save_all_and_exit():
 func _on_ButtonOk_pressed():
 	if is_a_valid_resource_path(resource_path) and is_a_valid_texture_path(texture_path, resource_path):
 		if not is_match_error_found:
-			var file := File.new()
-			var tileset_file_exists := file.file_exists(resource_path)
-			var texture_file_exists := file.file_exists(texture_path)
+			var tileset_file_exists := Helpers.file_exists(resource_path)
+			var texture_file_exists := Helpers.file_exists(texture_path)
 			if not tileset_file_exists and not texture_file_exists:
 				save_all_and_exit()
 			else:

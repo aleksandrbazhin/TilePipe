@@ -322,10 +322,10 @@ func fix_settings_with_defaults(loaded_settings: Dictionary, defaults: Dictionar
 # If settings data doesn't have some value, then it is populated with 
 # value from Const.DEFAULT_SETTINGS, it is not considered incompatibility.
 func load_settings():
-	var save := File.new()
-	if not save.file_exists(Const.SETTINGS_PATH):
+	if not Helpers.file_exists(Const.SETTINGS_PATH):
 		create_settings()
 	var saved_data: Dictionary = {}
+	var save := File.new()
 	save.open(Const.SETTINGS_PATH, File.READ)
 	if save.get_len() > 0:
 		var settings = parse_json(save.get_line())
@@ -891,8 +891,7 @@ func load_image_texture(path: String) -> Texture:
 		return texture
 	else:
 		var image = Image.new()
-		var directory = Directory.new();
-		if not directory.file_exists(path):
+		if not Helpers.file_exists(path):
 			report_error("Error: Image does not exist: %s, reverting to default" % path)
 			return null
 		var err = image.load(path)
