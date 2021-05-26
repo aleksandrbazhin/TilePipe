@@ -1,6 +1,7 @@
 extends Node
 
-const SETTINGS_PATH: String = "user://user_settings.sav"
+const SETTINGS_PATH := "user://user_settings.sav"
+const TILE_SETTINGS_DIR := "user://tile_settings"
 # version comparison works in godot due to str comparison (is_str_les() in ustring.h)
 const MIN_SETTINGS_COMPATIBLE_VERSION: String = "0.2"
 
@@ -148,6 +149,41 @@ const DEFAULT_OVERLAP: float = 0.25
 const DEFAULT_INPUT_TEXTURE_PATH: String = "res://generation_data/quarters_5.png"
 const DEFAULT_GODOT_RESOURCE_PATH := "res://tileset.tres"
 const DEFAULT_GODOT_TEXTURE_PATH := "res://generated_autotile.png"
+
+const COMMON_DEFAULT_SETTINGS: Dictionary = {
+	"program_version": "0.2",
+	
+	
+}
+
+
+
+const TILE_SPECIFIC_DEFAULT_SETTINGS: Dictionary = {
+	
+	"last_texture_path": DEFAULT_INPUT_TEXTURE_PATH,
+	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
+	"last_template_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
+	"last_save_texture_path": "res://generated_tile_texture.png",
+	"last_texture_file_dialog_path": DEFAULT_INPUT_TEXTURE_PATH,
+	"last_template_file_dialog_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
+	"output_tile_size": DEFAULT_OUTPUT_SIZE,
+	"input_type": 0,
+	"corner_preset": 0,
+	"overlay_preset": 0,
+	"template_type": 0,
+	"smoothing": false,
+	"merge_level": DEFAULT_MERGE,
+	"overlap_level": DEFAULT_OVERLAP,
+	"use_random_seed": false,
+	"random_seed_value": 0,
+	"output_tile_offset": 0,
+	"use_example": true,
+	"godot_export_resource_path": DEFAULT_GODOT_RESOURCE_PATH,
+	"godot_export_texture_path": DEFAULT_GODOT_TEXTURE_PATH,
+	"godot_export_tile_name": "",
+	"godot_export_last_generated_tile_name": "",
+	"godot_autotile_type": GODOT_AUTOTILE_TYPE.BLOB_3x3	
+}
 
 # IMPORTANT!
 # When some setting kind radically changes, 

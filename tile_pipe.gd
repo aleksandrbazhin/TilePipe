@@ -91,6 +91,9 @@ var output_tile_offset: int = 0
 var is_ready: bool = false
 var current_texture_basename: String = ""
 
+#func _init():
+#	OS.set_window_maximized(true)
+
 func _ready():
 	print("TilePipe v.%s running in Debug mode" % VERSION)
 	OS.set_window_title("TilePipe v.%s" % VERSION)
@@ -228,22 +231,6 @@ func capture_setting_values() -> Dictionary:
 		"godot_autotile_type": godot_export_dialog.autotile_type
 	}
 
-func create_settings():
-	var save = File.new()
-	save.open(Const.SETTINGS_PATH, File.WRITE)
-	var data := Const.DEFAULT_SETTINGS
-	data["program_version"] = VERSION
-	save.store_line(to_json(data))
-	save.close()
-
-func save_settings():
-	if is_ready: #check for ready - not to save unchanged data
-		var save = File.new()
-		save.open(Const.SETTINGS_PATH, File.WRITE)
-		var data := capture_setting_values()
-		save.store_line(to_json(data))
-		save.close()
-
 func load_input_texture(path: String) -> String:
 	var loaded_texture: Texture = load_image_texture(path)
 	if loaded_texture == null:
@@ -253,6 +240,7 @@ func load_input_texture(path: String) -> String:
 	texture_in.texture = loaded_texture
 	current_texture_basename = path.get_file().split(".")[0]
 	texture_input_container.get_node("InputInfo/InputNameLabel").text = path.get_file()
+	
 	return path
 
 func load_template_texture(path: String) -> String:
@@ -268,13 +256,8 @@ func load_template_texture(path: String) -> String:
 	template_texture_name.text =  template_name
 	return path
 
-func apply_saved_settings(data: Dictionary):
+func apply_tile_specific_settings(data: Dictionary):
 	generation_data = GenerationData.new(data["last_gen_preset_path"])
-
-	# file dialogs
-	load_input_texture(data["last_texture_path"])
-	input_file_dialog_path = data["last_texture_file_dialog_path"]
-	texture_file_dialog.current_path = Helpers.clear_path(input_file_dialog_path)
 
 	load_template_texture(data["last_template_path"])
 	template_file_dialog_path = data["last_template_file_dialog_path"]
@@ -306,41 +289,90 @@ func apply_saved_settings(data: Dictionary):
 	setup_input_type(generation_type_select.selected)
 	update_output_bg_texture_scale()
 	
-	example_check.pressed = bool(data["use_example"])
-	
 	godot_export_dialog.load_defaults_from_settings(data)
 
-func fix_settings_with_defaults(loaded_settings: Dictionary, defaults: Dictionary) -> Dictionary:
+func apply_saved_settings(data: Dictionary):
+	generation_data = GenerationData.new(data["last_gen_preset_path"])
+	# file dialogs
+	load_input_texture(data["last_texture_path"])
+	input_file_dialog_path = data["last_texture_file_dialog_path"]
+	texture_file_dialog.current_path = Helpers.clear_path(input_file_dialog_path)
+	example_check.pressed = bool(data["use_example"])
+	
+	apply_tile_specific_settings(data)
+
+func fix_settings(loaded_settings: Dictionary, defaults: Dictionary) -> Dictionary:
 	var fixed_settings: Dictionary = loaded_settings.duplicate(true)
 	for key in defaults.keys():
 		if not key in fixed_settings:
 			fixed_settings[key] = defaults[key]
 	return fixed_settings
 
+func get_stored_settings(settings_path: String) -> Dictionary:
+	var settings_data: Dictionary = {}
+	var settings_file := File.new()
+	settings_file.open(settings_path, File.READ)
+	if settings_file.get_len() > 0:
+		var settings_raw_data = parse_json(settings_file.get_as_text())
+		if typeof(settings_raw_data) == TYPE_DICTIONARY:
+			settings_data = Dictionary(settings_raw_data)
+	settings_file.close()
+	return settings_data
+
+func compute_tile_settings_path(tile_texture_path: String) -> String:
+	return Const.TILE_SETTINGS_DIR + "/" + tile_texture_path.md5_text() + ".sav"
+
+func create_settings():
+	var data := Const.DEFAULT_SETTINGS
+	data["program_version"] = VERSION
+	write_settings(Const.SETTINGS_PATH, data)
+
+func save_settings_for_tile(tile_texture_path: String, settings: Dictionary):
+	var tile_settings_path := compute_tile_settings_path(tile_texture_path)
+	write_settings(tile_settings_path, settings)
+
+func save_settings():
+	var settings_values := capture_setting_values()
+	write_settings(Const.SETTINGS_PATH, settings_values)
+	save_settings_for_tile(last_input_texture_path, settings_values)
+
+func write_settings(settings_path: String, settings: Dictionary):
+	if is_ready:
+		var save = File.new()
+		save.open(settings_path, File.WRITE)
+		var data := settings
+		save.store_string(to_json(data))
+		save.close()
+
+func load_settings_for_tile(tile_texture_path: String) -> Dictionary:
+	var tile_settings_path := compute_tile_settings_path(tile_texture_path)
+	if Helpers.file_exists(tile_settings_path):
+		return get_stored_settings(tile_settings_path)
+	else:
+#		save_settings_for_tile(tile_texture_path, user_settings)
+		return {}
+
 # User settings must have "program version" bigger than 
 # Const.MIN_SETTINGS_COMPATIBLE_VERSION otherwise Const.DEFAULT_SETTINGS are used.
 # If settings data doesn't have some value, then it is populated with 
 # value from Const.DEFAULT_SETTINGS, it is not considered incompatibility.
 func load_settings():
+	if not Helpers.dir_exists(Const.TILE_SETTINGS_DIR):
+		var dir := Directory.new()
+		dir.make_dir(Const.TILE_SETTINGS_DIR)
 	if not Helpers.file_exists(Const.SETTINGS_PATH):
 		create_settings()
-	var saved_data: Dictionary = {}
-	var save := File.new()
-	save.open(Const.SETTINGS_PATH, File.READ)
-	if save.get_len() > 0:
-		var settings = parse_json(save.get_line())
-		if typeof(settings) == TYPE_DICTIONARY:
-			saved_data = Dictionary(settings)
-	save.close()
-#	print(saved_data)
-	# settings are incompatible: revert to defaults
-	if saved_data["program_version"] < Const.MIN_SETTINGS_COMPATIBLE_VERSION:
-		saved_data = Const.DEFAULT_SETTINGS
+	var saved_settings_data: Dictionary = get_stored_settings(Const.SETTINGS_PATH)
+	if saved_settings_data["program_version"] < Const.MIN_SETTINGS_COMPATIBLE_VERSION:
+		saved_settings_data = Const.DEFAULT_SETTINGS
 		create_settings()
 		print("Incopmatible settings: Reverting to default settings")
+	if saved_settings_data.has("last_texture_path"):
+		var tile_settings := load_settings_for_tile(saved_settings_data["last_texture_path"])
+		saved_settings_data = fix_settings(tile_settings, saved_settings_data)
 	
-	saved_data = fix_settings_with_defaults(saved_data, Const.DEFAULT_SETTINGS)		
-	apply_saved_settings(saved_data)
+	saved_settings_data = fix_settings(saved_settings_data, Const.DEFAULT_SETTINGS)
+	apply_saved_settings(saved_settings_data)
 
 func check_input_texture() -> bool:
 	if not is_instance_valid(texture_in.texture):
@@ -906,6 +938,7 @@ func _on_TextureDialog_file_selected(path):
 	input_file_dialog_path = Helpers.clear_path(path)
 	example_check.pressed = false
 	load_input_texture(path)
+	apply_tile_specific_settings(load_settings_for_tile(path))
 	preprocess_input_image()
 	save_settings()
 
@@ -956,11 +989,11 @@ func setup_input_type(index: int):
 				node.show()
 
 
-
-func _on_InputType_item_selected(index):
+func _on_InputType_item_selected(index: int):
 	setup_input_type(index)
 	if example_check.pressed:
 		load_input_texture(generation_data.get_example_path())
+		apply_tile_specific_settings(load_settings_for_tile(generation_data.get_example_path()))
 	preprocess_input_image()
 	save_settings()
 
@@ -994,6 +1027,7 @@ func _on_CornersOptionButton_item_selected(index):
 	set_corner_generation_data(index)
 	if example_check.pressed:
 		load_input_texture(generation_data.get_example_path())
+		apply_tile_specific_settings(load_settings_for_tile(generation_data.get_example_path()))
 	preprocess_input_image()
 	save_settings()
 
@@ -1006,6 +1040,7 @@ func _on_OverlayOptionButton_item_selected(index):
 	set_overlay_generation_data(index)
 	if example_check.pressed:
 		load_input_texture(generation_data.get_example_path())
+		apply_tile_specific_settings(load_settings_for_tile(generation_data.get_example_path()))
 	preprocess_input_image()
 	save_settings()
 
@@ -1168,11 +1203,9 @@ func offset_lineedit_enter(_value: String):
 	_on_OffsetButton_pressed()
 
 func _on_ExampleCheckButton_toggled(button_pressed: bool):
-#	if button_pressed or input_file_dialog_path.begins_with("res://"):
-	if button_pressed:
-		load_input_texture(generation_data.get_example_path())
-	else:
-		load_input_texture(input_file_dialog_path)
+	var texture_path: String = generation_data.get_example_path() if button_pressed else input_file_dialog_path
+	load_input_texture(texture_path)
+	apply_tile_specific_settings(load_settings_for_tile(texture_path))
 	preprocess_input_image()
 	save_settings()
 

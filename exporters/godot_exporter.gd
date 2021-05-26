@@ -468,7 +468,6 @@ func start_export_dialog(new_tile_size: int, new_tile_masks: Array,
 	if is_a_valid_resource_path(resource_path):
 		set_lineedit_text(resource_name_edit, resource_path)
 		resource_dialog.current_path = resource_path
-		var file_checker := File.new()
 		load_tileset(resource_path)
 	else:
 		if resource_path != Helpers.clear_path(Const.DEFAULT_GODOT_RESOURCE_PATH):

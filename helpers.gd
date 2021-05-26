@@ -16,3 +16,7 @@ func clear_path(path: String) -> String:
 func file_exists(path: String) -> bool:
 	var f := File.new()
 	return f.file_exists(path)
+
+func dir_exists(path: String) -> bool:
+	var d := Directory.new()
+	return d.dir_exists(path)
