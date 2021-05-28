@@ -20,6 +20,7 @@ func load_data_from_json(data_path: String) -> Dictionary:
 			print("Data loader error: invalid JSON in: ", data_path)
 	else:
 		print("Data loader error: invalid data path: ",  data_path)
+	print("GenerationData->load_data_from_json")
 	return object_data
 
 func get_preset() -> Array:
