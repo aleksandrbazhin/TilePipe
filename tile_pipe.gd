@@ -131,7 +131,6 @@ func _ready():
 	for index in Const.OVERLAY_INPUT_PRESETS:
 		overlay_merge_type_select.add_item(Const.OVERLAY_INPUT_PRESET_NAMES[Const.OVERLAY_INPUT_PRESETS[index]])
 	load_settings()
-	generate_tile_masks()
 	preprocess_input_image()
 	is_ready = true
 #	adjust_for_small_resolution()
@@ -256,31 +255,33 @@ func load_template_texture(path: String) -> String:
 	template_texture_name.text =  template_name
 	return path
 
-func apply_tile_specific_settings(data: Dictionary, exclude_keys: Array = []):
+func apply_tile_specific_settings(data: Dictionary, is_example: bool = false, exclude_keys: Array = []):
 #	generation_data = GenerationData.new(data["last_gen_preset_path"])
-	if not "corner_preset" in exclude_keys:
+	if not is_example:
 		corners_merge_type_select.selected = data["corner_preset"]
-	if not "overlay_preset" in exclude_keys:
 		overlay_merge_type_select.selected = data["overlay_preset"]
-	if not ("input_type" in exclude_keys or "corner_preset" in exclude_keys or "overlay_preset" in exclude_keys):
 		generation_type_select.selected = data["input_type"]
 		setup_input_type(generation_type_select.selected)
 
-	load_template_texture(data["last_template_path"])
+
 	template_file_dialog_path = data["last_template_file_dialog_path"]
 	template_file_dialog.current_path = Helpers.clear_path(input_file_dialog_path)
 	template_type_select.selected = data["template_type"]
-	if template_type_select.selected == template_type_select.get_item_count() - 1:
+	if template_type_select.selected == template_type_select.get_item_count() - 1: # is set to custom
 		template_load_button.disabled = false
 		if template_load_button.is_in_group("really_disabled"):
 			template_load_button.remove_from_group("really_disabled")
 	else:
 		template_load_button.disabled = true
 		template_load_button.add_to_group("really_disabled")
-
+	load_template_texture(data["last_template_path"])
+	generate_tile_masks()
+	
 	save_png_file_dialog_path = data["last_save_texture_path"]
 	save_texture_dialog.current_path = Helpers.clear_path(save_png_file_dialog_path)
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
+	
+		
 #	if not ("input_type" in exclude_keys):
 #	if not ("input_type" in exclude_keys or "corner_preset" in exclude_keys or "overlay_preset" in exclude_keys):
 	smoothing_check.pressed = bool(data["smoothing"])
@@ -295,7 +296,6 @@ func apply_tile_specific_settings(data: Dictionary, exclude_keys: Array = []):
 	godot_export_dialog.load_defaults_from_settings(data)
 
 func apply_saved_settings(data: Dictionary):
-	print("apply_saved_settings")
 #	generation_data = GenerationData.new(data["last_gen_preset_path"])
 	# file dialogs
 	load_input_texture(data["last_texture_path"])
@@ -355,6 +355,10 @@ func load_settings_for_tile(tile_texture_path: String) -> Dictionary:
 #		save_settings_for_tile(tile_texture_path, user_settings)
 		return {}
 
+func load_fixed_settings(tile_texture_path: String, fix_with: Dictionary = Const.DEFAULT_SETTINGS) -> Dictionary:
+	var tile_settings_data := load_settings_for_tile(tile_texture_path)
+	return fix_settings(tile_settings_data, fix_with)
+
 # User settings must have "program version" bigger than 
 # Const.MIN_SETTINGS_COMPATIBLE_VERSION otherwise Const.DEFAULT_SETTINGS are used.
 # If settings data doesn't have some value, then it is populated with 
@@ -372,8 +376,7 @@ func load_settings():
 		print("Incopmatible settings: Reverting to default settings")
 	# load settings saved for once opened texture
 	if saved_settings_data.has("last_texture_path"):
-		var tile_settings := load_settings_for_tile(saved_settings_data["last_texture_path"])
-		saved_settings_data = fix_settings(tile_settings, saved_settings_data)
+		saved_settings_data = load_fixed_settings(saved_settings_data["last_texture_path"], saved_settings_data)
 	saved_settings_data = fix_settings(saved_settings_data, Const.DEFAULT_SETTINGS)
 	apply_saved_settings(saved_settings_data)
 
@@ -938,11 +941,13 @@ func load_image_texture(path: String) -> Texture:
 		return image_texture
 
 func _on_TextureDialog_file_selected(path):
-	print("_on_TextureDialog_file_selected")
 	input_file_dialog_path = Helpers.clear_path(path)
 	example_check.pressed = false
 	load_input_texture(path)
-	apply_tile_specific_settings(load_settings_for_tile(path))
+	var tile_settings_data := load_settings_for_tile(path)
+	if not tile_settings_data.empty():
+		tile_settings_data =  fix_settings(tile_settings_data, Const.DEFAULT_SETTINGS)
+		apply_tile_specific_settings(tile_settings_data, false)
 	preprocess_input_image()
 	save_settings()
 
@@ -973,7 +978,6 @@ func _on_SaveTextureDialog_file_selected(path: String):
 	save_settings()
 	
 func setup_input_type(index: int):
-	print("setup_input_type")
 	match index:
 		Const.INPUT_TYPES.CORNERS:
 			overlay_merge_container.hide()
@@ -994,15 +998,13 @@ func setup_input_type(index: int):
 				node.show()
 
 func _on_InputType_item_selected(index: int):
-	print("_on_InputType_item_selected")
 	if not is_ready:
 		return
 	setup_input_type(index)
 	if example_check.pressed:
 		load_input_texture(generation_data.get_example_path())
-		var tile_settings_data := load_settings_for_tile(generation_data.get_example_path())
-		tile_settings_data = fix_settings(tile_settings_data, Const.DEFAULT_SETTINGS)
-		apply_tile_specific_settings(tile_settings_data, ["input_type"])
+		var tile_settings_data := load_fixed_settings(generation_data.get_example_path())
+		apply_tile_specific_settings(tile_settings_data, true)
 
 	preprocess_input_image()
 	save_settings()
@@ -1029,41 +1031,35 @@ func _on_TemplateOption_item_selected(index):
 	save_settings()
 
 func set_corner_generation_data(index: int):
-	print("set_corner_generation_data")
 	last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[index]
 	generation_data = GenerationData.new(last_generator_preset_path)
 	example_texture.texture = load(generation_data.get_example_path())
 
 func _on_CornersOptionButton_item_selected(index: int):
-	print("_on_CornersOptionButton_item_selected")
 	if not is_ready:
 		return
 	set_corner_generation_data(index)
 	if example_check.pressed:
 		load_input_texture(generation_data.get_example_path())
-		var tile_settings_data := load_settings_for_tile(generation_data.get_example_path())
-		tile_settings_data = fix_settings(tile_settings_data, Const.DEFAULT_SETTINGS)
-		apply_tile_specific_settings(tile_settings_data, ['corner_preset'])
+		load_fixed_settings(generation_data.get_example_path())
+		var tile_settings_data := load_fixed_settings(generation_data.get_example_path())
+		apply_tile_specific_settings(tile_settings_data, true)
 	preprocess_input_image()
 	save_settings()
 
 func set_overlay_generation_data(index: int):
-	print("set_overlay_generation_data")
 	last_generator_preset_path = Const.OVERLAY_INPUT_PRESETS_DATA_PATH[index]
 	generation_data = GenerationData.new(last_generator_preset_path)
 	example_texture.texture = load(generation_data.get_example_path())
 
 func _on_OverlayOptionButton_item_selected(index):
-	print("_on_OverlayOptionButton_item_selected")
 	set_overlay_generation_data(index)
 	if not is_ready:
 		return
 	if example_check.pressed:
 		load_input_texture(generation_data.get_example_path())
-		var tile_settings_data := load_settings_for_tile(generation_data.get_example_path())
-		tile_settings_data = fix_settings(tile_settings_data, Const.DEFAULT_SETTINGS)
-		apply_tile_specific_settings(tile_settings_data,  ['overlay_preset'])
-
+		var tile_settings_data := load_fixed_settings(generation_data.get_example_path())
+		apply_tile_specific_settings(tile_settings_data,  true)
 	preprocess_input_image()
 	save_settings()
 
@@ -1226,13 +1222,13 @@ func offset_lineedit_enter(_value: String):
 	_on_OffsetButton_pressed()
 
 func _on_ExampleCheckButton_toggled(button_pressed: bool):
-	print("_on_ExampleCheckButton_toggled")
 	if not is_ready:
 		return
 	var texture_path: String = generation_data.get_example_path() if button_pressed else input_file_dialog_path
 	load_input_texture(texture_path)
 	if is_ready:
-		apply_tile_specific_settings(load_settings_for_tile(texture_path))
+		var tile_settings_data := load_fixed_settings(texture_path)
+		apply_tile_specific_settings(tile_settings_data, button_pressed)
 	preprocess_input_image()
 	save_settings()
 
