@@ -309,6 +309,7 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 			"name": String(tile_parse_result.strings[2]),
 			"texture_id": int(tile_parse_result.strings[3]),
 			"tile_mode": int(tile_parse_result.strings[5]),
+			"bitmask_mode": -1,
 			"icon_rect": Rect2()
 		}
 		if not textures.has(tile_dict["texture_id"]):
@@ -334,6 +335,14 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 					tile_dict["icon_rect"].size = Vector2(int(tile_sizes[0]), int(tile_sizes[1]))
 				else: #error
 					parse_result["error"] = true
+				continue
+			TileSet.AUTO_TILE:
+				var bitmask_mode_regex := RegEx.new()
+				bitmask_mode_regex.compile(
+					str(tile_dict["id"]) + '/autotile/bitmask_mode\\s*=\\s(\\d+)\\s*' )
+				var bitmask_mode_match: RegExMatch = bitmask_mode_regex.search(tiles_data)
+				if bitmask_mode_match != null:
+					tile_dict["bitmask_mode"] = int(bitmask_mode_match.strings[1])
 		parse_result["tiles"].append(tile_dict)
 	return parse_result
 
@@ -366,7 +375,7 @@ func load_tileset(tileset_path: String):
 							report_error_inside_dialog("Texture used for tile \"%s\" is missing" % tile["name"])
 						exisiting_tile.populate(tile["name"], tile["id"], 
 							exisiting_texture_path,
-							tile["icon_rect"], tile["tile_mode"],
+							tile["icon_rect"], tile["tile_mode"], tile["bitmask_mode"],
 							tileset_data["textures"][tile["texture_id"]]["image"])
 						existing_tiles_container.add_child(exisiting_tile)
 						exisiting_tile.connect("clicked", self, "populate_from_exisiting_tile")

@@ -13,13 +13,19 @@ const MODE_NAMES := {
 	TileSet.ATLAS_TILE: "Atlas",
 }
 
+const BITMASK_MODE_NAMES := {
+	TileSet.BITMASK_2X2: "2x2",
+	TileSet.BITMASK_3X3_MINIMAL: "3x3min",
+	TileSet.BITMASK_3X3: "3x3",
+}
+
 var tile_name: String
 var tile_id: int
 var texture_path: String
 
 
 func populate(new_tile_name: String, new_tile_id: int, new_texture_path: String, 
-		icon_rect: Rect2, tile_mode: int, image = null):
+		icon_rect: Rect2, tile_mode: int, bitmask_mode: int = -1, image = null):
 	tile_name = new_tile_name
 	tile_id = new_tile_id
 	texture_path = new_texture_path
@@ -35,7 +41,9 @@ func populate(new_tile_name: String, new_tile_id: int, new_texture_path: String,
 		$HBox/Icon.texture = icon_texture
 	if MODE_NAMES.has(tile_mode):
 		$HBox/TileMode.text = MODE_NAMES[tile_mode]
-	
+	if BITMASK_MODE_NAMES.has(bitmask_mode):
+		$HBox/TileMode.text += " " + BITMASK_MODE_NAMES[bitmask_mode]
+		
 func highlight_name(is_on: bool):
 	if is_on:
 		$HBox/Name.color.a = 1.0

@@ -44,6 +44,7 @@ run/main_scene="res://tile_pipe.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="TilePipe"
 boot_splash/image="res://assets/boot_splash.png"
+boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 1 )
 config/icon="res://assets/icon.png"
 config/windows_native_icon="res://icon.ico"
