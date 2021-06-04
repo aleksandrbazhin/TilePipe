@@ -417,7 +417,6 @@ func is_a_valid_resource_path(test_resource_path: String):
 		return false
 	var resource_project_path := get_godot_project_path(test_resource_path)	
 	if resource_project_path.empty():
-#		report_error_inside_dialog("Error: saving resource not in any Godot project")
 		return false
 	else:
 		return true
@@ -555,6 +554,8 @@ func _on_ResourceFileDialog_file_selected(path: String):
 		set_texture_path(resource_path.get_base_dir(), tile_name)
 		load_tileset(resource_path)
 		save_settings()
+	else:
+		report_error_inside_dialog("Error: Invalid tileset path. \n\nGodot tileset file path should be: \n 1. a valid path  \n 2. inside any Godot projects tree")
 
 func _on_ErrorDialog_confirmed():
 	error_dialog.dialog_text = ""
