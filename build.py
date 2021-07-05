@@ -94,30 +94,30 @@ if __name__ == "__main__":
         build()
 
     if args.upload:
-        print("\n____________________TilePipe______________________\nPreparing uppload with debug=%s\n" % str(args.debug))
+        print("\n____________________TilePipe______________________\nPreparing upload with debug=%s\n" % str(args.debug))
 
         import os.path, sys
         if not os.path.isfile("%(build_path)s/%(binary)s" % WIN_PARAMS):
-            sys.exit("ERROR: no Windows binary found, build project before upploading with the same debug flag (--debug is %s)" % str(args.debug))
+            sys.exit("ERROR: no Windows binary found, build project before uploading with the same debug flag (--debug is %s)" % str(args.debug))
         if not os.path.isfile("%(build_path)s/%(binary)s" % LINUX_PARAMS):
-            sys.exit("ERROR: no Linux binary found, build project before upploading with the same debug flag (--debug is %s)" % str(args.debug))
+            sys.exit("ERROR: no Linux binary found, build project before uploading with the same debug flag (--debug is %s)" % str(args.debug))
         if not os.path.isfile("%(build_path)s/%(binary)s" % MAC_PARAMS):
-            sys.exit("ERROR: no Mac binary found, build project before upploading with the same debug flag (--debug is %s)" % str(args.debug))
+            sys.exit("ERROR: no Mac binary found, build project before uploading with the same debug flag (--debug is %s)" % str(args.debug))
         
         prepare_uploads()
 
         print("\n____________________TilePipe______________________\nUploading build to itch.io")
         
         if args.debug:
-            os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe-testing:windows-debug --userversion %(version)' % WIN_PARAMS)
-            os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe-testing:linux-debug --userversion %(version)' % LINUX_PARAMS)
-            os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe-testing:mac-debug --userversion %(version)' % MAC_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe-testing:windows-debug --userversion %(version)s' % WIN_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe-testing:linux-debug --userversion %(version)s' % LINUX_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe-testing:mac-debug --userversion %(version)s' % MAC_PARAMS)
             
         else:
             # here upload to public TilePipe
-            os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe:windows --userversion %(version)' % WIN_PARAMS)
-            os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe:linux --userversion %(version)' % LINUX_PARAMS)
-            os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe:mac --userversion %(version)' % MAC_PARAMS)
-            os.system('butler push %(path)s/examples.zip  aleksandrbazhin/TilePipe:examples --userversion %(version)' % {"path": EXPORT_PATH, "version": VERSION})
+            os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe:windows --userversion %(version)s' % WIN_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe:linux --userversion %(version)s' % LINUX_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe:mac --userversion %(version)s' % MAC_PARAMS)
+            os.system('butler push %(path)s/examples.zip  aleksandrbazhin/TilePipe:examples --userversion %(version)s' % {"path": EXPORT_PATH, "version": VERSION})
         
 
