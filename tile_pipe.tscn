@@ -1230,7 +1230,8 @@ margin_right = 220.0
 margin_bottom = 224.0
 rect_min_size = Vector2( 0, 40 )
 rect_pivot_offset = Vector2( 227, -255 )
-hint_tooltip = "You can create a new Godot 3.x tileset resource or add a new autotile to the existing resource with the current result texture."
+hint_tooltip = "You can create a new Godot 3.x tileset resource or add a new autotile
+to the existing tileset with the current result output image"
 text = "Export for Godot 3"
 icon = ExtResource( 12 )
 __meta__ = {
