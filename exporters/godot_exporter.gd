@@ -2,9 +2,6 @@ extends PopupDialog
 
 class_name GodotExporter
 
-
-
-signal exporter_error(message)
 signal settings_saved()
 
 #var last_saved_data := {

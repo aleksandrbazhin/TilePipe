@@ -102,7 +102,6 @@ func _ready():
 	rng.randomize()
 	connect("input_image_processed", self, "make_output_texture")
 	output_offset_spinbox.get_line_edit().connect("text_entered", self, "offset_lineedit_enter")
-	godot_export_dialog.connect("exporter_error", self, "report_error")	
 	godot_export_dialog.connect("settings_saved", self, "save_settings")	
 	godot_export_dialog.connect("about_to_show", self, "show_blocking_overlay")
 	godot_export_dialog.connect("popup_hide", self, "hide_blocking_overlay")
