@@ -84,12 +84,13 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
 
-enum TEMPLATE_TYPES {BLOB_47, CORNERS_2x2, BLOB_47x2, BLOB_47_MR_MICHAEL, CUSTOM}
+enum TEMPLATE_TYPES {BLOB_47, CORNERS_2x2, BLOB_47_MR_MICHAEL, RPG_MAKER, BLOB_47x2, CUSTOM}
 const TEMPLATE_TYPE_NAMES : Dictionary = {
 	TEMPLATE_TYPES.BLOB_47: "Blob 47 (3x3min)",
 	TEMPLATE_TYPES.CORNERS_2x2: "Wang corners 16 (2x2)",
 	TEMPLATE_TYPES.BLOB_47x2: "Double blob (for random)",
-	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "Big blob from @MrMichael",
+	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "Big blob from MrMichael",
+	TEMPLATE_TYPES.RPG_MAKER: "Rpg-maker style",
 	TEMPLATE_TYPES.CUSTOM: "Custom"
 }
 const TEMPLATE_PATHS : Dictionary = {
@@ -97,6 +98,7 @@ const TEMPLATE_PATHS : Dictionary = {
 	TEMPLATE_TYPES.CORNERS_2x2: "res://generation_data/template_2x2.png",
 	TEMPLATE_TYPES.BLOB_47x2: "res://generation_data/template_47_double.png",
 	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "res://generation_data/template_47_with_duplicates.png",
+	TEMPLATE_TYPES.RPG_MAKER: "res://generation_data/template_rpg_maker.png",
 	TEMPLATE_TYPES.CUSTOM: "res://"
 }
 
