@@ -64,7 +64,7 @@ def make_zip(target, source, is_mac: bool = False):
 def prepare_uploads():
     shutil.rmtree("%s/examples" % EXPORT_PATH, ignore_errors=True)
     Path("%s/examples" % EXPORT_PATH).mkdir(parents=True, exist_ok=True)
-    os.system("ROBOCOPY  generation_data %s/examples *.png" % EXPORT_PATH)
+    os.system("ROBOCOPY generation_data %s/examples *.png /xf *.png~" % EXPORT_PATH)
     make_zip('%s/examples.zip' % EXPORT_PATH, '%s/examples' % EXPORT_PATH)
     make_zip('%(path)s/%(app_name)s_win64.zip' % WIN_PARAMS,  '%(build_path)s/* %(path)s/examples' % WIN_PARAMS)
     make_zip('%(path)s/%(app_name)s_linux.zip' % LINUX_PARAMS,  '%(build_path)s/* %(path)s/examples' % LINUX_PARAMS)
