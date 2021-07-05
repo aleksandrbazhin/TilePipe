@@ -18,9 +18,9 @@ VERSION = override_config['application']['config/version'].replace('"', '')
 
 APP_NAME = 'TilePipe_v.%s' % VERSION
 
-WIN_PARAMS = {"godot": GODOT33, "godot_params": "--no-window --export",  "path": EXPORT_PATH, "build_path": WIN_BUILD_PATH, "app_name": APP_NAME, "binary": "%s.exe" % APP_NAME}
-LINUX_PARAMS = {"godot": GODOT33, "godot_params": "--no-window --export", "path": EXPORT_PATH, "build_path": LINUX_BUILD_PATH, "app_name": APP_NAME, "binary": "%s.x86_64" % APP_NAME}
-MAC_PARAMS = {"godot": GODOT323, "godot_params": "--no-window --export", "path": EXPORT_PATH, "build_path": MAC_BUILD_PATH, "app_name": APP_NAME, "binary": "%s_mac.zip" % APP_NAME}
+WIN_PARAMS = {"godot": GODOT33, "godot_params": "--no-window --export",  "path": EXPORT_PATH, "build_path": WIN_BUILD_PATH, "app_name": APP_NAME, "binary": "%s.exe" % APP_NAME, "version": VERSION}
+LINUX_PARAMS = {"godot": GODOT33, "godot_params": "--no-window --export", "path": EXPORT_PATH, "build_path": LINUX_BUILD_PATH, "app_name": APP_NAME, "binary": "%s.x86_64" % APP_NAME, "version": VERSION}
+MAC_PARAMS = {"godot": GODOT323, "godot_params": "--no-window --export", "path": EXPORT_PATH, "build_path": MAC_BUILD_PATH, "app_name": APP_NAME, "binary": "%s_mac.zip" % APP_NAME, "version": VERSION}
 
 
 def update_godot_export_templates():
@@ -109,15 +109,15 @@ if __name__ == "__main__":
         print("\n____________________TilePipe______________________\nUploading build to itch.io")
         
         if args.debug:
-            os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe-testing:windows-debug' % WIN_PARAMS)
-            os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe-testing:linux-debug' % LINUX_PARAMS)
-            os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe-testing:mac-debug' % MAC_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe-testing:windows-debug --userversion %(version)' % WIN_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe-testing:linux-debug --userversion %(version)' % LINUX_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe-testing:mac-debug --userversion %(version)' % MAC_PARAMS)
             
         else:
             # here upload to public TilePipe
-            os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe:windows' % WIN_PARAMS)
-            os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe:linux' % LINUX_PARAMS)
-            os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe:mac' % MAC_PARAMS)
-            os.system('butler push %(path)s/examples.zip  aleksandrbazhin/TilePipe:examples' % {"path": EXPORT_PATH})
+            os.system('butler push %(path)s/%(app_name)s_win64.zip aleksandrbazhin/TilePipe:windows --userversion %(version)' % WIN_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_linux.zip aleksandrbazhin/TilePipe:linux --userversion %(version)' % LINUX_PARAMS)
+            os.system('butler push %(path)s/%(app_name)s_mac.zip  aleksandrbazhin/TilePipe:mac --userversion %(version)' % MAC_PARAMS)
+            os.system('butler push %(path)s/examples.zip  aleksandrbazhin/TilePipe:examples --userversion %(version)' % {"path": EXPORT_PATH, "version": VERSION})
         
 
