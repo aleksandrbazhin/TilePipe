@@ -297,11 +297,12 @@ func apply_tile_specific_settings(data: Dictionary, is_example: bool = false, ex
 func apply_saved_settings(data: Dictionary):
 #	generation_data = GenerationData.new(data["last_gen_preset_path"])
 	# file dialogs
+	apply_tile_specific_settings(data)
 	load_input_texture(data["last_texture_path"])
 	input_file_dialog_path = data["last_texture_file_dialog_path"]
 	texture_file_dialog.current_path = Helpers.clear_path(input_file_dialog_path)
 	example_check.pressed = bool(data["use_example"])
-	apply_tile_specific_settings(data)
+	
 	
 func fix_settings(loaded_settings: Dictionary, defaults: Dictionary) -> Dictionary:
 	var fixed_settings: Dictionary = loaded_settings.duplicate(true)
