@@ -930,7 +930,7 @@ func load_image_texture(path: String) -> Texture:
 	else:
 		var image = Image.new()
 		if not Helpers.file_exists(path):
-			report_error("Error: Image does not exist: %s, reverting to default" % path)
+			report_error("Error: Image does not exist: %s, reverting to example input" % path)
 			return null
 		var err = image.load(path)
 		if(err != 0):
