@@ -155,8 +155,8 @@ rect_min_size = Vector2( 0, 32 )
 rect_rotation = 270.0
 hint_tooltip = "Setup how your tiles are built"
 mouse_filter = 0
-custom_fonts/font = ExtResource( 10 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
+custom_fonts/font = ExtResource( 10 )
 text = "Input"
 align = 1
 valign = 1
@@ -176,9 +176,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LoadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=[
-"blockable",
-]]
+[node name="LoadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=["blockable"]]
 margin_right = 276.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
@@ -191,9 +189,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ReloadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=[
-"blockable",
-]]
+[node name="ReloadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=["blockable"]]
 margin_left = 280.0
 margin_right = 320.0
 margin_bottom = 40.0
@@ -294,8 +290,8 @@ margin_right = 122.0
 margin_bottom = 31.0
 hint_tooltip = "Setup the generation type"
 mouse_filter = 0
-custom_fonts/font = ExtResource( 10 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
+custom_fonts/font = ExtResource( 10 )
 text = "Generation type:"
 align = 2
 valign = 1
@@ -303,9 +299,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="InputType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBoxHeader" groups=[
-"blockable",
-]]
+[node name="InputType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBoxHeader" groups=["blockable"]]
 margin_left = 134.0
 margin_right = 284.0
 margin_bottom = 40.0
@@ -334,9 +328,7 @@ custom_constants/separation = 10
 margin_right = 194.0
 margin_bottom = 62.0
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/CornersMergeSettings" groups=[
-"blockable",
-]]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/CornersMergeSettings" groups=["blockable"]]
 margin_right = 194.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
@@ -345,9 +337,7 @@ mouse_filter = 1
 text = " Quarters merge preset"
 valign = 2
 
-[node name="CornersOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/CornersMergeSettings" groups=[
-"blockable",
-]]
+[node name="CornersOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/CornersMergeSettings" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 194.0
 margin_bottom = 62.0
@@ -363,9 +353,7 @@ margin_top = 72.0
 margin_right = 194.0
 margin_bottom = 134.0
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/OverlaySettings" groups=[
-"blockable",
-]]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/OverlaySettings" groups=["blockable"]]
 margin_right = 194.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
@@ -374,9 +362,7 @@ mouse_filter = 1
 text = " Overlay preset"
 valign = 2
 
-[node name="OverlayOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/OverlaySettings" groups=[
-"blockable",
-]]
+[node name="OverlayOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/OverlaySettings" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 194.0
 margin_bottom = 62.0
@@ -396,9 +382,7 @@ margin_right = 194.0
 margin_bottom = 40.0
 custom_constants/separation = 0
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HeaderContainer" groups=[
-"blockable",
-]]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HeaderContainer" groups=["blockable"]]
 margin_top = 7.0
 margin_right = 86.0
 margin_bottom = 33.0
@@ -407,9 +391,7 @@ text = " Use example"
 align = 1
 valign = 1
 
-[node name="ExampleCheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HeaderContainer" groups=[
-"blockable",
-]]
+[node name="ExampleCheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/ExampleContainer/HeaderContainer" groups=["blockable"]]
 margin_left = 86.0
 margin_right = 162.0
 margin_bottom = 40.0
@@ -471,9 +453,7 @@ rect_min_size = Vector2( 0, 26 )
 text = "Color processing type"
 valign = 2
 
-[node name="ColorProcessType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/ColorProcessContainer" groups=[
-"blockable",
-]]
+[node name="ColorProcessType" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/ColorProcessContainer" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 194.0
 margin_bottom = 62.0
@@ -481,9 +461,7 @@ rect_min_size = Vector2( 0, 32 )
 text = "Type"
 align = 1
 
-[node name="HSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=[
-"overlay_settings",
-]]
+[node name="HSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=["overlay_settings"]]
 margin_top = 41.0
 margin_right = 194.0
 margin_bottom = 87.0
@@ -493,18 +471,14 @@ minimum - only central part is used"
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/HSliderContainer" groups=[
-"blockable",
-]]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/HSliderContainer" groups=["blockable"]]
 margin_right = 194.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
 text = " Merge amount"
 valign = 2
 
-[node name="RateSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/HSliderContainer" groups=[
-"blockable",
-]]
+[node name="RateSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/HSliderContainer" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 194.0
 margin_bottom = 46.0
@@ -518,9 +492,7 @@ tick_count = 11
 ticks_on_borders = true
 script = ExtResource( 3 )
 
-[node name="OverlapSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=[
-"overlay_settings",
-]]
+[node name="OverlapSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=["overlay_settings"]]
 margin_top = 97.0
 margin_right = 194.0
 margin_bottom = 143.0
@@ -529,18 +501,14 @@ Only matters if sides have some transparency."
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/OverlapSliderContainer" groups=[
-"blockable",
-]]
+[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/OverlapSliderContainer" groups=["blockable"]]
 margin_right = 194.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
 text = " Overlap amount"
 valign = 2
 
-[node name="OverlapSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/OverlapSliderContainer" groups=[
-"blockable",
-]]
+[node name="OverlapSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/OverlapSliderContainer" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 194.0
 margin_bottom = 46.0
@@ -561,10 +529,7 @@ margin_right = 194.0
 margin_bottom = 66.0
 rect_min_size = Vector2( 24, 16 )
 
-[node name="RandomContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=[
-"corners_settings",
-"overlay_settings",
-]]
+[node name="RandomContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=["corners_settings", "overlay_settings"]]
 margin_top = 153.0
 margin_right = 194.0
 margin_bottom = 250.0
@@ -592,9 +557,7 @@ rect_min_size = Vector2( 0, 26 )
 text = " Use random seed"
 valign = 1
 
-[node name="RandomCheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/HBoxContainer" groups=[
-"blockable",
-]]
+[node name="RandomCheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/HBoxContainer" groups=["blockable"]]
 margin_left = 118.0
 margin_right = 194.0
 margin_bottom = 40.0
@@ -607,9 +570,7 @@ margin_right = 194.0
 margin_bottom = 97.0
 custom_constants/separation = 0
 
-[node name="SeedLineEdit" type="LineEdit" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/EditContainer" groups=[
-"blockable",
-]]
+[node name="SeedLineEdit" type="LineEdit" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/EditContainer" groups=["blockable"]]
 margin_right = 146.0
 margin_bottom = 29.0
 hint_tooltip = "Use some interger seed to have consistent randomization result"
@@ -619,9 +580,7 @@ editable = false
 placeholder_text = "Integer value"
 placeholder_alpha = 0.4
 
-[node name="SeedButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/EditContainer" groups=[
-"blockable",
-]]
+[node name="SeedButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/EditContainer" groups=["blockable"]]
 margin_left = 146.0
 margin_right = 194.0
 margin_bottom = 29.0
@@ -638,7 +597,7 @@ margin_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="WorkTextureContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer/Preview"]
+[node name="PreviewContainer" type="ScrollContainer" parent="Panel/HBox/Images/InContainer/Preview"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 256, 256 )
@@ -648,13 +607,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer"]
+[node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer"]
 margin_right = 318.0
 margin_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
+[node name="BGTextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 1.41425
@@ -669,7 +628,7 @@ __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="DebugTexture" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
+[node name="DebugTexture" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]
 margin_right = 133.345
 margin_bottom = 124.436
 rect_min_size = Vector2( 128, 128 )
@@ -681,7 +640,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="QuartersViewport" type="Viewport" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
+[node name="QuartersViewport" type="Viewport" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]
 size = Vector2( 32, 32 )
 size_override_stretch = true
 transparent_bg = true
@@ -691,13 +650,13 @@ usage = 1
 render_target_v_flip = true
 render_target_update_mode = 3
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control/QuartersViewport"]
+[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control/QuartersViewport"]
 material = SubResource( 1 )
 margin_right = 64.0
 margin_bottom = 64.0
 stretch_mode = 3
 
-[node name="OverlayViewport" type="Viewport" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
+[node name="OverlayViewport" type="Viewport" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]
 size = Vector2( 32, 32 )
 size_override_stretch = true
 transparent_bg = true
@@ -708,11 +667,11 @@ render_target_v_flip = true
 render_target_update_mode = 3
 gui_disable_input = true
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control/OverlayViewport"]
+[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control/OverlayViewport"]
 material = SubResource( 2 )
 stretch_mode = 3
 
-[node name="InViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
+[node name="InViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]
 visible = false
 anchor_left = 1.0
 anchor_right = 1.0
@@ -724,7 +683,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OverlayViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/WorkTextureContainer/Control"]
+[node name="OverlayViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]
 visible = false
 anchor_left = 1.0
 anchor_top = 1.0
@@ -763,9 +722,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer" groups=[
-"blockable",
-]]
+[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer" groups=["blockable"]]
 margin_right = 149.0
 margin_bottom = 19.0
 size_flags_vertical = 1
@@ -776,9 +733,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SizeOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer" groups=[
-"blockable",
-]]
+[node name="SizeOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer" groups=["blockable"]]
 margin_top = 25.0
 margin_right = 149.0
 margin_bottom = 57.0
@@ -789,9 +744,7 @@ align = 1
 items = [ "8x8", null, false, 0, null, "16x16", null, false, 1, null, "32x32", null, false, 2, null, "64x64", null, false, 3, null, "128x128", null, false, 4, null, "8x8", null, false, 5, null, "16x16", null, false, 6, null, "32x32", null, false, 7, null, "64x64", null, false, 8, null, "128x128", null, false, 9, null ]
 selected = 3
 
-[node name="Smoothing" type="CheckButton" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer" groups=[
-"blockable",
-]]
+[node name="Smoothing" type="CheckButton" parent="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer" groups=["blockable"]]
 margin_top = 63.0
 margin_right = 149.0
 margin_bottom = 103.0
@@ -829,8 +782,8 @@ rect_min_size = Vector2( 0, 32 )
 rect_rotation = 270.0
 hint_tooltip = "Setup how your tiles are placed"
 mouse_filter = 0
-custom_fonts/font = ExtResource( 10 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
+custom_fonts/font = ExtResource( 10 )
 text = "Template"
 align = 1
 valign = 1
@@ -886,9 +839,7 @@ margin_right = 1112.0
 margin_bottom = 130.0
 custom_constants/separation = 8
 
-[node name="Label" type="Label" parent="Panel/HBox/Images/TemplateContainer/ButtonBox" groups=[
-"blockable",
-]]
+[node name="Label" type="Label" parent="Panel/HBox/Images/TemplateContainer/ButtonBox" groups=["blockable"]]
 margin_right = 200.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
@@ -896,9 +847,7 @@ text = "Select template "
 align = 1
 valign = 2
 
-[node name="TemplateOption" type="OptionButton" parent="Panel/HBox/Images/TemplateContainer/ButtonBox" groups=[
-"blockable",
-]]
+[node name="TemplateOption" type="OptionButton" parent="Panel/HBox/Images/TemplateContainer/ButtonBox" groups=["blockable"]]
 margin_top = 38.0
 margin_right = 200.0
 margin_bottom = 74.0
@@ -907,16 +856,14 @@ hint_tooltip = "Select one of the provided templates or if you want to use your 
 text = "Template type"
 align = 1
 
-[node name="TemplateButton" type="Button" parent="Panel/HBox/Images/TemplateContainer/ButtonBox" groups=[
-"blockable",
-]]
+[node name="TemplateButton" type="Button" parent="Panel/HBox/Images/TemplateContainer/ButtonBox" groups=["blockable"]]
 margin_top = 82.0
 margin_right = 200.0
 margin_bottom = 122.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 disabled = true
-text = "Load template"
+text = "Load custom"
 icon = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -929,9 +876,7 @@ margin_right = 368.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 120, 0 )
 
-[node name="ReloadButton" type="Button" parent="Panel/HBox/Images/TemplateContainer/MoreTemplateControls" groups=[
-"blockable",
-]]
+[node name="ReloadButton" type="Button" parent="Panel/HBox/Images/TemplateContainer/MoreTemplateControls" groups=["blockable"]]
 visible = false
 margin_right = 120.0
 margin_bottom = 32.0
@@ -971,8 +916,8 @@ hint_tooltip = "Preview and tweak the resulting tileset"
 mouse_filter = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_fonts/font = ExtResource( 10 )
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
+custom_fonts/font = ExtResource( 10 )
 text = "Result"
 align = 1
 valign = 1
@@ -1056,9 +1001,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer" groups=[
-"blockable",
-]]
+[node name="Texturet Label" type="Label" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer" groups=["blockable"]]
 margin_right = 149.0
 margin_bottom = 19.0
 size_flags_vertical = 1
@@ -1069,9 +1012,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Freeze" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer" groups=[
-"blockable",
-]]
+[node name="Freeze" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer" groups=["blockable"]]
 visible = false
 margin_left = -22.476
 margin_top = -170.0
@@ -1090,9 +1031,7 @@ margin_right = 149.0
 margin_bottom = 54.0
 mouse_filter = 2
 
-[node name="OffsetSpinBox" type="SpinBox" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" groups=[
-"blockable",
-]]
+[node name="OffsetSpinBox" type="SpinBox" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" groups=["blockable"]]
 margin_right = 97.0
 margin_bottom = 29.0
 size_flags_horizontal = 3
@@ -1100,9 +1039,7 @@ max_value = 255.0
 rounded = true
 align = 1
 
-[node name="OffsetButton" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" groups=[
-"blockable",
-]]
+[node name="OffsetButton" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" groups=["blockable"]]
 margin_left = 101.0
 margin_right = 149.0
 margin_bottom = 29.0
@@ -1162,9 +1099,7 @@ margin_right = 1352.0
 margin_bottom = 754.0
 rect_min_size = Vector2( 220, 0 )
 
-[node name="CloseButton" type="Button" parent="Panel/HBox/Settings" groups=[
-"blockable",
-]]
+[node name="CloseButton" type="Button" parent="Panel/HBox/Settings" groups=["blockable"]]
 margin_right = 220.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 80, 40 )
@@ -1191,9 +1126,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Save" type="Button" parent="Panel/HBox/Settings" groups=[
-"blockable",
-]]
+[node name="Save" type="Button" parent="Panel/HBox/Settings" groups=["blockable"]]
 margin_top = 92.0
 margin_right = 220.0
 margin_bottom = 132.0
@@ -1222,9 +1155,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GodotExportButton" type="Button" parent="Panel/HBox/Settings" groups=[
-"blockable",
-]]
+[node name="GodotExportButton" type="Button" parent="Panel/HBox/Settings" groups=["blockable"]]
 margin_top = 184.0
 margin_right = 220.0
 margin_bottom = 224.0
@@ -1248,6 +1179,7 @@ __meta__ = {
 }
 
 [node name="GodotExportDialog" parent="." instance=ExtResource( 11 )]
+visible = false
 
 [node name="PopupDialog" type="AcceptDialog" parent="."]
 anchor_left = 0.5

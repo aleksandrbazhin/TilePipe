@@ -5,7 +5,7 @@ import shutil
 from pathlib import Path
 import configparser
 
-GODOT33 = "Godot_v3.3-stable_win64.exe"
+GODOT = "Godot_v3.4-stable_win64.exe"
 GODOT323 = "Godot_v3.2.3-stable_win64.exe"
 EXPORT_PATH = "../godot_export/TilePipe"
 WIN_BUILD_PATH = '%s/win' % EXPORT_PATH
@@ -18,8 +18,8 @@ VERSION = override_config['application']['config/version'].replace('"', '')
 
 APP_NAME = 'TilePipe_v.%s' % VERSION
 
-WIN_PARAMS = {"godot": GODOT33, "godot_params": "--no-window --export",  "path": EXPORT_PATH, "build_path": WIN_BUILD_PATH, "app_name": APP_NAME, "binary": "%s.exe" % APP_NAME, "version": VERSION}
-LINUX_PARAMS = {"godot": GODOT33, "godot_params": "--no-window --export", "path": EXPORT_PATH, "build_path": LINUX_BUILD_PATH, "app_name": APP_NAME, "binary": "%s.x86_64" % APP_NAME, "version": VERSION}
+WIN_PARAMS = {"godot": GODOT, "godot_params": "--no-window --export",  "path": EXPORT_PATH, "build_path": WIN_BUILD_PATH, "app_name": APP_NAME, "binary": "%s.exe" % APP_NAME, "version": VERSION}
+LINUX_PARAMS = {"godot": GODOT, "godot_params": "--no-window --export", "path": EXPORT_PATH, "build_path": LINUX_BUILD_PATH, "app_name": APP_NAME, "binary": "%s.x86_64" % APP_NAME, "version": VERSION}
 MAC_PARAMS = {"godot": GODOT323, "godot_params": "--no-window --export", "path": EXPORT_PATH, "build_path": MAC_BUILD_PATH, "app_name": APP_NAME, "binary": "%s_mac.zip" % APP_NAME, "version": VERSION}
 
 

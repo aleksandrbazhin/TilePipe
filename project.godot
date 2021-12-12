@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://exporters/Godot_existing_tile_row.gd"
 }, {
+"base": "Node",
+"class": "TileRenderer",
+"language": "GDScript",
+"path": "res://TileRenderer.gd"
+}, {
 "base": "TileSet",
 "class": "TilesheetDescrption",
 "language": "GDScript",
@@ -33,6 +38,7 @@ _global_script_class_icons={
 "GenerationData": "",
 "GodotExporter": "",
 "Godot_tile_row": "",
+"TileRenderer": "",
 "TilesheetDescrption": ""
 }
 
@@ -48,7 +54,7 @@ boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 1 )
 config/icon="res://assets/icon.png"
 config/windows_native_icon="res://icon.ico"
-config/version="0.4.2"
+config/version="0.4.3"
 
 [autoload]
 

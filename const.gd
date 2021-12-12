@@ -64,15 +64,17 @@ enum OVERLAY_INPUT_PRESETS {
 	TOP_DOWN_4, 
 #	SIDEVIEW_6, 
 	SIDEVIEW_8,
-	SIDEVIEW_13
+	SIDEVIEW_13,
+	SIDEVIEW_25_255
 }
 const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
 #	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "Top down without corners (2 tiles)",
 #	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "Top down with corners (3 tiles)",
-	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "4 tiles, symmetry: full",
+	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "4 parts, symmetry: full",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "Sideview (6 tiles)",
-	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "8 tiles, symmetry: sideway",
-	OVERLAY_INPUT_PRESETS.SIDEVIEW_13:"13 tiles, symmetry: no"
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "8 parts, symmetry: sideway",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_13:"13 parts, symmetry: no",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_25_255:"Full 255 tile template (25 parts)",
 }
 
 const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
@@ -81,12 +83,15 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/overlay_4.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "res://generation_data/overlay_8.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_13: "res://generation_data/overlay_13.json",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_25_255: "res://generation_data/overlay_25_255.json",
+	
 #	CORNERS_INPUT_PRESETS.NO: "",
 }
 
-enum TEMPLATE_TYPES {BLOB_47, CORNERS_2x2, BLOB_47_MR_MICHAEL, RPG_MAKER, BLOB_47x2, CUSTOM}
+enum TEMPLATE_TYPES {BLOB_47, BLOB_255, CORNERS_2x2, BLOB_47_MR_MICHAEL, RPG_MAKER, BLOB_47x2, CUSTOM}
 const TEMPLATE_TYPE_NAMES : Dictionary = {
 	TEMPLATE_TYPES.BLOB_47: "Blob 47 (3x3min)",
+	TEMPLATE_TYPES.BLOB_255: "Blob 255 tiles (3x3)",
 	TEMPLATE_TYPES.CORNERS_2x2: "Wang corners 16 (2x2)",
 	TEMPLATE_TYPES.BLOB_47x2: "Double blob (for random)",
 	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "Big blob from MrMichael",
@@ -95,6 +100,7 @@ const TEMPLATE_TYPE_NAMES : Dictionary = {
 }
 const TEMPLATE_PATHS : Dictionary = {
 	TEMPLATE_TYPES.BLOB_47: "res://generation_data/template_47.png",
+	TEMPLATE_TYPES.BLOB_255: "res://generation_data/template_255.png",
 	TEMPLATE_TYPES.CORNERS_2x2: "res://generation_data/template_2x2.png",
 	TEMPLATE_TYPES.BLOB_47x2: "res://generation_data/template_47_double.png",
 	TEMPLATE_TYPES.BLOB_47_MR_MICHAEL: "res://generation_data/template_47_with_duplicates.png",
