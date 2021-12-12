@@ -1,0 +1,145 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://utils/PresetGenerator.gd" type="Script" id=1]
+[ext_resource path="res://ui_theme.tres" type="Theme" id=2]
+[ext_resource path="res://utils/TemplateTextureRect.gd" type="Script" id=3]
+
+[node name="PresetGenerator" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PresetContainer" type="VBoxContainer" parent="HBoxContainer"]
+margin_right = 673.0
+margin_bottom = 768.0
+size_flags_horizontal = 3
+
+[node name="Spacer" type="Control" parent="HBoxContainer/PresetContainer"]
+margin_right = 673.0
+margin_bottom = 10.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/PresetContainer"]
+margin_top = 14.0
+margin_right = 673.0
+margin_bottom = 46.0
+
+[node name="PresetButton" type="Button" parent="HBoxContainer/PresetContainer/CenterContainer"]
+margin_left = 279.0
+margin_right = 393.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "GeneratePreset"
+
+[node name="Spacer2" type="Control" parent="HBoxContainer/PresetContainer"]
+margin_top = 50.0
+margin_right = 673.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PresetContainer"]
+margin_top = 64.0
+margin_right = 673.0
+margin_bottom = 718.0
+focus_mode = 2
+size_flags_vertical = 3
+text = "
+"
+selection_enabled = true
+
+[node name="CenterContainer2" type="CenterContainer" parent="HBoxContainer/PresetContainer"]
+margin_top = 722.0
+margin_right = 673.0
+margin_bottom = 754.0
+
+[node name="SaveButton" type="Button" parent="HBoxContainer/PresetContainer/CenterContainer2"]
+margin_left = 315.0
+margin_right = 358.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "Save"
+
+[node name="Spacer3" type="Control" parent="HBoxContainer/PresetContainer"]
+margin_top = 758.0
+margin_right = 673.0
+margin_bottom = 768.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+margin_left = 677.0
+margin_right = 689.0
+margin_bottom = 768.0
+
+[node name="TemplateContainer" type="VBoxContainer" parent="HBoxContainer"]
+margin_left = 693.0
+margin_right = 1366.0
+margin_bottom = 768.0
+size_flags_horizontal = 3
+
+[node name="Spacer" type="Control" parent="HBoxContainer/TemplateContainer"]
+margin_right = 673.0
+margin_bottom = 10.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/TemplateContainer"]
+margin_top = 14.0
+margin_right = 673.0
+margin_bottom = 46.0
+
+[node name="TemplateButton" type="Button" parent="HBoxContainer/TemplateContainer/CenterContainer"]
+margin_left = 270.0
+margin_right = 403.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "GenerateTemplate"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacer2" type="Control" parent="HBoxContainer/TemplateContainer"]
+margin_top = 50.0
+margin_right = 673.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="TemplateTextureRect" type="TextureRect" parent="HBoxContainer/TemplateContainer"]
+margin_top = 64.0
+margin_right = 673.0
+margin_bottom = 718.0
+size_flags_vertical = 3
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer3" type="CenterContainer" parent="HBoxContainer/TemplateContainer"]
+margin_top = 722.0
+margin_right = 673.0
+margin_bottom = 754.0
+
+[node name="SaveButton" type="Button" parent="HBoxContainer/TemplateContainer/CenterContainer3"]
+margin_left = 315.0
+margin_right = 358.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+text = "Save"
+
+[node name="Spacer3" type="Control" parent="HBoxContainer/TemplateContainer"]
+margin_top = 758.0
+margin_right = 673.0
+margin_bottom = 768.0
+rect_min_size = Vector2( 0, 10 )
+
+[connection signal="pressed" from="HBoxContainer/PresetContainer/CenterContainer/PresetButton" to="." method="_on_PresetButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/TemplateContainer/CenterContainer/TemplateButton" to="." method="_on_TemplateButton_pressed"]
