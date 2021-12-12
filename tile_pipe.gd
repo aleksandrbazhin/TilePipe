@@ -37,7 +37,7 @@ onready var overlay_merge_type_select: OptionButton = overlay_merge_container.ge
 onready var color_process_select: OptionButton = settings_container.get_node("ColorProcessContainer/ColorProcessType")
 
 onready var debug_preview: Control = $Panel/HBox/Images/InContainer/Preview
-onready var debug_input_scroll: ScrollContainer = debug_preview.get_node("WorkTextureContainer")
+onready var debug_input_scroll: ScrollContainer = debug_preview.get_node("PreviewContainer")
 onready var debug_input_control: Control = debug_input_scroll.get_node("Control")
 onready var debug_input_texture: TextureRect = debug_input_control.get_node("DebugTexture")
 onready var debug_input_texture_bg: TextureRect = debug_input_control.get_node("BGTextureRect")
@@ -500,18 +500,6 @@ func append_to_debug_image(debug_image: Image, slice_image: Image, slice_size: i
 	itex.create_from_image(debug_image, 0)
 	debug_input_texture.texture = itex
 
-# snap to closest bigger power of 2, for less than 1 x returns snapped fraction
-func snap_up_to_po2(x: float) -> float:
-	if x >= 1.0:
-		return float(nearest_po2(int(ceil(x))))
-	else:
-		return 1.0/float(nearest_po2(int(floor(1.0/x))))
-
-func snap_down_to_po2(x: float) -> float:
-	if x >= 1.0:
-		return float(nearest_po2(int(ceil(x)))) / 2.0
-	else:
-		return 1.0/float(nearest_po2(int(ceil(1.0/x))))
 
 func set_input_tile_size(input_tile_size: int, input_image: Image):
 #	input_tile_size_vector = Vector2(input_tile_size, input_tile_size)
@@ -519,12 +507,13 @@ func set_input_tile_size(input_tile_size: int, input_image: Image):
 	var x_scale: float = texture_input_container.rect_size.x / input_size.x
 	var y_scale: float = texture_input_container.rect_size.y / input_size.y
 	var scale_factor: float = min(x_scale, y_scale)
-	scale_factor = snap_down_to_po2(scale_factor)
+	scale_factor = Helpers.snap_down_to_po2(scale_factor)
 	texture_in.rect_scale = Vector2(scale_factor, scale_factor)
 	var bg_scale = scale_factor * float(input_tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
 	texture_input_bg.rect_size = texture_input_container.rect_size / bg_scale
 	texture_input_bg.rect_scale = Vector2(bg_scale, bg_scale)
 	texture_input_container.get_node("InputInfo/TileSizeLabel").text = "%sx%spx" % [input_tile_size, input_tile_size]
+
 
 func get_output_size_with_no_scaling() -> int:
 	var input_image: Image = texture_in.texture.get_data()
@@ -535,17 +524,20 @@ func get_output_size_with_no_scaling() -> int:
 		input_size *= 2
 	return input_size
 
+
 func get_output_tile_size() -> int:
 	var scale_to: int = Const.OUTPUT_SIZES.keys()[output_size_select.selected]
 	if scale_to == Const.NO_SCALING :
 		scale_to = get_output_size_with_no_scaling()
 	return scale_to
 
+
 func get_input_image_random_max_variants() -> int:
 	var input_image: Image = texture_in.texture.get_data()
 	var min_input_slices: Vector2 = generation_data.get_min_input_size()
 	var input_slice_size: int = int(input_image.get_size().x / min_input_slices.x)
 	return int(max(1, input_image.get_size().y / input_slice_size))
+
 
 func generate_corner_slices():
 	input_slices = {}
@@ -576,30 +568,29 @@ func generate_corner_slices():
 			slice.blit_rect(input_image, Rect2(x * input_slice_size, 
 							random_variant_y * input_slice_size, 
 							input_slice_size, input_slice_size), Vector2.ZERO)
-			var slice_variant_not_empty: bool = true
-			if slice_variant_not_empty:
-				var slice_variant = {}
-				for rot_index in Const.ROTATION_SHIFTS.size():
-					var rotation_key: int = Const.ROTATION_SHIFTS.keys()[rot_index]
-					put_to_rotation_viewport(slice, rotation_key, false)
-					yield(VisualServer, 'frame_post_draw')
-					var processed_slice: Image = get_from_rotation_viewport(image_fmt, resize_factor)
-					append_to_debug_image(debug_image, processed_slice, output_slice_size, 
-						Vector2((x* input_max_random_variants + random_variant_y) * output_slice_size,
-						2 * rot_index * output_slice_size))
-					put_to_rotation_viewport(slice, rotation_key, true)
-					yield(VisualServer, 'frame_post_draw')
-					var processed_flipped_slice : Image = get_from_rotation_viewport(image_fmt, resize_factor)
-					append_to_debug_image(debug_image, processed_flipped_slice, output_slice_size, 
-						Vector2((x* input_max_random_variants + random_variant_y) * output_slice_size,
-						(2 * rot_index + 1) * output_slice_size))
-					slice_variant[rotation_key] = {
-						false: processed_slice, 
-						true: processed_flipped_slice
-					}
+			var slice_variant = {}
+			for rot_index in Const.ROTATION_SHIFTS.size():
+				var rotation_key: int = Const.ROTATION_SHIFTS.keys()[rot_index]
+				put_to_rotation_viewport(slice, rotation_key, false)
+				yield(VisualServer, 'frame_post_draw')
+				var processed_slice: Image = get_from_rotation_viewport(image_fmt, resize_factor)
+				append_to_debug_image(debug_image, processed_slice, output_slice_size, 
+					Vector2((x* input_max_random_variants + random_variant_y) * output_slice_size,
+					2 * rot_index * output_slice_size))
+				put_to_rotation_viewport(slice, rotation_key, true)
+				yield(VisualServer, 'frame_post_draw')
+				var processed_flipped_slice : Image = get_from_rotation_viewport(image_fmt, resize_factor)
+				append_to_debug_image(debug_image, processed_flipped_slice, output_slice_size, 
+					Vector2((x* input_max_random_variants + random_variant_y) * output_slice_size,
+					(2 * rot_index + 1) * output_slice_size))
+				slice_variant[rotation_key] = {
+					false: processed_slice, 
+					true: processed_flipped_slice
+				}
 				input_slices[x].append(slice_variant)
 	rotated_texture_in_viewport.hide()
 	emit_signal("input_image_processed")
+
 
 func make_from_corners():
 	if rand_seed_check.pressed:
@@ -644,16 +635,15 @@ func make_from_corners():
 	set_output_texture(itex)
 	unblock_ui()
 
+
 #slice: Image, rotation_key: int, color_process: int,
 #		is_flipped := false
-func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate: float, overlap_rate: float, 
+func start_overlay_processing(data: Dictionary, input_tile_parts: Array, overlay_rate: float, overlap_rate: float, 
 		overlap_vectors: Array, overlap_vectors_is_rotatable: Array):
 	var random_center_index: int = 0
-	var center_image: Image = input_tiles[0][random_center_index]
+	var center_image: Image = input_tile_parts[0][random_center_index]
 	var gen_pieces: Array = data["generate_piece_indexes"]
 	var gen_rotations: Array = data["generate_piece_rotations"]
-#	var gen_flip_x: Array = 
-#	var gen_flip_y: Array = data["generate_piece_flip_y"]
 	assert (gen_pieces.size() == 8 && gen_rotations.size() == 8)
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image, 0)
@@ -661,12 +651,12 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 	var rot_index: int = 0
 	for mask_name in Const.TILE_MASK:
 		var piece_index: int = gen_pieces[rot_index]
-		var random_tile_index: int = rng.randi_range(0, input_tiles[piece_index].size()-1)
+		var random_tile_index: int = rng.randi_range(0, input_tile_parts[piece_index].size()-1)
 		var piece_rot_index: int = data["generate_piece_rotations"][rot_index]
 		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[piece_rot_index]
 		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
 		var overlay_image := Image.new()
-		overlay_image.copy_from(input_tiles[piece_index][random_tile_index])
+		overlay_image.copy_from(input_tile_parts[piece_index][random_tile_index])
 		if bool(data["generate_piece_flip_x"][rot_index]):
 			overlay_image.flip_x()
 		if bool(data["generate_piece_flip_y"][rot_index]):
@@ -688,8 +678,6 @@ func start_overlay_processing(data: Dictionary, input_tiles: Array, overlay_rate
 	overlay_texture_in_viewport.material.set_shader_param("overlap", overlap_rate)
 	var is_flow_map: bool = get_color_process() == Const.COLOR_PROCESS_TYPES.FLOW_MAP
 	overlay_texture_in_viewport.material.set_shader_param("is_flow_map", is_flow_map)
-#	var is_flow_map: bool = color_process == Const.COLOR_PROCESS_TYPES.FLOW_MAP
-#	input_texture_in_viewport.material.set_shader_param("is_flow_map", is_flow_map)
 
 
 func get_from_overlay_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:

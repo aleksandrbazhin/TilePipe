@@ -20,3 +20,16 @@ func file_exists(path: String) -> bool:
 func dir_exists(path: String) -> bool:
 	var d := Directory.new()
 	return d.dir_exists(path)
+
+# snap to closest bigger power of 2, for less than 1 x returns snapped fraction
+func snap_up_to_po2(x: float) -> float:
+	if x >= 1.0:
+		return float(nearest_po2(int(ceil(x))))
+	else:
+		return 1.0/float(nearest_po2(int(floor(1.0/x))))
+
+func snap_down_to_po2(x: float) -> float:
+	if x >= 1.0:
+		return float(nearest_po2(int(ceil(x)))) / 2.0
+	else:
+		return 1.0/float(nearest_po2(int(ceil(1.0/x))))
