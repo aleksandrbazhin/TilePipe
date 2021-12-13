@@ -4,7 +4,8 @@ extends Control
 var generation_data: GenerationData
 
 onready var text_node = $HBoxContainer/PresetContainer/RichTextLabel
-onready var image_node = $HBoxContainer/TemplateContainer/ScrollContainer/TemplateTextureRect
+onready var render_node: ViewportContainer = $HBoxContainer/TemplateContainer/ScrollContainer/ViewportContainer
+#onready var image_node: TextureRect = render_node.get_node("TemplateTextureRect")
 
 
 func _ready():
@@ -16,5 +17,15 @@ func _on_PresetButton_pressed():
 
 
 func _on_TemplateButton_pressed():
-	image_node.draw_data(generation_data.data)
+	render_node.draw_data(generation_data.data)
 #	image_node.texture = load(generation_data.get_example_path())
+
+
+func _on_SaveButton_pressed():
+	$FileDialog.popup_centered()
+	
+
+func _on_FileDialog_file_selected(path):
+	var image: Image = render_node.get_texture().get_data()
+	image.flip_y()
+	image.save_png(path)
