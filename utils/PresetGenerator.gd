@@ -4,7 +4,7 @@ extends Control
 var generation_data: GenerationData
 
 onready var text_node = $HBoxContainer/PresetContainer/RichTextLabel
-onready var image_node = $HBoxContainer/TemplateContainer/TemplateTextureRect
+onready var image_node = $HBoxContainer/TemplateContainer/ScrollContainer/TemplateTextureRect
 
 
 func _ready():
