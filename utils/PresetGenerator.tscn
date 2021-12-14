@@ -64,7 +64,7 @@ margin_top = 722.0
 margin_right = 673.0
 margin_bottom = 754.0
 
-[node name="SaveButton" type="Button" parent="HBoxContainer/PresetContainer/CenterContainer2"]
+[node name="SavePresetButton" type="Button" parent="HBoxContainer/PresetContainer/CenterContainer2"]
 margin_left = 315.0
 margin_right = 358.0
 margin_bottom = 32.0
@@ -166,14 +166,22 @@ margin_right = 673.0
 margin_bottom = 768.0
 rect_min_size = Vector2( 0, 10 )
 
-[node name="FileDialog" type="FileDialog" parent="."]
+[node name="TemplateFileDialog" type="FileDialog" parent="."]
 margin_right = 307.0
 margin_bottom = 150.0
 rect_min_size = Vector2( 500, 350 )
 window_title = "Save a template texture"
 filters = PoolStringArray( "*.png ; PNG Images" )
 
+[node name="PresetFileDialog" type="FileDialog" parent="."]
+margin_right = 307.0
+margin_bottom = 150.0
+rect_min_size = Vector2( 500, 350 )
+filters = PoolStringArray( "*.json ; JSON preset files" )
+
 [connection signal="pressed" from="HBoxContainer/PresetContainer/CenterContainer/PresetButton" to="." method="_on_PresetButton_pressed"]
+[connection signal="pressed" from="HBoxContainer/PresetContainer/CenterContainer2/SavePresetButton" to="." method="_on_SavePresetButton_pressed"]
 [connection signal="pressed" from="HBoxContainer/TemplateContainer/CenterContainer/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="pressed" from="HBoxContainer/TemplateContainer/CenterContainer3/SaveButton" to="." method="_on_SaveButton_pressed"]
-[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="file_selected" from="TemplateFileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="file_selected" from="PresetFileDialog" to="." method="_on_PresetFileDialog_file_selected"]

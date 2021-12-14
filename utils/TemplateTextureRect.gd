@@ -17,10 +17,10 @@ const DRAW_NEIGHBOUR_OFFSETS: Dictionary = {
 }
 const BG_COLOR := Color.white
 const BG_TILE_COLOR := Color.white
-const FG_COLOR := Color.dodgerblue
-const SELF_COLOR := Color.royalblue
+const FG_COLOR := Color("#98c0ef")
+const SELF_COLOR := Color("#b8e0ff")
 
-var image_tiles_x_amount = 20
+var image_tiles_x_amount = 0
 var data_len = 0
 var tile_size := Vector2.ZERO
 var texture_size := Vector2.ZERO

@@ -13,6 +13,7 @@ func load_data_from_json(data_path: String) -> Dictionary:
 	if data_file.file_exists(data_path):
 		data_file.open(data_path, File.READ)
 		var data_json: String = data_file.get_as_text()
+		data_file.close()
 		var parse_result: JSONParseResult = JSON.parse(data_json)
 		if parse_result.error == OK:
 			object_data = parse_result.result

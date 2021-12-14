@@ -82,7 +82,7 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 #	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/overlay_3.json",
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/overlay_4.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "res://generation_data/overlay_8.json",
-	OVERLAY_INPUT_PRESETS.SIDEVIEW_13: "res://generation_data/overlay_13.json",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_13: "res://generation_data/overlay_13_full.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_25_255: "res://generation_data/overlay_25_255.json",
 	
 #	CORNERS_INPUT_PRESETS.NO: "",

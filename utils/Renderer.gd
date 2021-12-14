@@ -1,10 +1,10 @@
 extends ViewportContainer
 
-const TILES_X = 20
+const TILES_X = 26
 const DATA_LEN = 256
 const TILE_SIZE := Vector2(32, 32)
 
-var data: Dictionary
+#var data: Dictionary
 
 
 onready var texture_node: TextureRect = $Viewport/TemplateTextureRect
@@ -13,8 +13,8 @@ func get_texture() -> ViewportTexture:
 	return $Viewport.get_texture()
 
 
-func draw_data(new_data: Dictionary):
-	data = new_data
+func draw_data():
+#	data = new_data
 	
 # warning-ignore:integer_division
 	var texture_size_tiles: Vector2 = Vector2(TILES_X, floor(DATA_LEN / TILES_X))
