@@ -643,8 +643,7 @@ func start_overlay_processing(data: Dictionary, input_tile_parts: Array, overlay
 	var random_center_index: int = 0
 	var center_image: Image = input_tile_parts[0][random_center_index]
 	var gen_pieces: Array = data["generate_piece_indexes"]
-	var gen_rotations: Array = data["generate_piece_rotations"]
-	assert (gen_pieces.size() == 8 && gen_rotations.size() == 8)
+	assert (gen_pieces.size() == 8 && data["generate_piece_rotations"].size() == 8)
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image, 0)
 	overlay_texture_in_viewport.texture = itex

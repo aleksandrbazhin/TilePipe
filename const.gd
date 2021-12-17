@@ -65,7 +65,8 @@ enum OVERLAY_INPUT_PRESETS {
 #	SIDEVIEW_6, 
 	SIDEVIEW_8,
 	SIDEVIEW_13,
-	SIDEVIEW_25_255
+	SIDEVIEW_25_255,
+	SIDEVIEW_7_255,
 }
 const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
 #	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "Top down without corners (2 tiles)",
@@ -73,8 +74,9 @@ const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "4 parts, symmetry: full",
 #	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "Sideview (6 tiles)",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "8 parts, symmetry: sideway",
-	OVERLAY_INPUT_PRESETS.SIDEVIEW_13:"13 parts, symmetry: no",
-	OVERLAY_INPUT_PRESETS.SIDEVIEW_25_255:"Full 255 tile template (25 parts)",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_13: "13 parts, symmetry: no",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_25_255: "Full 255 tile template (25 parts)",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_7_255: "Symmetrical 255 tile template (7 parts)",
 }
 
 const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
@@ -84,6 +86,7 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "res://generation_data/overlay_8_full.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_13: "res://generation_data/overlay_13_full.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_25_255: "res://generation_data/overlay_255_no_symmetry.json",
+	OVERLAY_INPUT_PRESETS.SIDEVIEW_7_255: "res://generation_data/overlay_255_full_symmetry.json",
 	
 #	CORNERS_INPUT_PRESETS.NO: "",
 }

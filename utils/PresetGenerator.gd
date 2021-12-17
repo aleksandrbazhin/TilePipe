@@ -122,7 +122,6 @@ func make_255_variant_template_non_symmetrical():
 		var mask_variants: Array = tile_data["mask_variants"]
 		var base_mask: int = tile_data["mask_variants"][0]
 		var base_indexes: Array = tile_data["generate_piece_indexes"]
-		
 		var base_rotations: Array = tile_data["generate_piece_rotations"]
 		for mask_variant in mask_variants:
 			var mask := int(mask_variant)
@@ -140,11 +139,8 @@ func make_255_variant_template_non_symmetrical():
 					if mask & ccw_corner_neighbour != 0:
 						offset_1 = 2
 					variant_indexes[bit_index] = 13 + 3 * (bit_index / 2) + offset_1
-#					variant_indexes[bit_index] = "x_" + str(13+3*(bit_index/2)+offset_1)
 #					variant_rotations[bit_index] = "x"
 				bit_index += 2
-				
-				
 			new_tile_data.append({
 				"mask_variants": [mask_variant],
 				"generate_piece_indexes":   variant_indexes,
@@ -156,11 +152,60 @@ func make_255_variant_template_non_symmetrical():
 	text_node.text = JSON.print(new_data, "\t")
 
 
+func make_255_variant_template_symmetrical():
+	var reference_generation_data := GenerationData.new("res://generation_data/overlay_4_full.json")
+	var new_data := {
+		"type": "overlay",
+		"example": "overlay_7_255.png",
+		"name": "input_overlay_7",
+		"min_size": {
+			"x": 7,
+			"y": 1
+		},
+	"piece_overlap_vectors": [[0, 0], [-1, -1], [0, 1], [1, 1], [1, 1], [1, 1], [1, 1]],
+	"piece_overlap_vectors_rotate": [false, false, true, false, false, false, false],
+	}
+	var new_tile_data := []
+	for tile_data in reference_generation_data.data["data"]:
+		var mask_variants: Array = tile_data["mask_variants"]
+		var base_mask: int = tile_data["mask_variants"][0]
+		var base_indexes: Array = tile_data["generate_piece_indexes"]
+		var base_rotations: Array = tile_data["generate_piece_rotations"]
+		for mask_variant in mask_variants:
+			var mask := int(mask_variant)
+			var variant_indexes := base_indexes.duplicate()
+			var variant_rotations := base_rotations.duplicate()
+			var bit_index := 1
+			for corner_bit in CORNER_BITS:
+				# base mask and variant vary in corner_bit
+				if (base_mask ^ mask) & corner_bit != 0:
+					var offset_1 := 0
+					var cw_corner_neighbour: int = Helpers.rotate_check_mask(corner_bit, 1)
+					if mask & cw_corner_neighbour != 0:
+						offset_1 = 1
+					var ccw_corner_neighbour: int = Helpers.rotate_check_mask(corner_bit, 7)
+					if mask & ccw_corner_neighbour != 0:
+						offset_1 = 2
+					variant_indexes[bit_index] = 4 + offset_1
+					variant_rotations[bit_index] = bit_index / 2
+#					variant_rotations[bit_index] = "x"
+				bit_index += 2
+			new_tile_data.append({
+				"mask_variants": [mask_variant],
+				"generate_piece_indexes":   variant_indexes,
+				"generate_piece_rotations": variant_rotations,
+				"generate_piece_flip_x":    tile_data["generate_piece_flip_x"],
+				"generate_piece_flip_y":    tile_data["generate_piece_flip_y"],
+			})
+	new_data["data"] = new_tile_data
+	text_node.text = JSON.print(new_data, "\t")
+
 
 func _on_PresetButton_pressed():
 #	add_255_variants()
 #	fix_rotations()
-	make_255_variant_template_non_symmetrical()
+#	make_255_variant_template_non_symmetrical()
+	make_255_variant_template_symmetrical()
 
 func _on_TemplateButton_pressed():
 	render_node.draw_data()

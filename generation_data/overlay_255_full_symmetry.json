@@ -1,0 +1,1802 @@
+{
+    "type": "overlay",
+    "example": "overlay_7_255.png",
+    "name": "input_overlay_7",
+    "min_size": {"x": 7, "y": 1},
+    "piece_overlap_vectors": [[0, 0], [-1, -1], [0, 1], [1, 1], [1, 1], [1, 1], [1, 1]],
+    "piece_overlap_vectors_rotate": [false, false, true, false, false, false, false],
+    "data": [
+        {
+            "mask_variants": [64],
+            "generate_piece_indexes": [2, 3, 2, 3, 2, 2, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [66],
+            "generate_piece_indexes": [2, 4, 2, 3, 2, 2, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [72],
+            "generate_piece_indexes": [2, 3, 2, 4, 2, 2, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [96],
+            "generate_piece_indexes": [2, 3, 2, 3, 2, 5, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [192],
+            "generate_piece_indexes": [2, 3, 2, 3, 2, 2, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [74],
+            "generate_piece_indexes": [2, 4, 2, 4, 2, 2, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [104],
+            "generate_piece_indexes": [2, 3, 2, 4, 2, 5, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [224],
+            "generate_piece_indexes": [2, 3, 2, 3, 2, 5, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [194],
+            "generate_piece_indexes": [2, 4, 2, 3, 2, 2, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [98],
+            "generate_piece_indexes": [2, 4, 2, 3, 2, 5, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [200],
+            "generate_piece_indexes": [2, 3, 2, 4, 2, 2, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [106],
+            "generate_piece_indexes": [2, 4, 2, 4, 2, 5, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [232],
+            "generate_piece_indexes": [2, 3, 2, 4, 2, 5, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [226],
+            "generate_piece_indexes": [2, 4, 2, 3, 2, 5, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [202],
+            "generate_piece_indexes": [2, 4, 2, 4, 2, 2, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [234],
+            "generate_piece_indexes": [2, 4, 2, 4, 2, 5, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [1],
+            "generate_piece_indexes": [0, 2, 2, 3, 2, 3, 2, 2],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [3],
+            "generate_piece_indexes": [0, 6, 2, 3, 2, 3, 2, 2],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [9],
+            "generate_piece_indexes": [0, 2, 2, 4, 2, 3, 2, 2],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [33],
+            "generate_piece_indexes": [0, 2, 2, 3, 2, 4, 2, 2],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [129],
+            "generate_piece_indexes": [0, 2, 2, 3, 2, 3, 2, 5],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [11],
+            "generate_piece_indexes": [0, 6, 2, 4, 2, 3, 2, 2],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [41],
+            "generate_piece_indexes": [0, 2, 2, 4, 2, 4, 2, 2],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [161],
+            "generate_piece_indexes": [0, 2, 2, 3, 2, 4, 2, 5],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [131],
+            "generate_piece_indexes": [0, 6, 2, 3, 2, 3, 2, 5],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [35],
+            "generate_piece_indexes": [0, 6, 2, 3, 2, 4, 2, 2],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [137],
+            "generate_piece_indexes": [0, 2, 2, 4, 2, 3, 2, 5],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [43],
+            "generate_piece_indexes": [0, 6, 2, 4, 2, 4, 2, 2],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [169],
+            "generate_piece_indexes": [0, 2, 2, 4, 2, 4, 2, 5],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [163],
+            "generate_piece_indexes": [0, 6, 2, 3, 2, 4, 2, 5],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [139],
+            "generate_piece_indexes": [0, 6, 2, 4, 2, 3, 2, 5],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [171],
+            "generate_piece_indexes": [0, 6, 2, 4, 2, 4, 2, 5],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [4],
+            "generate_piece_indexes": [2, 2, 0, 2, 2, 3, 2, 3],
+            "generate_piece_rotations": [0, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [6],
+            "generate_piece_indexes": [2, 5, 0, 2, 2, 3, 2, 3],
+            "generate_piece_rotations": [0, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [12],
+            "generate_piece_indexes": [2, 2, 0, 6, 2, 3, 2, 3],
+            "generate_piece_rotations": [0, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [36],
+            "generate_piece_indexes": [2, 2, 0, 2, 2, 4, 2, 3],
+            "generate_piece_rotations": [0, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [132],
+            "generate_piece_indexes": [2, 2, 0, 2, 2, 3, 2, 4],
+            "generate_piece_rotations": [0, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [14],
+            "generate_piece_indexes": [2, 5, 0, 6, 2, 3, 2, 3],
+            "generate_piece_rotations": [0, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [44],
+            "generate_piece_indexes": [2, 2, 0, 6, 2, 4, 2, 3],
+            "generate_piece_rotations": [0, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [164],
+            "generate_piece_indexes": [2, 2, 0, 2, 2, 4, 2, 4],
+            "generate_piece_rotations": [0, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [134],
+            "generate_piece_indexes": [2, 5, 0, 2, 2, 3, 2, 4],
+            "generate_piece_rotations": [0, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [38],
+            "generate_piece_indexes": [2, 5, 0, 2, 2, 4, 2, 3],
+            "generate_piece_rotations": [0, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [140],
+            "generate_piece_indexes": [2, 2, 0, 6, 2, 3, 2, 4],
+            "generate_piece_rotations": [0, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [46],
+            "generate_piece_indexes": [2, 5, 0, 6, 2, 4, 2, 3],
+            "generate_piece_rotations": [0, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [172],
+            "generate_piece_indexes": [2, 2, 0, 6, 2, 4, 2, 4],
+            "generate_piece_rotations": [0, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [166],
+            "generate_piece_indexes": [2, 5, 0, 2, 2, 4, 2, 4],
+            "generate_piece_rotations": [0, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [142],
+            "generate_piece_indexes": [2, 5, 0, 6, 2, 3, 2, 4],
+            "generate_piece_rotations": [0, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [174],
+            "generate_piece_indexes": [2, 5, 0, 6, 2, 4, 2, 4],
+            "generate_piece_rotations": [0, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [16],
+            "generate_piece_indexes": [2, 3, 2, 2, 0, 2, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [18],
+            "generate_piece_indexes": [2, 4, 2, 2, 0, 2, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [24],
+            "generate_piece_indexes": [2, 3, 2, 5, 0, 2, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [48],
+            "generate_piece_indexes": [2, 3, 2, 2, 0, 6, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [144],
+            "generate_piece_indexes": [2, 3, 2, 2, 0, 2, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [26],
+            "generate_piece_indexes": [2, 4, 2, 5, 0, 2, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [56],
+            "generate_piece_indexes": [2, 3, 2, 5, 0, 6, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [176],
+            "generate_piece_indexes": [2, 3, 2, 2, 0, 6, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [146],
+            "generate_piece_indexes": [2, 4, 2, 2, 0, 2, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [50],
+            "generate_piece_indexes": [2, 4, 2, 2, 0, 6, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [152],
+            "generate_piece_indexes": [2, 3, 2, 5, 0, 2, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [58],
+            "generate_piece_indexes": [2, 4, 2, 5, 0, 6, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [184],
+            "generate_piece_indexes": [2, 3, 2, 5, 0, 6, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [178],
+            "generate_piece_indexes": [2, 4, 2, 2, 0, 6, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [154],
+            "generate_piece_indexes": [2, 4, 2, 5, 0, 2, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [186],
+            "generate_piece_indexes": [2, 4, 2, 5, 0, 6, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [68],
+            "generate_piece_indexes": [2, 2, 0, 2, 2, 2, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 2, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [70],
+            "generate_piece_indexes": [2, 5, 0, 2, 2, 2, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 2, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [76],
+            "generate_piece_indexes": [2, 2, 0, 6, 2, 2, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [100],
+            "generate_piece_indexes": [2, 2, 0, 2, 2, 5, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 2, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [196],
+            "generate_piece_indexes": [2, 2, 0, 2, 2, 2, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 2, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [78],
+            "generate_piece_indexes": [2, 5, 0, 6, 2, 2, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [108],
+            "generate_piece_indexes": [2, 2, 0, 6, 2, 5, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [228],
+            "generate_piece_indexes": [2, 2, 0, 2, 2, 5, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 2, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [198],
+            "generate_piece_indexes": [2, 5, 0, 2, 2, 2, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 2, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [102],
+            "generate_piece_indexes": [2, 5, 0, 2, 2, 5, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 2, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [204],
+            "generate_piece_indexes": [2, 2, 0, 6, 2, 2, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [110],
+            "generate_piece_indexes": [2, 5, 0, 6, 2, 5, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 1, 2, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [236],
+            "generate_piece_indexes": [2, 2, 0, 6, 2, 5, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [230],
+            "generate_piece_indexes": [2, 5, 0, 2, 2, 5, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 2, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [206],
+            "generate_piece_indexes": [2, 5, 0, 6, 2, 2, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [238],
+            "generate_piece_indexes": [2, 5, 0, 6, 2, 5, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 1, 2, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [17],
+            "generate_piece_indexes": [0, 2, 2, 2, 0, 2, 2, 2],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [19],
+            "generate_piece_indexes": [0, 6, 2, 2, 0, 2, 2, 2],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [25],
+            "generate_piece_indexes": [0, 2, 2, 5, 0, 2, 2, 2],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [49],
+            "generate_piece_indexes": [0, 2, 2, 2, 0, 6, 2, 2],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [145],
+            "generate_piece_indexes": [0, 2, 2, 2, 0, 2, 2, 5],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [27],
+            "generate_piece_indexes": [0, 6, 2, 5, 0, 2, 2, 2],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [57],
+            "generate_piece_indexes": [0, 2, 2, 5, 0, 6, 2, 2],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [177],
+            "generate_piece_indexes": [0, 2, 2, 2, 0, 6, 2, 5],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [147],
+            "generate_piece_indexes": [0, 6, 2, 2, 0, 2, 2, 5],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [51],
+            "generate_piece_indexes": [0, 6, 2, 2, 0, 6, 2, 2],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [153],
+            "generate_piece_indexes": [0, 2, 2, 5, 0, 2, 2, 5],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [59],
+            "generate_piece_indexes": [0, 6, 2, 5, 0, 6, 2, 2],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [185],
+            "generate_piece_indexes": [0, 2, 2, 5, 0, 6, 2, 5],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [179],
+            "generate_piece_indexes": [0, 6, 2, 2, 0, 6, 2, 5],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [155],
+            "generate_piece_indexes": [0, 6, 2, 5, 0, 2, 2, 5],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [187],
+            "generate_piece_indexes": [0, 6, 2, 5, 0, 6, 2, 5],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [0],
+            "generate_piece_indexes": [2, 3, 2, 3, 2, 3, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [2],
+            "generate_piece_indexes": [2, 4, 2, 3, 2, 3, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [8],
+            "generate_piece_indexes": [2, 3, 2, 4, 2, 3, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [32],
+            "generate_piece_indexes": [2, 3, 2, 3, 2, 4, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [128],
+            "generate_piece_indexes": [2, 3, 2, 3, 2, 3, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [10],
+            "generate_piece_indexes": [2, 4, 2, 4, 2, 3, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [40],
+            "generate_piece_indexes": [2, 3, 2, 4, 2, 4, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [160],
+            "generate_piece_indexes": [2, 3, 2, 3, 2, 4, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [130],
+            "generate_piece_indexes": [2, 4, 2, 3, 2, 3, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [34],
+            "generate_piece_indexes": [2, 4, 2, 3, 2, 4, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [136],
+            "generate_piece_indexes": [2, 3, 2, 4, 2, 3, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [42],
+            "generate_piece_indexes": [2, 4, 2, 4, 2, 4, 2, 3],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [168],
+            "generate_piece_indexes": [2, 3, 2, 4, 2, 4, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [162],
+            "generate_piece_indexes": [2, 4, 2, 3, 2, 4, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [138],
+            "generate_piece_indexes": [2, 4, 2, 4, 2, 3, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [170],
+            "generate_piece_indexes": [2, 4, 2, 4, 2, 4, 2, 4],
+            "generate_piece_rotations": [0, 0, 1, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [80],
+            "generate_piece_indexes": [2, 3, 2, 2, 0, 1, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [82],
+            "generate_piece_indexes": [2, 4, 2, 2, 0, 1, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [88],
+            "generate_piece_indexes": [2, 3, 2, 5, 0, 1, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [208],
+            "generate_piece_indexes": [2, 3, 2, 2, 0, 1, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [90],
+            "generate_piece_indexes": [2, 4, 2, 5, 0, 1, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [210],
+            "generate_piece_indexes": [2, 4, 2, 2, 0, 1, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [216],
+            "generate_piece_indexes": [2, 3, 2, 5, 0, 1, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [218],
+            "generate_piece_indexes": [2, 4, 2, 5, 0, 1, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [65],
+            "generate_piece_indexes": [0, 2, 2, 3, 2, 2, 0, 1],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [67],
+            "generate_piece_indexes": [0, 6, 2, 3, 2, 2, 0, 1],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [73],
+            "generate_piece_indexes": [0, 2, 2, 4, 2, 2, 0, 1],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [97],
+            "generate_piece_indexes": [0, 2, 2, 3, 2, 5, 0, 1],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [75],
+            "generate_piece_indexes": [0, 6, 2, 4, 2, 2, 0, 1],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [105],
+            "generate_piece_indexes": [0, 2, 2, 4, 2, 5, 0, 1],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [99],
+            "generate_piece_indexes": [0, 6, 2, 3, 2, 5, 0, 1],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [107],
+            "generate_piece_indexes": [0, 6, 2, 4, 2, 5, 0, 1],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [5],
+            "generate_piece_indexes": [0, 1, 0, 2, 2, 3, 2, 2],
+            "generate_piece_rotations": [2, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [13],
+            "generate_piece_indexes": [0, 1, 0, 6, 2, 3, 2, 2],
+            "generate_piece_rotations": [2, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [37],
+            "generate_piece_indexes": [0, 1, 0, 2, 2, 4, 2, 2],
+            "generate_piece_rotations": [2, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [133],
+            "generate_piece_indexes": [0, 1, 0, 2, 2, 3, 2, 5],
+            "generate_piece_rotations": [2, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [45],
+            "generate_piece_indexes": [0, 1, 0, 6, 2, 4, 2, 2],
+            "generate_piece_rotations": [2, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [165],
+            "generate_piece_indexes": [0, 1, 0, 2, 2, 4, 2, 5],
+            "generate_piece_rotations": [2, 0, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [141],
+            "generate_piece_indexes": [0, 1, 0, 6, 2, 3, 2, 5],
+            "generate_piece_rotations": [2, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [173],
+            "generate_piece_indexes": [0, 1, 0, 6, 2, 4, 2, 5],
+            "generate_piece_rotations": [2, 0, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [20],
+            "generate_piece_indexes": [2, 2, 0, 1, 0, 2, 2, 3],
+            "generate_piece_rotations": [0, 0, 3, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [22],
+            "generate_piece_indexes": [2, 5, 0, 1, 0, 2, 2, 3],
+            "generate_piece_rotations": [0, 0, 3, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [52],
+            "generate_piece_indexes": [2, 2, 0, 1, 0, 6, 2, 3],
+            "generate_piece_rotations": [0, 0, 3, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [148],
+            "generate_piece_indexes": [2, 2, 0, 1, 0, 2, 2, 4],
+            "generate_piece_rotations": [0, 0, 3, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [180],
+            "generate_piece_indexes": [2, 2, 0, 1, 0, 6, 2, 4],
+            "generate_piece_rotations": [0, 0, 3, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [150],
+            "generate_piece_indexes": [2, 5, 0, 1, 0, 2, 2, 4],
+            "generate_piece_rotations": [0, 0, 3, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [54],
+            "generate_piece_indexes": [2, 5, 0, 1, 0, 6, 2, 3],
+            "generate_piece_rotations": [0, 0, 3, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [182],
+            "generate_piece_indexes": [2, 5, 0, 1, 0, 6, 2, 4],
+            "generate_piece_rotations": [0, 0, 3, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [84],
+            "generate_piece_indexes": [2, 2, 0, 1, 0, 1, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 1, 0, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [86],
+            "generate_piece_indexes": [2, 5, 0, 1, 0, 1, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 1, 0, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [212],
+            "generate_piece_indexes": [2, 2, 0, 1, 0, 1, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 1, 0, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [214],
+            "generate_piece_indexes": [2, 5, 0, 1, 0, 1, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 1, 0, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [81],
+            "generate_piece_indexes": [0, 2, 2, 2, 0, 1, 0, 1],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [83],
+            "generate_piece_indexes": [0, 6, 2, 2, 0, 1, 0, 1],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [89],
+            "generate_piece_indexes": [0, 2, 2, 5, 0, 1, 0, 1],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [91],
+            "generate_piece_indexes": [0, 6, 2, 5, 0, 1, 0, 1],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [69],
+            "generate_piece_indexes": [0, 1, 0, 2, 2, 2, 0, 1],
+            "generate_piece_rotations": [2, 0, 2, 2, 2, 2, 2, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [77],
+            "generate_piece_indexes": [0, 1, 0, 6, 2, 2, 0, 1],
+            "generate_piece_rotations": [2, 0, 2, 1, 2, 2, 2, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [101],
+            "generate_piece_indexes": [0, 1, 0, 2, 2, 5, 0, 1],
+            "generate_piece_rotations": [2, 0, 2, 2, 2, 2, 2, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [109],
+            "generate_piece_indexes": [0, 1, 0, 6, 2, 5, 0, 1],
+            "generate_piece_rotations": [2, 0, 2, 1, 2, 2, 2, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [21],
+            "generate_piece_indexes": [0, 1, 0, 1, 0, 2, 2, 2],
+            "generate_piece_rotations": [3, 0, 3, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [53],
+            "generate_piece_indexes": [0, 1, 0, 1, 0, 6, 2, 2],
+            "generate_piece_rotations": [3, 0, 3, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [149],
+            "generate_piece_indexes": [0, 1, 0, 1, 0, 2, 2, 5],
+            "generate_piece_rotations": [3, 0, 3, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [181],
+            "generate_piece_indexes": [0, 1, 0, 1, 0, 6, 2, 5],
+            "generate_piece_rotations": [3, 0, 3, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [85],
+            "generate_piece_indexes": [0, 1, 0, 1, 0, 1, 0, 1],
+            "generate_piece_rotations": [0, 0, 0, 1, 0, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [213],
+            "generate_piece_indexes": [0, 1, 0, 1, 0, 1, 0, 0],
+            "generate_piece_rotations": [0, 0, 0, 1, 0, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [87],
+            "generate_piece_indexes": [0, 0, 0, 1, 0, 1, 0, 1],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 2, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [93],
+            "generate_piece_indexes": [0, 1, 0, 0, 0, 1, 0, 1],
+            "generate_piece_rotations": [2, 0, 2, 2, 2, 2, 2, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [117],
+            "generate_piece_indexes": [0, 1, 0, 1, 0, 0, 0, 1],
+            "generate_piece_rotations": [3, 0, 3, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [92],
+            "generate_piece_indexes": [2, 2, 0, 0, 0, 1, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [94],
+            "generate_piece_indexes": [2, 5, 0, 0, 0, 1, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [220],
+            "generate_piece_indexes": [2, 2, 0, 0, 0, 1, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [222],
+            "generate_piece_indexes": [2, 5, 0, 0, 0, 1, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 2, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [113],
+            "generate_piece_indexes": [0, 2, 2, 2, 0, 0, 0, 1],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 1, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [115],
+            "generate_piece_indexes": [0, 6, 2, 2, 0, 0, 0, 1],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 1, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [121],
+            "generate_piece_indexes": [0, 2, 2, 5, 0, 0, 0, 1],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 1, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [123],
+            "generate_piece_indexes": [0, 6, 2, 5, 0, 0, 0, 1],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 1, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [197],
+            "generate_piece_indexes": [0, 1, 0, 2, 2, 2, 0, 0],
+            "generate_piece_rotations": [2, 0, 2, 2, 2, 2, 2, 2],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [205],
+            "generate_piece_indexes": [0, 1, 0, 6, 2, 2, 0, 0],
+            "generate_piece_rotations": [2, 0, 2, 1, 2, 2, 2, 2],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [229],
+            "generate_piece_indexes": [0, 1, 0, 2, 2, 5, 0, 0],
+            "generate_piece_rotations": [2, 0, 2, 2, 2, 2, 2, 2],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [237],
+            "generate_piece_indexes": [0, 1, 0, 6, 2, 5, 0, 0],
+            "generate_piece_rotations": [2, 0, 2, 1, 2, 2, 2, 2],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [23],
+            "generate_piece_indexes": [0, 0, 0, 1, 0, 2, 2, 2],
+            "generate_piece_rotations": [3, 3, 3, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [55],
+            "generate_piece_indexes": [0, 0, 0, 1, 0, 6, 2, 2],
+            "generate_piece_rotations": [3, 3, 3, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [151],
+            "generate_piece_indexes": [0, 0, 0, 1, 0, 2, 2, 5],
+            "generate_piece_rotations": [3, 3, 3, 1, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [183],
+            "generate_piece_indexes": [0, 0, 0, 1, 0, 6, 2, 5],
+            "generate_piece_rotations": [3, 3, 3, 1, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [116],
+            "generate_piece_indexes": [2, 2, 0, 1, 0, 0, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 1, 0, 0, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [118],
+            "generate_piece_indexes": [2, 5, 0, 1, 0, 0, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 1, 0, 0, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [244],
+            "generate_piece_indexes": [2, 2, 0, 1, 0, 0, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 1, 0, 0, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [246],
+            "generate_piece_indexes": [2, 5, 0, 1, 0, 0, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 1, 0, 0, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [209],
+            "generate_piece_indexes": [0, 2, 2, 2, 0, 1, 0, 0],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [211],
+            "generate_piece_indexes": [0, 6, 2, 2, 0, 1, 0, 0],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [217],
+            "generate_piece_indexes": [0, 2, 2, 5, 0, 1, 0, 0],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [219],
+            "generate_piece_indexes": [0, 6, 2, 5, 0, 1, 0, 0],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [71],
+            "generate_piece_indexes": [0, 0, 0, 2, 2, 2, 0, 1],
+            "generate_piece_rotations": [2, 2, 2, 2, 2, 2, 2, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [79],
+            "generate_piece_indexes": [0, 0, 0, 6, 2, 2, 0, 1],
+            "generate_piece_rotations": [2, 2, 2, 1, 2, 2, 2, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [103],
+            "generate_piece_indexes": [0, 0, 0, 2, 2, 5, 0, 1],
+            "generate_piece_rotations": [2, 2, 2, 2, 2, 2, 2, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [111],
+            "generate_piece_indexes": [0, 0, 0, 6, 2, 5, 0, 1],
+            "generate_piece_rotations": [2, 2, 2, 1, 2, 2, 2, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [29],
+            "generate_piece_indexes": [0, 1, 0, 0, 0, 2, 2, 2],
+            "generate_piece_rotations": [3, 0, 3, 3, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [61],
+            "generate_piece_indexes": [0, 1, 0, 0, 0, 6, 2, 2],
+            "generate_piece_rotations": [3, 0, 3, 3, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [157],
+            "generate_piece_indexes": [0, 1, 0, 0, 0, 2, 2, 5],
+            "generate_piece_rotations": [3, 0, 3, 3, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [189],
+            "generate_piece_indexes": [0, 1, 0, 0, 0, 6, 2, 5],
+            "generate_piece_rotations": [3, 0, 3, 3, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [253],
+            "generate_piece_indexes": [0, 1, 0, 0, 0, 0, 0, 0],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [247],
+            "generate_piece_indexes": [0, 0, 0, 1, 0, 0, 0, 0],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 1, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [223],
+            "generate_piece_indexes": [0, 0, 0, 0, 0, 1, 0, 0],
+            "generate_piece_rotations": [2, 2, 2, 2, 2, 2, 2, 2],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [127],
+            "generate_piece_indexes": [0, 0, 0, 0, 0, 0, 0, 1],
+            "generate_piece_rotations": [3, 3, 3, 3, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [112],
+            "generate_piece_indexes": [2, 3, 2, 2, 0, 0, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 0, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [114],
+            "generate_piece_indexes": [2, 4, 2, 2, 0, 0, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 0, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [120],
+            "generate_piece_indexes": [2, 3, 2, 5, 0, 0, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 0, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [240],
+            "generate_piece_indexes": [2, 3, 2, 2, 0, 0, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 0, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [122],
+            "generate_piece_indexes": [2, 4, 2, 5, 0, 0, 0, 2],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 0, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [242],
+            "generate_piece_indexes": [2, 4, 2, 2, 0, 0, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 0, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [248],
+            "generate_piece_indexes": [2, 3, 2, 5, 0, 0, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 0, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [250],
+            "generate_piece_indexes": [2, 4, 2, 5, 0, 0, 0, 6],
+            "generate_piece_rotations": [0, 0, 1, 1, 0, 0, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [193],
+            "generate_piece_indexes": [0, 2, 2, 3, 2, 2, 0, 0],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [195],
+            "generate_piece_indexes": [0, 6, 2, 3, 2, 2, 0, 0],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [201],
+            "generate_piece_indexes": [0, 2, 2, 4, 2, 2, 0, 0],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [225],
+            "generate_piece_indexes": [0, 2, 2, 3, 2, 5, 0, 0],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [203],
+            "generate_piece_indexes": [0, 6, 2, 4, 2, 2, 0, 0],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [233],
+            "generate_piece_indexes": [0, 2, 2, 4, 2, 5, 0, 0],
+            "generate_piece_rotations": [1, 1, 1, 1, 2, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [227],
+            "generate_piece_indexes": [0, 6, 2, 3, 2, 5, 0, 0],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [235],
+            "generate_piece_indexes": [0, 6, 2, 4, 2, 5, 0, 0],
+            "generate_piece_rotations": [1, 0, 1, 1, 2, 2, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [7],
+            "generate_piece_indexes": [0, 0, 0, 2, 2, 3, 2, 2],
+            "generate_piece_rotations": [2, 2, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [15],
+            "generate_piece_indexes": [0, 0, 0, 6, 2, 3, 2, 2],
+            "generate_piece_rotations": [2, 2, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [39],
+            "generate_piece_indexes": [0, 0, 0, 2, 2, 4, 2, 2],
+            "generate_piece_rotations": [2, 2, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [135],
+            "generate_piece_indexes": [0, 0, 0, 2, 2, 3, 2, 5],
+            "generate_piece_rotations": [2, 2, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [47],
+            "generate_piece_indexes": [0, 0, 0, 6, 2, 4, 2, 2],
+            "generate_piece_rotations": [2, 2, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [167],
+            "generate_piece_indexes": [0, 0, 0, 2, 2, 4, 2, 5],
+            "generate_piece_rotations": [2, 2, 2, 2, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [143],
+            "generate_piece_indexes": [0, 0, 0, 6, 2, 3, 2, 5],
+            "generate_piece_rotations": [2, 2, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [175],
+            "generate_piece_indexes": [0, 0, 0, 6, 2, 4, 2, 5],
+            "generate_piece_rotations": [2, 2, 2, 1, 2, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [28],
+            "generate_piece_indexes": [2, 2, 0, 0, 0, 2, 2, 3],
+            "generate_piece_rotations": [0, 0, 3, 3, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [30],
+            "generate_piece_indexes": [2, 5, 0, 0, 0, 2, 2, 3],
+            "generate_piece_rotations": [0, 0, 3, 3, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [60],
+            "generate_piece_indexes": [2, 2, 0, 0, 0, 6, 2, 3],
+            "generate_piece_rotations": [0, 0, 3, 3, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [156],
+            "generate_piece_indexes": [2, 2, 0, 0, 0, 2, 2, 4],
+            "generate_piece_rotations": [0, 0, 3, 3, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [188],
+            "generate_piece_indexes": [2, 2, 0, 0, 0, 6, 2, 4],
+            "generate_piece_rotations": [0, 0, 3, 3, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [158],
+            "generate_piece_indexes": [2, 5, 0, 0, 0, 2, 2, 4],
+            "generate_piece_rotations": [0, 0, 3, 3, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [62],
+            "generate_piece_indexes": [2, 5, 0, 0, 0, 6, 2, 3],
+            "generate_piece_rotations": [0, 0, 3, 3, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [190],
+            "generate_piece_indexes": [2, 5, 0, 0, 0, 6, 2, 4],
+            "generate_piece_rotations": [0, 0, 3, 3, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [124],
+            "generate_piece_indexes": [2, 2, 0, 0, 0, 0, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [126],
+            "generate_piece_indexes": [2, 5, 0, 0, 0, 0, 0, 2],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [252],
+            "generate_piece_indexes": [2, 2, 0, 0, 0, 0, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 0, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [254],
+            "generate_piece_indexes": [2, 5, 0, 0, 0, 0, 0, 6],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 0, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [241],
+            "generate_piece_indexes": [0, 2, 2, 2, 0, 0, 0, 0],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 1, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [243],
+            "generate_piece_indexes": [0, 6, 2, 2, 0, 0, 0, 0],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 1, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [249],
+            "generate_piece_indexes": [0, 2, 2, 5, 0, 0, 0, 0],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 1, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [251],
+            "generate_piece_indexes": [0, 6, 2, 5, 0, 0, 0, 0],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 1, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [199],
+            "generate_piece_indexes": [0, 0, 0, 2, 2, 2, 0, 0],
+            "generate_piece_rotations": [2, 2, 2, 2, 2, 2, 2, 2],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [207],
+            "generate_piece_indexes": [0, 0, 0, 6, 2, 2, 0, 0],
+            "generate_piece_rotations": [2, 2, 2, 1, 2, 2, 2, 2],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [231],
+            "generate_piece_indexes": [0, 0, 0, 2, 2, 5, 0, 0],
+            "generate_piece_rotations": [2, 2, 2, 2, 2, 2, 2, 2],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [239],
+            "generate_piece_indexes": [0, 0, 0, 6, 2, 5, 0, 0],
+            "generate_piece_rotations": [2, 2, 2, 1, 2, 2, 2, 2],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [31],
+            "generate_piece_indexes": [0, 0, 0, 0, 0, 2, 2, 2],
+            "generate_piece_rotations": [3, 3, 3, 3, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [63],
+            "generate_piece_indexes": [0, 0, 0, 0, 0, 6, 2, 2],
+            "generate_piece_rotations": [3, 3, 3, 3, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [159],
+            "generate_piece_indexes": [0, 0, 0, 0, 0, 2, 2, 5],
+            "generate_piece_rotations": [3, 3, 3, 3, 3, 3, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [191],
+            "generate_piece_indexes": [0, 0, 0, 0, 0, 6, 2, 5],
+            "generate_piece_rotations": [3, 3, 3, 3, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [125],
+            "generate_piece_indexes": [0, 1, 0, 0, 0, 0, 0, 1],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 0, 0, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [245],
+            "generate_piece_indexes": [0, 1, 0, 1, 0, 0, 0, 0],
+            "generate_piece_rotations": [1, 0, 1, 1, 1, 1, 1, 1],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [215],
+            "generate_piece_indexes": [0, 0, 0, 1, 0, 1, 0, 0],
+            "generate_piece_rotations": [2, 2, 2, 1, 2, 2, 2, 2],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [95],
+            "generate_piece_indexes": [0, 0, 0, 0, 0, 1, 0, 1],
+            "generate_piece_rotations": [3, 3, 3, 3, 3, 2, 3, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [221],
+            "generate_piece_indexes": [0, 1, 0, 0, 0, 1, 0, 0],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 2, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [119],
+            "generate_piece_indexes": [0, 0, 0, 1, 0, 0, 0, 1],
+            "generate_piece_rotations": [1, 1, 1, 1, 1, 1, 1, 3],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            "mask_variants": [255],
+            "generate_piece_indexes": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_rotations": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_x": [0, 0, 0, 0, 0, 0, 0, 0],
+            "generate_piece_flip_y": [0, 0, 0, 0, 0, 0, 0, 0]
+        }
+    ]
+}
