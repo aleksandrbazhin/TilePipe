@@ -28,38 +28,80 @@ func find_mask_alternatives(mask: int) -> Array:
 					break
 			if not skip:
 				alternatives.append(mask_alternative)
-#
-#
-
-#	for neigbour_name in Const.TILE_MASK:
-#		var is_diagonal = neigbour_name in ["TOP_RIGHT", "BOTTOM_RIGHT", "BOTTOM_LEFT", "TOP_LEFT"]
-#		if is_diagonal:
-#			var neighbour_bit: int = Const.TILE_MASK[neigbour_name]
-#			if mask & neighbour_bit != 0: # neighbour already in the mask
-#				continue
-#			var cw_neighbour: int = Helpers.rotate_mask_cw(neighbour_bit)
-#			var ccw_neighbour: int = Helpers.rotate_mask_ccw(neighbour_bit)
-#			if mask & cw_neighbour != 0 and mask & ccw_neighbour != 0: 
-#				continue
-#			alternatives.append(mask | neighbour_bit)
-#
-#
-			
 	return alternatives
-#
+
+
+func rotate_indexes(indexes: Array, rotation: int) -> Array:
+	var new_indexes := []
+	for i in indexes:
+		new_indexes.append((int(i) + rotation) % 4)
+	return new_indexes
+
+
+func fix_rotations(generation_data):
+	var new_data := {
+		"type": "overlay",
+		"example": "overlay_4.png",
+		"name": "input_overlay_4",
+		"min_size": {
+			"x": 4,
+			"y": 1
+		},
+		"piece_overlap_vectors": [[0, 0], [-1, -1], [0, 1], [1, 1]],
+		"piece_overlap_vectors_rotate": [false, false, true, false],
+	}
+	var new_tile_data := []
+	for tile_data in generation_data.data["data"]:
+		var mask_variants: Array = tile_data["mask_variants"]
+		for i in range(mask_variants.size()):
+			var mask_variant: int = mask_variants[i]
+			var mask_rotation: int = tile_data["variant_rotations"][i]
+			var part_indexes: Array = tile_data["generate_piece_indexes"]
+			var part_rotations: Array = tile_data["generate_piece_rotations"]
+			var rotated_indexes := []
+			var rotated_rotations := []
+			if mask_rotation == 1:
+				rotated_indexes = [part_indexes[6], part_indexes[7], part_indexes[0], part_indexes[1],
+					part_indexes[2], part_indexes[3], part_indexes[4], part_indexes[5]]
+				rotated_rotations = [part_rotations[6], part_rotations[7], part_rotations[0], part_rotations[1],
+					part_rotations[2], part_rotations[3], part_rotations[4], part_rotations[5]]
+				rotated_rotations = rotate_indexes(rotated_rotations, 1)
+			elif mask_rotation == 2:
+				rotated_indexes = [part_indexes[4], part_indexes[5], part_indexes[6], part_indexes[7], 
+					part_indexes[0], part_indexes[1], part_indexes[2], part_indexes[3]]
+				rotated_rotations = [part_rotations[4], part_rotations[5], part_rotations[6], part_rotations[7], 
+					part_rotations[0], part_rotations[1], part_rotations[2], part_rotations[3]]
+				rotated_rotations = rotate_indexes(rotated_rotations, 2)
+			elif mask_rotation == 3:
+				rotated_indexes = [part_indexes[2], part_indexes[3], part_indexes[4], part_indexes[5], 
+					part_indexes[6], part_indexes[7], part_indexes[0], part_indexes[1]]
+				rotated_rotations = [part_rotations[2], part_rotations[3], part_rotations[4], part_rotations[5],
+					part_rotations[6], part_rotations[7], part_rotations[0], part_rotations[1]]
+				rotated_rotations = rotate_indexes(rotated_rotations, 3)
+			else:
+				rotated_indexes = part_indexes.duplicate(true)
+				rotated_rotations = part_rotations.duplicate(true)
+			new_tile_data.append({
+				"mask_variants": [mask_variant],
+				"variant_rotations": [0],
+				"generate_piece_indexes":   rotated_indexes,
+				"generate_piece_rotations": rotated_rotations,
+				"generate_piece_flip_x":    tile_data["generate_piece_flip_x"],
+				"generate_piece_flip_y":    tile_data["generate_piece_flip_y"],
+			})
+	new_data["data"] = new_tile_data
+	text_node.text = JSON.print(new_data, "\t")
+
 
 func _on_PresetButton_pressed():
-	var reference_generation_data := GenerationData.new("res://generation_data/overlay_13.json")
+	var reference_generation_data := GenerationData.new("res://generation_data/overlay_4_full.json")
+#	fix_rotations(reference_generation_data)
 	for tile_data in reference_generation_data.data["data"]:
 		var mask_variants: Array = tile_data["mask_variants"]
 		var base_mask: int = mask_variants[0]
 		mask_variants.append_array(find_mask_alternatives(base_mask))
-		
-		
 		for i in range(mask_variants.size() - 1):
 			tile_data["variant_rotations"].append(0)
-
-
 	text_node.text = JSON.print(reference_generation_data.data, "\t")
 
 
