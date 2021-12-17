@@ -4,6 +4,7 @@ onready var text_node = $HBoxContainer/PresetContainer/RichTextLabel
 onready var render_node: ViewportContainer = $HBoxContainer/TemplateContainer/ScrollContainer/ViewportContainer
 
 const CORNER_MASK_CHECKS := [2, 10, 34, 42, 170]
+const CORNER_BITS := [2, 8, 32, 128]
 
 # compute all alternative 255 masks for 47 blob mask (with insignificant corner neighbours)
 func find_mask_alternatives(mask: int) -> Array:
@@ -17,7 +18,7 @@ func find_mask_alternatives(mask: int) -> Array:
 			if mask == mask_alternative or alternatives.has(mask_alternative):
 				continue
 			var skip := false
-			for corner_bit in [2, 8, 32, 128]: # separate btis in neighbour mask
+			for corner_bit in CORNER_BITS: # separate btis in neighbour mask
 				if neighbour_mask & corner_bit == 0: # neighbour_mask does not has this corner
 					continue
 				var cw_corner_neighbour: int = Helpers.rotate_check_mask(corner_bit, 1)
@@ -38,7 +39,8 @@ func rotate_indexes(indexes: Array, rotation: int) -> Array:
 	return new_indexes
 
 
-func fix_rotations(generation_data):
+func fix_rotations():
+	var generation_data := GenerationData.new("res://generation_data/overlay_4_full.json")
 	var new_data := {
 		"type": "overlay",
 		"example": "overlay_4.png",
@@ -92,15 +94,73 @@ func fix_rotations(generation_data):
 	text_node.text = JSON.print(new_data, "\t")
 
 
-func _on_PresetButton_pressed():
+func add_255_variants():
 	var reference_generation_data := GenerationData.new("res://generation_data/overlay_4_full.json")
-#	fix_rotations(reference_generation_data)
 	for tile_data in reference_generation_data.data["data"]:
 		var mask_variants: Array = tile_data["mask_variants"]
 		var base_mask: int = mask_variants[0]
 		mask_variants.append_array(find_mask_alternatives(base_mask))
 	text_node.text = JSON.print(reference_generation_data.data, "\t")
 
+
+func make_255_variant_template_non_symmetrical():
+	var reference_generation_data := GenerationData.new("res://generation_data/overlay_13_full.json")
+	var new_data := {
+		"type": "overlay",
+		"example": "overlay_25.png",
+		"name": "input_overlay_25",
+		"min_size": {
+			"x": 25,
+			"y": 1
+		},
+		"piece_overlap_vectors": [[0, 0], [-1, -1], [0, 1], [1, 1], [1, 0], [-1, -1], [0, 1], [1, 1], [1, 1], [-1, -1], [1, 0], [1, 1], [-1, -1], 
+								  [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1]],
+		"piece_overlap_vectors_rotate": [false, false, false, false, false, false, false, false, false, false, false, false, false, 
+								false, false, false, false, false, false, false, false, false, false, false, false]}
+	var new_tile_data := []
+	for tile_data in reference_generation_data.data["data"]:
+		var mask_variants: Array = tile_data["mask_variants"]
+		var base_mask: int = tile_data["mask_variants"][0]
+		var base_indexes: Array = tile_data["generate_piece_indexes"]
+		
+		var base_rotations: Array = tile_data["generate_piece_rotations"]
+		for mask_variant in mask_variants:
+			var mask := int(mask_variant)
+			var variant_indexes := base_indexes.duplicate()
+			var variant_rotations := base_rotations.duplicate()
+			var bit_index := 1
+			for corner_bit in CORNER_BITS:
+				# base mask and variant vary in corner_bit
+				if (base_mask ^ mask) & corner_bit != 0:
+					var offset_1 := 0
+					var cw_corner_neighbour: int = Helpers.rotate_check_mask(corner_bit, 1)
+					if mask & cw_corner_neighbour != 0:
+						offset_1 = 1
+					var ccw_corner_neighbour: int = Helpers.rotate_check_mask(corner_bit, 7)
+					if mask & ccw_corner_neighbour != 0:
+						offset_1 = 2
+					variant_indexes[bit_index] = 13 + 3 * (bit_index / 2) + offset_1
+#					variant_indexes[bit_index] = "x_" + str(13+3*(bit_index/2)+offset_1)
+#					variant_rotations[bit_index] = "x"
+				bit_index += 2
+				
+				
+			new_tile_data.append({
+				"mask_variants": [mask_variant],
+				"generate_piece_indexes":   variant_indexes,
+				"generate_piece_rotations": variant_rotations,
+				"generate_piece_flip_x":    tile_data["generate_piece_flip_x"],
+				"generate_piece_flip_y":    tile_data["generate_piece_flip_y"],
+			})
+	new_data["data"] = new_tile_data
+	text_node.text = JSON.print(new_data, "\t")
+
+
+
+func _on_PresetButton_pressed():
+#	add_255_variants()
+#	fix_rotations()
+	make_255_variant_template_non_symmetrical()
 
 func _on_TemplateButton_pressed():
 	render_node.draw_data()

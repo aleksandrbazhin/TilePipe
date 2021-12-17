@@ -44,5 +44,3 @@ func _draw():
 				var offset: Vector2 = DRAW_NEIGHBOUR_OFFSETS[neighbour_mask_name]
 				var neigbour_pos := tile_pos * tile_size + offset + TILE_BORDER
 				draw_rect(Rect2(neigbour_pos, NEIGHBOUR_SIZE_VEC), FG_COLOR)
-#				print(tile_mask, " ", neighbour_mask_name)
-
