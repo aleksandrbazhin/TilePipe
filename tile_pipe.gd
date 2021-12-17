@@ -764,8 +764,7 @@ func generate_overlayed_tiles():
 				Vector2((index % 4 + 4 * random_variant_index) * output_tile_size, (index / 4) * output_tile_size))
 		input_overlayed_tiles.append({
 			"tile_image_variants": result_tile_variants,
-			"mask_variants": int_variants,
-			"variant_rotations": data["variant_rotations"]
+			"mask_variants": int_variants
 		})
 		index += 1
 	overlay_texture_in_viewport.hide()
@@ -786,7 +785,7 @@ func make_from_overlayed():
 	var out_image := Image.new()
 	var first_tile_image: Image = input_overlayed_tiles[0]["tile_image_variants"][0]
 	var image_fmt: int = first_tile_image.get_format()
-	var out_image_fmt: int = rotate_viewport.get_texture().get_data().get_format()
+#	var out_image_fmt: int = rotate_viewport.get_texture().get_data().get_format()
 	var out_image_size: Vector2 = template_size * tile_size
 	out_image_size += (template_size - Vector2.ONE) * output_tile_offset
 	out_image.create(int(out_image_size.x), int(out_image_size.y), false, image_fmt)
@@ -810,14 +809,7 @@ func make_from_overlayed():
 		for tile_data in input_overlayed_tiles:
 			var variant_index: int = tile_data["mask_variants"].find(mask_value)
 			if variant_index != -1:
-				var rotation_key: int = Const.ROTATION_SHIFTS.keys()[tile_data["variant_rotations"][variant_index]]
-				if rotation_key != 0:
-					put_to_rotation_viewport(tile_data["tile_image_variants"][tile_variant_index], rotation_key, false)
-					yield(VisualServer, 'frame_post_draw')
-					var tile_image: Image = get_from_rotation_viewport(out_image_fmt)
-					out_image.blit_rect(tile_image, tile_rect, tile_position)
-				else:
-					out_image.blit_rect(tile_data["tile_image_variants"][tile_variant_index], tile_rect, tile_position)
+				out_image.blit_rect(tile_data["tile_image_variants"][tile_variant_index], tile_rect, tile_position)
 				itex.set_data(out_image)
 				set_output_texture(itex)
 	rotated_texture_in_viewport.hide()

@@ -83,7 +83,6 @@ func fix_rotations(generation_data):
 				rotated_rotations = part_rotations.duplicate(true)
 			new_tile_data.append({
 				"mask_variants": [mask_variant],
-				"variant_rotations": [0],
 				"generate_piece_indexes":   rotated_indexes,
 				"generate_piece_rotations": rotated_rotations,
 				"generate_piece_flip_x":    tile_data["generate_piece_flip_x"],
@@ -100,8 +99,6 @@ func _on_PresetButton_pressed():
 		var mask_variants: Array = tile_data["mask_variants"]
 		var base_mask: int = mask_variants[0]
 		mask_variants.append_array(find_mask_alternatives(base_mask))
-		for i in range(mask_variants.size() - 1):
-			tile_data["variant_rotations"].append(0)
 	text_node.text = JSON.print(reference_generation_data.data, "\t")
 
 
