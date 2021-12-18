@@ -68,7 +68,7 @@ func convert_mask_to_godot(tile_mask: int, has_center: bool = true,
 		godot_autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3) -> int:
 	var godot_mask: int = 0
 	match autotile_type:
-		Const.GODOT_AUTOTILE_TYPE.BLOB_3x3:
+		Const.GODOT_AUTOTILE_TYPE.BLOB_3x3, Const.GODOT_AUTOTILE_TYPE.FULL_3x3:
 			for mask_name in GODOT_MASK_3x3.keys():
 				if mask_name == "CENTER":
 					if has_center:
