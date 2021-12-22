@@ -20,15 +20,6 @@ uniform float rotation_16;
 uniform float rotation_32;
 uniform float rotation_64;
 uniform float rotation_128;
-//
-//uniform float flip_1;
-//uniform float flip_2;
-//uniform float rotation_4;
-//uniform float rotation_8;
-//uniform float rotation_16;
-//uniform float rotation_32;
-//uniform float rotation_64;
-//uniform float rotation_128;
 
 uniform vec2 ovelap_direction_1;
 uniform vec2 ovelap_direction_2;
@@ -39,10 +30,10 @@ uniform vec2 ovelap_direction_32;
 uniform vec2 ovelap_direction_64;
 uniform vec2 ovelap_direction_128;
 
-
 uniform float overlay_rate;
 uniform float overlap;
 uniform bool is_flow_map = false;
+
 
 vec2 rotateUV(vec2 uv, float rot) {
     float cosa = cos(rot);
@@ -83,24 +74,24 @@ void fragment() {
 	float minus_overlap = overlay_rate - overlay_rate * overlap * 2.0;
 	if (out_x_plus) {
 		if (out_y_plus) {
-			bool is_over = (plus_overlap > UV.x || ovelap_direction_8.x == 0.0) && (plus_overlap > UV.y || ovelap_direction_8.y == 0.0);
-			is_over = is_over || (plus_overlap > UV.x && ovelap_direction_8.x == -1.0) || (plus_overlap > UV.y && ovelap_direction_8.y == -1.0);
+			bool is_over = (plus_overlap > UV.x || ovelap_direction_8.x == 0.0) && (plus_overlap > UV.y || ovelap_direction_8.y == 0.0)
+				|| (plus_overlap > UV.x && ovelap_direction_8.x == -1.0) || (plus_overlap > UV.y && ovelap_direction_8.y == -1.0);
 			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_8, rotation_8, is_over);
 		} else if (out_y_minus) {
-			bool is_over = (plus_overlap > UV.x || ovelap_direction_2.x == 0.0) && (minus_overlap < UV.y || ovelap_direction_2.y == 0.0);
-			is_over = is_over || (plus_overlap > UV.x && ovelap_direction_2.x == -1.0) || (minus_overlap < UV.y && ovelap_direction_2.y == -1.0);
+			bool is_over = (plus_overlap > UV.x || ovelap_direction_2.x == 0.0) && (minus_overlap < UV.y || ovelap_direction_2.y == 0.0)
+				|| (plus_overlap > UV.x && ovelap_direction_2.x == -1.0) || (minus_overlap < UV.y && ovelap_direction_2.y == -1.0);
 			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_2, rotation_2, is_over);
 		} else {
 			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV),  overlay_texture_4, rotation_4, plus_overlap > UV.x);
 		}
 	} else if (out_x_minus) {
 		if (out_y_plus) {
-			bool is_over = (minus_overlap < UV.x || ovelap_direction_32.x == 0.0) && (plus_overlap > UV.y || ovelap_direction_32.y == 0.0);
-			is_over = is_over || (minus_overlap < UV.x && ovelap_direction_32.x == -1.0) || (plus_overlap > UV.y && ovelap_direction_32.y == -1.0);
+			bool is_over = (minus_overlap < UV.x || ovelap_direction_32.x == 0.0) && (plus_overlap > UV.y || ovelap_direction_32.y == 0.0)
+				|| (minus_overlap < UV.x && ovelap_direction_32.x == -1.0) || (plus_overlap > UV.y && ovelap_direction_32.y == -1.0);
 			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_32, rotation_32, is_over);
 		} else if (out_y_minus) {
-			bool is_over = (minus_overlap < UV.x || ovelap_direction_128.x == 0.0) && (minus_overlap < UV.y || ovelap_direction_128.y == 0.0);
-			is_over = is_over || (minus_overlap < UV.x && ovelap_direction_128.x == -1.0) || (minus_overlap < UV.y && ovelap_direction_128.y == -1.0);
+			bool is_over = (minus_overlap < UV.x || ovelap_direction_128.x == 0.0) && (minus_overlap < UV.y || ovelap_direction_128.y == 0.0)
+				|| (minus_overlap < UV.x && ovelap_direction_128.x == -1.0) || (minus_overlap < UV.y && ovelap_direction_128.y == -1.0);
 			COLOR = get_color_from_rotated(UV, texture(TEXTURE, UV), overlay_texture_128, rotation_128, is_over);
 		}
 		 else {

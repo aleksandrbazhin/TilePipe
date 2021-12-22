@@ -692,6 +692,7 @@ func get_from_overlay_viewport(image_fmt: int, resize_factor: float = 1.0) -> Im
 		image.resize(int(size.x * resize_factor), int(size.y * resize_factor), interpolation)
 	return image
 
+
 func generate_overlayed_tiles():
 	input_overlayed_tiles = []
 	var output_tile_size: int = get_output_tile_size()
@@ -704,7 +705,6 @@ func generate_overlayed_tiles():
 	overlay_merge_rate_slider.quantize(int(input_tile_size / 2))
 	# warning-ignore:integer_division
 	overlay_overlap_slider.quantize(int(input_tile_size / 2))
-	
 	
 	var max_random_variants: int = get_input_image_random_max_variants()
 	set_random_ui_enabled(max_random_variants)
@@ -727,7 +727,6 @@ func generate_overlayed_tiles():
 	debug_image.create(int(debug_texture_size.x) * max_random_variants, int(debug_texture_size.y), false, image_fmt)
 	var overlay_rate: float = overlay_merge_rate_slider.value
 	var overlap_rate: float = overlay_overlap_slider.value
-		
 	var preset: Array = generation_data.get_preset()
 	
 	# input tile variants
