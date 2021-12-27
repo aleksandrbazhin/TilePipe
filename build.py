@@ -5,8 +5,8 @@ import shutil
 from pathlib import Path
 import configparser
 
-GODOT = "Godot_v3.4-stable_win64.exe"
-GODOT323 = "Godot_v3.2.3-stable_win64.exe"
+GODOT = "Godot_v3.4.2-stable_win64.exe"
+GODOT_FOR_MAC = "Godot_v3.2.3-stable_win64.exe"
 EXPORT_PATH = "../godot_export/TilePipe"
 WIN_BUILD_PATH = '%s/win' % EXPORT_PATH
 LINUX_BUILD_PATH = '%s/linux' % EXPORT_PATH
@@ -20,7 +20,7 @@ APP_NAME = 'TilePipe_v.%s' % VERSION
 
 WIN_PARAMS = {"godot": GODOT, "godot_params": "--no-window --export",  "path": EXPORT_PATH, "build_path": WIN_BUILD_PATH, "app_name": APP_NAME, "binary": "%s.exe" % APP_NAME, "version": VERSION}
 LINUX_PARAMS = {"godot": GODOT, "godot_params": "--no-window --export", "path": EXPORT_PATH, "build_path": LINUX_BUILD_PATH, "app_name": APP_NAME, "binary": "%s.x86_64" % APP_NAME, "version": VERSION}
-MAC_PARAMS = {"godot": GODOT323, "godot_params": "--no-window --export", "path": EXPORT_PATH, "build_path": MAC_BUILD_PATH, "app_name": APP_NAME, "binary": "%s_mac.zip" % APP_NAME, "version": VERSION}
+MAC_PARAMS = {"godot": GODOT_FOR_MAC, "godot_params": "--no-window --export", "path": EXPORT_PATH, "build_path": MAC_BUILD_PATH, "app_name": APP_NAME, "binary": "%s_mac.zip" % APP_NAME, "version": VERSION}
 
 
 def update_godot_export_templates():
@@ -34,7 +34,20 @@ def update_godot_export_templates():
         export_config[preset["name"]]["export_path"] = '"%s"' % preset["export_path"]
         export_config[preset["name"] + ".options"]["application/version"] = '"%s"' % VERSION
         export_config[preset["name"] + ".options"]["application/short_version"] = '"%s"' % VERSION
-        
+        export_config[preset["name"]]["include_filter"] = '"generation_data/*"'
+        export_config[preset["name"]]["exclude_filter"] = '"*.import"'
+    # win params 
+    export_config["preset.0.options"]["product/version"] = '"%s"' % VERSION
+    export_config["preset.0.options"]["application/icon"] = '"res://icon.ico"'
+    export_config["preset.0.options"]["application/product_version"] = '"%s"' % VERSION
+    export_config["preset.0.options"]["application/company_name"] = '"Aleksandr Bazhin"'
+    export_config["preset.0.options"]["application/product_name"] = '"TilePipe"'
+    export_config["preset.0.options"]["application/file_description"] = '"Pipeline for tilesets"'
+    # mac params
+    export_config["preset.1.options"]["application/identifier"] = '"com.tilepipe.utility"'
+    export_config["preset.1.options"]["application/icon"] = '"res://icon.icns"'
+    export_config["preset.1.options"]["application/name"] = '"TilePipe"'
+    export_config["preset.1.options"]["application/info"] = '"Pipeline for tilesets"'
     with open('export_presets.cfg', 'w') as configfile:
         export_config.write(configfile, space_around_delimiters=False)
 
