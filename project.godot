@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Resource",
+"class": "GeneratedTile",
+"language": "GDScript",
+"path": "res://GeneratedTile.gd"
+}, {
+"base": "Resource",
 "class": "GenerationData",
 "language": "GDScript",
 "path": "res://generation_data/generation_data.gd"
@@ -35,6 +40,7 @@ _global_script_classes=[ {
 "path": "res://tilesheet_description.gd"
 } ]
 _global_script_class_icons={
+"GeneratedTile": "",
 "GenerationData": "",
 "GodotExporter": "",
 "Godot_tile_row": "",

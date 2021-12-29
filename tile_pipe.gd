@@ -75,9 +75,10 @@ var generation_data: GenerationData
 var template_size: Vector2
 var input_slices: Dictionary = {}
 #var input_tile_size_vector := Vector2.ZERO
-var input_overlayed_tiles: Array = []
-# tile_masks = [{"mask": int, "godot_mask": int, "position" Vector2}, ...]
-var tile_masks: Array = []
+var rendered_tiles := {}
+# tiles_by_bitmasks = {mask_value: [bitemask_position1, bitmask_position2]}
+# tiles_by_bitmasks = {mask_value: [tile1, tile2]}
+var tiles_by_bitmasks := {}
 var rng = RandomNumberGenerator.new()
 var last_input_texture_path: String = ""
 var saved_texture_rects: Array = []
@@ -93,6 +94,7 @@ var current_texture_basename: String = ""
 
 #func _init():
 #	OS.set_window_maximized(true)
+
 
 func _ready():
 	print("TilePipe v.%s running in Debug mode" % VERSION)
@@ -134,6 +136,7 @@ func _ready():
 	is_ready = true
 #	adjust_for_small_resolution()
 
+
 func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
 		if popup_dialog.visible:
@@ -149,9 +152,11 @@ func _process(_delta: float):
 		else:
 			exit()
 
+
 func _notification(what):
 	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
 		exit()
+
 
 func _input(event: InputEvent):
 	if event is InputEventKey and event.is_pressed():
@@ -173,11 +178,13 @@ func _input(event: InputEvent):
 				if not is_ui_blocked:
 					_on_ReloadButton_pressed()
 
+
 # nihua eto ne rabotaet
 func adjust_for_small_resolution():
 	if OS.get_screen_size().x < OS.window_size.x:
 		settings_container.rect_min_size = Vector2.ZERO
 		OS.window_maximized = true
+
 
 var last_generator_preset_path: String = ""
 func get_generator_preset_path() -> String:
@@ -191,8 +198,10 @@ func get_generator_preset_path() -> String:
 			path = Const.OVERLAY_INPUT_PRESETS_DATA_PATH[overlay_preset]
 	return path
 
+
 func get_default_template() -> String:
 	return Const.TEMPLATE_PATHS[Const.TEMPLATE_TYPES.BLOB_47]
+
 
 var custom_template_path: String = ""
 func get_template_path() -> String:
@@ -200,6 +209,7 @@ func get_template_path() -> String:
 		return custom_template_path
 	else:
 		return Const.TEMPLATE_PATHS[template_type_select.selected]
+
 
 func capture_setting_values() -> Dictionary:
 	return {
@@ -229,6 +239,7 @@ func capture_setting_values() -> Dictionary:
 		"godot_autotile_type": godot_export_dialog.autotile_type
 	}
 
+
 func load_input_texture(path: String) -> String:
 	var loaded_texture: Texture = load_image_texture(path)
 	if loaded_texture == null:
@@ -240,6 +251,7 @@ func load_input_texture(path: String) -> String:
 	texture_input_container.get_node("InputInfo/InputNameLabel").text = path.get_file()
 	
 	return path
+
 
 func load_template_texture(path: String) -> String:
 	var loaded_texture: Texture = load_image_texture(path)
@@ -253,6 +265,7 @@ func load_template_texture(path: String) -> String:
 #		template_name = # we need to invert the path of loaded template to get name
 	template_texture_name.text =  template_name
 	return path
+
 
 func apply_tile_specific_settings(data: Dictionary, is_example: bool = false, exclude_keys: Array = []):
 #	generation_data = GenerationData.new(data["last_gen_preset_path"])
@@ -274,7 +287,7 @@ func apply_tile_specific_settings(data: Dictionary, is_example: bool = false, ex
 		template_load_button.disabled = true
 		template_load_button.add_to_group("really_disabled")
 	load_template_texture(data["last_template_path"])
-	generate_tile_masks()
+	generate_template_bitmasks()
 	
 	save_png_file_dialog_path = data["last_save_texture_path"]
 	save_texture_dialog.current_path = Helpers.clear_path(save_png_file_dialog_path)
@@ -294,6 +307,7 @@ func apply_tile_specific_settings(data: Dictionary, is_example: bool = false, ex
 	update_output_bg_texture_scale()
 	godot_export_dialog.load_defaults_from_settings(data)
 
+
 func apply_saved_settings(data: Dictionary):
 #	generation_data = GenerationData.new(data["last_gen_preset_path"])
 	# file dialogs
@@ -302,14 +316,15 @@ func apply_saved_settings(data: Dictionary):
 	input_file_dialog_path = data["last_texture_file_dialog_path"]
 	texture_file_dialog.current_path = Helpers.clear_path(input_file_dialog_path)
 	example_check.pressed = bool(data["use_example"])
-	
-	
+
+
 func fix_settings(loaded_settings: Dictionary, defaults: Dictionary) -> Dictionary:
 	var fixed_settings: Dictionary = loaded_settings.duplicate(true)
 	for key in defaults.keys():
 		if not key in fixed_settings:
 			fixed_settings[key] = defaults[key]
 	return fixed_settings
+
 
 func read_settings(settings_path: String) -> Dictionary:
 	var settings_data: Dictionary = {}
@@ -322,22 +337,27 @@ func read_settings(settings_path: String) -> Dictionary:
 	settings_file.close()
 	return settings_data
 
+
 func compute_tile_settings_path(tile_texture_path: String) -> String:
 	return Const.TILE_SETTINGS_DIR + "/" + tile_texture_path.md5_text() + ".sav"
+
 
 func create_settings():
 	var data := Const.DEFAULT_SETTINGS
 	data["program_version"] = VERSION
 	write_settings(Const.SETTINGS_PATH, data, true)
 
+
 func save_settings_for_tile(tile_texture_path: String, settings: Dictionary):
 	var tile_settings_path := compute_tile_settings_path(tile_texture_path)
 	write_settings(tile_settings_path, settings)
+
 
 func save_settings():
 	var settings_values := capture_setting_values()
 	write_settings(Const.SETTINGS_PATH, settings_values)
 	save_settings_for_tile(last_input_texture_path, settings_values)
+
 
 func write_settings(settings_path: String, settings: Dictionary, write_before_onready: bool = false):
 	if is_ready or write_before_onready:
@@ -347,6 +367,7 @@ func write_settings(settings_path: String, settings: Dictionary, write_before_on
 		save.store_string(to_json(data))
 		save.close()
 
+
 func load_settings_for_tile(tile_texture_path: String) -> Dictionary:
 	var tile_settings_path := compute_tile_settings_path(tile_texture_path)
 	if Helpers.file_exists(tile_settings_path):
@@ -355,9 +376,11 @@ func load_settings_for_tile(tile_texture_path: String) -> Dictionary:
 #		save_settings_for_tile(tile_texture_path, user_settings)
 		return {}
 
+
 func load_fixed_settings(tile_texture_path: String, fix_with: Dictionary = Const.DEFAULT_SETTINGS) -> Dictionary:
 	var tile_settings_data := load_settings_for_tile(tile_texture_path)
 	return fix_settings(tile_settings_data, fix_with)
+
 
 # User settings must have "program version" bigger than 
 # Const.MIN_SETTINGS_COMPATIBLE_VERSION otherwise Const.DEFAULT_SETTINGS are used.
@@ -380,10 +403,12 @@ func load_settings():
 	saved_settings_data = fix_settings(saved_settings_data, Const.DEFAULT_SETTINGS)
 	apply_saved_settings(saved_settings_data)
 
+
 func check_input_texture() -> bool:
 	if not is_instance_valid(texture_in.texture):
 		return false
 	return true
+
 
 func check_template_texture() -> bool:
 	if not is_instance_valid(template_texture.texture):
@@ -393,9 +418,11 @@ func check_template_texture() -> bool:
 		return false
 	return true
 
+
 func compute_template_size() -> Vector2:
 	var template_image: Image = template_texture.texture.get_data()
 	return template_image.get_size() / Const.TEMPLATE_TILE_SIZE
+
 
 func get_template_has_tile(template_image: Image, x: int, y: int) -> bool:
 	template_image.lock()
@@ -404,6 +431,7 @@ func get_template_has_tile(template_image: Image, x: int, y: int) -> bool:
 	var has_tile: bool = not template_image.get_pixel(pixel_x, pixel_y).is_equal_approx(Color.white)
 	template_image.unlock()
 	return has_tile
+
 
 func get_template_mask_value(template_image: Image, x: int, y: int) -> int:
 	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS
@@ -417,10 +445,12 @@ func get_template_mask_value(template_image: Image, x: int, y: int) -> int:
 	template_image.unlock()
 	return mask_value
 
+
 func clear_generation_mask():
-	tile_masks = []
+	
 	for label in template_texture.get_children():
 		label.queue_free()
+
 
 func mark_template_tile(mask_value: int, mask_position: Vector2, is_text: bool = false):
 	if is_text:
@@ -440,20 +470,30 @@ func mark_template_tile(mask_value: int, mask_position: Vector2, is_text: bool =
 					mask_marker.texture = preload("res://assets/template_marker.png")
 					template_texture.add_child(mask_marker)
 
-func generate_tile_masks():
+
+func generate_template_bitmasks():
 	clear_generation_mask()
 	if not check_template_texture():
 		report_error("Error: Wrong template texture")
 		return
 	template_size = compute_template_size()
+	tiles_by_bitmasks.clear()
 	var template_image: Image = template_texture.texture.get_data()
 	for x in range(template_size.x):
 		for y in range(template_size.y):
-			var mask_value: int = get_template_mask_value(template_image, x, y)
+			var mask: int = get_template_mask_value(template_image, x, y)
 			var has_tile: bool = get_template_has_tile(template_image, x, y)
-			tile_masks.append({"mask": mask_value, "position": Vector2(x, y), "has_tile": has_tile})
-			mark_template_tile(mask_value, Vector2(x, y), true)
-#			mark_template_tile(godot_mask_value, Vector2(x, y), false)
+			if has_tile:
+				if not tiles_by_bitmasks.has(mask):
+					tiles_by_bitmasks[mask] = []
+				tiles_by_bitmasks[mask].append(GeneratedTile.new(mask, Vector2(x, y)))
+#				tiles_by_bitmasks[mask].append(Vector2(x, y))
+				mark_template_tile(mask, Vector2(x, y), true)
+			
+#			tiles_by_bitmasks.append({"mask": mask_value, "position": Vector2(x, y), "has_tile": has_tile})
+#			mark_template_tile(mask_value, Vector2(x, y), true)
+#	print("bitmask: ", template_bitmasks)
+
 
 func put_to_rotation_viewport(slice: Image, rotation_key: int, is_flipped := false):
 	var flip_x := false
@@ -463,7 +503,7 @@ func put_to_rotation_viewport(slice: Image, rotation_key: int, is_flipped := fal
 			flip_x = true
 		else:
 			flip_y = true
-	var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_key]['angle']
+	var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_key]["angle"]
 	var itex = ImageTexture.new()
 	itex.create_from_image(slice, 0)
 	rotated_texture_in_viewport.texture = itex
@@ -472,6 +512,7 @@ func put_to_rotation_viewport(slice: Image, rotation_key: int, is_flipped := fal
 	rotated_texture_in_viewport.material.set_shader_param("is_flipped_y", flip_y)
 	var is_flow_map: bool = get_color_process() == Const.COLOR_PROCESS_TYPES.FLOW_MAP
 	rotated_texture_in_viewport.material.set_shader_param("is_flow_map", is_flow_map)
+
 
 func get_from_rotation_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
 	var image := Image.new()
@@ -485,6 +526,7 @@ func get_from_rotation_viewport(image_fmt: int, resize_factor: float = 1.0) -> I
 		var interpolation: int = Image.INTERPOLATE_NEAREST if not smoothing_check.pressed else Image.INTERPOLATE_LANCZOS
 		image.resize(int(size.x * resize_factor), int(size.y * resize_factor), interpolation)
 	return image
+
 
 func get_color_process() -> int:
 	return color_process_select.selected
@@ -572,13 +614,13 @@ func generate_corner_slices():
 			for rot_index in Const.ROTATION_SHIFTS.size():
 				var rotation_key: int = Const.ROTATION_SHIFTS.keys()[rot_index]
 				put_to_rotation_viewport(slice, rotation_key, false)
-				yield(VisualServer, 'frame_post_draw')
+				yield(VisualServer, "frame_post_draw")
 				var processed_slice: Image = get_from_rotation_viewport(image_fmt, resize_factor)
 				append_to_debug_image(debug_image, processed_slice, output_slice_size, 
 					Vector2((x* input_max_random_variants + random_variant_y) * output_slice_size,
 					2 * rot_index * output_slice_size))
 				put_to_rotation_viewport(slice, rotation_key, true)
-				yield(VisualServer, 'frame_post_draw')
+				yield(VisualServer, "frame_post_draw")
 				var processed_flipped_slice : Image = get_from_rotation_viewport(image_fmt, resize_factor)
 				append_to_debug_image(debug_image, processed_flipped_slice, output_slice_size, 
 					Vector2((x* input_max_random_variants + random_variant_y) * output_slice_size,
@@ -609,15 +651,16 @@ func make_from_corners():
 	var out_image_size: Vector2 = template_size * tile_size
 	out_image_size += (template_size - Vector2.ONE) * output_tile_offset
 	out_image.create(int(out_image_size.x), int(out_image_size.y), false, image_fmt)
-	var preset: Array = generation_data.get_preset()
-	for mask in tile_masks:
-		var tile_position: Vector2 = mask['position'] * (tile_size + output_tile_offset)
-		if mask["has_tile"]: # don't draw only center
+	var preset: Array = generation_data.get_ruleset()
+	for mask in tiles_by_bitmasks:
+		for tile in tiles_by_bitmasks[mask]:
+			var translated_tile_position: Vector2 = tile.position_in_template * (tile_size + output_tile_offset)
+	#		if mask["has_tile"]: # don't draw only center
 			for place_mask in preset:
 				var allowed_rotations: Array = Helpers.get_allowed_mask_rotations(
 						place_mask["in_mask"]["positive"], 
 						place_mask["in_mask"]["negative"], 
-						mask['mask'],
+						tile.mask,
 						place_mask["rotation_offset"])
 				for rotation in allowed_rotations:
 					var out_tile = place_mask["out_tile"]
@@ -629,7 +672,7 @@ func make_from_corners():
 					var intile_offset : Vector2 = Const.ROTATION_SHIFTS[init_rotation]["vector"] * slice_size
 					if is_flipped: 
 						intile_offset = Const.ROTATION_SHIFTS[Helpers.rotate_mask_cw(init_rotation)]["vector"] * slice_size
-					out_image.blit_rect(slice_image, slice_rect, tile_position + intile_offset)
+					out_image.blit_rect(slice_image, slice_rect, translated_tile_position + intile_offset)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image, 0)
 	set_output_texture(itex)
@@ -694,7 +737,7 @@ func get_from_overlay_viewport(image_fmt: int, resize_factor: float = 1.0) -> Im
 
 
 func generate_overlayed_tiles():
-	input_overlayed_tiles = []
+	rendered_tiles.clear()
 	var output_tile_size: int = get_output_tile_size()
 	var input_image: Image = texture_in.texture.get_data()
 	var min_input_tiles: Vector2 = generation_data.get_min_input_size()
@@ -719,12 +762,12 @@ func generate_overlayed_tiles():
 		overlay_viewport.size = new_viewport_size
 		overlay_texture_in_viewport.rect_size = new_viewport_size
 #	var image_input_fmt: int = input_image.get_format()
-	var image_fmt: int = overlay_viewport.get_texture().get_data().get_format()
+#	var image_fmt: int = overlay_viewport.get_texture().get_data().get_format()
 	var debug_image := Image.new()
 #	var color_process: int = get_color_process()
 	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY)
 #	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY) * 2
-	debug_image.create(int(debug_texture_size.x) * max_random_variants, int(debug_texture_size.y), false, image_fmt)
+	debug_image.create(int(debug_texture_size.x) * max_random_variants, int(debug_texture_size.y), false, Image.FORMAT_RGBA8)
 	var overlay_rate: float = overlay_merge_rate_slider.value
 	var overlap_rate: float = overlay_overlap_slider.value
 	var preset: Array = generation_data.get_preset()
@@ -735,7 +778,7 @@ func generate_overlayed_tiles():
 		var tile_alternatives: Array = []
 		for y in range(max_random_variants):
 			var tile := Image.new()
-			tile.create(input_tile_size, input_tile_size, false, image_fmt)
+			tile.create(input_tile_size, input_tile_size, false, Image.FORMAT_RGBA8)
 			var copy_rect := Rect2(x * input_tile_size, y * input_tile_size, input_tile_size, input_tile_size)
 			tile.blit_rect(input_image, copy_rect, Vector2.ZERO)
 			tile_alternatives.append(tile)
@@ -747,30 +790,35 @@ func generate_overlayed_tiles():
 	var index: int = 0 
 	for data in preset:
 		var int_variants: Array = []
-		for variant in data["mask_variants"]:
-			int_variants.append(int(variant))
+		
 		# TODO: fix - на самом деле это не зависит от max_random_variants
 		# переделать - генерировать каждый тайл отдельно, а не предгененировать
 		var result_tile_variants: Array = []
 		for random_variant_index in range(max_random_variants):
 			start_overlay_processing(data, input_tiles, overlay_rate, overlap_rate, overlap_vectors, overlap_vector_rotations)
-			yield(VisualServer, 'frame_post_draw')
-			var overlayed_tile: Image = get_from_overlay_viewport(image_fmt, resize_factor)
+			yield(VisualServer, "frame_post_draw")
+			var overlayed_tile: Image = get_from_overlay_viewport(Image.FORMAT_RGBA8, resize_factor)
 			result_tile_variants.append(overlayed_tile)
 			# warning-ignore:integer_division		
 			append_to_debug_image(debug_image, overlayed_tile, output_tile_size, 
 				Vector2((index % 4 + 4 * random_variant_index) * output_tile_size, (index / 4) * output_tile_size))
-		input_overlayed_tiles.append({
-			"tile_image_variants": result_tile_variants,
-			"mask_variants": int_variants
-		})
+		for variant in data["mask_variants"]:
+			rendered_tiles[int(variant)] = result_tile_variants
+		
+#		rendered_tiles.append({
+#			"tile_image_variants": result_tile_variants,
+#			"mask_variants": int_variants
+#		})
 		index += 1
 	overlay_texture_in_viewport.hide()
 	emit_signal("input_image_processed")
 
+
 func make_from_overlayed():
+	print("make ", rendered_tiles.size())
 	set_output_texture(null)
-	if input_overlayed_tiles.size() == 0:
+	if rendered_tiles.size() == 0:
+		unblock_ui()
 		return
 	var tile_size: int = get_output_tile_size()
 	var new_viewport_size := Vector2(tile_size, tile_size)
@@ -781,39 +829,48 @@ func make_from_overlayed():
 	
 #	var color_process: int = get_color_process()
 	var out_image := Image.new()
-	var first_tile_image: Image = input_overlayed_tiles[0]["tile_image_variants"][0]
-	var image_fmt: int = first_tile_image.get_format()
+#	var first_tile_image: Image = rendered_tiles[0]["tile_image_variants"][0]
+#	var image_fmt: int = first_tile_image.get_format()
 #	var out_image_fmt: int = rotate_viewport.get_texture().get_data().get_format()
 	var out_image_size: Vector2 = template_size * tile_size
 	out_image_size += (template_size - Vector2.ONE) * output_tile_offset
-	out_image.create(int(out_image_size.x), int(out_image_size.y), false, image_fmt)
+	out_image.create(int(out_image_size.x), int(out_image_size.y), false, Image.FORMAT_RGBA8)
 #	var preset: Array = generation_data.get_preset()
 	var tile_rect := Rect2(0, 0, tile_size, tile_size)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image, 0)
-	var masks_use_count: Dictionary = {}
-	for mask in tile_masks:
-		if not mask["has_tile"]:
-			continue
-		var mask_value = mask["mask"]
-		if masks_use_count.has(mask_value):
-			masks_use_count[mask_value] += 1
-			if masks_use_count[mask_value] > input_overlayed_tiles[0]["tile_image_variants"].size() - 1:
-				masks_use_count[mask_value] = 0
-		else:
-			masks_use_count[mask_value] = 0
-		var tile_variant_index: int = masks_use_count[mask_value]
-		var tile_position: Vector2 = mask["position"] * (tile_size + output_tile_offset)
-		for tile_data in input_overlayed_tiles:
-			var variant_index: int = tile_data["mask_variants"].find(mask_value)
-			if variant_index != -1:
-				out_image.blit_rect(tile_data["tile_image_variants"][tile_variant_index], tile_rect, tile_position)
-				itex.set_data(out_image)
-				set_output_texture(itex)
+#	var masks_use_count: Dictionary = {}
+	for mask in tiles_by_bitmasks.keys():
+#		assert(tiles_by_bitmasks[mask_value].size() == rendered_tiles[mask_value].size())
+		for tile_variant_index in range(tiles_by_bitmasks[mask].size()):
+#			if masks_use_count.has(mask_value):
+#				masks_use_count[mask_value] += 1
+#				if masks_use_count[mask_value] > rendered_tiles[mask_value].size() - 1:
+#					masks_use_count[mask_value] = 0
+#			else:
+#				masks_use_count[mask_value] = 0
+#			var tile_variant_index: int = masks_use_count[mask_value]
+			var tile: GeneratedTile = tiles_by_bitmasks[mask][tile_variant_index]
+			var tile_position: Vector2 = tile.position_in_template * (tile_size + output_tile_offset)
+#			rendered_tiles[mask_value][tile_variant_index]
+#			print("mask: ", mask, " ", tile.mask, " ", tile.image)
+			if tile.image == null:
+				continue
+			out_image.blit_rect(tile.image, tile_rect, tile_position)
+			itex.set_data(out_image)
+			set_output_texture(itex)
+#		for tile_data in rendered_tiles:
+#			var variant_index: int = tile_data["mask_variants"].find(mask_value)
+#			if variant_index != -1:
+#				out_image.blit_rect(tile_data["tile_image_variants"][tile_variant_index], tile_rect, tile_position)
+#				itex.set_data(out_image)
+#				set_output_texture(itex)
 	rotated_texture_in_viewport.hide()
 	unblock_ui()
 
+
 func preprocess_input_image():
+	print("preprocess")
 	block_ui()
 	output_offset_spinbox.value = int(output_tile_offset)
 	rotated_texture_in_viewport.show()
@@ -824,9 +881,42 @@ func preprocess_input_image():
 	var generation_type: int = generation_type_select.selected
 	match generation_type:
 		Const.INPUT_TYPES.CORNERS:
+			print("corners")
 			generate_corner_slices()
 		Const.INPUT_TYPES.OVERLAY:
-			generate_overlayed_tiles()
+			print("overlay")
+#			generate_overlayed_tiles()
+			render_tiles()
+
+
+func render_tiles():
+	generate_template_bitmasks()
+	
+	var input_image: Image = texture_in.texture.get_data()
+	var min_input_tiles: Vector2 = generation_data.get_min_input_size()
+	var input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
+	set_input_tile_size(input_tile_size, input_image)
+	# warning-ignore:integer_division
+	overlay_merge_rate_slider.quantize(int(input_tile_size / 2))
+	# warning-ignore:integer_division
+	overlay_overlap_slider.quantize(int(input_tile_size / 2))
+	
+	
+	var renderer: TileRenderer = $TileRenderer
+#	var tile_size := get_output_tile_size()
+	renderer.start_render(generation_data, Vector2(input_tile_size, input_tile_size), 
+		texture_in.texture.get_data(), tiles_by_bitmasks)
+	renderer.connect("tiles_ready", self, "on_tiles_rendered")
+	
+
+
+func on_tiles_rendered():
+	var renderer: TileRenderer = $TileRenderer
+	renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
+	print("tiles out: ", renderer.tiles.size())
+	rendered_tiles = renderer.tiles
+	emit_signal("input_image_processed")
+
 
 func set_output_texture(texture: Texture):
 	out_texture.texture = texture
@@ -837,6 +927,7 @@ func set_output_texture(texture: Texture):
 	else:
 		output_control.rect_min_size = Vector2.ZERO
 
+
 func make_output_texture():
 	var generation_type: int = generation_type_select.selected
 	set_output_texture(null)
@@ -846,19 +937,21 @@ func make_output_texture():
 		Const.INPUT_TYPES.OVERLAY:
 			make_from_overlayed()
 	update_output_bg_texture_scale()
-	
-	
+
 
 func exit():
-	tile_masks.empty()
+	tiles_by_bitmasks.empty()
 	get_tree().quit()
+
 
 func _on_CloseButton_pressed():
 	exit()
-	
+
+
 func _on_Save_pressed():
 	save_texture_dialog.invalidate()
 	save_texture_dialog.popup_centered()
+
 
 func load_image_texture(path: String) -> Texture:
 	if path.begins_with("res://"):
@@ -877,6 +970,7 @@ func load_image_texture(path: String) -> Texture:
 		image_texture.create_from_image(image, 0)
 		return image_texture
 
+
 func _on_TextureDialog_file_selected(path):
 	input_file_dialog_path = Helpers.clear_path(path)
 	example_check.pressed = false
@@ -888,24 +982,29 @@ func _on_TextureDialog_file_selected(path):
 	preprocess_input_image()
 	save_settings()
 
+
 func _on_TemplateDialog_file_selected(path):
 	template_file_dialog_path = Helpers.clear_path(path)
 	load_template_texture(path)
-	generate_tile_masks()
+	generate_template_bitmasks()
 	make_output_texture()
 	save_settings()
+
 
 func _on_TemplateButton_pressed():
 	template_file_dialog.invalidate()
 	template_file_dialog.popup_centered()
 
+
 func _on_Button_pressed():
 	texture_file_dialog.invalidate()
 	texture_file_dialog.popup_centered()
 
+
 func save_texture_png(path: String):
 	save_png_file_dialog_path = Helpers.clear_path(path)
 	out_texture.texture.get_data().save_png(path)
+
 
 func _on_SaveTextureDialog_file_selected(path: String):
 	if not path.get_file().split(".")[0].empty() and path.get_file().is_valid_filename():
@@ -913,7 +1012,8 @@ func _on_SaveTextureDialog_file_selected(path: String):
 	else:
 		report_error("Error: %s is not a valid filename" % path.get_file())
 	save_settings()
-	
+
+
 func setup_input_type(index: int):
 	match index:
 		Const.INPUT_TYPES.CORNERS:
@@ -934,6 +1034,7 @@ func setup_input_type(index: int):
 			for node in get_tree().get_nodes_in_group("overlay_settings"):
 				node.show()
 
+
 func _on_InputType_item_selected(index: int):
 	if not is_ready:
 		return
@@ -942,17 +1043,19 @@ func _on_InputType_item_selected(index: int):
 		load_input_texture(generation_data.get_example_path())
 		var tile_settings_data := load_fixed_settings(generation_data.get_example_path())
 		apply_tile_specific_settings(tile_settings_data, true)
-
 	preprocess_input_image()
 	save_settings()
+
 
 func _on_ColorProcessType_item_selected(index):
 	preprocess_input_image()
 	save_settings()
 
+
 func _on_ReloadButton_pressed():
 	load_input_texture(last_input_texture_path)
 	preprocess_input_image()
+
 
 func _on_TemplateOption_item_selected(index):
 	if index == Const.TEMPLATE_TYPES.CUSTOM:
@@ -963,14 +1066,16 @@ func _on_TemplateOption_item_selected(index):
 		template_load_button.disabled = true
 		template_load_button.add_to_group("really_disabled")
 		load_template_texture(Const.TEMPLATE_PATHS[index])
-		generate_tile_masks()
-	make_output_texture()
+		generate_template_bitmasks()
+	rebuild_output()
 	save_settings()
+
 
 func set_corner_generation_data(index: int):
 	last_generator_preset_path = Const.CORNERS_INPUT_PRESETS_DATA_PATH[index]
 	generation_data = GenerationData.new(last_generator_preset_path)
 	example_texture.texture = load(generation_data.get_example_path())
+
 
 func _on_CornersOptionButton_item_selected(index: int):
 	if not is_ready:
@@ -984,10 +1089,12 @@ func _on_CornersOptionButton_item_selected(index: int):
 	preprocess_input_image()
 	save_settings()
 
+
 func set_overlay_generation_data(index: int):
 	last_generator_preset_path = Const.OVERLAY_INPUT_PRESETS_DATA_PATH[index]
 	generation_data = GenerationData.new(last_generator_preset_path)
 	example_texture.texture = load(generation_data.get_example_path())
+
 
 func _on_OverlayOptionButton_item_selected(index):
 	set_overlay_generation_data(index)
@@ -999,6 +1106,7 @@ func _on_OverlayOptionButton_item_selected(index):
 		apply_tile_specific_settings(tile_settings_data,  true)
 	preprocess_input_image()
 	save_settings()
+
 
 func get_debug_image_rect_size(input_type: int) -> Vector2:
 	var output_tile_size: int = get_output_tile_size()
@@ -1016,6 +1124,7 @@ func get_debug_image_rect_size(input_type: int) -> Vector2:
 			size.y = 4 * output_tile_size  
 	return size
 
+
 func update_output_bg_texture_scale():
 	var tile_size: int = get_output_tile_size()
 	var output_scale_factor: float = float(tile_size) / float(Const.DEFAULT_OUTPUT_SIZE)
@@ -1030,10 +1139,12 @@ func update_output_bg_texture_scale():
 #	debug_input_texture_bg.rect_size = debug_input_control.rect_size / output_scale_factor
 	debug_input_texture_bg.rect_size = Const.FULL_HD / output_scale_factor
 
+
 func _on_SizeOptionButton_item_selected(index):
 #	update_output_bg_texture_scale()
 	preprocess_input_image()
 	save_settings()
+
 
 func block_ui():
 	is_ui_blocked = true
@@ -1047,7 +1158,8 @@ func block_ui():
 		if node is Label:
 			node.add_color_override("font_color", Color(0.5,0.5,0.5))
 #			font_color = Color(0.5, 0.5, 0.5, 0.5)
-	
+
+
 func unblock_ui():
 	is_ui_blocked = false
 	for node in get_tree().get_nodes_in_group("blockable"):
@@ -1064,13 +1176,15 @@ func unblock_ui():
 			preprocess_input_image()
 	is_slider_changed = false
 
+
 func _on_RateSlider_released(value):
 	if not is_ui_blocked:
 		preprocess_input_image()
 		save_settings()
 #	else:
 #		is_slider_changed = true
-		
+
+
 func rebuild_output():
 	var generation_type: int = generation_type_select.selected
 	match generation_type:
@@ -1079,25 +1193,31 @@ func rebuild_output():
 		Const.INPUT_TYPES.OVERLAY:
 			preprocess_input_image()
 
+
 func apply_seed(new_seed: String):
 	rand_seed_value.text = str(int(new_seed))
 	rebuild_output()
 	save_settings()
 
+
 func _on_SeedLineEdit_text_entered(new_text):
 	apply_seed(new_text)
-	
+
+
 func _on_SeedButton_pressed():
 	apply_seed(rand_seed_value.text)
+
 
 func _on_OverlapSlider_released(value):
 	if not is_ui_blocked:
 		preprocess_input_image()
 		save_settings()
 
+
 func _on_Smoothing_button_up():
 	preprocess_input_image()
 	save_settings()
+
 
 func set_random_ui_enabled(tile_variants: int):
 	rand_seed_header.text = " Detected %s tile variants:" % str(tile_variants)
@@ -1116,6 +1236,7 @@ func set_random_ui_enabled(tile_variants: int):
 #		rand_seed_header.add_color_override("font_color", Color(0.5, 0.5, 0.5))
 		set_random_seed_ui_enabled(false)
 
+
 func set_random_seed_ui_enabled(is_enabled: bool):
 	if is_enabled:
 		if rand_seed_value.is_in_group("really_disabled"):
@@ -1131,6 +1252,7 @@ func set_random_seed_ui_enabled(is_enabled: bool):
 		rand_seed_use_button.disabled = true
 		rand_seed_use_button.add_to_group("really_disabled")
 
+
 func _on_RandomCheckButton_button_up():
 	set_random_seed_ui_enabled(rand_seed_check.pressed)
 	if not rand_seed_check.pressed:
@@ -1138,25 +1260,31 @@ func _on_RandomCheckButton_button_up():
 	rebuild_output()
 	save_settings()
 
+
 func reset_saved():
 	saved_tile_names = []
 	saved_texture_rects = []
+
 
 func report_error(error_text: String):
 	print(error_text)
 	popup_dialog.dialog_text += error_text + "\n"
 	popup_dialog.popup_centered()
 
+
 func _on_PopupDialog_confirmed():
 	popup_dialog.dialog_text = ""
+
 
 func _on_OffsetButton_pressed():
 	output_tile_offset = int(output_offset_spinbox.get_line_edit().text)
 	rebuild_output()
 	save_settings()
-	
+
+
 func offset_lineedit_enter(_value: String):
 	_on_OffsetButton_pressed()
+
 
 func _on_ExampleCheckButton_toggled(button_pressed: bool):
 	if not is_ready:
@@ -1169,19 +1297,23 @@ func _on_ExampleCheckButton_toggled(button_pressed: bool):
 	preprocess_input_image()
 	save_settings()
 
+
 func _on_testpopupButton_pressed():
 	godot_export_dialog.popup_centered()
+
 
 func show_blocking_overlay():
 	$BlockingOverlay.show()
 
+
 func hide_blocking_overlay():
 	$BlockingOverlay.hide()
+
 
 func _on_GodotExportButton_pressed():
 	godot_export_dialog.start_export_dialog(
 		get_output_tile_size(),
-		tile_masks,
+		tiles_by_bitmasks,
 		out_texture.texture.get_data().get_size(),
 		current_texture_basename,
 		output_tile_offset,

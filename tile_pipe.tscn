@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://tile_pipe.gd" type="Script" id=1]
 [ext_resource path="res://overlay.shader" type="Shader" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://header_font.tres" type="DynamicFont" id=10]
 [ext_resource path="res://exporters/Godot_exporter.tscn" type="PackedScene" id=11]
 [ext_resource path="res://assets/Godot.svg" type="Texture" id=12]
+[ext_resource path="res://TileRenderer.tscn" type="PackedScene" id=13]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 4 )
@@ -57,7 +58,7 @@ Label/constants/shadow_offset_y = 1
 Label/fonts/font = SubResource( 3 )
 Label/styles/normal = null
 
-[node name="Node" type="Control"]
+[node name="Main" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 1366, 768 )
@@ -67,6 +68,8 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="TileRenderer" parent="." instance=ExtResource( 13 )]
 
 [node name="TextureDialog" type="FileDialog" parent="."]
 margin_left = 7.0

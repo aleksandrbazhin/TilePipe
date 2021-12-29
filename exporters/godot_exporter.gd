@@ -42,7 +42,7 @@ var autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
 # data passed from main window
 var current_texture_image := Image.new()
 var current_tile_size: int
-var current_tile_masks: Array
+var current_tile_masks: Dictionary
 var current_texture_size: Vector2
 var current_tile_spacing: int
 
@@ -65,15 +65,15 @@ onready var save_confirm_dialog: ConfirmationDialog = $SaveConfirmationDialog
 onready var overwrite_tileset_select: CheckButton = $VBox/HBoxTileset/CheckButton
 
 
-func convert_mask_to_godot(tile_mask: int, has_center: bool = true,
+func convert_mask_to_godot(tile_mask: int, 
 		godot_autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3) -> int:
 	var godot_mask: int = 0
 	match autotile_type:
 		Const.GODOT_AUTOTILE_TYPE.BLOB_3x3, Const.GODOT_AUTOTILE_TYPE.FULL_3x3:
 			for mask_name in GODOT_MASK_3x3.keys():
 				if mask_name == "CENTER":
-					if has_center:
-						godot_mask += GODOT_MASK_3x3["CENTER"]
+#					if has_center:
+					godot_mask += GODOT_MASK_3x3["CENTER"]
 				else:
 					var check_bit: int = Const.TILE_MASK[mask_name]
 					if tile_mask & check_bit != 0:
@@ -221,7 +221,7 @@ func make_texture_string(tile_texture_path: String, texture_id: int = 1) -> Stri
 	return "[ext_resource path=\"%s\" type=\"Texture\" id=%d]\n" % [texture_relative_path, texture_id]
 
 
-func make_tile_data_string(tile_size: int, tile_masks: Array, 
+func make_tile_data_string(tile_size: int, tile_masks: Dictionary, 
 		texture_size: Vector2, new_tile_name: String, 
 		tile_spacing: int, new_autotile_type: int, 
 		tile_id: int, texture_id: int) -> String:
@@ -229,10 +229,12 @@ func make_tile_data_string(tile_size: int, tile_masks: Array,
 	var mask_out_array: PoolStringArray = []
 #	check_masks_with_warning(tile_masks, new_autotile_type)
 	var line_beginning := str(tile_id) + "/"
-	for mask in tile_masks:
-		mask_out_array.append("Vector2 ( %d, %d )" % [mask['position'].x, mask['position'].y])
-		var godot_mask: int = convert_mask_to_godot(mask['mask'], mask['has_tile'], new_autotile_type)
-		mask_out_array.append(str(godot_mask))
+	for mask in tile_masks.keys():
+		for tile_position in tile_masks[mask]:
+			mask_out_array.append("Vector2 ( %d, %d )" % [tile_position.x, tile_position.y])
+			var godot_mask: int = convert_mask_to_godot(mask, new_autotile_type)
+			mask_out_array.append(str(godot_mask))
+	
 	out_string += line_beginning + "name = \"%s\"\n" % new_tile_name
 	out_string += line_beginning + "texture = ExtResource( %d )\n" % texture_id
 	out_string += line_beginning + "tex_offset = Vector2( 0, 0 )\n"
@@ -259,7 +261,7 @@ func make_tile_data_string(tile_size: int, tile_masks: Array,
 	return out_string
 
 
-func make_autotile_resource_data(tile_size: int, tile_masks: Array, 
+func make_autotile_resource_data(tile_size: int, tile_masks: Dictionary, 
 		texture_size: Vector2, new_texture_path: String, new_tile_name: String, 
 		tile_spacing: int, new_autotile_type: int) -> String:
 	
@@ -469,13 +471,13 @@ func clear_file_path(path: String) -> String:
 		return Helpers.get_default_dir_path()
 
 
-func start_export_dialog(new_tile_size: int, new_tile_masks: Array, 
+func start_export_dialog(new_tile_size: int, new_tile_masks: Dictionary, 
 		new_texture_size: Vector2, new_tile_base_name: String, 
 		new_tile_spacing: int, texture_image: Image):
 	current_tile_size = new_tile_size
 	current_texture_size = new_texture_size
 	current_tile_spacing = new_tile_spacing
-	current_tile_masks = new_tile_masks.duplicate(true)
+	current_tile_masks = new_tile_masks
 	current_texture_image.copy_from(texture_image)
 	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
 	if last_generated_tile_name.empty() or (last_generated_tile_name != generated_tile_name and tile_name.is_valid_filename()):
