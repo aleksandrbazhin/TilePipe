@@ -1,7 +1,7 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://tile_pipe.gd" type="Script" id=1]
-[ext_resource path="res://overlay.shader" type="Shader" id=2]
+[ext_resource path="res://tile_shader_material.tres" type="Material" id=2]
 [ext_resource path="res://BlockableSlider.gd" type="Script" id=3]
 [ext_resource path="res://slice_process.shader" type="Shader" id=4]
 [ext_resource path="res://assets/IBMPlexSans-Medium.ttf" type="DynamicFontData" id=5]
@@ -19,28 +19,6 @@ shader = ExtResource( 4 )
 shader_param/rotation = 0.0
 shader_param/is_flipped_x = false
 shader_param/is_flipped_y = false
-shader_param/is_flow_map = false
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = ExtResource( 2 )
-shader_param/rotation_1 = null
-shader_param/rotation_2 = null
-shader_param/rotation_4 = null
-shader_param/rotation_8 = null
-shader_param/rotation_16 = null
-shader_param/rotation_32 = null
-shader_param/rotation_64 = null
-shader_param/rotation_128 = null
-shader_param/ovelap_direction_1 = null
-shader_param/ovelap_direction_2 = null
-shader_param/ovelap_direction_4 = null
-shader_param/ovelap_direction_8 = null
-shader_param/ovelap_direction_16 = null
-shader_param/ovelap_direction_32 = null
-shader_param/ovelap_direction_64 = null
-shader_param/ovelap_direction_128 = null
-shader_param/overlay_rate = null
-shader_param/overlap = null
 shader_param/is_flow_map = false
 
 [sub_resource type="DynamicFont" id=3]
@@ -671,7 +649,7 @@ render_target_update_mode = 3
 gui_disable_input = true
 
 [node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control/OverlayViewport"]
-material = SubResource( 2 )
+material = ExtResource( 2 )
 stretch_mode = 3
 
 [node name="InViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]

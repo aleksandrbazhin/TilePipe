@@ -1,0 +1,25 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://overlay.shader" type="Shader" id=1]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/rotation_1 = null
+shader_param/rotation_2 = null
+shader_param/rotation_4 = null
+shader_param/rotation_8 = null
+shader_param/rotation_16 = null
+shader_param/rotation_32 = null
+shader_param/rotation_64 = null
+shader_param/rotation_128 = null
+shader_param/ovelap_direction_1 = null
+shader_param/ovelap_direction_2 = null
+shader_param/ovelap_direction_4 = null
+shader_param/ovelap_direction_8 = null
+shader_param/ovelap_direction_16 = null
+shader_param/ovelap_direction_32 = null
+shader_param/ovelap_direction_64 = null
+shader_param/ovelap_direction_128 = null
+shader_param/overlay_rate = null
+shader_param/overlap = null
+shader_param/is_flow_map = false

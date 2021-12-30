@@ -681,7 +681,7 @@ func make_from_corners():
 
 #slice: Image, rotation_key: int, color_process: int,
 #		is_flipped := false
-func start_overlay_processing(data: Dictionary, input_tile_parts: Array, overlay_rate: float, overlap_rate: float, 
+func start_tile_overlay_processing(data: Dictionary, input_tile_parts: Array, overlay_rate: float, overlap_rate: float, 
 		overlap_vectors: Array, overlap_vectors_is_rotatable: Array):
 	var random_center_index: int = 0
 	var center_image: Image = input_tile_parts[0][random_center_index]
@@ -748,7 +748,9 @@ func generate_overlayed_tiles():
 	overlay_merge_rate_slider.quantize(int(input_tile_size / 2))
 	# warning-ignore:integer_division
 	overlay_overlap_slider.quantize(int(input_tile_size / 2))
-	
+	var merge_rate: float = overlay_merge_rate_slider.value
+	var overlap_rate: float = overlay_overlap_slider.value
+
 	var max_random_variants: int = get_input_image_random_max_variants()
 	set_random_ui_enabled(max_random_variants)
 	if rand_seed_check.pressed:
@@ -768,8 +770,7 @@ func generate_overlayed_tiles():
 	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY)
 #	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY) * 2
 	debug_image.create(int(debug_texture_size.x) * max_random_variants, int(debug_texture_size.y), false, Image.FORMAT_RGBA8)
-	var overlay_rate: float = overlay_merge_rate_slider.value
-	var overlap_rate: float = overlay_overlap_slider.value
+
 	var preset: Array = generation_data.get_preset()
 	
 	# input tile variants
@@ -795,7 +796,8 @@ func generate_overlayed_tiles():
 		# переделать - генерировать каждый тайл отдельно, а не предгененировать
 		var result_tile_variants: Array = []
 		for random_variant_index in range(max_random_variants):
-			start_overlay_processing(data, input_tiles, overlay_rate, overlap_rate, overlap_vectors, overlap_vector_rotations)
+			start_tile_overlay_processing(data, input_tiles, merge_rate, overlap_rate, overlap_vectors, 
+				overlap_vector_rotations)
 			yield(VisualServer, "frame_post_draw")
 			var overlayed_tile: Image = get_from_overlay_viewport(Image.FORMAT_RGBA8, resize_factor)
 			result_tile_variants.append(overlayed_tile)
@@ -894,18 +896,23 @@ func render_tiles():
 	
 	var input_image: Image = texture_in.texture.get_data()
 	var min_input_tiles: Vector2 = generation_data.get_min_input_size()
-	var input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
-	set_input_tile_size(input_tile_size, input_image)
+	var old_style_input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
+	var input_tile_size := Vector2(old_style_input_tile_size, old_style_input_tile_size)
+	var old_style_ouput_tile_size := get_output_tile_size()
+	var output_tile_size := Vector2(old_style_ouput_tile_size, old_style_ouput_tile_size)
+	set_input_tile_size(old_style_input_tile_size, input_image)
 	# warning-ignore:integer_division
-	overlay_merge_rate_slider.quantize(int(input_tile_size / 2))
+	overlay_merge_rate_slider.quantize(int(old_style_input_tile_size / 2))
 	# warning-ignore:integer_division
-	overlay_overlap_slider.quantize(int(input_tile_size / 2))
-	
+	overlay_overlap_slider.quantize(int(old_style_input_tile_size / 2))
+	var merge_rate: float = overlay_merge_rate_slider.value
+	var overlap_rate: float = overlay_overlap_slider.value
 	
 	var renderer: TileRenderer = $TileRenderer
 #	var tile_size := get_output_tile_size()
-	renderer.start_render(generation_data, Vector2(input_tile_size, input_tile_size), 
-		texture_in.texture.get_data(), tiles_by_bitmasks)
+	renderer.start_render(generation_data, input_tile_size, output_tile_size,
+		texture_in.texture.get_data(), tiles_by_bitmasks, smoothing_check.pressed,
+		merge_rate, overlap_rate, rng)
 	renderer.connect("tiles_ready", self, "on_tiles_rendered")
 	
 
