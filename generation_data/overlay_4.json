@@ -8,7 +8,7 @@
 },
 "piece_overlap_vectors": [[0, 0], [-1, -1], [0, 1], [1, 1]],
 "piece_overlap_vectors_rotate": [false, false, true, false],
-"data": [
+"tile_data": [
 	{
 		"mask_variants": [64, 1, 4, 16],
 		"variant_rotations": [0, 1, 2, 3],

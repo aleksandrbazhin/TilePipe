@@ -57,7 +57,7 @@
         false,
         false
     ],
-    "data": [
+    "tile_data": [
         {
             "mask_variants": [64],
             "generate_piece_indexes": [2, 3, 4, 7, 6, 6, 0, 2],

@@ -27,7 +27,7 @@ func load_data_from_json(data_path: String) -> Dictionary:
 
 
 func get_ruleset() -> Array:
-	return data["data"]
+	return data["tile_data"]
 
 
 func get_name() -> String:
@@ -58,9 +58,7 @@ func get_example_path() -> String:
 
 func get_mask_data(mask: int) -> Dictionary:
 	for tile_data in get_ruleset():
-		print(tile_data["mask_variants"])
-		if tile_data["mask_variants"].has(mask):
-			print("Found")
+		if tile_data["mask_variants"].has(float(mask)):
 			return tile_data
 	print("Error: invalid mask '%s'" % mask)
 	return {}

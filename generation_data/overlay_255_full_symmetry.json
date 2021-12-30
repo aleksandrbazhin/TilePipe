@@ -5,7 +5,7 @@
     "min_size": {"x": 7, "y": 1},
     "piece_overlap_vectors": [[0, 0], [-1, -1], [0, 1], [1, 1], [1, 1], [1, 1], [1, 1]],
     "piece_overlap_vectors_rotate": [false, false, true, false, false, false, false],
-    "data": [
+    "tile_data": [
         {
             "mask_variants": [64],
             "generate_piece_indexes": [2, 3, 2, 3, 2, 2, 0, 2],
