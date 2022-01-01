@@ -17,11 +17,8 @@ var template
 var ruleset: GenerationData
 var input_tile_size := Vector2.ZERO
 var output_tile_size := Vector2.ZERO
-#var overlap_rate := 0.5
-#var merge_rate := 0.5
 var rng: RandomNumberGenerator
 var smoothing_enabled := false
-var resize_factor
 var ready = false
 var last_mask := 0
 # tiles[mask] = [random_variant1, random_variant2, ...]
@@ -84,9 +81,10 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 		var variant_index := 0
 		while not part_is_empty:
 			var part := Image.new()
-			part.create(input_tile_size.x, input_tile_size.y, false, Image.FORMAT_RGBA8)
+			part.create(int(input_tile_size.x), int(input_tile_size.y), false, Image.FORMAT_RGBA8)
 			if input_tile_size.y + variant_index * input_tile_size.y > input_image.get_size().y:
 				break
+			
 			var copy_rect := Rect2(part_index * input_tile_size.x, variant_index * input_tile_size.y, 
 				input_tile_size.x, input_tile_size.y)
 			part.blit_rect(input_image, copy_rect, Vector2.ZERO)
@@ -104,22 +102,18 @@ func setup_tile_render(mask: int, viewport: Viewport):
 	var random_center_index: int = 0
 	var center_image: Image = input_tile_parts[0][random_center_index]
 	var tile_rules_data: Dictionary = ruleset.get_mask_data(mask)
-	
-	var pieces_rules: Array = tile_rules_data["generate_piece_indexes"]
-	var pieces_rotations: Array = tile_rules_data["generate_piece_rotations"]
-	assert (pieces_rules.size() == 8 && pieces_rotations.size() == 8)
-	
+	var parts_rules: Array = tile_rules_data["generate_piece_indexes"]
+	var parts_rotations: Array = tile_rules_data["generate_piece_rotations"]
+	assert (parts_rules.size() == 8 && parts_rotations.size() == 8)
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image, 0)
 	var texture_rect: TextureRect = viewport.get_node("TextureRect")
 	texture_rect.texture = itex
-#	print(mask)
 	var mask_index: int = 0
 	for mask_name in Const.TILE_MASK:
-		var piece_index: int = pieces_rules[mask_index]
-#		print(mask_name, " ", piece_index)
+		var piece_index: int = parts_rules[mask_index]
 		var random_tile_index: int = rng.randi_range(0, input_tile_parts[piece_index].size() - 1)
-		var piece_rot_index: int = pieces_rotations[mask_index]
+		var piece_rot_index: int = parts_rotations[mask_index]
 		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[piece_rot_index]
 		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
 		var overlay_image := Image.new()
@@ -139,8 +133,6 @@ func setup_tile_render(mask: int, viewport: Viewport):
 			overlap_vec.y = 0.0 if overlap_vec.y == 1.0 else 1.0
 		texture_rect.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_vec)
 		mask_index += 1
-	
-	
 #	var tile := Image.new()
 #	tile.create(int(input_tile_size.x), int(input_tile_size.y), false, Image.FORMAT_RGBA8)
 #	tile.blit_rect(input_tile_parts[0][0], Rect2(0, 0, input_tile_size.x, input_tile_size.y), Vector2.ZERO)
@@ -156,7 +148,6 @@ func render_next_batch():
 			last_mask = tile.mask
 			tile.is_rendering = true
 			setup_tile_render(tile.mask, viewport)
-#			viewport.get_node("TextureRect").texture = create_tile(tile.mask)
 			viewport.set_meta("tile", tile)
 		else:
 			viewport.remove_meta("tile")
@@ -174,22 +165,12 @@ func get_next_tile() -> GeneratedTile:
 
 
 func capture_rendered_batch():
-	# TODO: переделать размер на вектор
-	var resize_factor: float = float(output_tile_size.x) / float(input_tile_size.x)
 	for viewport in render_pool:
-		var tile_texture: ViewportTexture = viewport.get_texture()
-		var image := Image.new()
-		image.create(int(input_tile_size.x), int(input_tile_size.y), false, Image.FORMAT_RGBA8)
-		image.blit_rect(
-			tile_texture.get_data(),
-			Rect2(Vector2.ZERO, input_tile_size), 
-			Vector2.ZERO)
-		if resize_factor != 1.0:
-			var interpolation: int = Image.INTERPOLATE_NEAREST if not smoothing_enabled else Image.INTERPOLATE_TRILINEAR
-			image.resize(output_tile_size.x, output_tile_size.y, interpolation)
-		if viewport.has_meta("tile") :
+		if viewport.has_meta("tile"):
 			var tile: GeneratedTile = viewport.get_meta("tile")
-			tile.image = image
+			var tile_texture: ViewportTexture = viewport.get_texture()
+			tile.capture_texture(tile_texture, output_tile_size, smoothing_enabled)
+	print("captured batch")
 
 
 func get_template_random_variants(_mask: int):
@@ -198,23 +179,12 @@ func get_template_random_variants(_mask: int):
 
 func on_render():
 	if is_rendering:
-#		var total_tiles: int = 256#ruleset.data["data"].size()
-#		print(tiles.size() , "  ", total_tiles)
 		capture_rendered_batch()
-		emit_signal("tiles_ready")
-#		var last_mask: int = int(ruleset.get_ruleset()[-1]["mask_variants"][-1])
-#		print("last_mask: ", last_mask)
-#		if tiles.has(last_mask) and tiles[last_mask].size() == get_template_random_variants(last_mask):
-##		if tiles.size() < total_tiles:
-#			render_next_batch()
-#			emit_signal("report_progress", render_progress)
-#		else:
-#			emit_signal("report_progress", 100)
-#			is_rendering = false
-#			emit_signal("tiles_ready")
-
-
-	
-	
-
-
+		if get_next_tile() != null:
+			print(get_next_tile().mask)
+			render_next_batch()
+			emit_signal("report_progress", 1)
+		else:
+			print("tiles ready")
+			is_rendering = false
+			emit_signal("tiles_ready")

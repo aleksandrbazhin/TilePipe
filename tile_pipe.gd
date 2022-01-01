@@ -790,8 +790,6 @@ func generate_overlayed_tiles():
 	var overlap_vector_rotations: Array = generation_data.get_overlap_vector_rotations()
 	var index: int = 0 
 	for data in preset:
-		var int_variants: Array = []
-		
 		# TODO: fix - на самом деле это не зависит от max_random_variants
 		# переделать - генерировать каждый тайл отдельно, а не предгененировать
 		var result_tile_variants: Array = []
@@ -854,19 +852,18 @@ func make_from_overlayed():
 #			var tile_variant_index: int = masks_use_count[mask_value]
 			var tile: GeneratedTile = tiles_by_bitmasks[mask][tile_variant_index]
 			var tile_position: Vector2 = tile.position_in_template * (tile_size + output_tile_offset)
-#			rendered_tiles[mask_value][tile_variant_index]
-#			print("mask: ", mask, " ", tile.mask, " ", tile.image)
 			if tile.image == null:
 				continue
 			out_image.blit_rect(tile.image, tile_rect, tile_position)
 			itex.set_data(out_image)
-			set_output_texture(itex)
+	
 #		for tile_data in rendered_tiles:
 #			var variant_index: int = tile_data["mask_variants"].find(mask_value)
 #			if variant_index != -1:
 #				out_image.blit_rect(tile_data["tile_image_variants"][tile_variant_index], tile_rect, tile_position)
 #				itex.set_data(out_image)
 #				set_output_texture(itex)
+	set_output_texture(itex)
 	rotated_texture_in_viewport.hide()
 	unblock_ui()
 
@@ -914,7 +911,6 @@ func render_tiles():
 		texture_in.texture.get_data(), tiles_by_bitmasks, smoothing_check.pressed,
 		merge_rate, overlap_rate, rng)
 	renderer.connect("tiles_ready", self, "on_tiles_rendered")
-	
 
 
 func on_tiles_rendered():
@@ -928,7 +924,7 @@ func on_tiles_rendered():
 func set_output_texture(texture: Texture):
 	out_texture.texture = texture
 	if texture != null:
-		var image_size: Vector2 = out_texture.texture.get_data().get_size()
+		var image_size: Vector2 = out_texture.texture.get_size()
 		out_texture.rect_size = image_size
 		output_control.rect_min_size = image_size
 	else:

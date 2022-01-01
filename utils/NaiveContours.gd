@@ -6,7 +6,8 @@ const NO_WAY := -1.0
 const SEARCH_STEP := 1.0
 const GRID_CELLS := 15
 const DISTANCE_DELTA_SQ := 16
-const LINE_ANGLE_DELTA := 0.15
+const LINE_ANGLE_DELTA := 0.1
+
 
 func find_edge_pixel(ray: Vector2, direction = DIRECTION_FORWARD) -> Vector2:
 	var result := NOT_FOUND
@@ -20,7 +21,6 @@ func find_edge_pixel(ray: Vector2, direction = DIRECTION_FORWARD) -> Vector2:
 			var test_point := Vector2(ray.x, y)
 			if direction == DIRECTION_BACK:
 				test_point.y = length - y
-#			print("p: ", test_point)
 			var pixel_a := image.get_pixelv(test_point).a
 			if prev_pixel_a == 0.0 and pixel_a != 0.0:
 				return test_point
@@ -31,20 +31,15 @@ func find_edge_pixel(ray: Vector2, direction = DIRECTION_FORWARD) -> Vector2:
 
 	elif ray.x == NO_WAY:
 		ray.y = min(ray.y, texture.get_size().y - 1)
-#		print(ray.y)
 		var image: Image = texture.get_data()
 		image.lock()
 		var prev_pixel_a := 0.0
 		var length = texture.get_size().y - 1
 		for x in range(0, length, SEARCH_STEP):
-			
 			var test_point := Vector2(x, ray.y)
-#			print(test_point)
 			if direction == DIRECTION_BACK:
 				test_point.x = length - x
-			
 			var pixel_a := image.get_pixelv(test_point).a
-#			print("p: ", test_point, " ", pixel_a)
 			if prev_pixel_a == 0.0 and pixel_a != 0.0:
 				return test_point
 			else:
@@ -60,7 +55,6 @@ func find_edge_pixel(ray: Vector2, direction = DIRECTION_FORWARD) -> Vector2:
 func _draw():
 	draw_rect(Rect2(0, 0, rect_size.x, rect_size.y), Color.darkgray)
 	draw_texture(texture, Vector2.ZERO)
-
 	var top: PoolVector2Array = []
 	var bottom: PoolVector2Array  = []
 	var left := []
@@ -73,7 +67,6 @@ func _draw():
 		point = find_edge_pixel(ray)
 		if point != NOT_FOUND:
 			top.append(point)
-		
 		ray = Vector2(NO_WAY, line * texture.get_size().y / float(GRID_CELLS))
 		point = find_edge_pixel(ray, DIRECTION_BACK)
 		if point != NOT_FOUND:
@@ -81,46 +74,28 @@ func _draw():
 		point = find_edge_pixel(ray)
 		if point != NOT_FOUND:
 			left.append(point)
-
-#	print("\nSTART")
-
 	# cutoff overlapping left and right
 	var left_start := get_side_overlap(left, top[0], DIRECTION_FORWARD)
 	var left_end := get_side_overlap(left, bottom[0], DIRECTION_BACK)
 	var right_start := get_side_overlap(right, top[-1], DIRECTION_FORWARD)
 	var right_end := get_side_overlap(right, bottom[-1], DIRECTION_BACK)
-	
 	var fixed_left := PoolVector2Array(left.slice(left_start, left_end))
 	var fixed_right := PoolVector2Array(right.slice(right_start, right_end))
-
-
 	var contour: PoolVector2Array = []
+	
 	contour.append_array(top)
-#	right.invert()
 	contour.append_array(fixed_right)
 	bottom.invert()
 	contour.append_array(bottom)
 	fixed_left.invert()
 	contour.append_array(fixed_left)
-
-
-#	draw_polyline(contour, Color.white, 1.0)
-	
-
-
 	for point in contour:
 		draw_circle(point, 3.0, Color.red)
-#	print(contour.size())
-	
 	contour = remove_close_points(contour)
 	contour = simplify_contour(contour)
-	
-#	print(contour.size())
 	for point in contour:
 		draw_circle(point, 2.0, Color.green)
 
-
-#	contour.push_back(top[0])
 	if not Geometry.triangulate_polygon(contour).empty():
 		var colors: PoolColorArray = []
 		for point in contour:
@@ -130,23 +105,11 @@ func _draw():
 		print("ERROR")
 		print(contour)
 		draw_polyline(contour, Color.white)
-	
+
 		draw_polyline(right, Color.red, 2.0)
 		draw_polyline(fixed_right, Color.green, 1.0)
-	#
 		draw_polyline(left, Color.red, 2.0)
 		draw_polyline(fixed_left, Color.green, 1.0)
-	
-	
-	#simplify
-	
-	
-#	draw_polyline(right, Color.red, 4.0)
-#	draw_polyline(fixed_right, Color.blue, 2.0)
-##
-#	draw_polyline(left, Color.red, 4.0)
-#	draw_polyline(fixed_left, Color.blue, 2.0)
-
 
 
 func get_side_overlap(side_points: Array, cutoff: Vector2, vertical_direction: int) -> int:
@@ -155,17 +118,14 @@ func get_side_overlap(side_points: Array, cutoff: Vector2, vertical_direction: i
 	for i in range(overlap_index, side_points.size() - 1 - overlap_index, increment):
 		var is_y_overlapping: bool = side_points[i].y >= cutoff.y if \
 			vertical_direction == DIRECTION_FORWARD else side_points[i].y <= cutoff.y
-#		print(i, "  ", int(side_points[i].y) , " vs ", cutoff.y ,"  ",  is_y_overlapping)
 		if is_y_overlapping:
 			overlap_index = i
 			break
 		else:
 			overlap_index = i + increment
-#	print ("result is ", overlap_index)
 	return overlap_index
 
-
-
+# TODO: improve
 func simplify_contour(contour: PoolVector2Array) -> PoolVector2Array:
 	var point_checks := []
 	for i in range(contour.size()):
@@ -174,7 +134,6 @@ func simplify_contour(contour: PoolVector2Array) -> PoolVector2Array:
 		var next_point: Vector2 = contour[i + 1] if i < contour.size() - 1 else contour[0]
 		var segment1 := point - prev_point
 		var segment2 := next_point - point
-		
 		if abs(segment1.angle_to(segment2)) < LINE_ANGLE_DELTA:
 			point_checks.append(false)
 		else:
@@ -185,7 +144,7 @@ func simplify_contour(contour: PoolVector2Array) -> PoolVector2Array:
 			result_contour.append(contour[i])
 	return result_contour
 
-
+#TODO: caheck only sie ends?
 func remove_close_points(contour: PoolVector2Array) -> PoolVector2Array:
 	var point_neighbor_checks := []
 	for i in range(contour.size()):
@@ -195,7 +154,6 @@ func remove_close_points(contour: PoolVector2Array) -> PoolVector2Array:
 			point_neighbor_checks.append(true)
 		else:
 			point_neighbor_checks.append(false)
-#	print(point_neighbor_checks)
 	var result_contour: PoolVector2Array = []
 	for i in range(contour.size()):
 		var point_index := i
