@@ -3,7 +3,7 @@ extends Node
 class_name TileRenderer
 
 signal tiles_ready()
-signal report_progress(done_percent)
+signal report_progress(progress)
 
 const RENDER_POOL_SIZE = 16
 
@@ -172,16 +172,13 @@ func capture_rendered_batch():
 			tile.capture_texture(tile_texture, output_tile_size, smoothing_enabled)
 
 
-func get_template_random_variants(_mask: int):
-	return 1
-
-
 func on_render():
 	if is_rendering:
 		capture_rendered_batch()
 		if get_next_tile() != null:
+			var progress := int(float(tiles.keys().find(last_mask)) / float(tiles.size()) * 100)
 			render_next_batch()
-			emit_signal("report_progress", 1)
+			emit_signal("report_progress", progress)
 		else:
 			is_rendering = false
 			emit_signal("tiles_ready")

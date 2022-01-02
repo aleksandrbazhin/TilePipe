@@ -67,6 +67,9 @@ onready var image_settings: VBoxContainer = debug_preview.get_node("ImageSetting
 onready var output_size_select: OptionButton = image_settings.get_node("SizeOptionButton")
 onready var smoothing_check: CheckButton = image_settings.get_node("Smoothing")
 
+onready var render_progress_overlay: ColorRect = $Panel/HBox/Images/OutputContainer/Output/ProgressOverlay
+onready var render_progressbar: ProgressBar = render_progress_overlay.get_node("ProgressBar")
+
 onready var godot_export_dialog: GodotExporter = $GodotExportDialog
 
 var is_ui_blocked: bool = false
@@ -805,12 +808,23 @@ func render_tiles():
 	renderer.start_render(generation_data, input_tile_size, output_tile_size,
 		texture_in.texture.get_data(), tiles_by_bitmasks, smoothing_check.pressed,
 		merge_rate, overlap_rate, rng)
-	renderer.connect("tiles_ready", self, "on_tiles_rendered")
+	if not renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
+		renderer.connect("tiles_ready", self, "on_tiles_rendered")
+		renderer.connect("report_progress", self, "update_progress")
+	update_progress(0)
+	render_progress_overlay.show()
+
+
+func update_progress(progress: int):
+	render_progressbar.value = progress
 
 
 func on_tiles_rendered():
+	update_progress(100)
 	var renderer: TileRenderer = $TileRenderer
-	renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
+	if renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
+		renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
+		renderer.disconnect("report_progress", self, "update_progress")
 	rendered_tiles = renderer.tiles
 	emit_signal("input_image_processed")
 
@@ -823,6 +837,7 @@ func set_output_texture(texture: Texture):
 		output_control.rect_min_size = image_size
 	else:
 		output_control.rect_min_size = Vector2.ZERO
+	render_progress_overlay.hide()
 
 
 func make_output_texture():
@@ -1175,7 +1190,7 @@ func _on_PopupDialog_confirmed():
 
 func _on_OffsetButton_pressed():
 	output_tile_offset = int(output_offset_spinbox.get_line_edit().text)
-	rebuild_output()
+	make_output_texture()
 	save_settings()
 
 

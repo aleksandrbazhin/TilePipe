@@ -887,11 +887,11 @@ rect_min_size = Vector2( 40, 32 )
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="Panel/HBox/Images/OutputContainer/BlockLabel"]
+anchor_right = 1.0
 margin_left = 2.0
 margin_top = 270.0
-margin_right = 270.0
 margin_bottom = 302.0
-rect_min_size = Vector2( 0, 32 )
+rect_min_size = Vector2( 268, 32 )
 rect_rotation = 270.0
 hint_tooltip = "Preview and tweak the resulting tileset"
 mouse_filter = 0
@@ -1025,6 +1025,31 @@ margin_left = 101.0
 margin_right = 149.0
 margin_bottom = 29.0
 text = "Apply"
+
+[node name="ProgressOverlay" type="ColorRect" parent="Panel/HBox/Images/OutputContainer/Output"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.25098, 0.329412, 0.419608, 0.211765 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="Panel/HBox/Images/OutputContainer/Output/ProgressOverlay"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -250.0
+margin_top = -10.0
+margin_right = 250.0
+margin_bottom = 9.0
+rect_min_size = Vector2( 500, 22 )
+theme = ExtResource( 6 )
+step = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Labels" type="Control" parent="Panel/HBox/Images/OutputContainer/Output"]
 anchor_left = 1.0
