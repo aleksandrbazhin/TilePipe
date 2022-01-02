@@ -736,88 +736,9 @@ func get_from_overlay_viewport(image_fmt: int, resize_factor: float = 1.0) -> Im
 	return image
 
 
-func generate_overlayed_tiles():
-	rendered_tiles.clear()
-	var output_tile_size: int = get_output_tile_size()
-	var input_image: Image = texture_in.texture.get_data()
-	var min_input_tiles: Vector2 = generation_data.get_min_input_size()
-	var input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
-
-	set_input_tile_size(input_tile_size, input_image)
-	# warning-ignore:integer_division
-	overlay_merge_rate_slider.quantize(int(input_tile_size / 2))
-	# warning-ignore:integer_division
-	overlay_overlap_slider.quantize(int(input_tile_size / 2))
-	var merge_rate: float = overlay_merge_rate_slider.value
-	var overlap_rate: float = overlay_overlap_slider.value
-
-	var max_random_variants: int = get_input_image_random_max_variants()
-	set_random_ui_enabled(max_random_variants)
-	if rand_seed_check.pressed:
-		var random_seed_int: int = int(rand_seed_value.text)
-		var random_seed = rand_seed(random_seed_int)
-		rng.seed = random_seed[1]
-
-	var resize_factor: float = float(output_tile_size) / float(input_tile_size)
-	var new_viewport_size := Vector2(input_tile_size, input_tile_size)
-	if overlay_viewport.size != new_viewport_size:
-		overlay_viewport.size = new_viewport_size
-		overlay_texture_in_viewport.rect_size = new_viewport_size
-#	var image_input_fmt: int = input_image.get_format()
-#	var image_fmt: int = overlay_viewport.get_texture().get_data().get_format()
-	var debug_image := Image.new()
-#	var color_process: int = get_color_process()
-	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY)
-#	var debug_texture_size: Vector2 = get_debug_image_rect_size(Const.INPUT_TYPES.OVERLAY) * 2
-	debug_image.create(int(debug_texture_size.x) * max_random_variants, int(debug_texture_size.y), false, Image.FORMAT_RGBA8)
-
-	var preset: Array = generation_data.get_preset()
-	
-	# input tile variants
-	var input_tiles: Array = []
-	for x in range(min_input_tiles.x):
-		var tile_alternatives: Array = []
-		for y in range(max_random_variants):
-			var tile := Image.new()
-			tile.create(input_tile_size, input_tile_size, false, Image.FORMAT_RGBA8)
-			var copy_rect := Rect2(x * input_tile_size, y * input_tile_size, input_tile_size, input_tile_size)
-			tile.blit_rect(input_image, copy_rect, Vector2.ZERO)
-			tile_alternatives.append(tile)
-		input_tiles.append(tile_alternatives)
-	
-	overlay_texture_in_viewport.show()
-	var overlap_vectors: Array = generation_data.get_overlap_vectors()
-	var overlap_vector_rotations: Array = generation_data.get_overlap_vector_rotations()
-	var index: int = 0 
-	for data in preset:
-		# TODO: fix - на самом деле это не зависит от max_random_variants
-		# переделать - генерировать каждый тайл отдельно, а не предгененировать
-		var result_tile_variants: Array = []
-		for random_variant_index in range(max_random_variants):
-			start_tile_overlay_processing(data, input_tiles, merge_rate, overlap_rate, overlap_vectors, 
-				overlap_vector_rotations)
-			yield(VisualServer, "frame_post_draw")
-			var overlayed_tile: Image = get_from_overlay_viewport(Image.FORMAT_RGBA8, resize_factor)
-			result_tile_variants.append(overlayed_tile)
-			# warning-ignore:integer_division		
-			append_to_debug_image(debug_image, overlayed_tile, output_tile_size, 
-				Vector2((index % 4 + 4 * random_variant_index) * output_tile_size, (index / 4) * output_tile_size))
-		for variant in data["mask_variants"]:
-			rendered_tiles[int(variant)] = result_tile_variants
-		
-#		rendered_tiles.append({
-#			"tile_image_variants": result_tile_variants,
-#			"mask_variants": int_variants
-#		})
-		index += 1
-	overlay_texture_in_viewport.hide()
-	emit_signal("input_image_processed")
-
-
 func make_from_overlayed():
-	print("make ", rendered_tiles.size())
 	set_output_texture(null)
-	if rendered_tiles.size() == 0:
+	if tiles_by_bitmasks.size() == 0:
 		unblock_ui()
 		return
 	var tile_size: int = get_output_tile_size()
@@ -826,50 +747,27 @@ func make_from_overlayed():
 	if rotate_viewport.size != new_viewport_size:
 		rotate_viewport.size = new_viewport_size
 		rotated_texture_in_viewport.rect_size = new_viewport_size
-	
-#	var color_process: int = get_color_process()
 	var out_image := Image.new()
-#	var first_tile_image: Image = rendered_tiles[0]["tile_image_variants"][0]
-#	var image_fmt: int = first_tile_image.get_format()
-#	var out_image_fmt: int = rotate_viewport.get_texture().get_data().get_format()
 	var out_image_size: Vector2 = template_size * tile_size
 	out_image_size += (template_size - Vector2.ONE) * output_tile_offset
 	out_image.create(int(out_image_size.x), int(out_image_size.y), false, Image.FORMAT_RGBA8)
-#	var preset: Array = generation_data.get_preset()
 	var tile_rect := Rect2(0, 0, tile_size, tile_size)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image, 0)
-#	var masks_use_count: Dictionary = {}
 	for mask in tiles_by_bitmasks.keys():
-#		assert(tiles_by_bitmasks[mask_value].size() == rendered_tiles[mask_value].size())
 		for tile_variant_index in range(tiles_by_bitmasks[mask].size()):
-#			if masks_use_count.has(mask_value):
-#				masks_use_count[mask_value] += 1
-#				if masks_use_count[mask_value] > rendered_tiles[mask_value].size() - 1:
-#					masks_use_count[mask_value] = 0
-#			else:
-#				masks_use_count[mask_value] = 0
-#			var tile_variant_index: int = masks_use_count[mask_value]
 			var tile: GeneratedTile = tiles_by_bitmasks[mask][tile_variant_index]
 			var tile_position: Vector2 = tile.position_in_template * (tile_size + output_tile_offset)
 			if tile.image == null:
 				continue
 			out_image.blit_rect(tile.image, tile_rect, tile_position)
 			itex.set_data(out_image)
-	
-#		for tile_data in rendered_tiles:
-#			var variant_index: int = tile_data["mask_variants"].find(mask_value)
-#			if variant_index != -1:
-#				out_image.blit_rect(tile_data["tile_image_variants"][tile_variant_index], tile_rect, tile_position)
-#				itex.set_data(out_image)
-#				set_output_texture(itex)
 	set_output_texture(itex)
 	rotated_texture_in_viewport.hide()
 	unblock_ui()
 
 
 func preprocess_input_image():
-	print("preprocess")
 	block_ui()
 	output_offset_spinbox.value = int(output_tile_offset)
 	rotated_texture_in_viewport.show()
@@ -880,17 +778,13 @@ func preprocess_input_image():
 	var generation_type: int = generation_type_select.selected
 	match generation_type:
 		Const.INPUT_TYPES.CORNERS:
-			print("corners")
 			generate_corner_slices()
 		Const.INPUT_TYPES.OVERLAY:
-			print("overlay")
-#			generate_overlayed_tiles()
 			render_tiles()
 
 
 func render_tiles():
 	generate_template_bitmasks()
-	
 	var input_image: Image = texture_in.texture.get_data()
 	var min_input_tiles: Vector2 = generation_data.get_min_input_size()
 	var old_style_input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
@@ -916,7 +810,6 @@ func render_tiles():
 func on_tiles_rendered():
 	var renderer: TileRenderer = $TileRenderer
 	renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
-	print("tiles out: ", renderer.tiles.size())
 	rendered_tiles = renderer.tiles
 	emit_signal("input_image_processed")
 

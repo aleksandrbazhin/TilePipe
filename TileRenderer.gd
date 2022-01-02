@@ -32,7 +32,6 @@ func _ready():
 
 
 func init_render_pool():
-#	print(ready)
 	for _i in range(RENDER_POOL_SIZE):
 		var viewport := Viewport.new()
 		render_pool.append(viewport)
@@ -67,7 +66,6 @@ func start_render(new_ruleset: GenerationData, new_input_tile_size: Vector2, new
 		texture_node.rect_size = input_tile_size
 		texture_node.material.set_shader_param("overlay_rate", merge_rate)
 		texture_node.material.set_shader_param("overlap", overlap_rate)
-
 	render_next_batch()
 	is_rendering = true
 
@@ -84,7 +82,6 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 			part.create(int(input_tile_size.x), int(input_tile_size.y), false, Image.FORMAT_RGBA8)
 			if input_tile_size.y + variant_index * input_tile_size.y > input_image.get_size().y:
 				break
-			
 			var copy_rect := Rect2(part_index * input_tile_size.x, variant_index * input_tile_size.y, 
 				input_tile_size.x, input_tile_size.y)
 			part.blit_rect(input_image, copy_rect, Vector2.ZERO)
@@ -133,12 +130,6 @@ func setup_tile_render(mask: int, viewport: Viewport):
 			overlap_vec.y = 0.0 if overlap_vec.y == 1.0 else 1.0
 		texture_rect.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_vec)
 		mask_index += 1
-#	var tile := Image.new()
-#	tile.create(int(input_tile_size.x), int(input_tile_size.y), false, Image.FORMAT_RGBA8)
-#	tile.blit_rect(input_tile_parts[0][0], Rect2(0, 0, input_tile_size.x, input_tile_size.y), Vector2.ZERO)
-#	var itex := ImageTexture.new()
-#	itex.create_from_image(tile)
-#	return itex
 
 
 func render_next_batch():
@@ -170,7 +161,6 @@ func capture_rendered_batch():
 			var tile: GeneratedTile = viewport.get_meta("tile")
 			var tile_texture: ViewportTexture = viewport.get_texture()
 			tile.capture_texture(tile_texture, output_tile_size, smoothing_enabled)
-	print("captured batch")
 
 
 func get_template_random_variants(_mask: int):
@@ -181,10 +171,8 @@ func on_render():
 	if is_rendering:
 		capture_rendered_batch()
 		if get_next_tile() != null:
-			print(get_next_tile().mask)
 			render_next_batch()
 			emit_signal("report_progress", 1)
 		else:
-			print("tiles ready")
 			is_rendering = false
 			emit_signal("tiles_ready")
