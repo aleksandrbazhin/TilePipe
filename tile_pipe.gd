@@ -97,7 +97,8 @@ var current_texture_basename: String = ""
 
 
 func _ready():
-	print("TilePipe v.%s running in Debug mode" % VERSION)
+	var mode := "Debug" if OS.is_debug_build() else "Release"
+	print("TilePipe v.%s running in %s mode" % [VERSION, mode])
 	OS.set_window_title("TilePipe v.%s" % VERSION)
 #	OS.window_maximized = true
 #	rand_seed_check.disabled = true
