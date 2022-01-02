@@ -5,7 +5,7 @@ class_name TileRenderer
 signal tiles_ready()
 signal report_progress(done_percent)
 
-const RENDER_POOL_SIZE = 32
+const RENDER_POOL_SIZE = 16
 
 
 var is_rendering = false
@@ -106,10 +106,19 @@ func setup_tile_render(mask: int, viewport: Viewport):
 	itex.create_from_image(center_image, 0)
 	var texture_rect: TextureRect = viewport.get_node("TextureRect")
 	texture_rect.texture = itex
+	var piece_set := [-1, -1, -1, -1, -1, -1, -1, -1]
+	var piece_random := [0, 0, 0, 0, 0, 0, 0, 0]
 	var mask_index: int = 0
 	for mask_name in Const.TILE_MASK:
 		var piece_index: int = parts_rules[mask_index]
-		var random_tile_index: int = rng.randi_range(0, input_tile_parts[piece_index].size() - 1)
+		var random_tile_index: int = 0
+		var existing_piece_index := piece_set.find(piece_index)
+		if existing_piece_index != -1:
+			random_tile_index = piece_random[existing_piece_index]
+		else:
+			random_tile_index = rng.randi_range(0, input_tile_parts[piece_index].size() - 1)
+			piece_random[mask_index] = random_tile_index
+		piece_set[mask_index] = piece_index
 		var piece_rot_index: int = parts_rotations[mask_index]
 		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[piece_rot_index]
 		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
