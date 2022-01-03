@@ -184,4 +184,5 @@ func on_render():
 			for viewport in render_pool:
 				viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
 			is_rendering = false
+			emit_signal("report_progress", 100)
 			emit_signal("tiles_ready")

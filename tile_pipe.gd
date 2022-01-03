@@ -304,7 +304,7 @@ func apply_tile_specific_settings(data: Dictionary, is_example: bool = false, ex
 	overlay_merge_rate_slider.value = data["merge_level"]
 	overlay_overlap_slider.value = data["overlap_level"]
 	rand_seed_check.pressed = bool(data["use_random_seed"])
-#	set_random_ui_enabled(rand_seed_check.pressed)
+	set_random_seed_ui_enabled(rand_seed_check.pressed)
 	rand_seed_value.text = str(int(data["random_seed_value"]))
 	output_tile_offset = int(data["output_tile_offset"])
 	output_offset_spinbox.value = output_tile_offset
@@ -752,7 +752,6 @@ func render_tiles():
 		rng.seed = random_seed[1]
 	
 	var renderer: TileRenderer = $TileRenderer
-#	var tile_size := get_output_tile_size()
 	renderer.start_render(generation_data, input_tile_size, output_tile_size,
 		texture_in.texture.get_data(), tiles_by_bitmasks, smoothing_check.pressed,
 		merge_rate, overlap_rate, rng)
