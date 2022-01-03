@@ -55,6 +55,7 @@ config/description="Tool to compose tilesets"
 run/main_scene="res://tile_pipe.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="TilePipe"
+run/low_processor_mode=true
 boot_splash/image="res://assets/boot_splash.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 1 )
@@ -77,11 +78,16 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1366
 window/size/height=768
+window/vsync/use_vsync=false
 window/stretch/aspect="expand"
 
 [filesystem]
 
 import/open_asset_import/use_fbx=false
+
+[global]
+
+vsync=false
 
 [gui]
 

@@ -38,7 +38,7 @@ func init_render_pool():
 		viewport.transparent_bg = true
 		viewport.disable_3d = true
 		viewport.usage = Viewport.USAGE_2D_NO_SAMPLING
-		viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
+		viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
 		viewport.render_target_v_flip = true
 		viewport.size_override_stretch = true
 		var texture_rect := TextureRect.new()
@@ -61,6 +61,7 @@ func start_render(new_ruleset: GenerationData, new_input_tile_size: Vector2, new
 	rng = active_rng
 	last_mask = tiles.keys()[0]
 	for viewport in render_pool:
+		viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
 		viewport.size = input_tile_size
 		var texture_node = viewport.get_node("TextureRect")
 		texture_node.rect_size = input_tile_size
@@ -180,5 +181,7 @@ func on_render():
 			render_next_batch()
 			emit_signal("report_progress", progress)
 		else:
+			for viewport in render_pool:
+				viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
 			is_rendering = false
 			emit_signal("tiles_ready")
