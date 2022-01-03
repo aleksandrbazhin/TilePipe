@@ -229,10 +229,11 @@ func make_tile_data_string(tile_size: int, tile_masks: Dictionary,
 	var mask_out_array: PoolStringArray = []
 #	check_masks_with_warning(tile_masks, new_autotile_type)
 	var line_beginning := str(tile_id) + "/"
-	for mask in tile_masks.keys():
-		for tile_position in tile_masks[mask]:
+	for mask in tile_masks:
+		for tile in tile_masks[mask]:
+			var tile_position: Vector2 = tile.position_in_template
 			mask_out_array.append("Vector2 ( %d, %d )" % [tile_position.x, tile_position.y])
-			var godot_mask: int = convert_mask_to_godot(mask, new_autotile_type)
+			var godot_mask: int = convert_mask_to_godot(tile.mask, new_autotile_type)
 			mask_out_array.append(str(godot_mask))
 	
 	out_string += line_beginning + "name = \"%s\"\n" % new_tile_name
