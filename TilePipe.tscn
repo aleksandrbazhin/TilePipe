@@ -1,21 +1,21 @@
 [gd_scene load_steps=17 format=2]
 
-[ext_resource path="res://tile_pipe.gd" type="Script" id=1]
-[ext_resource path="res://tile_shader_material.tres" type="Material" id=2]
-[ext_resource path="res://BlockableSlider.gd" type="Script" id=3]
-[ext_resource path="res://slice_process.shader" type="Shader" id=4]
-[ext_resource path="res://assets/IBMPlexSans-Medium.ttf" type="DynamicFontData" id=5]
-[ext_resource path="res://ui_theme.tres" type="Theme" id=6]
-[ext_resource path="res://assets/checkers.png" type="Texture" id=7]
+[ext_resource path="res://TilePipe.gd" type="Script" id=1]
+[ext_resource path="res://assets/IBMPlexSans-Medium.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://slice_process.shader" type="Shader" id=3]
+[ext_resource path="res://assets/ui_theme.tres" type="Theme" id=4]
+[ext_resource path="res://TileRenderer.tscn" type="PackedScene" id=5]
+[ext_resource path="res://exporters/Godot_exporter.tscn" type="PackedScene" id=6]
+[ext_resource path="res://BlockableSlider.gd" type="Script" id=7]
 [ext_resource path="res://assets/Load.svg" type="Texture" id=8]
 [ext_resource path="res://assets/Save.svg" type="Texture" id=9]
-[ext_resource path="res://header_font.tres" type="DynamicFont" id=10]
-[ext_resource path="res://exporters/Godot_exporter.tscn" type="PackedScene" id=11]
-[ext_resource path="res://assets/Godot.svg" type="Texture" id=12]
-[ext_resource path="res://TileRenderer.tscn" type="PackedScene" id=13]
+[ext_resource path="res://assets/Godot.svg" type="Texture" id=10]
+[ext_resource path="res://assets/tile_shader_material.tres" type="Material" id=11]
+[ext_resource path="res://assets/checkers.png" type="Texture" id=12]
+[ext_resource path="res://assets/header_font.tres" type="DynamicFont" id=13]
 
 [sub_resource type="ShaderMaterial" id=1]
-shader = ExtResource( 4 )
+shader = ExtResource( 3 )
 shader_param/rotation = 0.0
 shader_param/is_flipped_x = false
 shader_param/is_flipped_y = false
@@ -23,7 +23,7 @@ shader_param/is_flow_map = false
 
 [sub_resource type="DynamicFont" id=3]
 size = 11
-font_data = ExtResource( 5 )
+font_data = ExtResource( 2 )
 
 [sub_resource type="Theme" id=4]
 Label/colors/font_color = Color( 0.207843, 0.258824, 0.317647, 1 )
@@ -41,13 +41,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 1366, 768 )
 mouse_filter = 2
-theme = ExtResource( 6 )
+theme = ExtResource( 4 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TileRenderer" parent="." instance=ExtResource( 13 )]
+[node name="TileRenderer" parent="." instance=ExtResource( 5 )]
 
 [node name="TextureDialog" type="FileDialog" parent="."]
 margin_left = 7.0
@@ -137,7 +137,7 @@ rect_rotation = 270.0
 hint_tooltip = "Setup how your tiles are built"
 mouse_filter = 0
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
-custom_fonts/font = ExtResource( 10 )
+custom_fonts/font = ExtResource( 13 )
 text = "Input"
 align = 1
 valign = 1
@@ -191,7 +191,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 7 )
+texture = ExtResource( 12 )
 expand = true
 stretch_mode = 2
 __meta__ = {
@@ -272,7 +272,7 @@ margin_bottom = 31.0
 hint_tooltip = "Setup the generation type"
 mouse_filter = 0
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
-custom_fonts/font = ExtResource( 10 )
+custom_fonts/font = ExtResource( 13 )
 text = "Generation type:"
 align = 2
 valign = 1
@@ -471,7 +471,7 @@ value = 0.25
 scrollable = false
 tick_count = 11
 ticks_on_borders = true
-script = ExtResource( 3 )
+script = ExtResource( 7 )
 
 [node name="OverlapSliderContainer" type="VBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings" groups=["overlay_settings"]]
 margin_top = 97.0
@@ -501,7 +501,7 @@ value = 0.25
 scrollable = false
 tick_count = 11
 ticks_on_borders = true
-script = ExtResource( 3 )
+script = ExtResource( 7 )
 
 [node name="Separator" type="Control" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/OverlapSliderContainer"]
 visible = false
@@ -601,7 +601,7 @@ margin_top = 1.41425
 margin_bottom = 1.41425
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 7 )
+texture = ExtResource( 12 )
 expand = true
 stretch_mode = 2
 __meta__ = {
@@ -649,7 +649,7 @@ render_target_update_mode = 3
 gui_disable_input = true
 
 [node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control/OverlayViewport"]
-material = ExtResource( 2 )
+material = ExtResource( 11 )
 stretch_mode = 3
 
 [node name="InViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]
@@ -764,7 +764,7 @@ rect_rotation = 270.0
 hint_tooltip = "Setup how your tiles are placed"
 mouse_filter = 0
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
-custom_fonts/font = ExtResource( 10 )
+custom_fonts/font = ExtResource( 13 )
 text = "Template"
 align = 1
 valign = 1
@@ -898,7 +898,7 @@ mouse_filter = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
-custom_fonts/font = ExtResource( 10 )
+custom_fonts/font = ExtResource( 13 )
 text = "Result"
 align = 1
 valign = 1
@@ -937,7 +937,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 7 )
+texture = ExtResource( 12 )
 expand = true
 stretch_mode = 2
 __meta__ = {
@@ -1045,7 +1045,7 @@ margin_top = -10.0
 margin_right = 250.0
 margin_bottom = 9.0
 rect_min_size = Vector2( 500, 22 )
-theme = ExtResource( 6 )
+theme = ExtResource( 4 )
 step = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1170,7 +1170,7 @@ rect_pivot_offset = Vector2( 227, -255 )
 hint_tooltip = "You can create a new Godot 3.x tileset resource or add a new autotile
 to the existing tileset with the current result output image"
 text = "Export for Godot 3"
-icon = ExtResource( 12 )
+icon = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1184,7 +1184,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GodotExportDialog" parent="." instance=ExtResource( 11 )]
+[node name="GodotExportDialog" parent="." instance=ExtResource( 6 )]
 
 [node name="PopupDialog" type="AcceptDialog" parent="."]
 anchor_left = 0.5

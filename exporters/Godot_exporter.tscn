@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://ui_theme.tres" type="Theme" id=1]
-[ext_resource path="res://header_font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://assets/ui_theme.tres" type="Theme" id=1]
+[ext_resource path="res://assets/header_font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://assets/Save.svg" type="Texture" id=3]
 [ext_resource path="res://assets/Load.svg" type="Texture" id=4]
 [ext_resource path="res://exporters/godot_exporter.gd" type="Script" id=5]

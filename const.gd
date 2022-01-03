@@ -40,22 +40,18 @@ const INPUT_TYPE_NAMES : Dictionary = {
 	INPUT_TYPES.CORNERS: "Quarters",
 	INPUT_TYPES.OVERLAY: "Overlay"
 }
-const DEFAULT_INPUT_TYPE: int = INPUT_TYPES.CORNERS
 
 enum CORNERS_INPUT_PRESETS {
 	FIVE, 
-	FOUR, 
-#	NO
+	FOUR
 }
 const CORNERS_INPUT_PRESETS_NAMES: Dictionary = {
 	CORNERS_INPUT_PRESETS.FIVE: "5 quarters, symmety: full",
 	CORNERS_INPUT_PRESETS.FOUR: "4 quarters, symmety: full",
-#	CORNERS_INPUT_PRESETS.NO: "Custom preset",
 }
 const CORNERS_INPUT_PRESETS_DATA_PATH: Dictionary = {
 	CORNERS_INPUT_PRESETS.FIVE: "res://generation_data/quarters_5.json",
 	CORNERS_INPUT_PRESETS.FOUR: "res://generation_data/quarters_4.json",
-#	CORNERS_INPUT_PRESETS.NO: "",
 }
 
 enum OVERLAY_INPUT_PRESETS {
@@ -87,8 +83,6 @@ const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_13: "res://generation_data/overlay_13_full.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_25_255: "res://generation_data/overlay_255_no_symmetry.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_7_255: "res://generation_data/overlay_255_full_symmetry.json",
-	
-#	CORNERS_INPUT_PRESETS.NO: "",
 }
 
 enum TEMPLATE_TYPES {BLOB_47, BLOB_255, CORNERS_2x2, BLOB_47_MR_MICHAEL, RPG_MAKER, BLOB_47x2, CUSTOM}
