@@ -86,7 +86,7 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 			var copy_rect := Rect2(part_index * input_tile_size.x, variant_index * input_tile_size.y, 
 				input_tile_size.x, input_tile_size.y)
 			part.blit_rect(input_image, copy_rect, Vector2.ZERO)
-			if part.is_empty():
+			if part.is_invisible():
 				part_is_empty = true
 			else:
 				parts[part_index].append(part)
