@@ -746,6 +746,11 @@ func render_tiles():
 	var merge_rate: float = overlay_merge_rate_slider.value
 	var overlap_rate: float = overlay_overlap_slider.value
 	
+	if rand_seed_check.pressed:
+		var random_seed_int: int = int(rand_seed_value.text)
+		var random_seed = rand_seed(random_seed_int)
+		rng.seed = random_seed[1]
+	
 	var renderer: TileRenderer = $TileRenderer
 #	var tile_size := get_output_tile_size()
 	renderer.start_render(generation_data, input_tile_size, output_tile_size,
