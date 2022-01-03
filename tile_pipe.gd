@@ -683,63 +683,6 @@ func make_from_corners():
 	unblock_ui()
 
 
-#slice: Image, rotation_key: int, color_process: int,
-#		is_flipped := false
-func start_tile_overlay_processing(data: Dictionary, input_tile_parts: Array, overlay_rate: float, overlap_rate: float, 
-		overlap_vectors: Array, overlap_vectors_is_rotatable: Array):
-	var random_center_index: int = 0
-	var center_image: Image = input_tile_parts[0][random_center_index]
-	var gen_pieces: Array = data["generate_piece_indexes"]
-	assert (gen_pieces.size() == 8 && data["generate_piece_rotations"].size() == 8)
-	var itex = ImageTexture.new()
-	itex.create_from_image(center_image, 0)
-	overlay_texture_in_viewport.texture = itex
-	var rot_index: int = 0
-	for mask_name in Const.TILE_MASK:
-		var piece_index: int = gen_pieces[rot_index]
-		var random_tile_index: int = rng.randi_range(0, input_tile_parts[piece_index].size()-1)
-		var piece_rot_index: int = data["generate_piece_rotations"][rot_index]
-		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[piece_rot_index]
-		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
-		var overlay_image := Image.new()
-		overlay_image.copy_from(input_tile_parts[piece_index][random_tile_index])
-		if bool(data["generate_piece_flip_x"][rot_index]):
-			overlay_image.flip_x()
-		if bool(data["generate_piece_flip_y"][rot_index]):
-			overlay_image.flip_y()
-		var itex2 = ImageTexture.new()
-		itex2.create_from_image(overlay_image, 0)
-		var mask_key: int = Const.TILE_MASK[mask_name]
-		overlay_texture_in_viewport.material.set_shader_param("overlay_texture_%s" % mask_key, itex2)
-		overlay_texture_in_viewport.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
-
-		var overlap_vec: Vector2 = overlap_vectors[piece_index]
-		if overlap_vectors_is_rotatable[piece_index] and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
-			overlap_vec.x = 0.0 if overlap_vec.x == 1.0 else 1.0
-			overlap_vec.y = 0.0 if overlap_vec.y == 1.0 else 1.0
-		overlay_texture_in_viewport.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_vec)
-		rot_index += 1
-
-	overlay_texture_in_viewport.material.set_shader_param("overlay_rate", overlay_rate)
-	overlay_texture_in_viewport.material.set_shader_param("overlap", overlap_rate)
-	var is_flow_map: bool = get_color_process() == Const.COLOR_PROCESS_TYPES.FLOW_MAP
-	overlay_texture_in_viewport.material.set_shader_param("is_flow_map", is_flow_map)
-
-
-func get_from_overlay_viewport(image_fmt: int, resize_factor: float = 1.0) -> Image:
-	var image := Image.new()
-	var size: Vector2 = overlay_texture_in_viewport.texture.get_size()
-	image.create(int(size.x), int(size.y), false, image_fmt)
-	image.blit_rect(
-		overlay_viewport.get_texture().get_data(),
-		Rect2(Vector2.ZERO, size), 
-		Vector2.ZERO)
-	if resize_factor != 1.0:
-		var interpolation: int = Image.INTERPOLATE_NEAREST if not smoothing_check.pressed else Image.INTERPOLATE_TRILINEAR
-		image.resize(int(size.x * resize_factor), int(size.y * resize_factor), interpolation)
-	return image
-
-
 func make_from_overlayed():
 	set_output_texture(null)
 	if tiles_by_bitmasks.size() == 0:
