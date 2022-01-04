@@ -25,7 +25,7 @@ var autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
 
 # data passed from main window
 var current_texture_image := Image.new()
-var current_tile_size: int
+var current_tile_size: Vector2
 var current_tile_masks: Dictionary
 var current_texture_size: Vector2
 var current_tile_spacing: int
@@ -186,7 +186,7 @@ func make_texture_string(tile_texture_path: String, texture_id: int = 1) -> Stri
 	return "[ext_resource path=\"%s\" type=\"Texture\" id=%d]\n" % [texture_relative_path, texture_id]
 
 
-func make_tile_data_string(tile_size: int, tile_masks: Dictionary, 
+func make_tile_data_string(tile_size: Vector2, tile_masks: Dictionary, 
 		texture_size: Vector2, new_tile_name: String, 
 		tile_spacing: int, new_autotile_type: int, 
 		tile_id: int, texture_id: int) -> String:
@@ -209,7 +209,7 @@ func make_tile_data_string(tile_size: int, tile_masks: Dictionary,
 	out_string += line_beginning + "autotile/bitmask_mode = %d\n" % Const.GODOT_AUTOTILE_GODOT_INDEXES[new_autotile_type]
 	out_string += line_beginning + "autotile/bitmask_flags = [ %s ]\n" % mask_out_array.join(", ")
 	out_string += line_beginning + "autotile/icon_coordinate = Vector2( 0, 0 )\n"
-	out_string += line_beginning + "autotile/tile_size = Vector2( %d, %d )\n" % [tile_size, tile_size]
+	out_string += line_beginning + "autotile/tile_size = Vector2( %d, %d )\n" % [tile_size.x, tile_size.y]
 	out_string += line_beginning + "autotile/spacing = %d\n" % tile_spacing
 	out_string += line_beginning + "autotile/occluder_map = [  ]\n"
 	out_string += line_beginning + "autotile/navpoly_map = [  ]\n"
@@ -226,7 +226,7 @@ func make_tile_data_string(tile_size: int, tile_masks: Dictionary,
 	return out_string
 
 
-func make_autotile_resource_data(tile_size: int, tile_masks: Dictionary, 
+func make_autotile_resource_data(tile_size: Vector2, tile_masks: Dictionary, 
 		texture_size: Vector2, new_texture_path: String, new_tile_name: String, 
 		tile_spacing: int, new_autotile_type: int) -> String:
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=2 format=2]\n"
@@ -284,7 +284,6 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 			"bitmask_mode": -1,
 			"icon_rect": Rect2()
 		}
-		print(tile_dict["name"])
 		if not textures.has(tile_dict["texture_id"]):
 			parse_result["error"] = true
 		match tile_dict["tile_mode"]:
@@ -431,6 +430,8 @@ func _ready():
 	save_confirm_dialog.connect("popup_hide", blocking_rect, "hide")
 	save_confirm_dialog.connect("about_to_show", blocking_rect, "show")
 	save_confirm_dialog.connect("confirmed", self, "save_all_and_exit")
+	$CollisionGenerator.connect("popup_hide", blocking_rect, "hide")
+	$CollisionGenerator.connect("about_to_show", blocking_rect, "show")
 	new_tile_container.hide()
 	for type in Const.GODOT_AUTOTILE_TYPE:
 		var type_id: int = Const.GODOT_AUTOTILE_TYPE[type]
@@ -444,7 +445,7 @@ func clear_file_path(path: String) -> String:
 		return Helpers.get_default_dir_path()
 
 
-func start_export_dialog(new_tile_size: int, tiles: Dictionary, 
+func start_export_dialog(new_tile_size: Vector2, tiles: Dictionary, 
 		new_tile_base_name: String, 
 		new_tile_spacing: int, texture_image: Image):
 	current_tile_size = new_tile_size
@@ -624,3 +625,9 @@ func _on_CheckButton_toggled(button_pressed):
 		free_loaded_tile_rows()
 	else:
 		load_tileset(resource_path)
+
+
+func _on_CollisionsCheckButton_toggled(button_pressed: bool):
+	if button_pressed:
+#		print(current_texture_image.get_size())
+		$CollisionGenerator.start(current_texture_image, current_tile_size, current_tile_spacing)

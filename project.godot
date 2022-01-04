@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "PopupDialog",
+"class": "CollisionGenerator",
+"language": "GDScript",
+"path": "res://exporters/CollisionGenerator.gd"
+}, {
 "base": "Resource",
 "class": "GeneratedTile",
 "language": "GDScript",
@@ -35,6 +40,7 @@ _global_script_classes=[ {
 "path": "res://TileRenderer.gd"
 } ]
 _global_script_class_icons={
+"CollisionGenerator": "",
 "GeneratedTile": "",
 "GenerationData": "",
 "GodotExporter": "",

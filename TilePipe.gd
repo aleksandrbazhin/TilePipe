@@ -1150,8 +1150,9 @@ func hide_blocking_overlay():
 
 
 func _on_GodotExportButton_pressed():
+	var tile_size := Vector2(get_output_tile_size(), get_output_tile_size())
 	godot_export_dialog.start_export_dialog(
-		get_output_tile_size(),
+		tile_size,
 		tiles_by_bitmasks,
 		current_texture_basename,
 		output_tile_offset,

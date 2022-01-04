@@ -105,7 +105,6 @@ func _draw():
 		print("ERROR")
 		print(contour)
 		draw_polyline(contour, Color.white)
-
 		draw_polyline(right, Color.red, 2.0)
 		draw_polyline(fixed_right, Color.green, 1.0)
 		draw_polyline(left, Color.red, 2.0)
