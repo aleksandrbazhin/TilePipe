@@ -12,23 +12,7 @@ signal settings_saved()
 #	"autotile_type": Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
 #}
 
-const GODOT_MASK_3x3: Dictionary = {
-	"TOP_LEFT": 1,
-	"TOP": 2,
-	"TOP_RIGHT": 4,
-	"LEFT": 8,
-	"CENTER": 16,
-	"RIGHT": 32,
-	"BOTTOM_LEFT": 64,
-	"BOTTOM": 128,
-	"BOTTOM_RIGHT": 256
-}
-const GODOT_MASK_2x2: Dictionary = {
-	"TOP_LEFT": 1,
-	"TOP_RIGHT": 4,
-	"BOTTOM_LEFT": 64,
-	"BOTTOM_RIGHT": 256
-}
+
 
 const DEFAULT_TILES_LABEL: String = "Select tileset to edit tiles ↑"
 
@@ -65,26 +49,6 @@ onready var save_confirm_dialog: ConfirmationDialog = $SaveConfirmationDialog
 onready var overwrite_tileset_select: CheckButton = $VBox/HBoxTileset/CheckButton
 
 
-func convert_mask_to_godot(tile_mask: int, 
-		godot_autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3) -> int:
-	var godot_mask: int = 0
-	match autotile_type:
-		Const.GODOT_AUTOTILE_TYPE.BLOB_3x3, Const.GODOT_AUTOTILE_TYPE.FULL_3x3:
-			for mask_name in GODOT_MASK_3x3.keys():
-				if mask_name == "CENTER":
-#					if has_center:
-					godot_mask += GODOT_MASK_3x3["CENTER"]
-				else:
-					var check_bit: int = Const.TILE_MASK[mask_name]
-					if tile_mask & check_bit != 0:
-						godot_mask += GODOT_MASK_3x3[mask_name]
-		Const.GODOT_AUTOTILE_TYPE.WANG_2x2:
-			for mask_name in GODOT_MASK_2x2.keys():
-				var check_bit: int = Const.TILE_MASK[mask_name]
-				if tile_mask & check_bit != 0:
-					godot_mask += GODOT_MASK_2x2[mask_name]
-	return godot_mask
-
 # warn if there are not enough tiles for proper autotiling
 func check_masks_with_warning(masks, godot_autotile_type):
 	match godot_autotile_type:
@@ -92,7 +56,8 @@ func check_masks_with_warning(masks, godot_autotile_type):
 			pass
 		Const.GODOT_AUTOTILE_TYPE.WANG_2x2:
 			pass
-
+		Const.GODOT_AUTOTILE_TYPE.FULL_3x3:
+			pass
 
 func save_tileset_resource() -> bool:
 	var file := File.new()
@@ -233,9 +198,8 @@ func make_tile_data_string(tile_size: int, tile_masks: Dictionary,
 		for tile in tile_masks[mask]:
 			var tile_position: Vector2 = tile.position_in_template
 			mask_out_array.append("Vector2 ( %d, %d )" % [tile_position.x, tile_position.y])
-			var godot_mask: int = convert_mask_to_godot(tile.mask, new_autotile_type)
+			var godot_mask: int = Helpers.convert_bitmask_to_godot(tile.mask, new_autotile_type)
 			mask_out_array.append(str(godot_mask))
-	
 	out_string += line_beginning + "name = \"%s\"\n" % new_tile_name
 	out_string += line_beginning + "texture = ExtResource( %d )\n" % texture_id
 	out_string += line_beginning + "tex_offset = Vector2( 0, 0 )\n"
@@ -265,7 +229,6 @@ func make_tile_data_string(tile_size: int, tile_masks: Dictionary,
 func make_autotile_resource_data(tile_size: int, tile_masks: Dictionary, 
 		texture_size: Vector2, new_texture_path: String, new_tile_name: String, 
 		tile_spacing: int, new_autotile_type: int) -> String:
-	
 	var out_string: String = "[gd_resource type=\"TileSet\" load_steps=2 format=2]\n"
 	var texture_id: int = 1
 	var tile_id: int = 0

@@ -85,3 +85,24 @@ func get_allowed_mask_rotations(pos_check_mask: int, neg_check_mask: int, curren
 		if satisfies_check:
 			rotations.append(rotation)
 	return rotations
+
+
+func convert_bitmask_to_godot(bitmask: int, 
+		godot_autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3) -> int:
+	var godot_bitmask: int = 0
+	match godot_autotile_type:
+		Const.GODOT_AUTOTILE_TYPE.BLOB_3x3, Const.GODOT_AUTOTILE_TYPE.FULL_3x3:
+			for mask_name in Const.GODOT_MASK_3x3.keys():
+				if mask_name == "CENTER":
+#					if has_center:
+					godot_bitmask += Const.GODOT_MASK_3x3["CENTER"]
+				else:
+					var check_bit: int = Const.TILE_MASK[mask_name]
+					if bitmask & check_bit != 0:
+						godot_bitmask += Const.GODOT_MASK_3x3[mask_name]
+		Const.GODOT_AUTOTILE_TYPE.WANG_2x2:
+			for mask_name in Const.GODOT_MASK_2x2.keys():
+				var check_bit: int = Const.TILE_MASK[mask_name]
+				if bitmask & check_bit != 0:
+					godot_bitmask += Const.GODOT_MASK_2x2[mask_name]
+	return godot_bitmask

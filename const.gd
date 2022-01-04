@@ -240,3 +240,21 @@ const ROTATION_SHIFTS := {
 	6: {"vector": Vector2(0, 1), "angle": 3 * PI / 2},
 }
 const FLIP_HORIZONTAL_KEYS := [0, 4]
+
+const GODOT_MASK_3x3: Dictionary = {
+	"TOP_LEFT": 1,
+	"TOP": 2,
+	"TOP_RIGHT": 4,
+	"LEFT": 8,
+	"CENTER": 16,
+	"RIGHT": 32,
+	"BOTTOM_LEFT": 64,
+	"BOTTOM": 128,
+	"BOTTOM_RIGHT": 256
+}
+const GODOT_MASK_2x2: Dictionary = {
+	"TOP_LEFT": 1,
+	"TOP_RIGHT": 4,
+	"BOTTOM_LEFT": 64,
+	"BOTTOM_RIGHT": 256
+}

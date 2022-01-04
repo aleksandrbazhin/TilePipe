@@ -75,10 +75,8 @@ var is_slider_changed: bool = false
 var generation_data: GenerationData
 var template_size: Vector2
 var input_slices: Dictionary = {}
-#var input_tile_size_vector := Vector2.ZERO
 var rendered_tiles := {}
-# tiles_by_bitmasks = {mask_value: [bitemask_position1, bitmask_position2]}
-# tiles_by_bitmasks = {mask_value: [tile1, tile2]}
+# tiles_by_bitmasks = {mask_value: [tile1: Tile, tile2: Tile]}
 var tiles_by_bitmasks := {}
 var rng = RandomNumberGenerator.new()
 var last_input_texture_path: String = ""
@@ -276,8 +274,6 @@ func apply_tile_specific_settings(data: Dictionary, is_example: bool = false, ex
 		overlay_merge_type_select.selected = data["overlay_preset"]
 		generation_type_select.selected = data["input_type"]
 		setup_input_type(generation_type_select.selected)
-
-
 	template_file_dialog_path = data["last_template_file_dialog_path"]
 	template_file_dialog.current_path = Helpers.clear_path(input_file_dialog_path)
 	template_type_select.selected = data["template_type"]
@@ -290,12 +286,9 @@ func apply_tile_specific_settings(data: Dictionary, is_example: bool = false, ex
 		template_load_button.add_to_group("really_disabled")
 	load_template_texture(data["last_template_path"])
 	generate_template_bitmasks()
-	
 	save_png_file_dialog_path = data["last_save_texture_path"]
 	save_texture_dialog.current_path = Helpers.clear_path(save_png_file_dialog_path)
 	output_size_select.selected = Const.OUTPUT_SIZES.keys().find(int(data["output_tile_size"]))
-	
-		
 #	if not ("input_type" in exclude_keys):
 #	if not ("input_type" in exclude_keys or "corner_preset" in exclude_keys or "overlay_preset" in exclude_keys):
 	smoothing_check.pressed = bool(data["smoothing"])
@@ -311,8 +304,6 @@ func apply_tile_specific_settings(data: Dictionary, is_example: bool = false, ex
 
 
 func apply_saved_settings(data: Dictionary):
-#	generation_data = GenerationData.new(data["last_gen_preset_path"])
-	# file dialogs
 	apply_tile_specific_settings(data)
 	load_input_texture(data["last_texture_path"])
 	input_file_dialog_path = data["last_texture_file_dialog_path"]
@@ -449,28 +440,28 @@ func get_template_mask_value(template_image: Image, x: int, y: int) -> int:
 
 
 func clear_generation_mask():
-	
 	for label in template_texture.get_children():
 		label.queue_free()
 
 
-func mark_template_tile(mask_value: int, mask_position: Vector2, is_text: bool = false):
+func mark_template_tile(bitmask: int, mask_position: Vector2, is_text: bool = false):
 	if is_text:
 		var mask_text_label := Label.new()
 		mask_text_label.add_color_override("font_color", Color(0, 0.05, 0.1))
-		mask_text_label.text = str(mask_value)
+		mask_text_label.text = str(bitmask)
 		mask_text_label.rect_position = mask_position * Const.TEMPLATE_TILE_SIZE + Vector2(8, 8)
 		template_texture.add_child(mask_text_label)
 	else:
+		var godot_bitmask: int = Helpers.convert_bitmask_to_godot(bitmask)
 		for x in range(3):
 			for y in range(3):
 				var check: int = 1 << (x + y * 3)
-				if check & mask_value == check:
+				if check & godot_bitmask == check:
 					var mask_marker = TextureRect.new()
 					mask_marker.rect_position = mask_position * Const.TEMPLATE_TILE_SIZE + \
 						Vector2(x * 10.6 + 1, y * 10.6 + 1)
 					mask_marker.texture = preload("res://assets/template_marker.png")
-					template_texture.add_child(mask_marker)
+					template_texture.add_child(mask_marker, true)
 
 
 func generate_template_bitmasks():
@@ -489,12 +480,7 @@ func generate_template_bitmasks():
 				if not tiles_by_bitmasks.has(mask):
 					tiles_by_bitmasks[mask] = []
 				tiles_by_bitmasks[mask].append(GeneratedTile.new(mask, Vector2(x, y)))
-#				tiles_by_bitmasks[mask].append(Vector2(x, y))
-				mark_template_tile(mask, Vector2(x, y), true)
-			
-#			tiles_by_bitmasks.append({"mask": mask_value, "position": Vector2(x, y), "has_tile": has_tile})
-#			mark_template_tile(mask_value, Vector2(x, y), true)
-#	print("bitmask: ", template_bitmasks)
+				mark_template_tile(mask, Vector2(x, y))
 
 
 func put_to_rotation_viewport(slice: Image, rotation_key: int, is_flipped := false):
@@ -977,7 +963,6 @@ func get_debug_image_rect_size(input_type: int) -> Vector2:
 			size.y = slice_size * min_size.y * 8
 		Const.INPUT_TYPES.OVERLAY:
 			size.x = 4 * output_tile_size
-#			size.y = 4 * output_tile_size * 3 
 			size.y = 4 * output_tile_size  
 	return size
 
@@ -1013,8 +998,7 @@ func block_ui():
 		if node is Slider or node is SpinBox:
 			node.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		if node is Label:
-			node.add_color_override("font_color", Color(0.5,0.5,0.5))
-#			font_color = Color(0.5, 0.5, 0.5, 0.5)
+			node.add_color_override("font_color", Color(0.5, 0.5, 0.5))
 
 
 func unblock_ui():
@@ -1084,13 +1068,11 @@ func set_random_ui_enabled(tile_variants: int):
 		if rand_seed_check.is_in_group("really_disabled"):
 			rand_seed_check.remove_from_group("really_disabled")
 		rand_seed_label.add_color_override("font_color", Color(1.0, 1.0, 1.0))
-#		rand_seed_header.add_color_override("font_color", Color(1.0, 1.0, 1.0))
 		set_random_seed_ui_enabled(rand_seed_check.pressed)
 	else:
 		rand_seed_check.disabled = true
 		rand_seed_check.add_to_group("really_disabled")
 		rand_seed_label.add_color_override("font_color", Color(0.5, 0.5, 0.5))
-#		rand_seed_header.add_color_override("font_color", Color(0.5, 0.5, 0.5))
 		set_random_seed_ui_enabled(false)
 
 
