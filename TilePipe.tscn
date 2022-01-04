@@ -1,16 +1,15 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://TilePipe.gd" type="Script" id=1]
 [ext_resource path="res://assets/IBMPlexSans-Medium.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://slice_process.shader" type="Shader" id=3]
 [ext_resource path="res://assets/ui_theme.tres" type="Theme" id=4]
 [ext_resource path="res://TileRenderer.tscn" type="PackedScene" id=5]
-[ext_resource path="res://exporters/Godot_exporter.tscn" type="PackedScene" id=6]
+[ext_resource path="res://exporters/GodotExporter.tscn" type="PackedScene" id=6]
 [ext_resource path="res://BlockableSlider.gd" type="Script" id=7]
 [ext_resource path="res://assets/Load.svg" type="Texture" id=8]
 [ext_resource path="res://assets/Save.svg" type="Texture" id=9]
 [ext_resource path="res://assets/Godot.svg" type="Texture" id=10]
-[ext_resource path="res://assets/tile_shader_material.tres" type="Material" id=11]
 [ext_resource path="res://assets/checkers.png" type="Texture" id=12]
 [ext_resource path="res://assets/header_font.tres" type="DynamicFont" id=13]
 
@@ -637,21 +636,6 @@ margin_right = 64.0
 margin_bottom = 64.0
 stretch_mode = 3
 
-[node name="OverlayViewport" type="Viewport" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]
-size = Vector2( 32, 32 )
-size_override_stretch = true
-transparent_bg = true
-handle_input_locally = false
-disable_3d = true
-usage = 1
-render_target_v_flip = true
-render_target_update_mode = 3
-gui_disable_input = true
-
-[node name="TextureRect" type="TextureRect" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control/OverlayViewport"]
-material = ExtResource( 11 )
-stretch_mode = 3
-
 [node name="InViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]
 visible = false
 anchor_left = 1.0
@@ -659,17 +643,6 @@ anchor_right = 1.0
 margin_left = 34.0
 margin_right = 162.0
 margin_bottom = 128.0
-rect_min_size = Vector2( 128, 128 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="OverlayViewportContainer" type="ViewportContainer" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer/Control"]
-visible = false
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
 rect_min_size = Vector2( 128, 128 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -850,20 +823,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MoreTemplateControls" type="VBoxContainer" parent="Panel/HBox/Images/TemplateContainer"]
-visible = false
-margin_left = 248.0
-margin_right = 368.0
-margin_bottom = 130.0
-rect_min_size = Vector2( 120, 0 )
-
-[node name="ReloadButton" type="Button" parent="Panel/HBox/Images/TemplateContainer/MoreTemplateControls" groups=["blockable"]]
-visible = false
-margin_right = 120.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 0, 32 )
-text = "Reload ↻"
-
 [node name="HSeparator2" type="HSeparator" parent="Panel/HBox/Images"]
 margin_top = 457.0
 margin_right = 1112.0
@@ -989,19 +948,6 @@ size_flags_vertical = 1
 text = "Tile spacing:"
 align = 1
 valign = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Freeze" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer" groups=["blockable"]]
-visible = false
-margin_left = -22.476
-margin_top = -170.0
-margin_right = 147.524
-margin_bottom = -130.0
-rect_min_size = Vector2( 170, 40 )
-hint_tooltip = "Freeze existing to append more below"
-text = "Ξ Freeze Ξ"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1217,7 +1163,6 @@ window_title = "Errors occured"
 [connection signal="button_up" from="Panel/HBox/Images/InContainer/Preview/ImageSettings/OutputControlContainer/Smoothing" to="." method="_on_Smoothing_button_up"]
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
-[connection signal="pressed" from="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/Freeze" to="." method="_on_Freeze_pressed"]
 [connection signal="pressed" from="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer/OffsetButton" to="." method="_on_OffsetButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save" to="." method="_on_Save_pressed"]

@@ -44,8 +44,6 @@ onready var debug_input_texture_bg: TextureRect = debug_input_control.get_node("
 
 onready var rotate_viewport: Viewport = debug_input_control.get_node("QuartersViewport")
 onready var rotated_texture_in_viewport: TextureRect = rotate_viewport.get_node("TextureRect")
-onready var overlay_viewport: Viewport = debug_input_control.get_node("OverlayViewport")
-onready var overlay_texture_in_viewport: TextureRect = overlay_viewport.get_node("TextureRect")
 onready var overlay_merge_rate_slider: HSlider = settings_container.get_node("HSliderContainer/RateSlider")
 onready var overlay_overlap_slider: HSlider = settings_container.get_node("OverlapSliderContainer/OverlapSlider")
 
@@ -1173,7 +1171,6 @@ func _on_GodotExportButton_pressed():
 	godot_export_dialog.start_export_dialog(
 		get_output_tile_size(),
 		tiles_by_bitmasks,
-		out_texture.texture.get_data().get_size(),
 		current_texture_basename,
 		output_tile_offset,
 		out_texture.texture.get_data())
