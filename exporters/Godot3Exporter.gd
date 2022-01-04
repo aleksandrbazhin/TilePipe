@@ -284,6 +284,7 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 			"bitmask_mode": -1,
 			"icon_rect": Rect2()
 		}
+		print(tile_dict["name"])
 		if not textures.has(tile_dict["texture_id"]):
 			parse_result["error"] = true
 		match tile_dict["tile_mode"]:
@@ -314,7 +315,10 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 					str(tile_dict["id"]) + '/autotile/bitmask_mode\\s*=\\s(\\d+)\\s*' )
 				var bitmask_mode_match: RegExMatch = bitmask_mode_regex.search(tiles_data)
 				if bitmask_mode_match != null:
-					tile_dict["bitmask_mode"] = int(bitmask_mode_match.strings[1])
+					var godot_bitmask_mode := int(bitmask_mode_match.strings[1])
+					var bitmask_mode_index := Const.GODOT_AUTOTILE_GODOT_INDEXES.values().find(godot_bitmask_mode)
+					if bitmask_mode_index != -1:
+						tile_dict["bitmask_mode"] = Const.GODOT_AUTOTILE_GODOT_INDEXES.keys()[bitmask_mode_index]
 		parse_result["tiles"].append(tile_dict)
 	return parse_result
 
@@ -342,14 +346,18 @@ func load_tileset(tileset_path: String):
 			if tileset_data["error"] == false:
 				free_loaded_tile_rows()
 				for tile in tileset_data["tiles"]:
-					var exisiting_tile: Godot_tile_row = preload("res://exporters/Godot_existing_tile_row.tscn").instance()
+					var exisiting_tile: Godot_tile_row = preload("res://exporters/GodotExistingTileRow.tscn").instance()
 					if tileset_data["textures"].has(tile["texture_id"]):
 						var exisiting_texture_path: String = tileset_data["textures"][tile["texture_id"]]["path"]
 						if not Helpers.file_exists(exisiting_texture_path):
 							report_error_inside_dialog("Texture used for tile \"%s\" is missing" % tile["name"])
-						exisiting_tile.populate(tile["name"], tile["id"], 
+						exisiting_tile.populate(
+							tile["name"], 
+							tile["id"], 
 							exisiting_texture_path,
-							tile["icon_rect"], tile["tile_mode"], tile["bitmask_mode"],
+							tile["icon_rect"], 
+							tile["tile_mode"], 
+							tile["bitmask_mode"],
 							tileset_data["textures"][tile["texture_id"]]["image"])
 						existing_tiles_container.add_child(exisiting_tile)
 						exisiting_tile.connect("clicked", self, "populate_from_exisiting_tile")
@@ -385,6 +393,7 @@ func populate_from_exisiting_tile(row: Godot_tile_row):
 	tile_name = row.tile_name
 	set_lineedit_text(tile_name_edit, tile_name)
 	set_texture_path(row.texture_path.get_base_dir(), row.texture_path.get_file().split(".")[0])
+	autotile_type_select.select(row.bitmask_mode)
 	check_existing_for_matches()
 
 

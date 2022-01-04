@@ -27,7 +27,7 @@ _global_script_classes=[ {
 "base": "ColorRect",
 "class": "Godot_tile_row",
 "language": "GDScript",
-"path": "res://exporters/Godot_existing_tile_row.gd"
+"path": "res://exporters/GodotExistingTileRow.gd"
 }, {
 "base": "Node",
 "class": "TileRenderer",
