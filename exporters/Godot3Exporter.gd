@@ -473,10 +473,10 @@ func clear_file_path(path: String) -> String:
 
 
 func start_export_dialog(new_tile_size: int, new_tile_masks: Dictionary, 
-		new_texture_size: Vector2, new_tile_base_name: String, 
+		new_tile_base_name: String, 
 		new_tile_spacing: int, texture_image: Image):
 	current_tile_size = new_tile_size
-	current_texture_size = new_texture_size
+	current_texture_size = texture_image.get_size()
 	current_tile_spacing = new_tile_spacing
 	current_tile_masks = new_tile_masks
 	current_texture_image.copy_from(texture_image)

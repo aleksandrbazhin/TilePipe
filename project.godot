@@ -22,7 +22,7 @@ _global_script_classes=[ {
 "base": "PopupDialog",
 "class": "GodotExporter",
 "language": "GDScript",
-"path": "res://exporters/godot_exporter.gd"
+"path": "res://exporters/Godot3Exporter.gd"
 }, {
 "base": "ColorRect",
 "class": "Godot_tile_row",

@@ -4,7 +4,7 @@
 [ext_resource path="res://assets/header_font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://assets/Save.svg" type="Texture" id=3]
 [ext_resource path="res://assets/Load.svg" type="Texture" id=4]
-[ext_resource path="res://exporters/godot_exporter.gd" type="Script" id=5]
+[ext_resource path="res://exporters/Godot3Exporter.gd" type="Script" id=5]
 
 [node name="GodotExportDialog" type="PopupDialog"]
 anchor_right = 1.0
