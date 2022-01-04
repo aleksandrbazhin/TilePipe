@@ -480,7 +480,7 @@ func generate_template_bitmasks():
 				if not tiles_by_bitmasks.has(mask):
 					tiles_by_bitmasks[mask] = []
 				tiles_by_bitmasks[mask].append(GeneratedTile.new(mask, Vector2(x, y)))
-				mark_template_tile(mask, Vector2(x, y))
+				mark_template_tile(mask, Vector2(x, y), true)
 
 
 func put_to_rotation_viewport(slice: Image, rotation_key: int, is_flipped := false):

@@ -106,3 +106,15 @@ func convert_bitmask_to_godot(bitmask: int,
 				if bitmask & check_bit != 0:
 					godot_bitmask += Const.GODOT_MASK_2x2[mask_name]
 	return godot_bitmask
+
+
+func get_godot_autotile_type(tiles_by_bitmask: Dictionary) -> int:
+	var type: int = Const.GODOT_AUTOTILE_TYPE.WANG_2x2
+	for mask in tiles_by_bitmask:
+		if not tiles_by_bitmask[mask].empty():
+			if not mask in Const.GODOT_AUTOTILE_BITMASKS[Const.GODOT_AUTOTILE_TYPE.WANG_2x2]:
+				type = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
+				if not mask in Const.GODOT_AUTOTILE_BITMASKS[Const.GODOT_AUTOTILE_TYPE.BLOB_3x3]:
+					return Const.GODOT_AUTOTILE_TYPE.FULL_3x3
+	return type
+	

@@ -435,14 +435,15 @@ func clear_file_path(path: String) -> String:
 		return Helpers.get_default_dir_path()
 
 
-func start_export_dialog(new_tile_size: int, new_tile_masks: Dictionary, 
+func start_export_dialog(new_tile_size: int, tiles: Dictionary, 
 		new_tile_base_name: String, 
 		new_tile_spacing: int, texture_image: Image):
 	current_tile_size = new_tile_size
 	current_texture_size = texture_image.get_size()
 	current_tile_spacing = new_tile_spacing
-	current_tile_masks = new_tile_masks
+	current_tile_masks = tiles
 	current_texture_image.copy_from(texture_image)
+	autotile_type = Helpers.get_godot_autotile_type(tiles)
 	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
 	if last_generated_tile_name.empty() or (last_generated_tile_name != generated_tile_name and tile_name.is_valid_filename()):
 		tile_name = generated_tile_name
@@ -452,7 +453,7 @@ func start_export_dialog(new_tile_size: int, new_tile_masks: Dictionary,
 	set_lineedit_text(tile_name_edit, tile_name)
 	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
-	autotile_type_select.selected = autotile_type	
+	autotile_type_select.selected = autotile_type
 	
 	if is_a_valid_resource_path(resource_path):
 		set_lineedit_text(resource_name_edit, resource_path)
