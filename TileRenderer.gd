@@ -56,9 +56,7 @@ func start_render(new_ruleset: GenerationData, new_input_tile_size: Vector2, new
 	ruleset = new_ruleset
 	input_tile_size = new_input_tile_size
 	output_tile_size = new_output_tile_size
-	print(input_image.get_size())
 	input_tile_parts = split_input_into_tile_parts(input_image)
-	print(input_tile_parts)
 	smoothing_enabled = new_smoothing_enabled
 	rng = active_rng
 	last_mask = tiles.keys()[0]
@@ -83,7 +81,7 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 		while not part_is_empty:
 			var part := Image.new()
 			part.create(int(input_tile_size.x), int(input_tile_size.y), false, Image.FORMAT_RGBA8)
-			if input_tile_size.y + variant_index * input_tile_size.y > input_image.get_size().y:
+			if input_tile_size.y + variant_index * input_tile_size.y > input_image.get_size().y and parts[part_index].size() > 0:
 				break
 			var copy_rect := Rect2(part_index * input_tile_size.x, variant_index * input_tile_size.y, 
 				input_tile_size.x, input_tile_size.y)
