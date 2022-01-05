@@ -28,6 +28,7 @@ var current_tile_size: Vector2
 var current_tile_masks: Dictionary
 var current_texture_size: Vector2
 var current_tile_spacing: int
+var current_smoothing : bool = false
 
 var is_tile_match: bool = false
 var is_match_error_found: bool = false
@@ -444,14 +445,19 @@ func clear_file_path(path: String) -> String:
 		return Helpers.get_default_dir_path()
 
 
-func start_export_dialog(new_tile_size: Vector2, tiles: Dictionary, 
+func start_export_dialog(
+		new_tile_size: Vector2, 
+		tiles: Dictionary, 
 		new_tile_base_name: String, 
-		new_tile_spacing: int, texture_image: Image):
+		new_tile_spacing: int, 
+		texture_image: Image,
+		smoothing: bool = true):
 	current_tile_size = new_tile_size
 	current_texture_size = texture_image.get_size()
 	current_tile_spacing = new_tile_spacing
 	current_tile_masks = tiles
 	current_texture_image.copy_from(texture_image)
+	current_smoothing = smoothing
 	autotile_type = Helpers.get_godot_autotile_type(tiles)
 	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
 	if last_generated_tile_name.empty() or (last_generated_tile_name != generated_tile_name and tile_name.is_valid_filename()):
@@ -629,4 +635,5 @@ func _on_CheckButton_toggled(button_pressed):
 func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	if button_pressed:
 #		print(current_texture_image.get_size())
-		$CollisionGenerator.start(current_texture_image, current_tile_size, current_tile_spacing)
+		$CollisionGenerator.start(current_texture_image, current_tile_size, 
+			current_tile_spacing, current_smoothing)

@@ -8,6 +8,7 @@
 [ext_resource path="res://exporters/CollisionGenerator.tscn" type="PackedScene" id=6]
 
 [node name="GodotExportDialog" type="PopupDialog"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -266.0
@@ -119,7 +120,7 @@ valign = 2
 [node name="TilesPanelContainer" type="PanelContainer" parent="VBox"]
 margin_top = 123.0
 margin_right = 1060.0
-margin_bottom = 526.0
+margin_bottom = 525.0
 rect_min_size = Vector2( 0, 48 )
 size_flags_vertical = 3
 
@@ -127,7 +128,7 @@ size_flags_vertical = 3
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1053.0
-margin_bottom = 396.0
+margin_bottom = 395.0
 custom_constants/separation = 8
 
 [node name="Control" type="Control" parent="VBox/TilesPanelContainer/VBox"]
@@ -240,36 +241,36 @@ size_flags_horizontal = 3
 custom_constants/separation = 10
 
 [node name="Control" type="Control" parent="VBox"]
-margin_top = 526.0
+margin_top = 525.0
 margin_right = 1060.0
-margin_bottom = 528.0
+margin_bottom = 527.0
 rect_min_size = Vector2( 0, 2 )
 
 [node name="HSeparator" type="HSeparator" parent="VBox"]
-margin_top = 528.0
+margin_top = 527.0
 margin_right = 1060.0
-margin_bottom = 548.0
+margin_bottom = 547.0
 custom_constants/separation = 20
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBox"]
-margin_top = 548.0
+margin_top = 547.0
 margin_right = 1060.0
-margin_bottom = 580.0
+margin_bottom = 583.0
 custom_constants/separation = 16
 alignment = 2
 
 [node name="ButtonCancel" type="Button" parent="VBox/HBoxContainer"]
 margin_left = 844.0
 margin_right = 944.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 100, 32 )
+margin_bottom = 36.0
+rect_min_size = Vector2( 100, 36 )
 text = "Cancel"
 
 [node name="ButtonOk" type="Button" parent="VBox/HBoxContainer"]
 margin_left = 960.0
 margin_right = 1060.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 100, 32 )
+margin_bottom = 36.0
+rect_min_size = Vector2( 100, 36 )
 hint_tooltip = "Saves changes  both to selected tileset and texture files"
 custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
 custom_fonts/font = ExtResource( 2 )

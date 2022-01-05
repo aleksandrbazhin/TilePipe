@@ -5,11 +5,12 @@ class_name CollisionGenerator
 enum {DIRECTION_FORWARD, DIRECTION_BACK}
 const NOT_FOUND: Vector2 = Vector2(-1.0, -1.0)
 const NO_WAY := -1.0
-const SEARCH_STEP := 1.0
-const GRID_CELLS := 15 # TODO: сделать пропорциональным размеру тайла
-const DISTANCE_DELTA_SQ := 9 # TODO: сделать пропорциональным размеру тайла
+#const SEARCH_STEP := 1.0
 const LINE_ANGLE_DELTA := 0.1
 
+var grid_cells := 15 # TODO: сделать пропорциональным размеру тайла
+var point_elimination_delta_sq := 4 # TODO: сделать пропорциональным размеру тайла
+var is_ui_blocked := true
 var full_image: Image = null
 var tile_size: Vector2
 var tile_spacing: Vector2
@@ -20,14 +21,36 @@ onready var viewport := $VBoxContainer/MarginContainer/Viewport
 onready var contours_texture_rect := $VBoxContainer/MarginContainer/Viewport/ContourTextureRect
 onready var contours_display_texture_rect := $VBoxContainer/MarginContainer/VisibleTextureRect
 onready var progress_bar := $VBoxContainer/MarginContainer2/HBoxContainer/ProgressBar
+onready var grid_slider := $VBoxContainer/MarginContainer3/HBoxContainer/GridSlider
+onready var delta_slider := $VBoxContainer/MarginContainer3/HBoxContainer/DeltaSlider
+onready var accept_button := $VBoxContainer/MarginContainer2/HBoxContainer/SaveButton
+onready var cancel_button := $VBoxContainer/MarginContainer2/HBoxContainer/CancelButton
+onready var grid_label := $VBoxContainer/MarginContainer3/HBoxContainer/GridLabel
+onready var delta_label := $VBoxContainer/MarginContainer3/HBoxContainer/DeltaLabel
+onready var grid_value_label := $VBoxContainer/MarginContainer3/HBoxContainer/GridValueLabel
+onready var delta_value_label := $VBoxContainer/MarginContainer3/HBoxContainer/DeltaValueLabel
 
 
-func start(new_image: Image, new_tile_size: Vector2, new_tile_spacing: int):
+func start(new_image: Image, new_tile_size: Vector2, new_tile_spacing: int, smoothing: bool = false):
+	block_ui()
 	full_image = new_image
 	tile_size = new_tile_size
+	setup_sliders()
 	tile_spacing = Vector2(new_tile_spacing, new_tile_spacing)
+	
+	var scaled_image := Image.new()
+	scaled_image = full_image.duplicate()
+	var image_size := full_image.get_size()
+	var image_draw_scale := min(
+		contours_texture_rect.rect_size.x / image_size.x, 
+		contours_texture_rect.rect_size.y / image_size.y)
+	if image_draw_scale != 1.0:
+		var interpolation: int = Image.INTERPOLATE_LANCZOS if smoothing else Image.INTERPOLATE_NEAREST
+		scaled_image.resize(int(image_size.x * image_draw_scale), int(image_size.y * image_draw_scale), interpolation)
+	
+	contours_texture_rect.draw_scale = image_draw_scale
 	var itex := ImageTexture.new()
-	itex.create_from_image(full_image)
+	itex.create_from_image(scaled_image)
 	contours_texture_rect.texture = itex
 	contours_display_texture_rect.texture = itex
 	popup_centered()
@@ -39,14 +62,15 @@ func start(new_image: Image, new_tile_size: Vector2, new_tile_spacing: int):
 	compute_contours()
 
 
-func _on_CloseButton_pressed():
-	collisions_accepted = false
-	hide()
-
-
-func _on_SaveButton_pressed():
-	collisions_accepted = true
-	hide()
+func setup_sliders():
+	var max_grid := int(min(tile_size.x, tile_size.y))
+	grid_cells = int(max_grid / 3.0)
+#	max_grid = min(max_grid/2.0, 20.0)
+	grid_slider.min_value = 1.0
+	grid_slider.max_value = max_grid / 2.0
+	grid_slider.quantize(max_grid / 2.0 - 1)
+	
+	grid_slider.value = grid_cells
 
 
 func compute_contour_at(tile_rect: Rect2) -> PoolVector2Array:
@@ -54,20 +78,23 @@ func compute_contour_at(tile_rect: Rect2) -> PoolVector2Array:
 	tile_image.create(int(tile_size.x), int(tile_size.y), false, Image.FORMAT_RGBA8)
 	tile_image.blit_rect(full_image, tile_rect, Vector2.ZERO)
 	var contour: PoolVector2Array = []
+#	print("COMPUTING rect1")
 	if not tile_image.is_invisible():
 		var top: PoolVector2Array = []
 		var bottom: PoolVector2Array  = []
 		var left := []
 		var right := []
-		for line in range(GRID_CELLS + 1):
-			var ray := Vector2(line * tile_image.get_size().x / float(GRID_CELLS), NO_WAY)
+		for line in range(grid_cells + 1):
+#			print ("line ", line)
+			var ray := Vector2(line * tile_image.get_size().x / float(grid_cells), NO_WAY)
+#			print ("ray", ray)
 			var point := find_edge_pixel(ray, tile_image, DIRECTION_BACK)
 			if point != NOT_FOUND:
 				bottom.append(point)
 			point = find_edge_pixel(ray, tile_image, DIRECTION_FORWARD)
 			if point != NOT_FOUND:
 				top.append(point)
-			ray = Vector2(NO_WAY, line * tile_image.get_size().y / float(GRID_CELLS))
+			ray = Vector2(NO_WAY, line * tile_image.get_size().y / float(grid_cells))
 			point = find_edge_pixel(ray, tile_image, DIRECTION_BACK)
 			if point != NOT_FOUND:
 				right.append(point)
@@ -125,6 +152,7 @@ func constours_drawn():
 	var itex := ImageTexture.new()
 	itex.create_from_image(viewport.get_texture().get_data())
 	contours_display_texture_rect.texture = itex
+	unblock_ui()
 
 
 func get_side_overlap(side_points: Array, cutoff: Vector2, vertical_direction: int) -> int:
@@ -167,7 +195,7 @@ func remove_close_points(contour: PoolVector2Array) -> PoolVector2Array:
 	for i in range(contour.size()):
 		var point: Vector2 = contour[i]
 		var next_point: Vector2 = contour[i + 1] if i < contour.size() - 1 else contour[0]
-		if point.distance_squared_to(next_point) < DISTANCE_DELTA_SQ:
+		if point.distance_squared_to(next_point) < point_elimination_delta_sq:
 			point_neighbor_checks.append(true)
 		else:
 			point_neighbor_checks.append(false)
@@ -184,41 +212,105 @@ func find_edge_pixel(ray: Vector2, tile_image: Image, direction: int) -> Vector2
 	var result := NOT_FOUND
 	if ray.y == NO_WAY:
 		ray.x = min(ray.x, tile_image.get_size().x - 1)
-#		var image: Image = texture.get_data()
 		tile_image.lock()
 		var prev_pixel_a := 0.0
-		var length = tile_image.get_size().y - 1
-		for y in range(0, length, SEARCH_STEP):
+#		var length = tile_image.get_size().y - 1
+		for y in range(tile_image.get_size().y):
 			var test_point := Vector2(ray.x, y)
+#			print("y" , y, "    test_point: ", test_point )
 			if direction == DIRECTION_BACK:
-				test_point.y = length - y
+				test_point.y = tile_image.get_size().y - 1 - y
 			var pixel_a := tile_image.get_pixelv(test_point).a
 			if prev_pixel_a == 0.0 and pixel_a != 0.0:
-				return test_point
+				if direction == DIRECTION_BACK:
+					test_point.y += 1
+				if test_point.x == tile_image.get_size().x - 1:
+					test_point.x = tile_image.get_size().x
+				tile_image.unlock()
+				return test_point 
 			else:
 				prev_pixel_a = pixel_a
-			pass
 		tile_image.unlock()
-
 	elif ray.x == NO_WAY:
 		ray.y = min(ray.y, tile_image.get_size().y - 1)
-#		var image: Image = texture.get_data()
 		tile_image.lock()
 		var prev_pixel_a := 0.0
-		var length = tile_image.get_size().y - 1
-		for x in range(0, length, SEARCH_STEP):
+#		var length = tile_image.get_size().x - 1
+		for x in range(tile_image.get_size().x):
 			var test_point := Vector2(x, ray.y)
 			if direction == DIRECTION_BACK:
-				test_point.x = length - x
+				test_point.x = tile_image.get_size().x - 1 - x
 			var pixel_a := tile_image.get_pixelv(test_point).a
 			if prev_pixel_a == 0.0 and pixel_a != 0.0:
+				if direction == DIRECTION_BACK:
+					test_point.x += 1
+				if test_point.y == tile_image.get_size().y - 1:
+					test_point.y = tile_image.get_size().y
+				tile_image.unlock()
 				return test_point
 			else:
 				prev_pixel_a = pixel_a
-			pass
 		tile_image.unlock()
-
 	else:
 		print("ERROR: NOT AXIS ALIGNED RAY")
 	return result
 
+
+func _on_CloseButton_pressed():
+	collisions_accepted = false
+	hide()
+
+
+func _on_SaveButton_pressed():
+	collisions_accepted = true
+	hide()
+
+
+func _on_GridSlider_released(value):
+	grid_cells = value
+	progress_bar.value = 0
+	block_ui()
+	yield(VisualServer, "frame_post_draw")
+	compute_contours()
+	
+
+
+func _on_DeltaSlider_released(value):
+	
+	progress_bar.value = 0
+	block_ui()
+	yield(VisualServer, "frame_post_draw")
+	compute_contours()
+
+
+func block_ui():
+	is_ui_blocked = true
+	grid_slider.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	delta_slider.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	accept_button.disabled = true
+	cancel_button.disabled = true
+	grid_label.add_color_override("font_color", Color.darkgray)
+	grid_value_label.add_color_override("font_color", Color.darkgray)
+	delta_label.add_color_override("font_color", Color.darkgray)
+	delta_value_label.add_color_override("font_color", Color.darkgray)
+	
+
+
+func unblock_ui():
+	is_ui_blocked = false
+	grid_slider.mouse_filter = Control.MOUSE_FILTER_STOP
+	delta_slider.mouse_filter = Control.MOUSE_FILTER_STOP
+	accept_button.disabled = false
+	cancel_button.disabled = false
+	grid_label.add_color_override("font_color", Color.white)
+	grid_value_label.add_color_override("font_color", Color.white)
+	delta_label.add_color_override("font_color", Color.white)
+	delta_value_label.add_color_override("font_color", Color.white)
+
+
+func _on_GridSlider_value_changed(value):
+	grid_value_label.text = str(value)
+
+
+func _on_DeltaSlider_value_changed(value):
+	delta_value_label.text = str(value)

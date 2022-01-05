@@ -1156,4 +1156,5 @@ func _on_GodotExportButton_pressed():
 		tiles_by_bitmasks,
 		current_texture_basename,
 		output_tile_offset,
-		out_texture.texture.get_data())
+		out_texture.texture.get_data(),
+		smoothing_check.pressed)

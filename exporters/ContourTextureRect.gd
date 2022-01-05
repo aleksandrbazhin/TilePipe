@@ -3,7 +3,7 @@ extends TextureRect
 signal drawn()
 
 var contours := []
-
+var draw_scale := 1.0
 
 func translate_contour(contour: PoolVector2Array) -> PoolVector2Array:
 	var texture_size := texture.get_size()
@@ -12,7 +12,7 @@ func translate_contour(contour: PoolVector2Array) -> PoolVector2Array:
 	var new_contour:= PoolVector2Array()
 	new_contour.resize(contour.size())
 	for i in range(contour.size()):
-		new_contour[i] = translate + contour[i] * scale
+		new_contour[i] = translate + contour[i] * scale * draw_scale
 	return new_contour
 
 
@@ -27,6 +27,9 @@ func _draw():
 		if not Geometry.triangulate_polygon(contour).empty():
 			var colors: PoolColorArray = []
 			for point in contour:
-				colors.append(Color(1.0, 1.0, 1.0, 0.66))
+				colors.append(Color(1.0, 1.0, 1.0, 0.4))
 			draw_polygon(contour, colors)
+		else:
+			draw_polyline(contour, Color.red, 2.0)
 	emit_signal("drawn")
+

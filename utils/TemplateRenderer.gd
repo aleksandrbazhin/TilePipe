@@ -1,6 +1,6 @@
 extends ViewportContainer
 
-const TILES_X = 32
+const TILES_X = 16
 const DATA_LEN = 256
 const TILE_SIZE := Vector2(32, 32)
 

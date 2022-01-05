@@ -1,15 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://exporters/CollisionGenerator.gd" type="Script" id=1]
 [ext_resource path="res://exporters/ContourTextureRect.gd" type="Script" id=2]
 [ext_resource path="res://assets/header_font.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/ui_theme.tres" type="Theme" id=4]
+[ext_resource path="res://BlockableSlider.gd" type="Script" id=5]
 
 [node name="CollisionGenerator" type="PopupDialog"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -466.0
-margin_bottom = -268.0
+margin_right = -386.0
+margin_bottom = -208.0
 theme = ExtResource( 4 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -24,7 +26,7 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="VBoxContainer"]
-margin_right = 900.0
+margin_right = 980.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 custom_fonts/font = ExtResource( 3 )
@@ -34,8 +36,8 @@ valign = 1
 
 [node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer"]
 margin_top = 44.0
-margin_right = 900.0
-margin_bottom = 80.0
+margin_right = 980.0
+margin_bottom = 83.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
@@ -44,44 +46,80 @@ custom_constants/margin_bottom = 10
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer3"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 890.0
+margin_right = 970.0
 margin_bottom = 29.0
 custom_constants/separation = 12
 
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-margin_top = 1.0
-margin_right = 100.0
-margin_bottom = 15.0
+[node name="GridLabel" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
+margin_right = 99.0
+margin_bottom = 19.0
+hint_tooltip = "How many cells are computed per tile"
+mouse_filter = 0
 text = "Grid resolution:"
 
-[node name="HSlider" type="HSlider" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-margin_left = 112.0
-margin_right = 403.0
+[node name="GridSlider" type="HSlider" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
+margin_left = 111.0
+margin_right = 922.0
 margin_bottom = 16.0
+hint_tooltip = "How many cells are computed per tile"
 size_flags_horizontal = 3
+rounded = true
+ticks_on_borders = true
+script = ExtResource( 5 )
+
+[node name="GridValueLabel" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
+margin_left = 934.0
+margin_right = 960.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 26, 0 )
+text = "10"
+
+[node name="Control" type="Control" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
+visible = false
+margin_left = 560.0
+margin_right = 960.0
+margin_bottom = 19.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-margin_left = 415.0
-margin_right = 419.0
-margin_bottom = 16.0
+visible = false
+margin_left = 948.0
+margin_right = 960.0
+margin_bottom = 19.0
 
-[node name="Label2" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-margin_left = 431.0
-margin_top = 1.0
-margin_right = 577.0
-margin_bottom = 15.0
+[node name="DeltaLabel" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
+visible = false
+margin_left = 474.0
+margin_right = 620.0
+margin_bottom = 19.0
+hint_tooltip = "On what distance in px close contour points are eliminated"
+mouse_filter = 0
 text = "Point elimination delta"
 
-[node name="HSlider2" type="HSlider" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-margin_left = 589.0
-margin_right = 880.0
+[node name="DeltaSlider" type="HSlider" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
+visible = false
+margin_left = 553.0
+margin_right = 922.0
 margin_bottom = 16.0
+hint_tooltip = "On what distance in px close contour points are eliminated"
 size_flags_horizontal = 3
+script = ExtResource( 5 )
+
+[node name="DeltaValueLabel" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
+visible = false
+margin_left = 934.0
+margin_right = 960.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 26, 0 )
+text = "0.5"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
-margin_top = 84.0
-margin_right = 900.0
-margin_bottom = 436.0
+margin_top = 87.0
+margin_right = 980.0
+margin_bottom = 500.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 20
@@ -106,17 +144,17 @@ script = ExtResource( 2 )
 [node name="VisibleTextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 880.0
-margin_bottom = 332.0
+margin_right = 960.0
+margin_bottom = 393.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 expand = true
 stretch_mode = 6
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
-margin_top = 440.0
-margin_right = 860.0
-margin_bottom = 752.0
+margin_top = 504.0
+margin_right = 980.0
+margin_bottom = 560.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
@@ -125,31 +163,35 @@ custom_constants/margin_bottom = 10
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 850.0
-margin_bottom = 302.0
-rect_min_size = Vector2( 0, 40 )
+margin_right = 970.0
+margin_bottom = 46.0
+rect_min_size = Vector2( 0, 36 )
 custom_constants/separation = 10
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_top = 13.0
-margin_right = 700.0
+margin_top = 8.0
+margin_right = 740.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
 [node name="SaveButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_left = 710.0
-margin_right = 790.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 80, 0 )
+margin_left = 750.0
+margin_right = 850.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 100, 0 )
 text = "Accept"
 
-[node name="CloseButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_left = 800.0
-margin_right = 880.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 80, 0 )
+[node name="CancelButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
+margin_left = 860.0
+margin_right = 960.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 100, 0 )
 text = "Cancel"
 
+[connection signal="released" from="VBoxContainer/MarginContainer3/HBoxContainer/GridSlider" to="." method="_on_GridSlider_released"]
+[connection signal="value_changed" from="VBoxContainer/MarginContainer3/HBoxContainer/GridSlider" to="." method="_on_GridSlider_value_changed"]
+[connection signal="released" from="VBoxContainer/MarginContainer3/HBoxContainer/DeltaSlider" to="." method="_on_DeltaSlider_released"]
+[connection signal="value_changed" from="VBoxContainer/MarginContainer3/HBoxContainer/DeltaSlider" to="." method="_on_DeltaSlider_value_changed"]
 [connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/SaveButton" to="." method="_on_SaveButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/CloseButton" to="." method="_on_CloseButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/CancelButton" to="." method="_on_CloseButton_pressed"]
