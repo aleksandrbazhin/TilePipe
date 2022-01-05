@@ -13,7 +13,6 @@ signal settings_saved()
 #}
 
 
-
 const DEFAULT_TILES_LABEL: String = "Select tileset to edit tiles ↑"
 
 var resource_path: String = ""

@@ -34,6 +34,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://exporters/GodotExistingTileRow.gd"
 }, {
+"base": "Panel",
+"class": "MonitorPlotPanel",
+"language": "GDScript",
+"path": "res://addons/PerfMonitor/MonitorPlotPanel.gd"
+}, {
 "base": "Node",
 "class": "TileRenderer",
 "language": "GDScript",
@@ -45,6 +50,7 @@ _global_script_class_icons={
 "GenerationData": "",
 "GodotExporter": "",
 "Godot_tile_row": "",
+"MonitorPlotPanel": "",
 "TileRenderer": ""
 }
 
@@ -80,6 +86,10 @@ window/size/width=1366
 window/size/height=768
 window/vsync/use_vsync=false
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/PerfMonitor/plugin.cfg" )
 
 [filesystem]
 

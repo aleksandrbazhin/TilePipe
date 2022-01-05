@@ -6,8 +6,8 @@ enum {DIRECTION_FORWARD, DIRECTION_BACK}
 const NOT_FOUND: Vector2 = Vector2(-1.0, -1.0)
 const NO_WAY := -1.0
 const SEARCH_STEP := 1.0
-const GRID_CELLS := 15
-const DISTANCE_DELTA_SQ := 9
+const GRID_CELLS := 15 # TODO: сделать пропорциональным размеру тайла
+const DISTANCE_DELTA_SQ := 9 # TODO: сделать пропорциональным размеру тайла
 const LINE_ANGLE_DELTA := 0.1
 
 var full_image: Image = null
@@ -16,8 +16,10 @@ var tile_spacing: Vector2
 var collision_contours: Dictionary
 var collisions_accepted := false
 
-
-onready var contours_texture_rect := $VBoxContainer/MarginContainer/ContourTextureRect
+onready var viewport := $VBoxContainer/MarginContainer/Viewport
+onready var contours_texture_rect := $VBoxContainer/MarginContainer/Viewport/ContourTextureRect
+onready var contours_display_texture_rect := $VBoxContainer/MarginContainer/VisibleTextureRect
+onready var progress_bar := $VBoxContainer/MarginContainer2/HBoxContainer/ProgressBar
 
 
 func start(new_image: Image, new_tile_size: Vector2, new_tile_spacing: int):
@@ -27,13 +29,18 @@ func start(new_image: Image, new_tile_size: Vector2, new_tile_spacing: int):
 	var itex := ImageTexture.new()
 	itex.create_from_image(full_image)
 	contours_texture_rect.texture = itex
-#	contours_texture_rect.texture_rect = 
-#	print($VBoxContainer/MarginContainer/ContourTextureRect.rect_size, image.get_size())
+	contours_display_texture_rect.texture = itex
 	popup_centered()
+	contours_texture_rect.contours = []
+	contours_texture_rect.update()
+	viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
+	viewport.size = contours_texture_rect.rect_size
+	yield(VisualServer, "frame_post_draw")
 	compute_contours()
 
 
 func _on_CloseButton_pressed():
+	collisions_accepted = false
 	hide()
 
 
@@ -90,7 +97,8 @@ func compute_contour_at(tile_rect: Rect2) -> PoolVector2Array:
 
 func compute_contours():
 	contours_texture_rect.contours = []
-	var size_in_tiles: Vector2 = full_image.get_size() / (tile_size + tile_spacing)
+	progress_bar.value = 0
+	var size_in_tiles: Vector2 = (full_image.get_size() - tile_size) / (tile_size + tile_spacing) + Vector2.ONE
 #	var tile_size: Vector2 = image.get_size() / size_in_tiles
 	for x in range(size_in_tiles.x):
 		for y in range(size_in_tiles.y):
@@ -102,7 +110,21 @@ func compute_contours():
 					contour[i] = contour[i] + tile_position
 				collision_contours[tile_template_position] = contour
 				contours_texture_rect.add_contour(contour)
+#		progress_bar.value = int(x / size_in_tiles.x * 100.0)
+#		yield(VisualServer, "frame_post_draw")
+	viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
 	contours_texture_rect.update()
+	contours_texture_rect.connect("drawn", self, "constours_drawn")
+	progress_bar.value = 100
+
+
+func constours_drawn():
+	contours_texture_rect.disconnect("drawn", self, "constours_drawn")
+	yield(VisualServer, "frame_post_draw")
+	viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
+	var itex := ImageTexture.new()
+	itex.create_from_image(viewport.get_texture().get_data())
+	contours_display_texture_rect.texture = itex
 
 
 func get_side_overlap(side_points: Array, cutoff: Vector2, vertical_direction: int) -> int:

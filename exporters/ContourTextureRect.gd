@@ -1,9 +1,8 @@
 extends TextureRect
 
+signal drawn()
+
 var contours := []
-#var texture_rect: Rect2
-
-
 
 
 func translate_contour(contour: PoolVector2Array) -> PoolVector2Array:
@@ -30,3 +29,4 @@ func _draw():
 			for point in contour:
 				colors.append(Color(1.0, 1.0, 1.0, 0.66))
 			draw_polygon(contour, colors)
+	emit_signal("drawn")
