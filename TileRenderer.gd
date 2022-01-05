@@ -56,7 +56,9 @@ func start_render(new_ruleset: GenerationData, new_input_tile_size: Vector2, new
 	ruleset = new_ruleset
 	input_tile_size = new_input_tile_size
 	output_tile_size = new_output_tile_size
+	print(input_image.get_size())
 	input_tile_parts = split_input_into_tile_parts(input_image)
+	print(input_tile_parts)
 	smoothing_enabled = new_smoothing_enabled
 	rng = active_rng
 	last_mask = tiles.keys()[0]
@@ -86,7 +88,7 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 			var copy_rect := Rect2(part_index * input_tile_size.x, variant_index * input_tile_size.y, 
 				input_tile_size.x, input_tile_size.y)
 			part.blit_rect(input_image, copy_rect, Vector2.ZERO)
-			if part.is_invisible():
+			if part.is_invisible() and parts[part_index].size() > 0:
 				part_is_empty = true
 			else:
 				parts[part_index].append(part)
@@ -97,7 +99,7 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 func setup_tile_render(mask: int, viewport: Viewport):
 	var overlap_vectors: Array = ruleset.get_overlap_vectors()
 	var overlap_vector_rotations: Array = ruleset.get_overlap_vector_rotations()
-	var random_center_index: int = 0
+	var random_center_index: int = rng.randi_range(0, input_tile_parts[0].size() - 1)
 	var center_image: Image = input_tile_parts[0][random_center_index]
 	var tile_rules_data: Dictionary = ruleset.get_mask_data(mask)
 	var parts_rules: Array = tile_rules_data["generate_piece_indexes"]
@@ -112,19 +114,20 @@ func setup_tile_render(mask: int, viewport: Viewport):
 	var mask_index: int = 0
 	for mask_name in Const.TILE_MASK:
 		var piece_index: int = parts_rules[mask_index]
+		var tile_variants: Array = input_tile_parts[piece_index]
 		var random_tile_index: int = 0
 		var existing_piece_index := piece_set.find(piece_index)
 		if existing_piece_index != -1:
 			random_tile_index = piece_random[existing_piece_index]
 		else:
-			random_tile_index = rng.randi_range(0, input_tile_parts[piece_index].size() - 1)
+			random_tile_index = rng.randi_range(0, tile_variants.size() - 1)
 			piece_random[mask_index] = random_tile_index
 		piece_set[mask_index] = piece_index
 		var piece_rot_index: int = parts_rotations[mask_index]
 		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[piece_rot_index]
 		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
 		var overlay_image := Image.new()
-		overlay_image.copy_from(input_tile_parts[piece_index][random_tile_index])
+		overlay_image.copy_from(tile_variants[random_tile_index])
 		if bool(tile_rules_data["generate_piece_flip_x"][mask_index]):
 			overlay_image.flip_x()
 		if bool(tile_rules_data["generate_piece_flip_y"][mask_index]):
