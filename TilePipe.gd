@@ -304,8 +304,8 @@ func apply_tile_specific_settings(data: Dictionary, is_example: bool = false, ex
 
 
 func apply_saved_settings(data: Dictionary):
-	apply_tile_specific_settings(data)
 	load_input_texture(data["last_texture_path"])
+	apply_tile_specific_settings(data)
 	input_file_dialog_path = data["last_texture_file_dialog_path"]
 	texture_file_dialog.current_path = Helpers.clear_path(input_file_dialog_path)
 	example_check.pressed = bool(data["use_example"])
