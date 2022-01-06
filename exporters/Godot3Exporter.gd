@@ -631,9 +631,27 @@ func _on_ButtonOk_pressed():
 		report_error_inside_dialog("Error: invalide resource or texture path")
 
 
+func make_collisions_strings(collision_contours: Dictionary) -> Dictionary:
+	var strings := {}
+	var index := 1
+	for polygon_position in collision_contours:
+		var polygon: PoolVector2Array = collision_contours[polygon_position]
+		var polygon_string := "[sub_resource type=\"ConvexPolygonShape2D\" id=%d]" % index
+		polygon_string += "\npoints = PoolVector2Array( "
+		var points := PoolStringArray()
+		points.resize(polygon.size() * 2)
+		for i in range(polygon.size()):
+			points[i * 2] = str(polygon[i].x)
+			points[i * 2 + 1] = str(polygon[i].y)
+		polygon_string += points.join(", ") + " )"
+		strings[polygon_position] = polygon_string
+		index += 1
+	return strings
+
+
 func on_collsions_dialog_hide():
 	if collision_dialog.collisions_accepted:
-		print(collision_dialog.collision_contours.size())
+		print(make_collisions_strings(collision_dialog.collision_contours))
 	else:
 		collisions_check.pressed = false
 
@@ -647,6 +665,5 @@ func _on_CheckButton_toggled(button_pressed):
 
 func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	if button_pressed:
-#		print(current_texture_image.get_size())
 		collision_dialog.start(current_texture_image, current_tile_size, 
 			current_tile_spacing, current_smoothing)

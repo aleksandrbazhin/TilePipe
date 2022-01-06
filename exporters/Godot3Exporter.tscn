@@ -186,7 +186,7 @@ valign = 1
 
 [node name="LineEditTexture" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
 margin_left = 511.0
-margin_right = 748.0
+margin_right = 744.0
 margin_bottom = 40.0
 hint_tooltip = "Texture file"
 size_flags_horizontal = 3
@@ -198,23 +198,23 @@ __meta__ = {
 }
 
 [node name="SelectTextureButton" type="Button" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 756.0
-margin_right = 856.0
+margin_left = 752.0
+margin_right = 852.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 100, 32 )
 text = "Change"
 
 [node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 864.0
-margin_right = 864.0
+margin_left = 860.0
+margin_right = 860.0
 margin_bottom = 40.0
 
 [node name="CollsionsLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 872.0
+margin_left = 868.0
 margin_right = 962.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 90, 40 )
-text = "Collisions:"
+rect_min_size = Vector2( 94, 40 )
+text = "Add collisions:"
 align = 2
 valign = 1
 
