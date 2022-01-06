@@ -8,6 +8,7 @@
 [ext_resource path="res://exporters/CollisionGenerator.tscn" type="PackedScene" id=6]
 
 [node name="GodotExportDialog" type="PopupDialog"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -266.0
@@ -119,7 +120,7 @@ valign = 2
 [node name="TilesPanelContainer" type="PanelContainer" parent="VBox"]
 margin_top = 123.0
 margin_right = 1060.0
-margin_bottom = 525.0
+margin_bottom = 529.0
 rect_min_size = Vector2( 0, 48 )
 size_flags_vertical = 3
 
@@ -127,7 +128,7 @@ size_flags_vertical = 3
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1053.0
-margin_bottom = 395.0
+margin_bottom = 399.0
 custom_constants/separation = 8
 
 [node name="Control" type="Control" parent="VBox/TilesPanelContainer/VBox"]
@@ -227,11 +228,61 @@ margin_top = 56.0
 margin_right = 1046.0
 margin_bottom = 68.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBox/TilesPanelContainer/VBox"]
+[node name="ColorRect" type="ColorRect" parent="VBox/TilesPanelContainer/VBox"]
 margin_top = 76.0
 margin_right = 1046.0
-margin_bottom = 388.0
-rect_min_size = Vector2( 0, 312 )
+margin_bottom = 104.0
+rect_min_size = Vector2( 0, 28 )
+size_flags_horizontal = 3
+color = Color( 0.45098, 0.45098, 0.454902, 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBox/TilesPanelContainer/VBox/ColorRect/HBoxContainer"]
+margin_top = 2.0
+margin_right = 254.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 254, 24 )
+text = "     Existing tile name:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="VBox/TilesPanelContainer/VBox/ColorRect/HBoxContainer"]
+margin_left = 258.0
+margin_top = 2.0
+margin_right = 408.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 150, 24 )
+text = "Tile type:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="VBox/TilesPanelContainer/VBox/ColorRect/HBoxContainer"]
+margin_left = 412.0
+margin_top = 2.0
+margin_right = 465.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 24 )
+text = "Texture:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBox/TilesPanelContainer/VBox"]
+margin_top = 112.0
+margin_right = 1046.0
+margin_bottom = 392.0
+rect_min_size = Vector2( 0, 280 )
 scroll_horizontal_enabled = false
 
 [node name="VBoxExistiingTiles" type="VBoxContainer" parent="VBox/TilesPanelContainer/VBox/ScrollContainer"]
@@ -240,21 +291,21 @@ size_flags_horizontal = 3
 custom_constants/separation = 10
 
 [node name="Control" type="Control" parent="VBox"]
-margin_top = 525.0
+margin_top = 529.0
 margin_right = 1060.0
-margin_bottom = 527.0
+margin_bottom = 531.0
 rect_min_size = Vector2( 0, 2 )
 
 [node name="HSeparator" type="HSeparator" parent="VBox"]
-margin_top = 527.0
+margin_top = 531.0
 margin_right = 1060.0
-margin_bottom = 547.0
+margin_bottom = 551.0
 custom_constants/separation = 20
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBox"]
-margin_top = 547.0
+margin_top = 551.0
 margin_right = 1060.0
-margin_bottom = 583.0
+margin_bottom = 587.0
 custom_constants/separation = 16
 alignment = 2
 
