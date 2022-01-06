@@ -2,6 +2,8 @@ extends PopupDialog
 
 class_name CollisionGenerator
 
+#signal collisions_de(collision_contours)
+
 enum {DIRECTION_FORWARD, DIRECTION_BACK}
 const NOT_FOUND: Vector2 = Vector2(-1.0, -1.0)
 const NO_WAY := -1.0
@@ -22,16 +24,14 @@ onready var contours_texture_rect := $VBoxContainer/MarginContainer/Viewport/Con
 onready var contours_display_texture_rect := $VBoxContainer/MarginContainer/VisibleTextureRect
 onready var progress_bar := $VBoxContainer/MarginContainer2/HBoxContainer/ProgressBar
 onready var grid_slider := $VBoxContainer/MarginContainer3/HBoxContainer/GridSlider
-onready var delta_slider := $VBoxContainer/MarginContainer3/HBoxContainer/DeltaSlider
 onready var accept_button := $VBoxContainer/MarginContainer2/HBoxContainer/SaveButton
 onready var cancel_button := $VBoxContainer/MarginContainer2/HBoxContainer/CancelButton
 onready var grid_label := $VBoxContainer/MarginContainer3/HBoxContainer/GridLabel
-onready var delta_label := $VBoxContainer/MarginContainer3/HBoxContainer/DeltaLabel
 onready var grid_value_label := $VBoxContainer/MarginContainer3/HBoxContainer/GridValueLabel
-onready var delta_value_label := $VBoxContainer/MarginContainer3/HBoxContainer/DeltaValueLabel
 
 
 func start(new_image: Image, new_tile_size: Vector2, new_tile_spacing: int, smoothing: bool = false):
+	collisions_accepted = false
 	block_ui()
 	full_image = new_image
 	tile_size = new_tile_size
@@ -272,45 +272,25 @@ func _on_GridSlider_released(value):
 	block_ui()
 	yield(VisualServer, "frame_post_draw")
 	compute_contours()
-	
-
-
-func _on_DeltaSlider_released(value):
-	
-	progress_bar.value = 0
-	block_ui()
-	yield(VisualServer, "frame_post_draw")
-	compute_contours()
 
 
 func block_ui():
 	is_ui_blocked = true
 	grid_slider.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	delta_slider.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	accept_button.disabled = true
 	cancel_button.disabled = true
 	grid_label.add_color_override("font_color", Color.darkgray)
 	grid_value_label.add_color_override("font_color", Color.darkgray)
-	delta_label.add_color_override("font_color", Color.darkgray)
-	delta_value_label.add_color_override("font_color", Color.darkgray)
-	
 
 
 func unblock_ui():
 	is_ui_blocked = false
 	grid_slider.mouse_filter = Control.MOUSE_FILTER_STOP
-	delta_slider.mouse_filter = Control.MOUSE_FILTER_STOP
 	accept_button.disabled = false
 	cancel_button.disabled = false
 	grid_label.add_color_override("font_color", Color.white)
 	grid_value_label.add_color_override("font_color", Color.white)
-	delta_label.add_color_override("font_color", Color.white)
-	delta_value_label.add_color_override("font_color", Color.white)
 
 
 func _on_GridSlider_value_changed(value):
 	grid_value_label.text = str(value)
-
-
-func _on_DeltaSlider_value_changed(value):
-	delta_value_label.text = str(value)

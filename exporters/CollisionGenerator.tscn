@@ -7,12 +7,12 @@
 [ext_resource path="res://BlockableSlider.gd" type="Script" id=5]
 
 [node name="CollisionGenerator" type="PopupDialog"]
-visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -386.0
 margin_bottom = -208.0
 theme = ExtResource( 4 )
+popup_exclusive = true
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -73,48 +73,6 @@ margin_right = 960.0
 margin_bottom = 19.0
 rect_min_size = Vector2( 26, 0 )
 text = "10"
-
-[node name="Control" type="Control" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-visible = false
-margin_left = 560.0
-margin_right = 960.0
-margin_bottom = 19.0
-size_flags_horizontal = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-visible = false
-margin_left = 948.0
-margin_right = 960.0
-margin_bottom = 19.0
-
-[node name="DeltaLabel" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-visible = false
-margin_left = 474.0
-margin_right = 620.0
-margin_bottom = 19.0
-hint_tooltip = "On what distance in px close contour points are eliminated"
-mouse_filter = 0
-text = "Point elimination delta"
-
-[node name="DeltaSlider" type="HSlider" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-visible = false
-margin_left = 553.0
-margin_right = 922.0
-margin_bottom = 16.0
-hint_tooltip = "On what distance in px close contour points are eliminated"
-size_flags_horizontal = 3
-script = ExtResource( 5 )
-
-[node name="DeltaValueLabel" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-visible = false
-margin_left = 934.0
-margin_right = 960.0
-margin_bottom = 19.0
-rect_min_size = Vector2( 26, 0 )
-text = "0.5"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 margin_top = 87.0
@@ -191,7 +149,5 @@ text = "Cancel"
 
 [connection signal="released" from="VBoxContainer/MarginContainer3/HBoxContainer/GridSlider" to="." method="_on_GridSlider_released"]
 [connection signal="value_changed" from="VBoxContainer/MarginContainer3/HBoxContainer/GridSlider" to="." method="_on_GridSlider_value_changed"]
-[connection signal="released" from="VBoxContainer/MarginContainer3/HBoxContainer/DeltaSlider" to="." method="_on_DeltaSlider_released"]
-[connection signal="value_changed" from="VBoxContainer/MarginContainer3/HBoxContainer/DeltaSlider" to="." method="_on_DeltaSlider_value_changed"]
 [connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/SaveButton" to="." method="_on_SaveButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/CancelButton" to="." method="_on_CloseButton_pressed"]

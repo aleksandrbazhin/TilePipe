@@ -12,7 +12,6 @@ signal settings_saved()
 #	"autotile_type": Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
 #}
 
-
 const DEFAULT_TILES_LABEL: String = "Select tileset to edit tiles ↑"
 
 var resource_path: String = ""
@@ -21,7 +20,6 @@ var tile_name: String = ""
 # we need it to indentify tiles since it depends on input filename
 var last_generated_tile_name: String = ""
 var autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
-
 # data passed from main window
 var current_texture_image := Image.new()
 var current_tile_size: Vector2
@@ -47,6 +45,68 @@ onready var blocking_rect_tiles: ColorRect = $TileBlockColorRect
 onready var existing_tiles_container: VBoxContainer = $VBox/TilesPanelContainer/VBox/ScrollContainer/VBoxExistiingTiles
 onready var save_confirm_dialog: ConfirmationDialog = $SaveConfirmationDialog
 onready var overwrite_tileset_select: CheckButton = $VBox/HBoxTileset/CheckButton
+onready var collisions_check: CheckButton = $VBox/TilesPanelContainer/VBox/HBoxNewTile/CollisionsCheckButton
+onready var collision_dialog: CollisionGenerator = $CollisionGenerator
+
+
+func _ready():
+	resource_dialog.connect("popup_hide", blocking_rect, "hide")
+	resource_dialog.connect("about_to_show", blocking_rect, "show")
+	texture_dialog.connect("popup_hide", blocking_rect, "hide")
+	texture_dialog.connect("about_to_show", blocking_rect, "show")
+	error_dialog.connect("popup_hide", blocking_rect, "hide")
+	error_dialog.connect("about_to_show", blocking_rect, "show")
+	save_confirm_dialog.connect("popup_hide", blocking_rect, "hide")
+	save_confirm_dialog.connect("about_to_show", blocking_rect, "show")
+	save_confirm_dialog.connect("confirmed", self, "save_all_and_exit")
+	collision_dialog.connect("popup_hide", blocking_rect, "hide")
+	collision_dialog.connect("about_to_show", blocking_rect, "show")
+	collision_dialog.connect("popup_hide", self, "on_collsions_dialog_hide")
+	new_tile_container.hide()
+	for type in Const.GODOT_AUTOTILE_TYPE:
+		var type_id: int = Const.GODOT_AUTOTILE_TYPE[type]
+		autotile_type_select.add_item(Const.GODOT_AUTOTILE_TYPE_NAMES[type_id], type_id)
+
+
+func start_export_dialog(
+		new_tile_size: Vector2, 
+		tiles: Dictionary, 
+		new_tile_base_name: String, 
+		new_tile_spacing: int, 
+		texture_image: Image,
+		smoothing: bool = true):
+	current_tile_size = new_tile_size
+	current_texture_size = texture_image.get_size()
+	current_tile_spacing = new_tile_spacing
+	current_tile_masks = tiles
+	current_texture_image.copy_from(texture_image)
+	current_smoothing = smoothing
+	autotile_type = Helpers.get_godot_autotile_type(tiles)
+	collisions_check.pressed = false
+	collision_dialog.collisions_accepted = false
+	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
+	if last_generated_tile_name.empty() or (last_generated_tile_name != generated_tile_name and tile_name.is_valid_filename()):
+		tile_name = generated_tile_name
+		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
+		last_generated_tile_name = generated_tile_name
+		save_settings()
+	set_lineedit_text(tile_name_edit, tile_name)
+	texture_dialog.current_path = texture_path
+	set_lineedit_text(tile_texture_edit, texture_path)
+	autotile_type_select.selected = autotile_type
+	
+	if is_a_valid_resource_path(resource_path):
+		set_lineedit_text(resource_name_edit, resource_path)
+		resource_dialog.current_path = resource_path
+		load_tileset(resource_path)
+	else:
+		if resource_path != Helpers.clear_path(Const.DEFAULT_GODOT_RESOURCE_PATH):
+			report_error_inside_dialog("Error: Godot tileset resource path is invalid,\npossibly loading a tilest not belonging to any Godot project")
+		set_lineedit_text(resource_name_edit, ".tres")
+		resource_dialog.current_path = resource_path
+		overwrite_tileset_select.pressed = true
+		overwrite_tileset_select.disabled = true
+	popup_centered()
 
 
 # warn if there are not enough tiles for proper autotiling
@@ -58,6 +118,7 @@ func check_masks_with_warning(masks, godot_autotile_type):
 			pass
 		Const.GODOT_AUTOTILE_TYPE.FULL_3x3:
 			pass
+
 
 func save_tileset_resource() -> bool:
 	var file := File.new()
@@ -420,68 +481,11 @@ func is_a_valid_texture_path(test_texture_path: String, test_resource_path: Stri
 		return true
 
 
-func _ready():
-	resource_dialog.connect("popup_hide", blocking_rect, "hide")
-	resource_dialog.connect("about_to_show", blocking_rect, "show")
-	texture_dialog.connect("popup_hide", blocking_rect, "hide")
-	texture_dialog.connect("about_to_show", blocking_rect, "show")
-	error_dialog.connect("popup_hide", blocking_rect, "hide")
-	error_dialog.connect("about_to_show", blocking_rect, "show")
-	save_confirm_dialog.connect("popup_hide", blocking_rect, "hide")
-	save_confirm_dialog.connect("about_to_show", blocking_rect, "show")
-	save_confirm_dialog.connect("confirmed", self, "save_all_and_exit")
-	$CollisionGenerator.connect("popup_hide", blocking_rect, "hide")
-	$CollisionGenerator.connect("about_to_show", blocking_rect, "show")
-	new_tile_container.hide()
-	for type in Const.GODOT_AUTOTILE_TYPE:
-		var type_id: int = Const.GODOT_AUTOTILE_TYPE[type]
-		autotile_type_select.add_item(Const.GODOT_AUTOTILE_TYPE_NAMES[type_id], type_id)
-
-
 func clear_file_path(path: String) -> String:
 	if Helpers.file_exists(path):
 		return path
 	else:
 		return Helpers.get_default_dir_path()
-
-
-func start_export_dialog(
-		new_tile_size: Vector2, 
-		tiles: Dictionary, 
-		new_tile_base_name: String, 
-		new_tile_spacing: int, 
-		texture_image: Image,
-		smoothing: bool = true):
-	current_tile_size = new_tile_size
-	current_texture_size = texture_image.get_size()
-	current_tile_spacing = new_tile_spacing
-	current_tile_masks = tiles
-	current_texture_image.copy_from(texture_image)
-	current_smoothing = smoothing
-	autotile_type = Helpers.get_godot_autotile_type(tiles)
-	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
-	if last_generated_tile_name.empty() or (last_generated_tile_name != generated_tile_name and tile_name.is_valid_filename()):
-		tile_name = generated_tile_name
-		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
-		last_generated_tile_name = generated_tile_name
-		save_settings()
-	set_lineedit_text(tile_name_edit, tile_name)
-	texture_dialog.current_path = texture_path
-	set_lineedit_text(tile_texture_edit, texture_path)
-	autotile_type_select.selected = autotile_type
-	
-	if is_a_valid_resource_path(resource_path):
-		set_lineedit_text(resource_name_edit, resource_path)
-		resource_dialog.current_path = resource_path
-		load_tileset(resource_path)
-	else:
-		if resource_path != Helpers.clear_path(Const.DEFAULT_GODOT_RESOURCE_PATH):
-			report_error_inside_dialog("Error: Godot tileset resource path is invalid,\npossibly loading a tilest not belonging to any Godot project")
-		set_lineedit_text(resource_name_edit, ".tres")
-		resource_dialog.current_path = resource_path
-		overwrite_tileset_select.pressed = true
-		overwrite_tileset_select.disabled = true
-	popup_centered()
 
 
 func load_defaults_from_settings(data: Dictionary):
@@ -500,6 +504,8 @@ func cancel_action():
 		resource_dialog.hide()
 	elif texture_dialog.visible:
 		texture_dialog.hide()
+	elif collision_dialog.visible:
+		collision_dialog.hide()
 	else:
 		hide()
 
@@ -625,6 +631,13 @@ func _on_ButtonOk_pressed():
 		report_error_inside_dialog("Error: invalide resource or texture path")
 
 
+func on_collsions_dialog_hide():
+	if collision_dialog.collisions_accepted:
+		print(collision_dialog.collision_contours.size())
+	else:
+		collisions_check.pressed = false
+
+
 func _on_CheckButton_toggled(button_pressed):
 	if button_pressed:
 		free_loaded_tile_rows()
@@ -635,5 +648,5 @@ func _on_CheckButton_toggled(button_pressed):
 func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	if button_pressed:
 #		print(current_texture_image.get_size())
-		$CollisionGenerator.start(current_texture_image, current_tile_size, 
+		collision_dialog.start(current_texture_image, current_tile_size, 
 			current_tile_spacing, current_smoothing)
