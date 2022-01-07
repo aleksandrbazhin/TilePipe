@@ -30,7 +30,7 @@ _global_script_classes=[ {
 "path": "res://exporters/Godot3Exporter.gd"
 }, {
 "base": "ColorRect",
-"class": "Godot_tile_row",
+"class": "GodotTileRow",
 "language": "GDScript",
 "path": "res://exporters/GodotExistingTileRow.gd"
 }, {
@@ -49,7 +49,7 @@ _global_script_class_icons={
 "GeneratedTile": "",
 "GenerationData": "",
 "GodotExporter": "",
-"Godot_tile_row": "",
+"GodotTileRow": "",
 "MonitorPlotPanel": "",
 "TileRenderer": ""
 }

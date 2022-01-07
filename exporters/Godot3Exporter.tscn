@@ -260,7 +260,7 @@ margin_top = 2.0
 margin_right = 408.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 150, 24 )
-text = "Tile type:"
+text = "      Tile type:"
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -269,10 +269,23 @@ __meta__ = {
 [node name="Label3" type="Label" parent="VBox/TilesPanelContainer/VBox/ColorRect/HBoxContainer"]
 margin_left = 412.0
 margin_top = 2.0
-margin_right = 465.0
+margin_right = 956.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 24 )
+size_flags_horizontal = 3
 text = "Texture:"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label4" type="Label" parent="VBox/TilesPanelContainer/VBox/ColorRect/HBoxContainer"]
+margin_left = 960.0
+margin_top = 2.0
+margin_right = 1046.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 86, 24 )
+text = "Collisions:"
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false

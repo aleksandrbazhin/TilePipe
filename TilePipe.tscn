@@ -749,12 +749,13 @@ __meta__ = {
 margin_left = 48.0
 margin_right = 896.0
 margin_bottom = 130.0
-rect_min_size = Vector2( 390, 130 )
-hint_tooltip = "Template image, numbers over tiles are recognized neighbour bitmasks (clockwise neighbor bits)"
+rect_min_size = Vector2( 0, 130 )
 size_flags_horizontal = 3
 
 [node name="TemplateTextureRect" type="TextureRect" parent="Panel/HBox/Images/TemplateContainer/ScrollContainer"]
+margin_right = 848.0
 margin_bottom = 130.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource( 4 )
 __meta__ = {

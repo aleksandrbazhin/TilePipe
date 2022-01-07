@@ -2,21 +2,18 @@ extends PopupDialog
 
 class_name CollisionGenerator
 
-#signal collisions_de(collision_contours)
-
 enum {DIRECTION_FORWARD, DIRECTION_BACK}
 const NOT_FOUND: Vector2 = Vector2(-1.0, -1.0)
 const NO_WAY := -1.0
-#const SEARCH_STEP := 1.0
 const LINE_ANGLE_DELTA := 0.1
 
-var grid_cells := 15 # TODO: сделать пропорциональным размеру тайла
-var point_elimination_delta_sq := 4 # TODO: сделать пропорциональным размеру тайла
+var grid_cells := 15
+var point_elimination_delta_sq := 4
 var is_ui_blocked := true
 var full_image: Image = null
 var tile_size: Vector2
 var tile_spacing: Vector2
-var collision_contours: Dictionary
+var collision_contours: Dictionary # {template_poisiton (Vector2): contour_points(PoolVector2Array)}
 var collisions_accepted := false
 
 onready var viewport := $VBoxContainer/MarginContainer/Viewport

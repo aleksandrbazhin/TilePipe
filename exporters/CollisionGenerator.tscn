@@ -7,6 +7,7 @@
 [ext_resource path="res://BlockableSlider.gd" type="Script" id=5]
 
 [node name="CollisionGenerator" type="PopupDialog"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -386.0
@@ -128,17 +129,17 @@ custom_constants/separation = 10
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
 margin_top = 8.0
-margin_right = 740.0
+margin_right = 720.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
 [node name="SaveButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_left = 750.0
+margin_left = 730.0
 margin_right = 850.0
 margin_bottom = 36.0
-rect_min_size = Vector2( 100, 0 )
-text = "Accept"
+rect_min_size = Vector2( 120, 0 )
+text = "Set collisions"
 
 [node name="CancelButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
 margin_left = 860.0

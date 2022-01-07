@@ -50,8 +50,8 @@ onready var overlay_overlap_slider: HSlider = settings_container.get_node("Overl
 onready var template_container: HBoxContainer = $Panel/HBox/Images/TemplateContainer
 onready var template_load_button : Button = template_container.get_node("ButtonBox/TemplateButton")
 onready var template_type_select: OptionButton = template_container.get_node("ButtonBox/TemplateOption")
-onready var template_scroll: ScrollContainer = template_container.get_node("ScrollContainer")
-onready var template_texture: TextureRect = template_scroll.get_node("TemplateTextureRect")
+#onready var template_scroll: ScrollContainer = template_container.get_node("ScrollContainer")
+onready var template_texture: TextureRect = template_container.get_node("ScrollContainer/TemplateTextureRect")
 onready var template_texture_name: Label = template_container.get_node("NameControl/TemplateNameLabel")
 
 onready var output_block: Control = $Panel/HBox/Images/OutputContainer/Output
@@ -445,11 +445,21 @@ func clear_generation_mask():
 
 
 func mark_template_tile(bitmask: int, mask_position: Vector2, is_text: bool = false):
+
+#	var texture_size := template_texture.texture.get_size()
+#	var texture_rect_size := template_texture.rect_size
+#	var scale := min(texture_rect_size.x / texture_size.x, texture_rect_size.y / texture_size.y)
+#	var translate := (texture_rect_size - texture_size * scale) / 2.0
+#	var translated_mask_position = translate + mask_position * Const.TEMPLATE_TILE_SIZE * scale
+#	var label_offset := Vector2(8, 8) * scale
+	var label_offset := Vector2(8, 8)
+	var translated_mask_position := mask_position * Const.TEMPLATE_TILE_SIZE
 	if is_text:
 		var mask_text_label := Label.new()
 		mask_text_label.add_color_override("font_color", Color(0, 0.05, 0.1))
+#		mask_text_label.rect_scale = Vector2(scale, scale)
 		mask_text_label.text = str(bitmask)
-		mask_text_label.rect_position = mask_position * Const.TEMPLATE_TILE_SIZE + Vector2(8, 8)
+		mask_text_label.rect_position = translated_mask_position + label_offset
 		template_texture.add_child(mask_text_label)
 	else:
 		var godot_bitmask: int = Helpers.convert_bitmask_to_godot(bitmask)
@@ -458,8 +468,7 @@ func mark_template_tile(bitmask: int, mask_position: Vector2, is_text: bool = fa
 				var check: int = 1 << (x + y * 3)
 				if check & godot_bitmask == check:
 					var mask_marker = TextureRect.new()
-					mask_marker.rect_position = mask_position * Const.TEMPLATE_TILE_SIZE + \
-						Vector2(x * 10.6 + 1, y * 10.6 + 1)
+					mask_marker.rect_position = translated_mask_position + Vector2(x * 10.6 + 1, y * 10.6 + 1)
 					mask_marker.texture = preload("res://assets/template_marker.png")
 					template_texture.add_child(mask_marker, true)
 

@@ -26,7 +26,10 @@ var current_tile_size: Vector2
 var current_tile_masks: Dictionary
 var current_texture_size: Vector2
 var current_tile_spacing: int
-var current_smoothing : bool = false
+var current_smoothing: bool = false
+
+var collision_shapes_to_id: Dictionary
+#var collision_shapes_string := ""
 
 var is_tile_match: bool = false
 var is_match_error_found: bool = false
@@ -47,6 +50,7 @@ onready var save_confirm_dialog: ConfirmationDialog = $SaveConfirmationDialog
 onready var overwrite_tileset_select: CheckButton = $VBox/HBoxTileset/CheckButton
 onready var collisions_check: CheckButton = $VBox/TilesPanelContainer/VBox/HBoxNewTile/CollisionsCheckButton
 onready var collision_dialog: CollisionGenerator = $CollisionGenerator
+
 
 
 func _ready():
@@ -94,7 +98,6 @@ func start_export_dialog(
 	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
 	autotile_type_select.selected = autotile_type
-	
 	if is_a_valid_resource_path(resource_path):
 		set_lineedit_text(resource_name_edit, resource_path)
 		resource_dialog.current_path = resource_path
@@ -162,8 +165,14 @@ func save_tileset_resource() -> bool:
 			updated_content = updated_content.insert(texture_insert_position, texture_string)
 			# update load_steps here
 			# load steps is the total number of resources (gd_resource + ext_resource)
-			var load_steps: int = tileset_data["textures"].size() + 1 # existing textures + the top gd_resource
-			load_steps += 1 # add the new texture
+			var new_load_steps: int = tileset_data["textures"].size() + 1 # existing textures + the top gd_resource
+			new_load_steps += 1 # add the new texture
+			
+			# это ещё вынести отдельно от текстур - в субресурсы
+			# new_load_steps += existing_subresources.count()
+			# if collisions:
+			#      new_load_steps += collisions.keys().size()
+			
 			var load_steps_regex := RegEx.new()
 			load_steps_regex.compile('\\[gd_resource\\s*type="TileSet"\\s*load_steps=(\\d+)')
 			var load_steps_match: RegExMatch = load_steps_regex.search(tileset_content)
@@ -171,7 +180,10 @@ func save_tileset_resource() -> bool:
 				report_error_inside_dialog("Error parsing tileset: load_steps not found")
 				return false
 			var previous_load_steps: int = int(load_steps_match.strings[1])
-			updated_content = updated_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % load_steps)
+			
+			
+			
+			updated_content = updated_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % new_load_steps)
 		var tile_id: int = 0
 		var tile_found: bool = false
 		for tile in tileset_data["tiles"]:
@@ -252,15 +264,20 @@ func make_tile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 		tile_spacing: int, new_autotile_type: int, 
 		tile_id: int, texture_id: int) -> String:
 	var out_string: String = ""
-	var mask_out_array: PoolStringArray = []
+	var mask_out_strings: PoolStringArray = []
+	var tile_collision_strings: PoolStringArray = []
 #	check_masks_with_warning(tile_masks, new_autotile_type)
 	var line_beginning := str(tile_id) + "/"
+	
 	for mask in tile_masks:
 		for tile in tile_masks[mask]:
 			var tile_position: Vector2 = tile.position_in_template
-			mask_out_array.append("Vector2 ( %d, %d )" % [tile_position.x, tile_position.y])
+			mask_out_strings.append("Vector2 ( %d, %d )" % [tile_position.x, tile_position.y])
 			var godot_mask: int = Helpers.convert_bitmask_to_godot(tile.mask, new_autotile_type)
-			mask_out_array.append(str(godot_mask))
+			mask_out_strings.append(str(godot_mask))
+			if collision_dialog.collisions_accepted:
+				pass
+				tile_collision_strings.append(make_tile_shape_string(tile_position, 1))
 	out_string += line_beginning + "name = \"%s\"\n" % new_tile_name
 	out_string += line_beginning + "texture = ExtResource( %d )\n" % texture_id
 	out_string += line_beginning + "tex_offset = Vector2( 0, 0 )\n"
@@ -268,7 +285,7 @@ func make_tile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 	out_string += line_beginning + "region = Rect2( 0, 0, %d, %d )\n" % [texture_size.x, texture_size.y]
 	out_string += line_beginning + "tile_mode = 1\n" 
 	out_string += line_beginning + "autotile/bitmask_mode = %d\n" % Const.GODOT_AUTOTILE_GODOT_INDEXES[new_autotile_type]
-	out_string += line_beginning + "autotile/bitmask_flags = [ %s ]\n" % mask_out_array.join(", ")
+	out_string += line_beginning + "autotile/bitmask_flags = [ %s ]\n" % mask_out_strings.join(", ")
 	out_string += line_beginning + "autotile/icon_coordinate = Vector2( 0, 0 )\n"
 	out_string += line_beginning + "autotile/tile_size = Vector2( %d, %d )\n" % [tile_size.x, tile_size.y]
 	out_string += line_beginning + "autotile/spacing = %d\n" % tile_spacing
@@ -283,6 +300,7 @@ func make_tile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 	out_string += line_beginning + "shape_one_way = false\n"
 	out_string += line_beginning + "shape_one_way_margin = 0.0\n"
 	out_string += line_beginning + "shapes = [  ]\n"
+	
 	out_string += line_beginning + "z_index = 0\n"
 	return out_string
 
@@ -301,15 +319,16 @@ func make_autotile_resource_data(tile_size: Vector2, tile_masks: Dictionary,
 
 
 func _parse_tileset(tileset_file_content: String, project_path: String) -> Dictionary:
+	var parse_result: Dictionary = {
+		"textures": {},
+		"subresources": {},
+		"tiles": [],
+		"error": false # error during parsing tileset
+	}
 	var sections: PoolStringArray = tileset_file_content.split("[resource]", false, 1)
 	var header: String = sections[0]
 	var texture_regex := RegEx.new()
 	texture_regex.compile('\\[ext_resource path="(.+)" type="Texture" id=(\\d+)\\]')
-	var parse_result: Dictionary = {
-		"textures": {},
-		"tiles": [],
-		"error": false # error during parsing tileset
-	}
 	var textures: Dictionary = {}
 	for texture_result in texture_regex.search_all(header):
 		var texture_parsed_path: String = texture_result.strings[1]
@@ -327,6 +346,15 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 		else:
 			textures[texture_id]["error"] = true
 	parse_result["textures"] = textures
+	
+	var subresource_regex := RegEx.new()
+	subresource_regex.compile('\\s\\[sub_resource type="ConvexPolygonShape2D" id=(\\d+)\\]\\s*' +
+							  'points = PoolVector2Array\\(.+\\)\\s')
+	for subresource_result in subresource_regex.search_all(header):
+		var subresource_id := int(subresource_result.strings[1])
+		var subresouces_string: String = subresource_result.strings[0] 
+		parse_result["subresources"][subresource_id] = subresource_result.strings[0] 
+	
 	var tiles_data: String = sections[1]
 	var tile_parse_regex := RegEx.new()
 	tile_parse_regex.compile('(\\d+)/name\\s*=\\s*"(.+)"\\s*' + 
@@ -343,7 +371,8 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 			"texture_id": int(tile_parse_result.strings[3]),
 			"tile_mode": int(tile_parse_result.strings[5]),
 			"bitmask_mode": -1,
-			"icon_rect": Rect2()
+			"icon_rect": Rect2(),
+			"shape_ids": []
 		}
 		if not textures.has(tile_dict["texture_id"]):
 			parse_result["error"] = true
@@ -379,6 +408,31 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 					var bitmask_mode_index := Const.GODOT_AUTOTILE_GODOT_INDEXES.values().find(godot_bitmask_mode)
 					if bitmask_mode_index != -1:
 						tile_dict["bitmask_mode"] = Const.GODOT_AUTOTILE_GODOT_INDEXES.keys()[bitmask_mode_index]
+				
+				var shapes_regex := RegEx.new()
+				shapes_regex.compile(
+					str(tile_dict["id"]) + '/shapes\\s*=\\s*\\[\\s*' + 
+					'([\\s\\S]*)' + 
+					'\\s*\\]\\s*' + 
+					str(tile_dict["id"]) + '/z_index')
+				var shapes_search_result := shapes_regex.search(tiles_data)
+				if shapes_search_result != null:
+					var shapes_string: String = shapes_search_result.strings[1]
+					if shapes_string.length() > 0:
+						var one_shape_regex := RegEx.new()
+						one_shape_regex.compile('\\{\\s*' + 
+								'"autotile_coord": Vector2\\(\\s*(\\d+)\\,\\s*(\\d+)\\s*\\),\\s*' + 
+								'"one_way": false,\\s*' +
+								'"one_way_margin": .*,\\s*' +
+								'"shape": SubResource\\(\\s*(\\d+)\\s*\\),\\s*' + 
+								'"shape_transform": Transform2D\\(.*\\)\\s*' + 
+								'\\}\\s*')
+#						print(shapes_string)
+						for one_shape_result in one_shape_regex.search_all(shapes_string):
+#							var autotile_coord := Vector2(int(one_shape_result.strings[1]), int(one_shape_result.strings[2]))
+							var shape_id := int(one_shape_result.strings[3])
+#							print(shape_id, ": ", autotile_coord)
+							tile_dict["shape_ids"].append(shape_id)
 		parse_result["tiles"].append(tile_dict)
 	return parse_result
 
@@ -406,7 +460,7 @@ func load_tileset(tileset_path: String):
 			if tileset_data["error"] == false:
 				free_loaded_tile_rows()
 				for tile in tileset_data["tiles"]:
-					var exisiting_tile: Godot_tile_row = preload("res://exporters/GodotExistingTileRow.tscn").instance()
+					var exisiting_tile: GodotTileRow = preload("res://exporters/GodotExistingTileRow.tscn").instance()
 					if tileset_data["textures"].has(tile["texture_id"]):
 						var exisiting_texture_path: String = tileset_data["textures"][tile["texture_id"]]["path"]
 						if not Helpers.file_exists(exisiting_texture_path):
@@ -418,7 +472,8 @@ func load_tileset(tileset_path: String):
 							tile["icon_rect"], 
 							tile["tile_mode"], 
 							tile["bitmask_mode"],
-							tileset_data["textures"][tile["texture_id"]]["image"])
+							tileset_data["textures"][tile["texture_id"]]["image"],
+							tile["shape_ids"])
 						existing_tiles_container.add_child(exisiting_tile)
 						exisiting_tile.connect("clicked", self, "populate_from_exisiting_tile")
 					else: 
@@ -449,7 +504,7 @@ func check_existing_for_matches():
 		is_match_error_found = is_match_error_found or error_duplicate_textures
 
 
-func populate_from_exisiting_tile(row: Godot_tile_row):
+func populate_from_exisiting_tile(row: GodotTileRow):
 	tile_name = row.tile_name
 	set_lineedit_text(tile_name_edit, tile_name)
 	set_texture_path(row.texture_path.get_base_dir(), row.texture_path.get_file().split(".")[0])
@@ -631,12 +686,23 @@ func _on_ButtonOk_pressed():
 		report_error_inside_dialog("Error: invalide resource or texture path")
 
 
-func make_collisions_strings(collision_contours: Dictionary) -> Dictionary:
-	var strings := {}
-	var index := 1
+func make_tile_shape_string(autotile_coord: Vector2, collision_shape_id: int) -> String:
+	var out_string := "{\n"
+	out_string += "\"autotile_coord\": Vector2( %d, %d ),\n" % [int(autotile_coord.x), int(autotile_coord.y)]
+	out_string += "\"one_way\": false,\n"
+	out_string += "\"one_way_margin\": 1.0,\n"
+	out_string += "\"shape\": SubResource( %d ),\n" % collision_shape_id
+	out_string += "\"shape_transform\": Transform2D( 1, 0, 0, 1, 0, 0 )\n}"
+	return out_string
+
+
+func make_collision_shapes_string(collision_contours: Dictionary, start_id: int = 1) -> String:
+	var strings := PoolStringArray()
+	collision_shapes_to_id = {}
+	var id := start_id
 	for polygon_position in collision_contours:
 		var polygon: PoolVector2Array = collision_contours[polygon_position]
-		var polygon_string := "[sub_resource type=\"ConvexPolygonShape2D\" id=%d]" % index
+		var polygon_string := "[sub_resource type=\"ConvexPolygonShape2D\" id=%d]" % id
 		polygon_string += "\npoints = PoolVector2Array( "
 		var points := PoolStringArray()
 		points.resize(polygon.size() * 2)
@@ -644,14 +710,22 @@ func make_collisions_strings(collision_contours: Dictionary) -> Dictionary:
 			points[i * 2] = str(polygon[i].x)
 			points[i * 2 + 1] = str(polygon[i].y)
 		polygon_string += points.join(", ") + " )"
-		strings[polygon_position] = polygon_string
-		index += 1
-	return strings
+		strings.append(polygon_string)
+		collision_shapes_to_id[polygon_position] = id
+#		strings[polygon_position] = {
+#			"id": id,
+#			"string": polygon_string
+#		}
+		id += 1
+	return strings.join("\n\n")
 
 
 func on_collsions_dialog_hide():
 	if collision_dialog.collisions_accepted:
-		print(make_collisions_strings(collision_dialog.collision_contours))
+		pass
+#		collision_shapes_string = make_collision_shapes_string(collision_dialog.collision_contours)
+#		var collision_string := make_collision_shapes_string(collision_dialog.collision_contours)
+#		print(collision_string)
 	else:
 		collisions_check.pressed = false
 
@@ -667,3 +741,8 @@ func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	if button_pressed:
 		collision_dialog.start(current_texture_image, current_tile_size, 
 			current_tile_spacing, current_smoothing)
+	else:
+		collision_dialog.collisions_accepted = false
+		collision_shapes_to_id = {}
+#		collision_shapes_string = ""
+#		collision_shapes = {}

@@ -1,6 +1,6 @@
 extends ColorRect
 
-class_name Godot_tile_row
+class_name GodotTileRow
 
 signal clicked()
 
@@ -28,7 +28,7 @@ var bitmask_mode: int
 
 
 func populate(new_tile_name: String, new_tile_id: int, new_texture_path: String, 
-		icon_rect: Rect2, tile_mode: int, new_bitmask_mode: int, image: Image, collisions: bool = false):
+		icon_rect: Rect2, tile_mode: int, new_bitmask_mode: int, image: Image, collision_shapes: Array):
 	tile_name = new_tile_name
 	tile_id = new_tile_id
 	texture_path = new_texture_path
@@ -47,7 +47,7 @@ func populate(new_tile_name: String, new_tile_id: int, new_texture_path: String,
 		$HBox/TileMode.text = MODE_NAMES[tile_mode]
 	if BITMASK_MODE_NAMES.has(bitmask_mode):
 		$HBox/TileMode.text += " " + BITMASK_MODE_NAMES[bitmask_mode]
-	if collisions:
+	if collision_shapes.size() > 0:
 		$HBox/Collisions.pressed = true
 
 
