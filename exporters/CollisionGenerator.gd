@@ -125,7 +125,6 @@ func compute_contours():
 	progress_bar.value = 0
 	var size_in_tiles: Vector2 = (full_image.get_size() - tile_size) / (tile_size + tile_spacing) + Vector2.ONE
 #	var tile_size: Vector2 = image.get_size() / size_in_tiles
-	print((tile_size + tile_spacing))
 	for x in range(size_in_tiles.x):
 		for y in range(size_in_tiles.y):
 			var tile_template_position := Vector2(x, y)

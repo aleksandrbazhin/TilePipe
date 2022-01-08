@@ -60,5 +60,5 @@ func get_mask_data(mask: int) -> Dictionary:
 	for tile_data in get_ruleset():
 		if tile_data["mask_variants"].has(float(mask)):
 			return tile_data
-	print("Error: invalid mask '%s'" % mask)
+	print("ERROR: invalid mask '%s'" % mask)
 	return {}
