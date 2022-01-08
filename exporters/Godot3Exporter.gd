@@ -231,30 +231,31 @@ func _resource_update_load_steps(tileset_content: String, new_load_steps: int) -
 	load_steps_regex.compile('\\[gd_resource\\s*type="TileSet"\\s*load_steps=(\\d+)')
 	var load_steps_match: RegExMatch = load_steps_regex.search(tileset_content)
 	if load_steps_match == null:
-		report_error_inside_dialog("Error parsing tileset: load_steps not found")
-		return tileset_content
+		var load_steps_insert_position = tileset_content.find("format")
+		return tileset_content.insert(load_steps_insert_position, "load_steps=%d " % new_load_steps)
+#		report_error_inside_dialog("Error parsing tileset: load_steps not found")
 	var previous_load_steps: int = int(load_steps_match.strings[1])
 	return tileset_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % new_load_steps)
 
 
 func _resource_add_texture_resource(tileset_content: String, texture_id: int) -> String:
+	var texture_string: String = make_texture_string(texture_path, texture_id)
 	var last_ext_resource_position: int = tileset_content.find_last("[ext_resource")
 	var texture_insert_position: int = 0
 	if last_ext_resource_position != -1: # has ext_resources in tileset
 		texture_insert_position = tileset_content.find("\n", last_ext_resource_position) + 1
 	else:
-		texture_insert_position = tileset_content.find("\n[resource]", 0) - 1
-	var texture_string: String = make_texture_string(texture_path, texture_id)
+		texture_insert_position = tileset_content.find("\n\n", 0) + 1
+		texture_string = texture_string.insert(0, "\n")
 	return tileset_content.insert(texture_insert_position, texture_string)
 
 
-func _resource_add_collision_subresources(tileset_content: String, exsiting_subresources: Dictionary, 
+func _resource_add_collision_subresources(tileset_content: String, existing_subresources: Dictionary, 
 		new_contours: Dictionary) -> String:
-	# 1. выяснить новый макс id
-	# 2. найти куда вставвлять
-	# 3. вставить
-	make_collision_subresources_string(new_contours, 1)
-	return tileset_content
+	var main_resource_position: int = tileset_content.find_last("\n[resource]")
+	var max_id: int = existing_subresources.keys().max() if existing_subresources.keys().size() > 0 else 0
+	return tileset_content.insert(main_resource_position, 
+		"\n" + make_collision_subresources_string(new_contours, max_id + 1) + "\n")
 
 
 func save_tileset_resource() -> bool:
@@ -275,38 +276,51 @@ func save_tileset_resource() -> bool:
 		file.open(tileset_path, File.READ_WRITE)
 		var tileset_content := file.get_as_text()
 		var project_path := get_godot_project_path(tileset_path)
-		var tileset_resiource_data := _parse_tileset(tileset_content, project_path)
-		if tileset_resiource_data["error"] != false:
+		var tileset_resource_data := _parse_tileset(tileset_content, project_path)
+		if tileset_resource_data["error"] != false:
 			file.close()
 			report_error_inside_dialog("Error parsing tileset")
 			return false
 		var updated_content: String = tileset_content
 		var is_texture_found := false
 		var tile_texture_id: int = 0
-		for texture_id in tileset_resiource_data["textures"]:
-			if tileset_resiource_data["textures"][texture_id]["path"] == texture_path:
+		for texture_id in tileset_resource_data["textures"]:
+			if tileset_resource_data["textures"][texture_id]["path"] == texture_path:
 				is_texture_found = true
 				tile_texture_id = texture_id
-		var resource_count: int = tileset_resiource_data["textures"].size() + 1 # +1 for reqired top resource
+		var resource_count: int = tileset_resource_data["textures"].size() + 1 # +1 for reqired top resource
 		if not is_texture_found: # add new texture ext_resource
-			tile_texture_id = tileset_resiource_data["textures"].keys().max() + 1
+			if tileset_resource_data["textures"].keys().size() > 1:
+				tile_texture_id = tileset_resource_data["textures"].keys().max() + 1
+			else:
+				tile_texture_id = 1
 			updated_content = _resource_add_texture_resource(updated_content, tile_texture_id)
 			resource_count += 1 # +1 for new texture and 
-		if collision_dialog.collisions_accepted and collisions_check.pressed and \
-				not tileset_resiource_data["subresources"].empty():
-			resource_count += tileset_resiource_data["subresources"].size()
+		print(collision_dialog.collisions_accepted, collisions_check.pressed)
+		if collision_dialog.collisions_accepted and collisions_check.pressed:
+			# if there were subresources already
+			if not tileset_resource_data["subresources"].empty():
+				resource_count += tileset_resource_data["subresources"].size()
+				# + TODO:
+				# если у этого тайла были коллизии => удалить все связанные субресурсы
+				
+				
+#			print(resource_count)
 			updated_content = _resource_add_collision_subresources(updated_content, 
-				tileset_resiource_data["subresources"], collision_dialog.collision_contours)
-#			print(tileset_resiource_data["subresources"])
-			# если у этого тайла были коллизии => удалить все связанные субресурсы
+				tileset_resource_data["subresources"], collision_dialog.collision_contours)
+			resource_count += collision_dialog.collision_contours.size()
+#			print(resource_count)
+
+			
 			# иначе => добавить субресурсов 
 
 			
 		# load steps is the total number of resources (gd_resource + ext_resource)
+		print(resource_count)
 		updated_content = _resource_update_load_steps(updated_content, resource_count)
 		var tile_id: int = 0
 		var tile_found: bool = false
-		for tile in tileset_resiource_data["tiles"]:
+		for tile in tileset_resource_data["tiles"]:
 			if tile_name == tile["name"]:
 				tile_found = true
 				tile_id = tile["id"]
@@ -333,7 +347,7 @@ func save_tileset_resource() -> bool:
 			if replace_tile_block_end == -1:
 				report_error_inside_dialog("Error parsing tileset while replacing tile")
 				return false
-			updated_content.erase(replace_tile_block_start, replace_tile_block_end - replace_tile_block_start)
+			updated_content.erase(replace_tile_block_start, replace_tile_block_end - replace_tile_block_start + 1)
 			updated_content = updated_content.insert(replace_tile_block_start, new_tile_data)
 		file.store_string(updated_content)
 		file.close()
@@ -395,6 +409,9 @@ func make_tile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 			mask_out_strings.append(str(godot_mask))
 			if collision_dialog.collisions_accepted and collisions_check.pressed:
 				tile_collision_strings.append(make_tile_shape_string(tile_position, 1))
+	var tile_shapes_string := ""
+	if tile_collision_strings.size() > 0:
+		tile_shapes_string = tile_collision_strings.join(", ")
 	out_string += line_beginning + "name = \"%s\"\n" % new_tile_name
 	out_string += line_beginning + "texture = ExtResource( %d )\n" % texture_id
 	out_string += line_beginning + "tex_offset = Vector2( 0, 0 )\n"
@@ -416,7 +433,7 @@ func make_tile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 	out_string += line_beginning + "shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )\n"
 	out_string += line_beginning + "shape_one_way = false\n"
 	out_string += line_beginning + "shape_one_way_margin = 0.0\n"
-	out_string += line_beginning + "shapes = [  ]\n"
+	out_string += line_beginning + "shapes = [ %s ]\n" % tile_shapes_string
 	out_string += line_beginning + "z_index = 0\n"
 	return out_string
 
@@ -432,9 +449,6 @@ func make_autotile_resource_data(tile_size: Vector2, tile_masks: Dictionary,
 	out_string += make_tile_data_string(tile_size, tile_masks, texture_size, 
 		new_tile_name, tile_spacing, new_autotile_type, tile_id, texture_id)
 	return out_string
-
-
-
 
 
 func free_loaded_tile_rows_ui():
