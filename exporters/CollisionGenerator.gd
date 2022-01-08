@@ -125,16 +125,17 @@ func compute_contours():
 	progress_bar.value = 0
 	var size_in_tiles: Vector2 = (full_image.get_size() - tile_size) / (tile_size + tile_spacing) + Vector2.ONE
 #	var tile_size: Vector2 = image.get_size() / size_in_tiles
+	print((tile_size + tile_spacing))
 	for x in range(size_in_tiles.x):
 		for y in range(size_in_tiles.y):
 			var tile_template_position := Vector2(x, y)
 			var tile_position := tile_template_position * (tile_size + tile_spacing)
 			var contour := compute_contour_at(Rect2(tile_position, tile_size))
 			if not contour.empty():
-				for i in range(contour.size()):
-					contour[i] = contour[i] + tile_position
+#				for i in range(contour.size()):
+#					contour[i] = contour[i] + tile_position
 				collision_contours[tile_template_position] = contour
-				contours_texture_rect.add_contour(contour)
+				contours_texture_rect.add_contour(contour, tile_position)
 #		progress_bar.value = int(x / size_in_tiles.x * 100.0)
 #		yield(VisualServer, "frame_post_draw")
 	viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
