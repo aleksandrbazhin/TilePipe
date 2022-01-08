@@ -63,9 +63,9 @@ func setup_sliders():
 	var max_grid := int(min(tile_size.x, tile_size.y))
 	grid_cells = int(max_grid / 3.0)
 #	max_grid = min(max_grid/2.0, 20.0)
-	grid_slider.min_value = 1.0
+	grid_slider.min_value = 2.0
 	grid_slider.max_value = max_grid / 2.0
-	grid_slider.quantize(max_grid / 2.0 - 1)
+	grid_slider.quantize(max_grid / 2.0 - 2.0)
 	
 	grid_slider.value = grid_cells
 
@@ -120,6 +120,7 @@ func compute_contour_at(tile_rect: Rect2) -> PoolVector2Array:
 
 
 func compute_contours():
+	collision_contours.clear()
 	contours_texture_rect.contours = []
 	progress_bar.value = 0
 	var size_in_tiles: Vector2 = (full_image.get_size() - tile_size) / (tile_size + tile_spacing) + Vector2.ONE
