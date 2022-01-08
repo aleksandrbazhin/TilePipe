@@ -29,7 +29,6 @@ var current_tile_spacing: int
 var current_smoothing: bool = false
 
 var collision_shapes_to_id: Dictionary
-#var collision_shapes_string := ""
 
 var is_tile_match: bool = false
 var is_match_error_found: bool = false
@@ -50,7 +49,6 @@ onready var save_confirm_dialog: ConfirmationDialog = $SaveConfirmationDialog
 onready var overwrite_tileset_select: CheckButton = $VBox/HBoxTileset/CheckButton
 onready var collisions_check: CheckButton = $VBox/TilesPanelContainer/VBox/HBoxNewTile/CollisionsCheckButton
 onready var collision_dialog: CollisionGenerator = $CollisionGenerator
-
 
 
 func _ready():
@@ -85,7 +83,7 @@ func start_export_dialog(
 	current_tile_masks = tiles
 	current_texture_image.copy_from(texture_image)
 	current_smoothing = smoothing
-	autotile_type = Helpers.get_godot_autotile_type(tiles)
+	autotile_type = Helpers.assume_godot_autotile_type(tiles)
 	collisions_check.pressed = false
 	collision_dialog.collisions_accepted = false
 	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
@@ -112,15 +110,151 @@ func start_export_dialog(
 	popup_centered()
 
 
-# warn if there are not enough tiles for proper autotiling
-func check_masks_with_warning(masks, godot_autotile_type):
-	match godot_autotile_type:
-		Const.GODOT_AUTOTILE_TYPE.BLOB_3x3:
-			pass
-		Const.GODOT_AUTOTILE_TYPE.WANG_2x2:
-			pass
-		Const.GODOT_AUTOTILE_TYPE.FULL_3x3:
-			pass
+func _parse_tileset(tileset_file_content: String, project_path: String) -> Dictionary:
+	var parse_result: Dictionary = {
+		"textures": {},
+		"subresources": {},
+		"tiles": [],
+		"error": false # error during parsing tileset
+	}
+	var sections: PoolStringArray = tileset_file_content.split("[resource]", false, 1)
+	var header: String = sections[0]
+	var texture_regex := RegEx.new()
+	texture_regex.compile('\\[ext_resource path="(.+)" type="Texture" id=(\\d+)\\]')
+	var textures: Dictionary = {}
+	for texture_result in texture_regex.search_all(header):
+		var texture_parsed_path: String = texture_result.strings[1]
+		var texture_id: int = int(texture_result.strings[2])
+		var texture_absolute_path: String = texture_parsed_path.replace("res://", project_path)
+		textures[texture_id] = {
+			"path": texture_absolute_path,
+			"image": null,
+			"error": false # error when miage does not exist
+		}
+		if Helpers.file_exists(texture_absolute_path):
+			var exisiting_image: Image = Image.new()
+			exisiting_image.load(texture_absolute_path)
+			textures[texture_id]["image"] = exisiting_image
+		else:
+			textures[texture_id]["error"] = true
+	parse_result["textures"] = textures
+	var subresource_regex := RegEx.new()
+	subresource_regex.compile('\\s\\[sub_resource type="ConvexPolygonShape2D" id=(\\d+)\\]\\s*' +
+							  'points = PoolVector2Array\\(.+\\)\\s')
+	for subresource_result in subresource_regex.search_all(header):
+		var subresource_id := int(subresource_result.strings[1])
+		var subresouces_string: String = subresource_result.strings[0]
+		parse_result["subresources"][subresource_id] = subresource_result.strings[0]
+	var tiles_data: String = sections[1]
+	var tile_parse_regex := RegEx.new()
+	tile_parse_regex.compile('(\\d+)/name\\s*=\\s*"(.+)"\\s*' + 
+							'\\d+/texture\\s*=\\s*ExtResource\\(\\s*(\\d+)\\s*\\)\\s*' + 
+							'\\d+/tex_offset.*\\s*'+
+							'\\d+/modulate.*\\s*'+
+							'\\d+/region\\s*=\\s*Rect2\\(([0-9,\\s]+)\\)\\s*' + 
+							'\\d+/tile_mode\\s*=\\s*(\\d+)\\s*'+
+							'')
+	for tile_parse_result in tile_parse_regex.search_all(tiles_data):
+		var tile_dict: Dictionary = {
+			"id": int(tile_parse_result.strings[1]),
+			"name": String(tile_parse_result.strings[2]),
+			"texture_id": int(tile_parse_result.strings[3]),
+			"tile_mode": int(tile_parse_result.strings[5]),
+			"bitmask_mode": -1,
+			"icon_rect": Rect2(),
+			"shape_ids": []
+		}
+		if not textures.has(tile_dict["texture_id"]):
+			parse_result["error"] = true
+		match tile_dict["tile_mode"]:
+			TileSet.SINGLE_TILE:
+				var rect_string: String = tile_parse_result.strings[4]
+				var rect_coords := rect_string.split(",")
+				tile_dict["icon_rect"].position = Vector2(int(rect_coords[0]), int(rect_coords[1]))
+				tile_dict["icon_rect"].size = Vector2(int(rect_coords[2]), int(rect_coords[3]))
+			TileSet.AUTO_TILE, TileSet.ATLAS_TILE:
+				var autotile_regex := RegEx.new()
+				autotile_regex.compile(
+					str(tile_dict["id"]) + '/autotile/icon_coordinate\\s*=\\s*Vector2\\(([0-9,\\s]+)\\)\\s*' +
+					str(tile_dict["id"]) + '/autotile/tile_size\\s*=\\s*Vector2\\(([0-9,\\s]+)\\)' )
+				var autotile_tile_size: RegExMatch = autotile_regex.search(tiles_data)
+				if autotile_tile_size != null:
+					var icon_coord_string: String = autotile_tile_size.strings[1]
+					var icon_coords := icon_coord_string.split(",")
+					tile_dict["icon_rect"].position = Vector2(int(icon_coords[0]), int(icon_coords[1]))
+					var tile_size_string: String = autotile_tile_size.strings[2]
+					var tile_sizes := tile_size_string.split(",")
+					tile_dict["icon_rect"].size = Vector2(int(tile_sizes[0]), int(tile_sizes[1]))
+				else: #error
+					parse_result["error"] = true
+				continue
+			TileSet.AUTO_TILE:
+				var bitmask_mode_regex := RegEx.new()
+				bitmask_mode_regex.compile(
+					str(tile_dict["id"]) + '/autotile/bitmask_mode\\s*=\\s(\\d+)\\s*' )
+				var bitmask_mode_match: RegExMatch = bitmask_mode_regex.search(tiles_data)
+				if bitmask_mode_match != null:
+					var godot_bitmask_mode := int(bitmask_mode_match.strings[1])
+					var bitmask_mode_index := Const.GODOT_AUTOTILE_GODOT_INDEXES.values().find(godot_bitmask_mode)
+					if bitmask_mode_index != -1:
+						tile_dict["bitmask_mode"] = Const.GODOT_AUTOTILE_GODOT_INDEXES.keys()[bitmask_mode_index]
+				
+				var shapes_regex := RegEx.new()
+				shapes_regex.compile(
+					str(tile_dict["id"]) + '/shapes\\s*=\\s*\\[\\s*' + 
+					'([\\s\\S]*)' + 
+					'\\s*\\]\\s*' + 
+					str(tile_dict["id"]) + '/z_index')
+				var shapes_search_result := shapes_regex.search(tiles_data)
+				if shapes_search_result != null:
+					var shapes_string: String = shapes_search_result.strings[1]
+					if shapes_string.length() > 0:
+						var one_shape_regex := RegEx.new()
+						one_shape_regex.compile('\\{\\s*' + 
+								'"autotile_coord": Vector2\\(\\s*(\\d+)\\,\\s*(\\d+)\\s*\\),\\s*' + 
+								'"one_way": false,\\s*' +
+								'"one_way_margin": .*,\\s*' +
+								'"shape": SubResource\\(\\s*(\\d+)\\s*\\),\\s*' + 
+								'"shape_transform": Transform2D\\(.*\\)\\s*' + 
+								'\\}\\s*')
+						for one_shape_result in one_shape_regex.search_all(shapes_string):
+							var shape_id := int(one_shape_result.strings[3])
+#							var shape_autotile_coord := Vector2(int(one_shape_result.strings[1]), int(one_shape_result.strings[2]))
+#							print(shape_id, ": ", shape_autotile_coord)
+							tile_dict["shape_ids"].append(shape_id)
+		parse_result["tiles"].append(tile_dict)
+	return parse_result
+
+
+func _resource_update_load_steps(tileset_content: String, new_load_steps: int) -> String:
+	var load_steps_regex := RegEx.new()
+	load_steps_regex.compile('\\[gd_resource\\s*type="TileSet"\\s*load_steps=(\\d+)')
+	var load_steps_match: RegExMatch = load_steps_regex.search(tileset_content)
+	if load_steps_match == null:
+		report_error_inside_dialog("Error parsing tileset: load_steps not found")
+		return tileset_content
+	var previous_load_steps: int = int(load_steps_match.strings[1])
+	return tileset_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % new_load_steps)
+
+
+func _resource_add_texture_resource(tileset_content: String, texture_id: int) -> String:
+	var last_ext_resource_position: int = tileset_content.find_last("[ext_resource")
+	var texture_insert_position: int = 0
+	if last_ext_resource_position != -1: # has ext_resources in tileset
+		texture_insert_position = tileset_content.find("\n", last_ext_resource_position) + 1
+	else:
+		texture_insert_position = tileset_content.find("\n[resource]", 0) - 1
+	var texture_string: String = make_texture_string(texture_path, texture_id)
+	return tileset_content.insert(texture_insert_position, texture_string)
+
+
+func _resource_add_collision_subresources(tileset_content: String, exsiting_subresources: Dictionary, 
+		new_contours: Dictionary) -> String:
+	# 1. выяснить новый макс id
+	# 2. найти куда вставвлять
+	# 3. вставить
+	make_collision_subresources_string(new_contours, 1)
+	return tileset_content
 
 
 func save_tileset_resource() -> bool:
@@ -141,52 +275,38 @@ func save_tileset_resource() -> bool:
 		file.open(tileset_path, File.READ_WRITE)
 		var tileset_content := file.get_as_text()
 		var project_path := get_godot_project_path(tileset_path)
-		var tileset_data := _parse_tileset(tileset_content, project_path)
-		if tileset_data["error"] != false:
+		var tileset_resiource_data := _parse_tileset(tileset_content, project_path)
+		if tileset_resiource_data["error"] != false:
 			file.close()
 			report_error_inside_dialog("Error parsing tileset")
 			return false
 		var updated_content: String = tileset_content
 		var is_texture_found := false
 		var tile_texture_id: int = 0
-		for texture_id in tileset_data["textures"]:
-			if tileset_data["textures"][texture_id]["path"] == texture_path:
+		for texture_id in tileset_resiource_data["textures"]:
+			if tileset_resiource_data["textures"][texture_id]["path"] == texture_path:
 				is_texture_found = true
 				tile_texture_id = texture_id
-		if not is_texture_found: # add texture ext_resource
-			tile_texture_id = tileset_data["textures"].keys().max() + 1
-			var last_ext_resource_position: int = updated_content.find_last("[ext_resource")
-			var texture_insert_position: int = 0
-			if last_ext_resource_position != -1: # has ext_resources in tileset
-				texture_insert_position = updated_content.find("\n", last_ext_resource_position) + 1
-			else:
-				texture_insert_position = updated_content.find("\n[resource]", 0) - 1
-			var texture_string: String = make_texture_string(texture_path, tile_texture_id)
-			updated_content = updated_content.insert(texture_insert_position, texture_string)
-			# update load_steps here
-			# load steps is the total number of resources (gd_resource + ext_resource)
-			var new_load_steps: int = tileset_data["textures"].size() + 1 # existing textures + the top gd_resource
-			new_load_steps += 1 # add the new texture
+		var resource_count: int = tileset_resiource_data["textures"].size() + 1 # +1 for reqired top resource
+		if not is_texture_found: # add new texture ext_resource
+			tile_texture_id = tileset_resiource_data["textures"].keys().max() + 1
+			updated_content = _resource_add_texture_resource(updated_content, tile_texture_id)
+			resource_count += 1 # +1 for new texture and 
+		if collision_dialog.collisions_accepted and collisions_check.pressed and \
+				not tileset_resiource_data["subresources"].empty():
+			resource_count += tileset_resiource_data["subresources"].size()
+			updated_content = _resource_add_collision_subresources(updated_content, 
+				tileset_resiource_data["subresources"], collision_dialog.collision_contours)
+#			print(tileset_resiource_data["subresources"])
+			# если у этого тайла были коллизии => удалить все связанные субресурсы
+			# иначе => добавить субресурсов 
+
 			
-			# это ещё вынести отдельно от текстур - в субресурсы
-			# new_load_steps += existing_subresources.count()
-			# if collisions:
-			#      new_load_steps += collisions.keys().size()
-			
-			var load_steps_regex := RegEx.new()
-			load_steps_regex.compile('\\[gd_resource\\s*type="TileSet"\\s*load_steps=(\\d+)')
-			var load_steps_match: RegExMatch = load_steps_regex.search(tileset_content)
-			if load_steps_match == null:
-				report_error_inside_dialog("Error parsing tileset: load_steps not found")
-				return false
-			var previous_load_steps: int = int(load_steps_match.strings[1])
-			
-			
-			
-			updated_content = updated_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % new_load_steps)
+		# load steps is the total number of resources (gd_resource + ext_resource)
+		updated_content = _resource_update_load_steps(updated_content, resource_count)
 		var tile_id: int = 0
 		var tile_found: bool = false
-		for tile in tileset_data["tiles"]:
+		for tile in tileset_resiource_data["tiles"]:
 			if tile_name == tile["name"]:
 				tile_found = true
 				tile_id = tile["id"]
@@ -266,17 +386,14 @@ func make_tile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 	var out_string: String = ""
 	var mask_out_strings: PoolStringArray = []
 	var tile_collision_strings: PoolStringArray = []
-#	check_masks_with_warning(tile_masks, new_autotile_type)
 	var line_beginning := str(tile_id) + "/"
-	
 	for mask in tile_masks:
 		for tile in tile_masks[mask]:
 			var tile_position: Vector2 = tile.position_in_template
 			mask_out_strings.append("Vector2 ( %d, %d )" % [tile_position.x, tile_position.y])
 			var godot_mask: int = Helpers.convert_bitmask_to_godot(tile.mask, new_autotile_type)
 			mask_out_strings.append(str(godot_mask))
-			if collision_dialog.collisions_accepted:
-				pass
+			if collision_dialog.collisions_accepted and collisions_check.pressed:
 				tile_collision_strings.append(make_tile_shape_string(tile_position, 1))
 	out_string += line_beginning + "name = \"%s\"\n" % new_tile_name
 	out_string += line_beginning + "texture = ExtResource( %d )\n" % texture_id
@@ -300,7 +417,6 @@ func make_tile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 	out_string += line_beginning + "shape_one_way = false\n"
 	out_string += line_beginning + "shape_one_way_margin = 0.0\n"
 	out_string += line_beginning + "shapes = [  ]\n"
-	
 	out_string += line_beginning + "z_index = 0\n"
 	return out_string
 
@@ -318,126 +434,10 @@ func make_autotile_resource_data(tile_size: Vector2, tile_masks: Dictionary,
 	return out_string
 
 
-func _parse_tileset(tileset_file_content: String, project_path: String) -> Dictionary:
-	var parse_result: Dictionary = {
-		"textures": {},
-		"subresources": {},
-		"tiles": [],
-		"error": false # error during parsing tileset
-	}
-	var sections: PoolStringArray = tileset_file_content.split("[resource]", false, 1)
-	var header: String = sections[0]
-	var texture_regex := RegEx.new()
-	texture_regex.compile('\\[ext_resource path="(.+)" type="Texture" id=(\\d+)\\]')
-	var textures: Dictionary = {}
-	for texture_result in texture_regex.search_all(header):
-		var texture_parsed_path: String = texture_result.strings[1]
-		var texture_id: int = int(texture_result.strings[2])
-		var texture_absolute_path: String = texture_parsed_path.replace("res://", project_path)
-		textures[texture_id] = {
-			"path": texture_absolute_path,
-			"image": null,
-			"error": false # error when miage does not exist
-		}
-		if Helpers.file_exists(texture_absolute_path):
-			var exisiting_image: Image = Image.new()
-			exisiting_image.load(texture_absolute_path)
-			textures[texture_id]["image"] = exisiting_image
-		else:
-			textures[texture_id]["error"] = true
-	parse_result["textures"] = textures
-	
-	var subresource_regex := RegEx.new()
-	subresource_regex.compile('\\s\\[sub_resource type="ConvexPolygonShape2D" id=(\\d+)\\]\\s*' +
-							  'points = PoolVector2Array\\(.+\\)\\s')
-	for subresource_result in subresource_regex.search_all(header):
-		var subresource_id := int(subresource_result.strings[1])
-		var subresouces_string: String = subresource_result.strings[0] 
-		parse_result["subresources"][subresource_id] = subresource_result.strings[0] 
-	
-	var tiles_data: String = sections[1]
-	var tile_parse_regex := RegEx.new()
-	tile_parse_regex.compile('(\\d+)/name\\s*=\\s*"(.+)"\\s*' + 
-							'\\d+/texture\\s*=\\s*ExtResource\\(\\s*(\\d+)\\s*\\)\\s*' + 
-							'\\d+/tex_offset.*\\s*'+
-							'\\d+/modulate.*\\s*'+
-							'\\d+/region\\s*=\\s*Rect2\\(([0-9,\\s]+)\\)\\s*' + 
-							'\\d+/tile_mode\\s*=\\s*(\\d+)\\s*'+
-							'')
-	for tile_parse_result in tile_parse_regex.search_all(tiles_data):
-		var tile_dict: Dictionary = {
-			"id": int(tile_parse_result.strings[1]),
-			"name": String(tile_parse_result.strings[2]),
-			"texture_id": int(tile_parse_result.strings[3]),
-			"tile_mode": int(tile_parse_result.strings[5]),
-			"bitmask_mode": -1,
-			"icon_rect": Rect2(),
-			"shape_ids": []
-		}
-		if not textures.has(tile_dict["texture_id"]):
-			parse_result["error"] = true
-		match tile_dict["tile_mode"]:
-			TileSet.SINGLE_TILE:
-				var rect_string: String = tile_parse_result.strings[4]
-				var rect_coords := rect_string.split(",")
-				tile_dict["icon_rect"].position = Vector2(int(rect_coords[0]), int(rect_coords[1]))
-				tile_dict["icon_rect"].size = Vector2(int(rect_coords[2]), int(rect_coords[3]))
-			TileSet.AUTO_TILE, TileSet.ATLAS_TILE:
-				var autotile_regex := RegEx.new()
-				autotile_regex.compile(
-					str(tile_dict["id"]) + '/autotile/icon_coordinate\\s*=\\s*Vector2\\(([0-9,\\s]+)\\)\\s*' +
-					str(tile_dict["id"]) + '/autotile/tile_size\\s*=\\s*Vector2\\(([0-9,\\s]+)\\)' )
-				var autotile_tile_size: RegExMatch = autotile_regex.search(tiles_data)
-				if autotile_tile_size != null:
-					var icon_coord_string: String = autotile_tile_size.strings[1]
-					var icon_coords := icon_coord_string.split(",")
-					tile_dict["icon_rect"].position = Vector2(int(icon_coords[0]), int(icon_coords[1]))
-					var tile_size_string: String = autotile_tile_size.strings[2]
-					var tile_sizes := tile_size_string.split(",")
-					tile_dict["icon_rect"].size = Vector2(int(tile_sizes[0]), int(tile_sizes[1]))
-				else: #error
-					parse_result["error"] = true
-				continue
-			TileSet.AUTO_TILE:
-				var bitmask_mode_regex := RegEx.new()
-				bitmask_mode_regex.compile(
-					str(tile_dict["id"]) + '/autotile/bitmask_mode\\s*=\\s(\\d+)\\s*' )
-				var bitmask_mode_match: RegExMatch = bitmask_mode_regex.search(tiles_data)
-				if bitmask_mode_match != null:
-					var godot_bitmask_mode := int(bitmask_mode_match.strings[1])
-					var bitmask_mode_index := Const.GODOT_AUTOTILE_GODOT_INDEXES.values().find(godot_bitmask_mode)
-					if bitmask_mode_index != -1:
-						tile_dict["bitmask_mode"] = Const.GODOT_AUTOTILE_GODOT_INDEXES.keys()[bitmask_mode_index]
-				
-				var shapes_regex := RegEx.new()
-				shapes_regex.compile(
-					str(tile_dict["id"]) + '/shapes\\s*=\\s*\\[\\s*' + 
-					'([\\s\\S]*)' + 
-					'\\s*\\]\\s*' + 
-					str(tile_dict["id"]) + '/z_index')
-				var shapes_search_result := shapes_regex.search(tiles_data)
-				if shapes_search_result != null:
-					var shapes_string: String = shapes_search_result.strings[1]
-					if shapes_string.length() > 0:
-						var one_shape_regex := RegEx.new()
-						one_shape_regex.compile('\\{\\s*' + 
-								'"autotile_coord": Vector2\\(\\s*(\\d+)\\,\\s*(\\d+)\\s*\\),\\s*' + 
-								'"one_way": false,\\s*' +
-								'"one_way_margin": .*,\\s*' +
-								'"shape": SubResource\\(\\s*(\\d+)\\s*\\),\\s*' + 
-								'"shape_transform": Transform2D\\(.*\\)\\s*' + 
-								'\\}\\s*')
-#						print(shapes_string)
-						for one_shape_result in one_shape_regex.search_all(shapes_string):
-#							var autotile_coord := Vector2(int(one_shape_result.strings[1]), int(one_shape_result.strings[2]))
-							var shape_id := int(one_shape_result.strings[3])
-#							print(shape_id, ": ", autotile_coord)
-							tile_dict["shape_ids"].append(shape_id)
-		parse_result["tiles"].append(tile_dict)
-	return parse_result
 
 
-func free_loaded_tile_rows():
+
+func free_loaded_tile_rows_ui():
 	for row in existing_tiles_container.get_children():
 		row.queue_free()
 
@@ -458,7 +458,7 @@ func load_tileset(tileset_path: String):
 			tileset_file.close()
 			var tileset_data := _parse_tileset(tileset_content, project_path)
 			if tileset_data["error"] == false:
-				free_loaded_tile_rows()
+				free_loaded_tile_rows_ui()
 				for tile in tileset_data["tiles"]:
 					var exisiting_tile: GodotTileRow = preload("res://exporters/GodotExistingTileRow.tscn").instance()
 					if tileset_data["textures"].has(tile["texture_id"]):
@@ -486,7 +486,7 @@ func load_tileset(tileset_path: String):
 			overwrite_tileset_select.disabled = true
 			overwrite_tileset_select.pressed = true
 			enable_tiles_editing(tileset_name, project_name)
-			free_loaded_tile_rows()
+			free_loaded_tile_rows_ui()
 	else:
 		report_error_inside_dialog("Error: Invalid tileset path")
 
@@ -696,7 +696,7 @@ func make_tile_shape_string(autotile_coord: Vector2, collision_shape_id: int) ->
 	return out_string
 
 
-func make_collision_shapes_string(collision_contours: Dictionary, start_id: int = 1) -> String:
+func make_collision_subresources_string(collision_contours: Dictionary, start_id: int = 1) -> String:
 	var strings := PoolStringArray()
 	collision_shapes_to_id = {}
 	var id := start_id
@@ -723,8 +723,7 @@ func make_collision_shapes_string(collision_contours: Dictionary, start_id: int 
 func on_collsions_dialog_hide():
 	if collision_dialog.collisions_accepted:
 		pass
-#		collision_shapes_string = make_collision_shapes_string(collision_dialog.collision_contours)
-#		var collision_string := make_collision_shapes_string(collision_dialog.collision_contours)
+#		var collision_string := make_collision_subresource_string(collision_dialog.collision_contours)
 #		print(collision_string)
 	else:
 		collisions_check.pressed = false
@@ -732,7 +731,7 @@ func on_collsions_dialog_hide():
 
 func _on_CheckButton_toggled(button_pressed):
 	if button_pressed:
-		free_loaded_tile_rows()
+		free_loaded_tile_rows_ui()
 	else:
 		load_tileset(resource_path)
 
@@ -744,5 +743,3 @@ func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	else:
 		collision_dialog.collisions_accepted = false
 		collision_shapes_to_id = {}
-#		collision_shapes_string = ""
-#		collision_shapes = {}
