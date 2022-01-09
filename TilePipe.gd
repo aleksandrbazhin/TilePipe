@@ -409,6 +409,7 @@ func check_template_texture() -> bool:
 		return false
 	var template_image_size: Vector2 = template_texture.texture.get_data().get_size()
 	if template_image_size.x < Const.TEMPLATE_TILE_SIZE and template_image_size.y < Const.TEMPLATE_TILE_SIZE:
+		print("Template texture size should be multiples of 32x32px")
 		return false
 	return true
 
@@ -787,6 +788,9 @@ func set_output_texture(texture: Texture):
 func make_output_texture():
 	if not check_input_texture():
 		report_error("Error: Wrong input texture")
+		return
+	if not check_template_texture():
+		report_error("Error: Wrong template texture")
 		return
 	var generation_type: int = generation_type_select.selected
 	set_output_texture(null)

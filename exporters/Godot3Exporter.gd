@@ -145,7 +145,7 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 	for subresource_result in subresource_regex.search_all(header):
 		var subresource_id := int(subresource_result.strings[1])
 		var subresouces_string: String = subresource_result.strings[0]
-		parse_result["subresources"][subresource_id] = subresource_result.strings[0]
+		parse_result["subresources"][subresource_id] = subresouces_string
 	var tiles_data: String = sections[1]
 	var tile_parse_regex := RegEx.new()
 	tile_parse_regex.compile('(\\d+)/name\\s*=\\s*"(.+)"\\s*' + 
