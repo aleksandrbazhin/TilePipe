@@ -249,7 +249,6 @@ func load_input_texture(path: String) -> String:
 	texture_in.texture = loaded_texture
 	current_texture_basename = path.get_file().split(".")[0]
 	texture_input_container.get_node("InputInfo/InputNameLabel").text = path.get_file()
-	
 	return path
 
 
@@ -263,7 +262,7 @@ func load_template_texture(path: String) -> String:
 	var template_name: String = path.get_file()
 #	if path.begins_with("res://"):
 #		template_name = # we need to invert the path of loaded template to get name
-	template_texture_name.text =  template_name
+	template_texture_name.text = template_name
 	return path
 
 
@@ -839,7 +838,7 @@ func _on_TemplateDialog_file_selected(path):
 	template_file_dialog_path = Helpers.clear_path(path)
 	load_template_texture(path)
 	generate_template_bitmasks()
-	make_output_texture()
+	rebuild_output()
 	save_settings()
 
 
@@ -911,6 +910,9 @@ func _on_ReloadButton_pressed():
 
 func _on_TemplateOption_item_selected(index):
 	if index == Const.TEMPLATE_TYPES.CUSTOM:
+		clear_generation_mask()
+		template_texture.texture = null
+		out_texture.texture = null
 		template_load_button.disabled = false
 		if template_load_button.is_in_group("really_disabled"):
 			template_load_button.remove_from_group("really_disabled")
@@ -919,8 +921,8 @@ func _on_TemplateOption_item_selected(index):
 		template_load_button.add_to_group("really_disabled")
 		load_template_texture(Const.TEMPLATE_PATHS[index])
 		generate_template_bitmasks()
-	rebuild_output()
-	save_settings()
+		rebuild_output()
+		save_settings()
 
 
 func set_corner_generation_data(index: int):
