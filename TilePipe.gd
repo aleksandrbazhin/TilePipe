@@ -69,6 +69,8 @@ onready var render_progress_overlay: ColorRect = $Panel/HBox/Images/OutputContai
 onready var render_progressbar: ProgressBar = render_progress_overlay.get_node("ProgressBar")
 
 onready var godot_export_dialog: GodotExporter = $GodotExportDialog
+#onready var godot_export_button: GodotExporter = $GodotExportDialog
+#onready var godot_export_button: GodotExporter = $GodotExportDialog
 
 var is_ui_blocked: bool = false
 var is_slider_changed: bool = false
@@ -403,7 +405,7 @@ func check_input_texture() -> bool:
 
 
 func check_template_texture() -> bool:
-	if not is_instance_valid(template_texture.texture):
+	if not is_instance_valid(template_texture.texture) or template_texture.texture == null:
 		return false
 	var template_image_size: Vector2 = template_texture.texture.get_data().get_size()
 	if template_image_size.x < Const.TEMPLATE_TILE_SIZE and template_image_size.y < Const.TEMPLATE_TILE_SIZE:
@@ -707,12 +709,15 @@ func make_from_overlayed():
 
 
 func preprocess_input_image():
+	if not check_template_texture():
+		report_error("Error: Wrong template texture")
+		return
+	if not check_input_texture():
+		report_error("Error: Wrong input texture")
+		return	
 	block_ui()
 	output_offset_spinbox.value = int(output_tile_offset)
 	rotated_texture_in_viewport.show()
-	if not check_input_texture():
-		report_error("Error: Wrong input texture")
-		return
 	debug_input_texture.texture = null
 	var generation_type: int = generation_type_select.selected
 	match generation_type:
@@ -780,6 +785,9 @@ func set_output_texture(texture: Texture):
 
 
 func make_output_texture():
+	if not check_input_texture():
+		report_error("Error: Wrong input texture")
+		return
 	var generation_type: int = generation_type_select.selected
 	set_output_texture(null)
 	match generation_type:
@@ -800,6 +808,9 @@ func _on_CloseButton_pressed():
 
 
 func _on_Save_pressed():
+	if out_texture.texture == null:
+		report_error("Error: No generated texture")
+		return
 	save_texture_dialog.invalidate()
 	save_texture_dialog.popup_centered()
 
@@ -1038,6 +1049,9 @@ func _on_RateSlider_released(value):
 
 
 func rebuild_output():
+	if not check_template_texture():
+		report_error("Error: Wrong template texture")
+		return
 	var generation_type: int = generation_type_select.selected
 	match generation_type:
 		Const.INPUT_TYPES.CORNERS:
@@ -1161,6 +1175,12 @@ func hide_blocking_overlay():
 
 
 func _on_GodotExportButton_pressed():
+	if out_texture.texture == null:
+		report_error("Error: No generated texture")
+		return
+	if not check_template_texture():
+		report_error("Error: Wrong template texture")
+		return
 	var tile_size := Vector2(get_output_tile_size(), get_output_tile_size())
 	godot_export_dialog.start_export_dialog(
 		tile_size,
