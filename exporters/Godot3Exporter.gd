@@ -199,7 +199,6 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 					var bitmask_mode_index := Const.GODOT_AUTOTILE_GODOT_INDEXES.values().find(godot_bitmask_mode)
 					if bitmask_mode_index != -1:
 						tile_dict["bitmask_mode"] = Const.GODOT_AUTOTILE_GODOT_INDEXES.keys()[bitmask_mode_index]
-				
 				var shapes_regex := RegEx.new()
 				shapes_regex.compile(
 					str(tile_dict["id"]) + '/shapes\\s*=\\s*\\[\\s*' + 
@@ -227,6 +226,7 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 	return parse_result
 
 
+# load steps is the total number of resources (gd_resource + ext_resource + subresource)
 func _resource_update_load_steps(tileset_content: String, new_load_steps: int) -> String:
 	var load_steps_regex := RegEx.new()
 	load_steps_regex.compile('\\[gd_resource\\s*type="TileSet"\\s*load_steps=(\\d+)')
@@ -269,12 +269,14 @@ func save_tileset_resource() -> bool:
 	if not Helpers.file_exists(resource_path):
 		report_error_inside_dialog("Error: tileset file does not exist on path: \n%s" % tileset_path)
 		return false
-	file.open(tileset_path, File.READ_WRITE)
+	file.open(tileset_path, File.READ)
 	var tileset_content := file.get_as_text()
+	file.close()
+#	print(tileset_content)
+#	print(collision_shapes_to_id)
 	var project_path := get_godot_project_path(tileset_path)
 	var tileset_resource_data := _parse_tileset(tileset_content, project_path)
 	if tileset_resource_data["error"] != false:
-		file.close()
 		report_error_inside_dialog("Error parsing tileset")
 		return false
 	var updated_content: String = tileset_content
@@ -286,24 +288,12 @@ func save_tileset_resource() -> bool:
 			tile_texture_id = texture_id
 	var resource_count: int = tileset_resource_data["textures"].size() + 1 # +1 for reqired top resource
 	if not is_texture_found: # add new texture ext_resource
-		if tileset_resource_data["textures"].keys().size() > 1:
+		if tileset_resource_data["textures"].keys().size() > 0:
 			tile_texture_id = tileset_resource_data["textures"].keys().max() + 1
 		else:
 			tile_texture_id = 1
 		updated_content = _resource_add_texture_resource(updated_content, tile_texture_id)
 		resource_count += 1 # +1 for new texture and 
-	if collision_dialog.collisions_accepted and collisions_check.pressed:
-		# if there were subresources already
-		if not tileset_resource_data["subresources"].empty():
-			resource_count += tileset_resource_data["subresources"].size()
-			# + TODO:
-			# если у этого тайла были коллизии => удалить все связанные субресурсы
-		updated_content = _resource_add_collision_subresources(updated_content, 
-			tileset_resource_data["subresources"], collision_dialog.collision_contours)
-		resource_count += collision_dialog.collision_contours.size()
-		
-	# load steps is the total number of resources (gd_resource + ext_resource)
-	updated_content = _resource_update_load_steps(updated_content, resource_count)
 	var tile_id: int = 0
 	var tile_found: bool = false
 	for tile in tileset_resource_data["tiles"]:
@@ -313,29 +303,51 @@ func save_tileset_resource() -> bool:
 			break
 		else:
 			tile_id = int(max(tile_id, tile["id"]))
-	if not tile_found:
-		tile_id += 1 # id = max_id + 1
-	var tile_new_data: String = make_autotile_data_string(current_tile_size, 
+	var tile_replace_tile_block_start := -1
+	var tile_replace_tile_block_end := -1
+	if tile_found:
+		tile_replace_tile_block_start = updated_content.find("%d/name" % tile_id)
+		if tile_replace_tile_block_start == -1:
+			report_error_inside_dialog("Error parsing tileset while replacing tile")
+			return false
+		tile_replace_tile_block_end = updated_content.find("%d/z_index" % tile_id, tile_replace_tile_block_start)
+		if tile_replace_tile_block_end == -1:
+			report_error_inside_dialog("Error parsing tileset while replacing tile")
+			return false
+		tile_replace_tile_block_end = updated_content.find("\n", tile_replace_tile_block_end)
+		if tile_replace_tile_block_end == -1:
+			report_error_inside_dialog("Error parsing tileset while replacing tile")
+			return false
+		var tile_string := updated_content.substr(tile_replace_tile_block_start, tile_replace_tile_block_end)
+		var used_subresources_regex := RegEx.new()
+		used_subresources_regex.compile('"shape": SubResource\\s*\\(\\s*(\\d+)\\s*\\)\\s*')
+		for shape_id_result in used_subresources_regex.search_all(tile_string):
+			var subresource_id := int(shape_id_result.strings[1])
+			var subresource_start := updated_content.find('[sub_resource type="ConvexPolygonShape2D" id=%d]' % subresource_id)
+			var subresource_end := updated_content.find('\n\n', subresource_start)
+			updated_content.erase(subresource_start, subresource_end - subresource_start + 2)
+	else:
+		tile_id += 1
+	
+	if collision_dialog.collisions_accepted and collisions_check.pressed:
+		if not tileset_resource_data["subresources"].empty(): # if there were subresources already
+			resource_count += tileset_resource_data["subresources"].size()
+		updated_content = _resource_add_collision_subresources(updated_content, 
+			tileset_resource_data["subresources"], collision_dialog.collision_contours)
+		resource_count += collision_dialog.collision_contours.size()
+	updated_content = _resource_update_load_steps(updated_content, resource_count)	
+	var tile_string := make_autotile_data_string(current_tile_size, 
 			current_tile_masks, current_texture_size, tile_name, 
 			current_tile_spacing, autotile_type, tile_id, tile_texture_id)
-			
 	if not tile_found: # we add new
-		updated_content += tile_new_data
+		updated_content += tile_string
 	else: #we modify exisiting
-		var replace_tile_block_start: int = updated_content.find("%d/name" % tile_id)
-		if replace_tile_block_start == -1:
-			report_error_inside_dialog("Error parsing tileset while replacing tile")
-			return false
-		var replace_tile_block_end: int = updated_content.find("%d/z_index" % tile_id, replace_tile_block_start)
-		if replace_tile_block_end == -1:
-			report_error_inside_dialog("Error parsing tileset while replacing tile")
-			return false
-		replace_tile_block_end = updated_content.find("\n", replace_tile_block_end)
-		if replace_tile_block_end == -1:
-			report_error_inside_dialog("Error parsing tileset while replacing tile")
-			return false
-		updated_content.erase(replace_tile_block_start, replace_tile_block_end - replace_tile_block_start + 1)
-		updated_content = updated_content.insert(replace_tile_block_start, tile_new_data)
+		tile_replace_tile_block_start = updated_content.find("%d/name" % tile_id)
+		tile_replace_tile_block_end = updated_content.find("%d/z_index" % tile_id, tile_replace_tile_block_start)
+		tile_replace_tile_block_end = updated_content.find("\n", tile_replace_tile_block_end)
+		updated_content.erase(tile_replace_tile_block_start, tile_replace_tile_block_end - tile_replace_tile_block_start + 1)
+		updated_content = updated_content.insert(tile_replace_tile_block_start, tile_string)
+	file.open(tileset_path, File.WRITE)
 	file.store_string(updated_content)
 	file.close()
 	return true
@@ -709,11 +721,7 @@ func make_collision_subresources_string(collision_contours: Dictionary, start_id
 
 
 func on_collsions_dialog_hide():
-	if collision_dialog.collisions_accepted:
-		pass
-#		var collision_string := make_collision_subresource_string(collision_dialog.collision_contours)
-#		print(collision_string)
-	else:
+	if not collision_dialog.collisions_accepted:
 		collisions_check.pressed = false
 
 
