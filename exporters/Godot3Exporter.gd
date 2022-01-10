@@ -119,6 +119,9 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 		"error": false # error during parsing tileset
 	}
 	var sections: PoolStringArray = tileset_file_content.split("[resource]", false, 1)
+	if sections.size() != 2:
+		parse_result["error"] = true
+		return parse_result
 	var header: String = sections[0]
 	var texture_regex := RegEx.new()
 	texture_regex.compile('\\[ext_resource path="(.+)" type="Texture" id=(\\d+)\\]')
@@ -272,7 +275,7 @@ func save_tileset_resource() -> bool:
 	file.open(tileset_path, File.READ)
 	var tileset_content := file.get_as_text()
 	file.close()
-#	print(tileset_content)
+	
 #	print(collision_shapes_to_id)
 	var project_path := get_godot_project_path(tileset_path)
 	var tileset_resource_data := _parse_tileset(tileset_content, project_path)
@@ -314,14 +317,10 @@ func save_tileset_resource() -> bool:
 		if tile_replace_tile_block_end == -1:
 			report_error_inside_dialog("Error parsing tileset while replacing tile")
 			return false
-		tile_replace_tile_block_end = updated_content.find("\n", tile_replace_tile_block_end)
-		if tile_replace_tile_block_end == -1:
-			report_error_inside_dialog("Error parsing tileset while replacing tile")
-			return false
-		var tile_string := updated_content.substr(tile_replace_tile_block_start, tile_replace_tile_block_end)
 		var used_subresources_regex := RegEx.new()
 		used_subresources_regex.compile('"shape": SubResource\\s*\\(\\s*(\\d+)\\s*\\)\\s*')
-		for shape_id_result in used_subresources_regex.search_all(tile_string):
+		for shape_id_result in used_subresources_regex.search_all(updated_content, 
+				tile_replace_tile_block_start, tile_replace_tile_block_end):
 			var subresource_id := int(shape_id_result.strings[1])
 			var subresource_start := updated_content.find('[sub_resource type="ConvexPolygonShape2D" id=%d]' % subresource_id)
 			var subresource_end := updated_content.find('\n\n', subresource_start)
@@ -339,6 +338,7 @@ func save_tileset_resource() -> bool:
 	var tile_string := make_autotile_data_string(current_tile_size, 
 			current_tile_masks, current_texture_size, tile_name, 
 			current_tile_spacing, autotile_type, tile_id, tile_texture_id)
+	
 	if not tile_found: # we add new
 		updated_content += tile_string
 	else: #we modify exisiting
@@ -349,6 +349,7 @@ func save_tileset_resource() -> bool:
 		updated_content = updated_content.insert(tile_replace_tile_block_start, tile_string)
 	file.open(tileset_path, File.WRITE)
 	file.store_string(updated_content)
+#	print(updated_content.substr(0, 100))
 	file.close()
 	return true
 
@@ -448,7 +449,6 @@ func free_loaded_tile_rows_ui():
 
 func load_tileset(tileset_path: String):
 	var project_path := get_godot_project_path(tileset_path)
-	var tileset_file := File.new()
 	if is_a_valid_resource_path(tileset_path):
 		var tileset_name := tileset_path.get_file()
 		var project_config := ConfigFile.new()
@@ -457,6 +457,7 @@ func load_tileset(tileset_path: String):
 		if Helpers.file_exists(tileset_path):
 			overwrite_tileset_select.disabled = false
 			overwrite_tileset_select.pressed = false
+			var tileset_file := File.new()
 			tileset_file.open(tileset_path, File.READ)
 			var tileset_content: String = tileset_file.get_as_text()
 			tileset_file.close()
@@ -480,10 +481,14 @@ func load_tileset(tileset_path: String):
 							tile["shape_ids"])
 						existing_tiles_container.add_child(exisiting_tile)
 						exisiting_tile.connect("clicked", self, "populate_from_exisiting_tile")
-					else: 
-						report_error_inside_dialog("Error parsing tileset file")
+					else:
+						overwrite_tileset_select.disabled = true
+						overwrite_tileset_select.pressed = true
+						report_error_inside_dialog("Error parsing tileset file, can only overwrite")
 			else:
-				report_error_inside_dialog("Error parsing tileset file")
+				overwrite_tileset_select.disabled = true
+				overwrite_tileset_select.pressed = true
+				report_error_inside_dialog("Error parsing tileset file, can only overwrite")
 			enable_tiles_editing(tileset_name, project_name)
 			check_existing_for_matches()
 		else:
