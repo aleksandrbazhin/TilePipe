@@ -325,16 +325,16 @@ func save_tileset_resource() -> bool:
 			var subresource_start := updated_content.find('[sub_resource type="ConvexPolygonShape2D" id=%d]' % subresource_id)
 			var subresource_end := updated_content.find('\n\n', subresource_start)
 			updated_content.erase(subresource_start, subresource_end - subresource_start + 2)
+			tileset_resource_data["subresources"].erase(subresource_id)
 	else:
 		tile_id += 1
-	
+	if not tileset_resource_data["subresources"].empty(): # if there were subresources already
+		resource_count += tileset_resource_data["subresources"].size()
 	if collision_dialog.collisions_accepted and collisions_check.pressed:
-		if not tileset_resource_data["subresources"].empty(): # if there were subresources already
-			resource_count += tileset_resource_data["subresources"].size()
 		updated_content = _resource_add_collision_subresources(updated_content, 
 			tileset_resource_data["subresources"], collision_dialog.collision_contours)
 		resource_count += collision_dialog.collision_contours.size()
-	updated_content = _resource_update_load_steps(updated_content, resource_count)	
+	updated_content = _resource_update_load_steps(updated_content, resource_count)
 	var tile_string := make_autotile_data_string(current_tile_size, 
 			current_tile_masks, current_texture_size, tile_name, 
 			current_tile_spacing, autotile_type, tile_id, tile_texture_id)
