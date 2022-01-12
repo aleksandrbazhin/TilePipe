@@ -50,6 +50,7 @@ onready var save_confirm_dialog: ConfirmationDialog = $SaveConfirmationDialog
 onready var overwrite_tileset_select: CheckButton = $VBox/HBoxTileset/CheckButton
 onready var collisions_check: CheckButton = $VBox/TilesPanelContainer/VBox/HBoxNewTile/CollisionsCheckButton
 onready var collision_dialog: CollisionGenerator = $CollisionGenerator
+onready var temp_tile_row: GodotTileRow = $VBox/TilesPanelContainer/VBox/ScrollContainer/VBoxExistiingTiles/Existing
 
 
 func _ready():
@@ -93,10 +94,22 @@ func start_export_dialog(
 		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
 		last_generated_tile_name = generated_tile_name
 		save_settings()
+	
 	set_lineedit_text(tile_name_edit, tile_name)
 	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
 	autotile_type_select.selected = autotile_type
+	temp_tile_row.populate(
+		tile_name,
+		-1,
+		texture_path,
+		current_texture_image,
+		Rect2(Vector2.ZERO, current_tile_size),
+		TileSet.AUTO_TILE,
+		autotile_type,
+		false,
+		true
+	)
 	if is_a_valid_resource_path(resource_path):
 		set_lineedit_text(resource_name_edit, resource_path)
 		resource_dialog.current_path = resource_path
@@ -237,7 +250,6 @@ func _resource_update_load_steps(tileset_content: String, new_load_steps: int) -
 	if load_steps_match == null:
 		var load_steps_insert_position = tileset_content.find("format")
 		return tileset_content.insert(load_steps_insert_position, "load_steps=%d " % new_load_steps)
-#		report_error_inside_dialog("Error parsing tileset: load_steps not found")
 	var previous_load_steps: int = int(load_steps_match.strings[1])
 	return tileset_content.replace("load_steps=%d" % previous_load_steps, "load_steps=%d" % new_load_steps)
 
@@ -275,8 +287,6 @@ func save_tileset_resource() -> bool:
 	file.open(tileset_path, File.READ)
 	var tileset_content := file.get_as_text()
 	file.close()
-	
-#	print(collision_shapes_to_id)
 	var project_path := get_godot_project_path(tileset_path)
 	var tileset_resource_data := _parse_tileset(tileset_content, project_path)
 	if tileset_resource_data["error"] != false:
@@ -444,7 +454,10 @@ func make_autotile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 
 func free_loaded_tile_rows_ui():
 	for row in existing_tiles_container.get_children():
-		row.queue_free()
+		if row == temp_tile_row:
+			pass
+		else:
+			row.queue_free()
 
 
 func load_tileset(tileset_path: String):
@@ -464,27 +477,30 @@ func load_tileset(tileset_path: String):
 			var tileset_data := _parse_tileset(tileset_content, project_path)
 			if tileset_data["error"] == false:
 				free_loaded_tile_rows_ui()
+				existing_tiles_container.remove_child(temp_tile_row)
 				for tile in tileset_data["tiles"]:
 					var exisiting_tile: GodotTileRow = preload("res://exporters/GodotExistingTileRow.tscn").instance()
 					if tileset_data["textures"].has(tile["texture_id"]):
 						var exisiting_texture_path: String = tileset_data["textures"][tile["texture_id"]]["path"]
+						var exisiting_texture_image: Image = tileset_data["textures"][tile["texture_id"]]["image"]
 						if not Helpers.file_exists(exisiting_texture_path):
 							report_error_inside_dialog("Texture used for tile \"%s\" is missing" % tile["name"])
 						exisiting_tile.populate(
 							tile["name"], 
-							tile["id"], 
+							tile["id"],
 							exisiting_texture_path,
+							exisiting_texture_image,
 							tile["icon_rect"], 
 							tile["tile_mode"], 
 							tile["bitmask_mode"],
-							tileset_data["textures"][tile["texture_id"]]["image"],
-							tile["shape_ids"])
+							tile["shape_ids"].size() > 0)
 						existing_tiles_container.add_child(exisiting_tile)
 						exisiting_tile.connect("clicked", self, "populate_from_exisiting_tile")
 					else:
 						overwrite_tileset_select.disabled = true
 						overwrite_tileset_select.pressed = true
 						report_error_inside_dialog("Error parsing tileset file, can only overwrite")
+				existing_tiles_container.add_child(temp_tile_row)
 			else:
 				overwrite_tileset_select.disabled = true
 				overwrite_tileset_select.pressed = true
@@ -504,13 +520,19 @@ func check_existing_for_matches():
 	is_tile_match = false
 	is_match_error_found = false
 	for row in existing_tiles_container.get_children():
-		var tile_match: bool = row.tile_name == tile_name_edit.text
+		var tile_match: bool = row.tile_name == tile_name_edit.text and not row == temp_tile_row
 		is_tile_match = is_tile_match or tile_match
-		var texture_match: bool = row.texture_path == tile_texture_edit.text
+		var texture_match: bool = row.texture_path == tile_texture_edit.text and not row == temp_tile_row
 		var error_duplicate_textures: bool = (not tile_match) and texture_match
+		if row == temp_tile_row:
+			continue
 		row.highlight_name(tile_match)
 		row.highlight_path(texture_match, error_duplicate_textures)
 		is_match_error_found = is_match_error_found or error_duplicate_textures
+	if is_tile_match:
+		temp_tile_row.hide()
+	else:
+		temp_tile_row.show()
 
 
 func populate_from_exisiting_tile(row: GodotTileRow):
@@ -607,6 +629,7 @@ func set_texture_path(basedir: String, texture_file_name: String):
 		texture_path = texture_path_auto_name(basedir, texture_file_name)
 		texture_dialog.current_path = texture_path
 		set_lineedit_text(tile_texture_edit, texture_path)
+		temp_tile_row.set_texture_path(texture_path)
 	else:
 		report_error_inside_dialog("Error: texture file name is invalid")
 
@@ -640,12 +663,14 @@ func _on_ErrorDialog_confirmed():
 
 func _on_LineEditName_text_changed(new_text):
 	tile_name = new_text
+	temp_tile_row.set_tile_name(new_text)
 	check_existing_for_matches()
 	save_settings()
 
 
 func _on_OptionButton_item_selected(index):
 	autotile_type = index
+	temp_tile_row.set_tile_mode(TileSet.AUTO_TILE, autotile_type)
 	save_settings()
 
 
@@ -733,6 +758,18 @@ func on_collsions_dialog_hide():
 func _on_CheckButton_toggled(button_pressed):
 	if button_pressed:
 		free_loaded_tile_rows_ui()
+		temp_tile_row.show()
+		temp_tile_row.populate(
+			tile_name,
+			-1,
+			texture_path,
+			current_texture_image,
+			Rect2(Vector2.ZERO, current_tile_size),
+			TileSet.AUTO_TILE,
+			autotile_type,
+			false,
+			true
+		)
 	else:
 		load_tileset(resource_path)
 
@@ -744,3 +781,4 @@ func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	else:
 		collision_dialog.collisions_accepted = false
 		collision_shapes_to_id = {}
+	temp_tile_row.set_collisions(button_pressed)
