@@ -5,9 +5,11 @@
 [ext_resource path="res://assets/new_row.png" type="Texture" id=3]
 
 [node name="Existing" type="ColorRect"]
-margin_right = 866.0
-rect_min_size = Vector2( 0, 32 )
+margin_right = 850.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 1032, 34 )
 mouse_default_cursor_shape = 2
+size_flags_horizontal = 0
 color = Color( 0.894118, 0.898039, 0.886275, 0.0784314 )
 script = ExtResource( 2 )
 __meta__ = {
@@ -29,7 +31,7 @@ margin_bottom = 32.0
 
 [node name="Name" type="ColorRect" parent="HBox"]
 margin_right = 200.0
-margin_bottom = 32.0
+margin_bottom = 34.0
 rect_min_size = Vector2( 200, 0 )
 mouse_filter = 2
 size_flags_vertical = 3
@@ -55,23 +57,32 @@ __meta__ = {
 [node name="Icon" type="TextureRect" parent="HBox"]
 margin_left = 212.0
 margin_right = 244.0
-margin_bottom = 32.0
+margin_bottom = 34.0
 rect_min_size = Vector2( 32, 32 )
 
 [node name="TileMode" type="Label" parent="HBox"]
 margin_left = 256.0
-margin_right = 362.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 106, 0 )
+margin_right = 372.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 116, 0 )
 size_flags_vertical = 3
 text = "Unknown mode"
 align = 1
 valign = 1
 
+[node name="Spacer4" type="Control" parent="HBox"]
+margin_left = 384.0
+margin_right = 402.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 18, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Path" type="ColorRect" parent="HBox"]
-margin_left = 374.0
-margin_right = 770.0
-margin_bottom = 32.0
+margin_left = 414.0
+margin_right = 936.0
+margin_bottom = 34.0
 mouse_filter = 2
 size_flags_horizontal = 3
 color = Color( 0.654902, 0.247059, 0, 0 )
@@ -90,7 +101,7 @@ __meta__ = {
 
 [node name="Control2" type="Control" parent="HBox/Path/HBox"]
 margin_right = 32.0
-margin_bottom = 32.0
+margin_bottom = 34.0
 rect_min_size = Vector2( 32, 32 )
 mouse_filter = 2
 
@@ -109,9 +120,9 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="HBox/Path/HBox"]
 margin_left = 36.0
-margin_top = 9.0
-margin_right = 382.0
-margin_bottom = 23.0
+margin_top = 10.0
+margin_right = 508.0
+margin_bottom = 24.0
 size_flags_horizontal = 3
 text = "Texture path"
 valign = 1
@@ -121,33 +132,33 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="HBox/Path/HBox"]
-margin_left = 386.0
-margin_right = 396.0
-margin_bottom = 32.0
+margin_left = 512.0
+margin_right = 522.0
+margin_bottom = 34.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="Spacer2" type="Control" parent="HBox"]
-margin_left = 782.0
-margin_right = 792.0
-margin_bottom = 32.0
+margin_left = 948.0
+margin_right = 958.0
+margin_bottom = 34.0
 rect_min_size = Vector2( 10, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Collisions" type="CheckBox" parent="HBox"]
-margin_left = 804.0
-margin_right = 844.0
-margin_bottom = 32.0
+margin_left = 970.0
+margin_right = 1010.0
+margin_bottom = 34.0
 rect_min_size = Vector2( 40, 0 )
 hint_tooltip = "If this tile has collisions"
 disabled = true
 align = 2
 
 [node name="Spacer3" type="Control" parent="HBox"]
-margin_left = 856.0
-margin_right = 866.0
-margin_bottom = 32.0
+margin_left = 1022.0
+margin_right = 1032.0
+margin_bottom = 34.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="TextureRect" type="TextureRect" parent="."]

@@ -14,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -266.0
 margin_bottom = -168.0
+rect_min_size = Vector2( 0, 650 )
 theme = ExtResource( 1 )
 popup_exclusive = true
 script = ExtResource( 5 )
@@ -97,7 +98,7 @@ margin_left = 843.0
 margin_right = 843.0
 margin_bottom = 40.0
 
-[node name="CheckButton" type="CheckButton" parent="VBox/HBoxTileset"]
+[node name="OverrideCheckButton" type="CheckButton" parent="VBox/HBoxTileset"]
 margin_left = 851.0
 margin_right = 1060.0
 margin_bottom = 40.0
@@ -122,7 +123,7 @@ valign = 1
 [node name="TilesPanelContainer" type="PanelContainer" parent="VBox"]
 margin_top = 124.0
 margin_right = 1060.0
-margin_bottom = 526.0
+margin_bottom = 576.0
 rect_min_size = Vector2( 0, 48 )
 size_flags_vertical = 3
 
@@ -130,7 +131,7 @@ size_flags_vertical = 3
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1053.0
-margin_bottom = 395.0
+margin_bottom = 445.0
 custom_constants/separation = 8
 
 [node name="Control" type="Control" parent="VBox/TilesPanelContainer/VBox"]
@@ -231,7 +232,7 @@ margin_top = 56.0
 margin_right = 1046.0
 margin_bottom = 68.0
 
-[node name="ColorRect" type="ColorRect" parent="VBox/TilesPanelContainer/VBox"]
+[node name="TableHeaderRect" type="ColorRect" parent="VBox/TilesPanelContainer/VBox"]
 margin_top = 76.0
 margin_right = 1046.0
 margin_bottom = 104.0
@@ -239,40 +240,40 @@ rect_min_size = Vector2( 0, 28 )
 size_flags_horizontal = 3
 color = Color( 0.45098, 0.45098, 0.454902, 1 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox/ColorRect"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox/TableHeaderRect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="VBox/TilesPanelContainer/VBox/ColorRect/HBoxContainer"]
+[node name="Label" type="Label" parent="VBox/TilesPanelContainer/VBox/TableHeaderRect/HBoxContainer"]
 margin_top = 2.0
-margin_right = 254.0
+margin_right = 256.0
 margin_bottom = 26.0
-rect_min_size = Vector2( 254, 24 )
+rect_min_size = Vector2( 256, 24 )
 text = "     Existing tile name:"
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="VBox/TilesPanelContainer/VBox/ColorRect/HBoxContainer"]
-margin_left = 258.0
+[node name="Label2" type="Label" parent="VBox/TilesPanelContainer/VBox/TableHeaderRect/HBoxContainer"]
+margin_left = 260.0
 margin_top = 2.0
-margin_right = 408.0
+margin_right = 448.0
 margin_bottom = 26.0
-rect_min_size = Vector2( 150, 24 )
+rect_min_size = Vector2( 188, 24 )
 text = "      Tile mode:"
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label3" type="Label" parent="VBox/TilesPanelContainer/VBox/ColorRect/HBoxContainer"]
-margin_left = 412.0
+[node name="Label3" type="Label" parent="VBox/TilesPanelContainer/VBox/TableHeaderRect/HBoxContainer"]
+margin_left = 452.0
 margin_top = 2.0
-margin_right = 956.0
+margin_right = 944.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 24 )
 size_flags_horizontal = 3
@@ -282,12 +283,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label4" type="Label" parent="VBox/TilesPanelContainer/VBox/ColorRect/HBoxContainer"]
-margin_left = 960.0
+[node name="Label4" type="Label" parent="VBox/TilesPanelContainer/VBox/TableHeaderRect/HBoxContainer"]
+margin_left = 948.0
 margin_top = 2.0
 margin_right = 1046.0
 margin_bottom = 26.0
-rect_min_size = Vector2( 86, 24 )
+rect_min_size = Vector2( 98, 24 )
 text = "Collisions:"
 valign = 1
 __meta__ = {
@@ -297,36 +298,37 @@ __meta__ = {
 [node name="ScrollContainer" type="ScrollContainer" parent="VBox/TilesPanelContainer/VBox"]
 margin_top = 112.0
 margin_right = 1046.0
-margin_bottom = 388.0
-rect_min_size = Vector2( 0, 276 )
+margin_bottom = 438.0
+rect_min_size = Vector2( 0, 326 )
 scroll_horizontal_enabled = false
 
 [node name="VBoxExistiingTiles" type="VBoxContainer" parent="VBox/TilesPanelContainer/VBox/ScrollContainer"]
 margin_right = 1046.0
-margin_bottom = 32.0
+margin_bottom = 36.0
 size_flags_horizontal = 3
 custom_constants/separation = 10
 
 [node name="Existing" parent="VBox/TilesPanelContainer/VBox/ScrollContainer/VBoxExistiingTiles" instance=ExtResource( 7 )]
-margin_right = 1046.0
-margin_bottom = 32.0
+margin_right = 1032.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 1032, 36 )
 
 [node name="Control" type="Control" parent="VBox"]
-margin_top = 526.0
+margin_top = 576.0
 margin_right = 1060.0
-margin_bottom = 528.0
+margin_bottom = 578.0
 rect_min_size = Vector2( 0, 2 )
 
 [node name="HSeparator" type="HSeparator" parent="VBox"]
-margin_top = 528.0
+margin_top = 578.0
 margin_right = 1060.0
-margin_bottom = 548.0
+margin_bottom = 598.0
 custom_constants/separation = 20
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBox"]
-margin_top = 548.0
+margin_top = 598.0
 margin_right = 1060.0
-margin_bottom = 584.0
+margin_bottom = 634.0
 custom_constants/separation = 16
 alignment = 2
 
@@ -372,7 +374,7 @@ __meta__ = {
 [node name="ResourceFileDialog" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
-rect_min_size = Vector2( 600, 440 )
+rect_min_size = Vector2( 700, 500 )
 popup_exclusive = true
 access = 2
 filters = PoolStringArray( "*.tres ; Godot resouces" )
@@ -382,7 +384,7 @@ current_path = "/Users/user/Documents/TilePipe/"
 [node name="TextureFileDialog" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
-rect_min_size = Vector2( 600, 440 )
+rect_min_size = Vector2( 700, 500 )
 popup_exclusive = true
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
@@ -410,7 +412,7 @@ margin_bottom = 538.0
 [node name="CollisionGenerator" parent="." instance=ExtResource( 6 )]
 
 [connection signal="pressed" from="VBox/HBoxTileset/SelectResourceButton" to="." method="_on_SelectResourceButton_pressed"]
-[connection signal="toggled" from="VBox/HBoxTileset/CheckButton" to="." method="_on_CheckButton_toggled"]
+[connection signal="toggled" from="VBox/HBoxTileset/OverrideCheckButton" to="." method="_on_OverrideCheckButton_toggled"]
 [connection signal="text_changed" from="VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditName" to="." method="_on_LineEditName_text_changed"]
 [connection signal="item_selected" from="VBox/TilesPanelContainer/VBox/HBoxNewTile/OptionButton" to="." method="_on_OptionButton_item_selected"]
 [connection signal="pressed" from="VBox/TilesPanelContainer/VBox/HBoxNewTile/SelectTextureButton" to="." method="_on_SelectTextureButton_pressed"]

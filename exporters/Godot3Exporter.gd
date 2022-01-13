@@ -4,14 +4,6 @@ class_name GodotExporter
 
 signal settings_saved()
 
-#var last_saved_data := {
-#	"resource_path": "",
-#	"texture_name": "",
-#	"tile_name": "",
-#	"last_generated_tile_name": "",
-#	"autotile_type": Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
-#}
-
 const DEFAULT_TILES_LABEL: String = "Select tileset to edit tiles ↑"
 
 var resource_path: String = ""
@@ -30,9 +22,9 @@ var current_smoothing: bool = false
 
 # {template_position (Vector2): id (int)}
 var collision_shapes_to_id: Dictionary
-
 var is_tile_match: bool = false
 var is_match_error_found: bool = false
+var scroll_deferred: bool = false
 
 onready var resource_name_edit: LineEdit = $VBox/HBoxTileset/ResourceNameEdit
 onready var tile_name_edit: LineEdit = $VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditName
@@ -47,10 +39,11 @@ onready var blocking_rect: ColorRect = $ColorRect
 onready var blocking_rect_tiles: ColorRect = $TileBlockColorRect
 onready var existing_tiles_container: VBoxContainer = $VBox/TilesPanelContainer/VBox/ScrollContainer/VBoxExistiingTiles
 onready var save_confirm_dialog: ConfirmationDialog = $SaveConfirmationDialog
-onready var overwrite_tileset_select: CheckButton = $VBox/HBoxTileset/CheckButton
+onready var overwrite_tileset_select: CheckButton = $VBox/HBoxTileset/OverrideCheckButton
 onready var collisions_check: CheckButton = $VBox/TilesPanelContainer/VBox/HBoxNewTile/CollisionsCheckButton
 onready var collision_dialog: CollisionGenerator = $CollisionGenerator
 onready var temp_tile_row: GodotTileRow = $VBox/TilesPanelContainer/VBox/ScrollContainer/VBoxExistiingTiles/Existing
+onready var tiles_scroll_container: ScrollContainer = $VBox/TilesPanelContainer/VBox/ScrollContainer
 
 
 func _ready():
@@ -71,6 +64,11 @@ func _ready():
 		var type_id: int = Const.GODOT_AUTOTILE_TYPE[type]
 		autotile_type_select.add_item(Const.GODOT_AUTOTILE_TYPE_NAMES[type_id], type_id)
 
+
+func _process(delta):
+	if scroll_deferred:
+		tiles_scroll_container.ensure_control_visible(temp_tile_row)
+		scroll_deferred = false
 
 func start_export_dialog(
 		new_tile_size: Vector2, 
@@ -94,15 +92,15 @@ func start_export_dialog(
 		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
 		last_generated_tile_name = generated_tile_name
 		save_settings()
-	
 	set_lineedit_text(tile_name_edit, tile_name)
 	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
 	autotile_type_select.selected = autotile_type
+	var texture_relative_path: String = project_export_relative_path(texture_path).replace("res://", "")
 	temp_tile_row.populate(
 		tile_name,
 		-1,
-		texture_path,
+		texture_relative_path,
 		current_texture_image,
 		Rect2(Vector2.ZERO, current_tile_size),
 		TileSet.AUTO_TILE,
@@ -143,7 +141,9 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 		var texture_parsed_path: String = texture_result.strings[1]
 		var texture_id: int = int(texture_result.strings[2])
 		var texture_absolute_path: String = texture_parsed_path.replace("res://", project_path)
+		var texture_relative_path: String = texture_parsed_path.replace("res://", "")
 		textures[texture_id] = {
+			"relative_path": texture_relative_path,
 			"path": texture_absolute_path,
 			"image": null,
 			"error": false # error when miage does not exist
@@ -392,8 +392,7 @@ func project_export_relative_path(path: String) -> String:
 	if project_found:
 		var relative_path_array: Array = Array(path_array).slice(project_dir_index, len(path_array))
 		relative_path_array.append(path.get_file())
-		var relative_path: String = "res://" 
-		relative_path += PoolStringArray(relative_path_array).join("/")
+		var relative_path: String = "res://" + PoolStringArray(relative_path_array).join("/")
 		return relative_path
 	return ""
 
@@ -454,9 +453,7 @@ func make_autotile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 
 func free_loaded_tile_rows_ui():
 	for row in existing_tiles_container.get_children():
-		if row == temp_tile_row:
-			pass
-		else:
+		if row != temp_tile_row:
 			row.queue_free()
 
 
@@ -479,23 +476,24 @@ func load_tileset(tileset_path: String):
 				free_loaded_tile_rows_ui()
 				existing_tiles_container.remove_child(temp_tile_row)
 				for tile in tileset_data["tiles"]:
-					var exisiting_tile: GodotTileRow = preload("res://exporters/GodotExistingTileRow.tscn").instance()
+					var existing_tile: GodotTileRow = preload("res://exporters/GodotExistingTileRow.tscn").instance()
 					if tileset_data["textures"].has(tile["texture_id"]):
-						var exisiting_texture_path: String = tileset_data["textures"][tile["texture_id"]]["path"]
+						var exisiting_texture_abs_path: String = tileset_data["textures"][tile["texture_id"]]["path"]
+						var exisiting_texture_rel_path: String = tileset_data["textures"][tile["texture_id"]]["relative_path"]
 						var exisiting_texture_image: Image = tileset_data["textures"][tile["texture_id"]]["image"]
-						if not Helpers.file_exists(exisiting_texture_path):
+						if not Helpers.file_exists(exisiting_texture_abs_path):
 							report_error_inside_dialog("Texture used for tile \"%s\" is missing" % tile["name"])
-						exisiting_tile.populate(
+						existing_tile.populate(
 							tile["name"], 
 							tile["id"],
-							exisiting_texture_path,
+							exisiting_texture_rel_path,
 							exisiting_texture_image,
 							tile["icon_rect"], 
 							tile["tile_mode"], 
 							tile["bitmask_mode"],
 							tile["shape_ids"].size() > 0)
-						existing_tiles_container.add_child(exisiting_tile)
-						exisiting_tile.connect("clicked", self, "populate_from_exisiting_tile")
+						existing_tiles_container.add_child(existing_tile)
+						existing_tile.connect("clicked", self, "populate_new_from_exisiting_tile")
 					else:
 						overwrite_tileset_select.disabled = true
 						overwrite_tileset_select.pressed = true
@@ -519,10 +517,11 @@ func load_tileset(tileset_path: String):
 func check_existing_for_matches():
 	is_tile_match = false
 	is_match_error_found = false
+	var current_texture_relative_path := texture_path.replace(resource_path.get_base_dir() + "/", "")
 	for row in existing_tiles_container.get_children():
 		var tile_match: bool = row.tile_name == tile_name_edit.text and not row == temp_tile_row
 		is_tile_match = is_tile_match or tile_match
-		var texture_match: bool = row.texture_path == tile_texture_edit.text and not row == temp_tile_row
+		var texture_match: bool = row.texture_path == current_texture_relative_path and not row == temp_tile_row
 		var error_duplicate_textures: bool = (not tile_match) and texture_match
 		if row == temp_tile_row:
 			continue
@@ -533,12 +532,23 @@ func check_existing_for_matches():
 		temp_tile_row.hide()
 	else:
 		temp_tile_row.show()
+		scroll_deferred = true
+		# scroll container size is not recalulated
+#		yield(get_tree(), "idle_frame")
+#		yield(get_tree(), "idle_frame")
+#		tiles_scroll_container.call_deferred("set_v_scroll", tiles_scroll_container.rect_size.y + 50)
+#		tiles_scroll_container.call_deferred("ensure_control_visible", temp_tile_row)
+#		tiles_scroll_container.ensure_control_visible(temp_tile_row)
 
 
-func populate_from_exisiting_tile(row: GodotTileRow):
+func populate_new_from_exisiting_tile(row: GodotTileRow):
 	tile_name = row.tile_name
 	set_lineedit_text(tile_name_edit, tile_name)
-	set_texture_path(row.texture_path.get_base_dir(), row.texture_path.get_file().split(".")[0])
+	var base_dir_abs_path := get_godot_project_path(resource_path) + row.texture_path.get_base_dir()
+	if base_dir_abs_path.ends_with("/"):
+		base_dir_abs_path.erase(base_dir_abs_path.length() - 1, 1)
+	var texture_file_name := row.texture_path.get_basename().get_file()
+	set_texture_path(base_dir_abs_path, texture_file_name)
 	autotile_type_select.select(row.bitmask_mode)
 	check_existing_for_matches()
 
@@ -629,7 +639,8 @@ func set_texture_path(basedir: String, texture_file_name: String):
 		texture_path = texture_path_auto_name(basedir, texture_file_name)
 		texture_dialog.current_path = texture_path
 		set_lineedit_text(tile_texture_edit, texture_path)
-		temp_tile_row.set_texture_path(texture_path)
+		var relative_texture_path := project_export_relative_path(texture_path).replace("res://", "")
+		temp_tile_row.set_texture_path(relative_texture_path)
 	else:
 		report_error_inside_dialog("Error: texture file name is invalid")
 
@@ -755,14 +766,15 @@ func on_collsions_dialog_hide():
 		collisions_check.pressed = false
 
 
-func _on_CheckButton_toggled(button_pressed):
+func _on_OverrideCheckButton_toggled(button_pressed):
 	if button_pressed:
 		free_loaded_tile_rows_ui()
 		temp_tile_row.show()
+		var texture_relative_path: String = project_export_relative_path(texture_path).replace("res://", "")
 		temp_tile_row.populate(
 			tile_name,
 			-1,
-			texture_path,
+			texture_relative_path,
 			current_texture_image,
 			Rect2(Vector2.ZERO, current_tile_size),
 			TileSet.AUTO_TILE,

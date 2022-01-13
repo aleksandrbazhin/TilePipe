@@ -101,8 +101,8 @@ func _ready():
 	if is_temp:
 		$TextureRect.show()
 		mouse_default_cursor_shape = Control.CURSOR_ARROW
-		rect_min_size.y = 34
-		$HBox.margin_top = 2
+#		$HBox.rect_min_size.y = 136
+#		$HBox.margin_top = 2
 		hint_tooltip = "This tile will be added to the tileset"
 
 
