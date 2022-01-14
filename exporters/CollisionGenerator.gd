@@ -6,15 +6,16 @@ enum {DIRECTION_FORWARD, DIRECTION_BACK}
 const NOT_FOUND: Vector2 = Vector2(-1.0, -1.0)
 const NO_WAY := -1.0
 const LINE_ANGLE_DELTA := 0.1
+var CLOSE_POINT_DELTA_SQ := 4
 
 var grid_cells := 15
-var point_elimination_delta_sq := 4
 var is_ui_blocked := true
 var full_image: Image = null
 var tile_size: Vector2
 var tile_spacing: Vector2
 var collision_contours: Dictionary # {template_poisiton (Vector2): contour_points(PoolVector2Array)}
 var collisions_accepted := false
+var has_error_contour := false
 
 onready var viewport := $VBoxContainer/MarginContainer/Viewport
 onready var contours_texture_rect := $VBoxContainer/MarginContainer/Viewport/ContourTextureRect
@@ -34,7 +35,6 @@ func start(new_image: Image, new_tile_size: Vector2, new_tile_spacing: int, smoo
 	tile_size = new_tile_size
 	setup_sliders()
 	tile_spacing = Vector2(new_tile_spacing, new_tile_spacing)
-	
 	var scaled_image := Image.new()
 	scaled_image = full_image.duplicate()
 	var image_size := full_image.get_size()
@@ -44,7 +44,6 @@ func start(new_image: Image, new_tile_size: Vector2, new_tile_spacing: int, smoo
 	if image_draw_scale != 1.0:
 		var interpolation: int = Image.INTERPOLATE_LANCZOS if smoothing else Image.INTERPOLATE_NEAREST
 		scaled_image.resize(int(image_size.x * image_draw_scale), int(image_size.y * image_draw_scale), interpolation)
-	
 	contours_texture_rect.draw_scale = image_draw_scale
 	var itex := ImageTexture.new()
 	itex.create_from_image(scaled_image)
@@ -59,15 +58,85 @@ func start(new_image: Image, new_tile_size: Vector2, new_tile_spacing: int, smoo
 	compute_contours()
 
 
+func compute_contours():
+	has_error_contour = false
+	collision_contours.clear()
+	contours_texture_rect.contours = []
+#	var grid_resolution := tile_image.get_size() / float(grid_cells)
+	CLOSE_POINT_DELTA_SQ =  int(pow(min(tile_size.x, tile_size.y) / float(grid_cells) / 2.0, 2.0))
+	progress_bar.value = 0
+	var size_in_tiles: Vector2 = (full_image.get_size() - tile_size) / (tile_size + tile_spacing) + Vector2.ONE
+	for x in range(size_in_tiles.x):
+		for y in range(size_in_tiles.y):
+			var tile_template_position := Vector2(x, y)
+			var tile_position := tile_template_position * (tile_size + tile_spacing)
+			var contour := compute_contour_at(Rect2(tile_position, tile_size))
+			if contour.empty():
+				continue
+			collision_contours[tile_template_position] = contour
+			contours_texture_rect.add_contour(contour, tile_position)
+			if Geometry.triangulate_polygon(contour).empty():
+				has_error_contour = true
+	viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
+	contours_texture_rect.update()
+	contours_texture_rect.connect("drawn", self, "on_contours_drawn")
+	progress_bar.value = 100
+
+
 func setup_sliders():
 	var max_grid := int(min(tile_size.x, tile_size.y))
-	grid_cells = int(max_grid / 3.0)
-#	max_grid = min(max_grid/2.0, 20.0)
+	grid_cells = int(max_grid / 4.0)
 	grid_slider.min_value = 2.0
 	grid_slider.max_value = max_grid / 2.0
 	grid_slider.quantize(max_grid / 2.0 - 2.0)
-	
 	grid_slider.value = grid_cells
+
+
+func find_horizontal_edge_pixel(y_coord: float, tile_image: Image, direction: int) -> Vector2:
+	var result := NOT_FOUND
+	var y: float = min(y_coord, tile_image.get_size().y - 1)
+	tile_image.lock()
+	var prev_pixel_a := 0.0
+#		var length = tile_image.get_size().x - 1
+	for x in range(tile_image.get_size().x):
+		var test_point := Vector2(x, y)
+		if direction == DIRECTION_BACK:
+			test_point.x = tile_image.get_size().x - x - 1
+		var pixel_a := tile_image.get_pixelv(test_point).a
+		if prev_pixel_a == 0.0 and pixel_a != 0.0:
+			if direction == DIRECTION_BACK:
+				test_point.x += 1
+			if test_point.y == tile_image.get_size().y - 1:
+				test_point.y = tile_image.get_size().y
+			tile_image.unlock()
+			return test_point
+		else:
+			prev_pixel_a = pixel_a
+	tile_image.unlock()
+	return result
+
+
+func find_vertical_edge_pixel(x_coord: float, tile_image: Image, direction: int) -> Vector2:
+	var result := NOT_FOUND
+	var x := min(x_coord, tile_image.get_size().x - 1)
+	tile_image.lock()
+	var prev_pixel_a := 0.0
+	for y in range(tile_image.get_size().y):
+		var test_point := Vector2(x, y)
+		if direction == DIRECTION_BACK:
+			test_point.y = tile_image.get_size().y - y - 1
+		var pixel_a := tile_image.get_pixelv(test_point).a
+		if prev_pixel_a == 0.0 and pixel_a != 0.0:
+			if direction == DIRECTION_BACK:
+				test_point.y += 1
+			if test_point.x == tile_image.get_size().x - 1:
+				test_point.x = tile_image.get_size().x
+			tile_image.unlock()
+			return test_point 
+		else:
+			prev_pixel_a = pixel_a
+	tile_image.unlock()
+	return result
 
 
 func compute_contour_at(tile_rect: Rect2) -> PoolVector2Array:
@@ -76,75 +145,89 @@ func compute_contour_at(tile_rect: Rect2) -> PoolVector2Array:
 	tile_image.blit_rect(full_image, tile_rect, Vector2.ZERO)
 	var contour: PoolVector2Array = []
 #	print("COMPUTING rect1")
+	var grid_resolution := tile_image.get_size() / float(grid_cells)
 	if not tile_image.is_invisible():
 		var top: PoolVector2Array = []
 		var bottom: PoolVector2Array  = []
-		var left := []
-		var right := []
-		for line in range(grid_cells + 1):
+		var left: PoolVector2Array = []
+		var right: PoolVector2Array = []
+		for i in range(grid_cells + 1):
 #			print ("line ", line)
-			var ray := Vector2(line * tile_image.get_size().x / float(grid_cells), NO_WAY)
-#			print ("ray", ray)
-			var point := find_edge_pixel(ray, tile_image, DIRECTION_BACK)
+#			var ray := Vector2(, NO_WAY)
+			var x_test_coord := i * grid_resolution.x
+			var y_test_coord := i * grid_resolution.y
+			var point := find_vertical_edge_pixel(x_test_coord, tile_image, DIRECTION_BACK)
 			if point != NOT_FOUND:
 				bottom.append(point)
-			point = find_edge_pixel(ray, tile_image, DIRECTION_FORWARD)
+			point = find_vertical_edge_pixel(x_test_coord, tile_image, DIRECTION_FORWARD)
 			if point != NOT_FOUND:
 				top.append(point)
-			ray = Vector2(NO_WAY, line * tile_image.get_size().y / float(grid_cells))
-			point = find_edge_pixel(ray, tile_image, DIRECTION_BACK)
+			point = find_horizontal_edge_pixel(y_test_coord, tile_image, DIRECTION_BACK)
 			if point != NOT_FOUND:
 				right.append(point)
-			point = find_edge_pixel(ray, tile_image, DIRECTION_FORWARD)
+			point = find_horizontal_edge_pixel(y_test_coord, tile_image, DIRECTION_FORWARD)
 			if point != NOT_FOUND:
 				left.append(point)
 		if left.empty() and right.empty() and top.empty() and bottom.empty():
 			print("Can not detect contour in position ", tile_rect.position)
 			return contour
+#		print(top, right, bottom)
 		# cutoff overlapping left and right
-		var left_start := get_side_overlap(left, top[0], DIRECTION_FORWARD)
-		var left_end := get_side_overlap(left, bottom[0], DIRECTION_BACK)
-		var right_start := get_side_overlap(right, top[-1], DIRECTION_FORWARD)
-		var right_end := get_side_overlap(right, bottom[-1], DIRECTION_BACK)
-		var fixed_left := PoolVector2Array(left.slice(left_start, left_end))
-		var fixed_right := PoolVector2Array(right.slice(right_start, right_end))
-		contour.append_array(top)
-		contour.append_array(fixed_right)
-		bottom.invert()
-		contour.append_array(bottom)
-		fixed_left.invert()
-		contour.append_array(fixed_left)
-		contour = remove_close_points(contour)
+		contour = merge_side_lines(top, bottom, left, right)
 		contour = simplify_contour(contour)
+#		print(contour)
+#		contour = improve_contour(contour, max(grid_resolution.x, grid_resolution.y), tile_image)
 	return contour
 
 
-func compute_contours():
-	collision_contours.clear()
-	contours_texture_rect.contours = []
-	progress_bar.value = 0
-	var size_in_tiles: Vector2 = (full_image.get_size() - tile_size) / (tile_size + tile_spacing) + Vector2.ONE
-#	var tile_size: Vector2 = image.get_size() / size_in_tiles
-	for x in range(size_in_tiles.x):
-		for y in range(size_in_tiles.y):
-			var tile_template_position := Vector2(x, y)
-			var tile_position := tile_template_position * (tile_size + tile_spacing)
-			var contour := compute_contour_at(Rect2(tile_position, tile_size))
-			if not contour.empty():
-#				for i in range(contour.size()):
-#					contour[i] = contour[i] + tile_position
-				collision_contours[tile_template_position] = contour
-				contours_texture_rect.add_contour(contour, tile_position)
-#		progress_bar.value = int(x / size_in_tiles.x * 100.0)
-#		yield(VisualServer, "frame_post_draw")
-	viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
-	contours_texture_rect.update()
-	contours_texture_rect.connect("drawn", self, "constours_drawn")
-	progress_bar.value = 100
+func remove_side_overlap(side: PoolVector2Array, top_cutoff: Vector2, bottom_cutoff: Vector2) -> PoolVector2Array:
+	var result: PoolVector2Array = []
+	for point in side:
+		if point.y > top_cutoff.y and point.y < bottom_cutoff.y:
+			result.append(point)
+	result = remove_close_side_end_points(result, top_cutoff, bottom_cutoff)
+	
+	return result
 
 
-func constours_drawn():
-	contours_texture_rect.disconnect("drawn", self, "constours_drawn")
+func merge_side_lines(top: PoolVector2Array, bottom: PoolVector2Array, left: PoolVector2Array, right: PoolVector2Array) -> PoolVector2Array:
+	var contour_result: PoolVector2Array = []
+#	var left_start := get_side_overlap(left, top[0], DIRECTION_FORWARD)
+#	var left_end := get_side_overlap(left, bottom[0], DIRECTION_BACK)
+#	var fixed_left := PoolVector2Array(Array(left).slice(left_start, left_end))
+	var fixed_left := remove_side_overlap(left, top[0], bottom[0])
+#	print("left: ", left, " - ", fixed_left)
+#	var right_start := get_side_overlap(right, top[-1], DIRECTION_FORWARD)
+#	var right_end := get_side_overlap(right, bottom[-1], DIRECTION_BACK)
+#	var fixed_right := PoolVector2Array(Array(right).slice(right_start, right_end))
+	
+	var fixed_right := remove_side_overlap(right, top[-1], bottom[-1])
+#	print("right: ", right, " - ", fixed_right)
+	#fixed_right = remove_close_side_end_points(fixed_right, top[-1], bottom[-1])
+	contour_result.append_array(top)
+	contour_result.append_array(fixed_right)
+	bottom.invert()
+	contour_result.append_array(bottom)
+	fixed_left.invert()
+	contour_result.append_array(fixed_left)
+	return contour_result
+
+
+func remove_close_side_end_points(side: PoolVector2Array, top_point: Vector2, bottom_point: Vector2) -> PoolVector2Array:
+#	print(top_point, bottom_point)
+	if side.empty():
+		return side
+	if side[0].distance_squared_to(top_point) < CLOSE_POINT_DELTA_SQ:
+		side.remove(0)
+	if side.empty():
+		return side
+	if side[-1].distance_squared_to(bottom_point) < CLOSE_POINT_DELTA_SQ:
+		side.remove(side.size() - 1)
+	return side
+
+
+func on_contours_drawn():
+	contours_texture_rect.disconnect("drawn", self, "on_contours_drawn")
 	yield(VisualServer, "frame_post_draw")
 	viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
 	var itex := ImageTexture.new()
@@ -154,20 +237,27 @@ func constours_drawn():
 
 
 func get_side_overlap(side_points: Array, cutoff: Vector2, vertical_direction: int) -> int:
-	var overlap_index := 0 if vertical_direction == DIRECTION_FORWARD else side_points.size() - 1
+	print("cutoff: ", cutoff.y)
+	var range_from := 0 if vertical_direction == DIRECTION_FORWARD else side_points.size() - 1
 	var increment: int = 1 if vertical_direction == DIRECTION_FORWARD else -1
-	for i in range(overlap_index, side_points.size() - 1 - overlap_index, increment):
+	var range_to: int = side_points.size() - 1 - range_from
+	var overlap_index := range_from
+	for i in range(range_from, range_to, increment):
+		
 		var is_y_overlapping: bool = side_points[i].y >= cutoff.y if \
 			vertical_direction == DIRECTION_FORWARD else side_points[i].y <= cutoff.y
+		print(i, " ", side_points[i].y, " ", is_y_overlapping)
+		overlap_index = i
 		if is_y_overlapping:
 			overlap_index = i
 			break
 		else:
 			overlap_index = i + increment
+	print("o:", overlap_index)
 	return overlap_index
 
 
-# TODO: improve
+# removes points on the straight line between neigbors
 func simplify_contour(contour: PoolVector2Array) -> PoolVector2Array:
 	var point_checks := []
 	for i in range(contour.size()):
@@ -187,71 +277,49 @@ func simplify_contour(contour: PoolVector2Array) -> PoolVector2Array:
 	return result_contour
 
 
-#TODO: caheck only sie ends?
-func remove_close_points(contour: PoolVector2Array) -> PoolVector2Array:
-	var point_neighbor_checks := []
-	for i in range(contour.size()):
-		var point: Vector2 = contour[i]
-		var next_point: Vector2 = contour[i + 1] if i < contour.size() - 1 else contour[0]
-		if point.distance_squared_to(next_point) < point_elimination_delta_sq:
-			point_neighbor_checks.append(true)
-		else:
-			point_neighbor_checks.append(false)
-	var result_contour: PoolVector2Array = []
-	for i in range(contour.size()):
-		var point_index := i
-		var next_point_index := i + 1 if i < contour.size() - 1 else 0
-		if not(point_neighbor_checks[point_index] and not point_neighbor_checks[next_point_index]):
-			result_contour.append(contour[point_index])
-	return result_contour
-
-
-func find_edge_pixel(ray: Vector2, tile_image: Image, direction: int) -> Vector2:
-	var result := NOT_FOUND
-	if ray.y == NO_WAY:
-		ray.x = min(ray.x, tile_image.get_size().x - 1)
-		tile_image.lock()
-		var prev_pixel_a := 0.0
-#		var length = tile_image.get_size().y - 1
-		for y in range(tile_image.get_size().y):
-			var test_point := Vector2(ray.x, y)
-#			print("y" , y, "    test_point: ", test_point )
-			if direction == DIRECTION_BACK:
-				test_point.y = tile_image.get_size().y - 1 - y
-			var pixel_a := tile_image.get_pixelv(test_point).a
-			if prev_pixel_a == 0.0 and pixel_a != 0.0:
-				if direction == DIRECTION_BACK:
-					test_point.y += 1
-				if test_point.x == tile_image.get_size().x - 1:
-					test_point.x = tile_image.get_size().x
-				tile_image.unlock()
-				return test_point 
-			else:
-				prev_pixel_a = pixel_a
-		tile_image.unlock()
-	elif ray.x == NO_WAY:
-		ray.y = min(ray.y, tile_image.get_size().y - 1)
-		tile_image.lock()
-		var prev_pixel_a := 0.0
-#		var length = tile_image.get_size().x - 1
-		for x in range(tile_image.get_size().x):
-			var test_point := Vector2(x, ray.y)
-			if direction == DIRECTION_BACK:
-				test_point.x = tile_image.get_size().x - 1 - x
-			var pixel_a := tile_image.get_pixelv(test_point).a
-			if prev_pixel_a == 0.0 and pixel_a != 0.0:
-				if direction == DIRECTION_BACK:
-					test_point.x += 1
-				if test_point.y == tile_image.get_size().y - 1:
-					test_point.y = tile_image.get_size().y
-				tile_image.unlock()
-				return test_point
-			else:
-				prev_pixel_a = pixel_a
-		tile_image.unlock()
-	else:
-		print("ERROR: NOT AXIS ALIGNED RAY")
-	return result
+## elongate straight lines
+#func improve_contour(contour: PoolVector2Array, grid_resolution_px: float, tile_image: Image) -> PoolVector2Array:
+#	tile_image.lock()
+##	print(contour)
+#	for i in range(contour.size()):
+#		var next_i: int = i + 1 if i < contour.size() - 1 else 0
+#		var section_vec := (contour[next_i] - contour[i]).normalized()
+#		var new_point := contour[i]
+#		for step in grid_resolution_px:
+#			var test_point: Vector2 = contour[i] - section_vec * step 
+#			test_point = test_point.snapped(Vector2.ONE)
+#			if test_point.x >= tile_size.x or test_point.y >= tile_size.y or test_point.x < 0 or test_point.y < 0:
+#				break
+#			if tile_image.get_pixelv(test_point).a == 0.0:
+#				break
+#			new_point = test_point
+#		contour[i] = new_point
+#		var new_next := contour[next_i]
+#		for step in grid_resolution_px:
+#			var test_point: Vector2 = contour[next_i] + section_vec * step 
+#			test_point = test_point.snapped(Vector2.ONE)
+#			if test_point.x >= tile_size.x or test_point.y >= tile_size.y or test_point.x < 0 or test_point.y < 0:
+#				break
+#			if tile_image.get_pixelv(test_point).a == 0.0:
+#				break
+#			new_next = test_point
+#		contour[next_i] = new_next
+#	tile_image.unlock()
+#	var point_neighbor_checks := []
+#	for i in range(contour.size()):
+#		var point: Vector2 = contour[i]
+#		var next_point: Vector2 = contour[i + 1] if i < contour.size() - 1 else contour[0]
+#		if point.distance_squared_to(next_point) < CLOSE_POINT_DELTA_SQ:
+#			point_neighbor_checks.append(true)
+#		else:
+#			point_neighbor_checks.append(false)
+#	var result_contour: PoolVector2Array = []
+#	for i in range(contour.size()):
+#		var point_index := i
+#		var next_point_index := i + 1 if i < contour.size() - 1 else 0
+#		if not(point_neighbor_checks[point_index] and not point_neighbor_checks[next_point_index]):
+#			result_contour.append(contour[point_index])
+#	return result_contour
 
 
 func _on_CloseButton_pressed():
@@ -260,8 +328,11 @@ func _on_CloseButton_pressed():
 
 
 func _on_SaveButton_pressed():
-	collisions_accepted = true
-	hide()
+	if has_error_contour:
+		pass
+	else:
+		collisions_accepted = true
+		hide()
 
 
 func _on_GridSlider_released(value):
