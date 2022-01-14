@@ -94,21 +94,26 @@ func setup_sliders():
 
 func find_horizontal_edge_pixel(y_coord: float, tile_image: Image, direction: int) -> Vector2:
 	var result := NOT_FOUND
-	var y: float = min(y_coord, tile_image.get_size().y - 1)
+#	var y: float = min(y_coord, tile_size.y - 1)
+	var y := y_coord
+	if y > tile_size.y / 2.0:
+		y -= 1
 	tile_image.lock()
 	var prev_pixel_a := 0.0
 #		var length = tile_image.get_size().x - 1
-	for x in range(tile_image.get_size().x):
+	for x in range(tile_size.x):
 		var test_point := Vector2(x, y)
 		if direction == DIRECTION_BACK:
-			test_point.x = tile_image.get_size().x - x - 1
+			test_point.x = tile_size.x - 1 - x
 		var pixel_a := tile_image.get_pixelv(test_point).a
 		if prev_pixel_a == 0.0 and pixel_a != 0.0:
 			if direction == DIRECTION_BACK:
 				test_point.x += 1
-			if test_point.y == tile_image.get_size().y - 1:
-				test_point.y = tile_image.get_size().y
+			if test_point.y > tile_size.y / 2:
+				test_point.y += 1
 			tile_image.unlock()
+			test_point.x = clamp(test_point.x, 0, tile_size.x)
+			test_point.y = clamp(test_point.y, 0, tile_size.y)
 			return test_point
 		else:
 			prev_pixel_a = pixel_a
@@ -118,20 +123,24 @@ func find_horizontal_edge_pixel(y_coord: float, tile_image: Image, direction: in
 
 func find_vertical_edge_pixel(x_coord: float, tile_image: Image, direction: int) -> Vector2:
 	var result := NOT_FOUND
-	var x := min(x_coord, tile_image.get_size().x - 1)
+	var x := x_coord
+	if x > tile_size.x / 2.0:
+		x -= 1
 	tile_image.lock()
 	var prev_pixel_a := 0.0
-	for y in range(tile_image.get_size().y):
+	for y in range(tile_size.y):
 		var test_point := Vector2(x, y)
 		if direction == DIRECTION_BACK:
-			test_point.y = tile_image.get_size().y - y - 1
+			test_point.y = tile_size.y - y - 1
 		var pixel_a := tile_image.get_pixelv(test_point).a
 		if prev_pixel_a == 0.0 and pixel_a != 0.0:
 			if direction == DIRECTION_BACK:
 				test_point.y += 1
-			if test_point.x == tile_image.get_size().x - 1:
-				test_point.x = tile_image.get_size().x
+			if test_point.x > tile_size.x / 2.0:
+				test_point.x += 1
 			tile_image.unlock()
+			test_point.x = clamp(test_point.x, 0, tile_size.x)
+			test_point.y = clamp(test_point.y, 0, tile_size.y)
 			return test_point 
 		else:
 			prev_pixel_a = pixel_a
@@ -139,43 +148,92 @@ func find_vertical_edge_pixel(x_coord: float, tile_image: Image, direction: int)
 	return result
 
 
+func join_mirrored_arrays(a1: PoolVector2Array, a2: PoolVector2Array) -> PoolVector2Array:
+	if a1.empty() or a2.empty():
+		return PoolVector2Array([])
+	var center := a1.size() - 1
+	a2.invert()
+	a1.append_array(a2)
+	a1[center + 1] = a1[center]
+	a1[center] = a2[0]
+	return a1
+
+
 func compute_contour_at(tile_rect: Rect2) -> PoolVector2Array:
 	var tile_image := Image.new()
 	tile_image.create(int(tile_size.x), int(tile_size.y), false, Image.FORMAT_RGBA8)
 	tile_image.blit_rect(full_image, tile_rect, Vector2.ZERO)
 	var contour: PoolVector2Array = []
-#	print("COMPUTING rect1")
-	var grid_resolution := tile_image.get_size() / float(grid_cells)
+	var grid_resolution := tile_size / float(grid_cells)
 	if not tile_image.is_invisible():
 		var top: PoolVector2Array = []
-		var bottom: PoolVector2Array  = []
+		var bottom: PoolVector2Array = []
 		var left: PoolVector2Array = []
 		var right: PoolVector2Array = []
-		for i in range(grid_cells + 1):
-#			print ("line ", line)
-#			var ray := Vector2(, NO_WAY)
+		for i in range((grid_cells + 1)):
 			var x_test_coord := i * grid_resolution.x
-			var y_test_coord := i * grid_resolution.y
-			var point := find_vertical_edge_pixel(x_test_coord, tile_image, DIRECTION_BACK)
-			if point != NOT_FOUND:
-				bottom.append(point)
+			var point := Vector2.ZERO
 			point = find_vertical_edge_pixel(x_test_coord, tile_image, DIRECTION_FORWARD)
 			if point != NOT_FOUND:
 				top.append(point)
+			point = find_vertical_edge_pixel(x_test_coord, tile_image, DIRECTION_BACK)
+			if point != NOT_FOUND:
+				bottom.append(point)
+			var y_test_coord := i * grid_resolution.y
 			point = find_horizontal_edge_pixel(y_test_coord, tile_image, DIRECTION_BACK)
 			if point != NOT_FOUND:
 				right.append(point)
 			point = find_horizontal_edge_pixel(y_test_coord, tile_image, DIRECTION_FORWARD)
 			if point != NOT_FOUND:
 				left.append(point)
+
+#		var top1: PoolVector2Array = []
+#		var bottom1: PoolVector2Array  = []
+#		var left1: PoolVector2Array = []
+#		var right1: PoolVector2Array = []
+#		var top2: PoolVector2Array = []
+#		var bottom2: PoolVector2Array  = []
+#		var left2: PoolVector2Array = []
+#		var right2: PoolVector2Array = []
+#		for i in range((grid_cells / 2 + 1)):
+#			var x_test_coord := i * grid_resolution.x
+#			var point := Vector2.ZERO
+#			point = find_vertical_edge_pixel(x_test_coord, tile_image, DIRECTION_FORWARD)
+#			if point != NOT_FOUND:
+#				top1.append(point)
+#			point = find_vertical_edge_pixel(tile_size.x - x_test_coord - 1, tile_image, DIRECTION_FORWARD)
+#			if point != NOT_FOUND:
+#				top2.append(point)
+#			point = find_vertical_edge_pixel(x_test_coord, tile_image, DIRECTION_BACK)
+#			if point != NOT_FOUND:
+#				bottom1.append(point)
+#			point = find_vertical_edge_pixel(tile_size.x - x_test_coord - 1, tile_image, DIRECTION_BACK)
+#			if point != NOT_FOUND:
+#				bottom2.append(point)
+#			var y_test_coord := i * grid_resolution.y
+#			point = find_horizontal_edge_pixel(y_test_coord, tile_image, DIRECTION_BACK)
+#			if point != NOT_FOUND:
+#				right1.append(point)
+#			point = find_horizontal_edge_pixel(tile_size.y - y_test_coord - 1, tile_image, DIRECTION_BACK)
+#			if point != NOT_FOUND:
+#				right2.append(point)
+#			point = find_horizontal_edge_pixel(y_test_coord, tile_image, DIRECTION_FORWARD)
+#			if point != NOT_FOUND:
+#				left1.append(point)
+#			point = find_horizontal_edge_pixel(tile_size.y - y_test_coord - 1, tile_image, DIRECTION_FORWARD)
+#			if point != NOT_FOUND:
+#				left2.append(point)
+##		var top: PoolVector2Array = join_mirrored_arrays(top1, top2)
+##		var bottom: PoolVector2Array = join_mirrored_arrays(bottom1, bottom2)
+##		var left: PoolVector2Array = join_mirrored_arrays(left1, left2)
+##		var right: PoolVector2Array = join_mirrored_arrays(right1, right2)
+
 		if left.empty() and right.empty() and top.empty() and bottom.empty():
 			print("Can not detect contour in position ", tile_rect.position)
 			return contour
-#		print(top, right, bottom)
 		# cutoff overlapping left and right
 		contour = merge_side_lines(top, bottom, left, right)
 		contour = simplify_contour(contour)
-#		print(contour)
 #		contour = improve_contour(contour, max(grid_resolution.x, grid_resolution.y), tile_image)
 	return contour
 
@@ -253,7 +311,6 @@ func get_side_overlap(side_points: Array, cutoff: Vector2, vertical_direction: i
 			break
 		else:
 			overlap_index = i + increment
-	print("o:", overlap_index)
 	return overlap_index
 
 
