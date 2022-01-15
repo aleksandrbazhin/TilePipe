@@ -85,7 +85,7 @@ func start_export_dialog(
 	current_smoothing = smoothing
 	autotile_type = Helpers.assume_godot_autotile_type(tiles)
 	collisions_check.pressed = false
-	collision_dialog.collisions_accepted = false
+	collision_dialog.collisions_accepted_by_user = false
 	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
 	if last_generated_tile_name.empty() or (last_generated_tile_name != generated_tile_name and tile_name.is_valid_filename()):
 		tile_name = generated_tile_name
@@ -340,7 +340,7 @@ func save_tileset_resource() -> bool:
 		tile_id += 1
 	if not tileset_resource_data["subresources"].empty(): # if there were subresources already
 		resource_count += tileset_resource_data["subresources"].size()
-	if collision_dialog.collisions_accepted and collisions_check.pressed:
+	if collision_dialog.collisions_accepted_by_user and collisions_check.pressed:
 		updated_content = _resource_add_collision_subresources(updated_content, 
 			tileset_resource_data["subresources"], collision_dialog.collision_contours)
 		resource_count += collision_dialog.collision_contours.size()
@@ -416,7 +416,7 @@ func make_autotile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 			mask_out_strings.append("Vector2 ( %d, %d )" % [tile_position.x, tile_position.y])
 			var godot_mask: int = Helpers.convert_bitmask_to_godot(tile.mask, new_autotile_type)
 			mask_out_strings.append(str(godot_mask))
-			if collision_dialog.collisions_accepted and collisions_check.pressed:
+			if collision_dialog.collisions_accepted_by_user and collisions_check.pressed:
 				if tile_position in collision_shapes_to_id:
 					var collision_resource_id: int = collision_shapes_to_id[tile_position]
 					tile_collision_strings.append(make_tile_shape_string(tile_position, collision_resource_id))
@@ -762,7 +762,7 @@ func make_collision_subresources_string(collision_contours: Dictionary, start_id
 
 
 func on_collsions_dialog_hide():
-	if not collision_dialog.collisions_accepted:
+	if not collision_dialog.collisions_accepted_by_user:
 		collisions_check.pressed = false
 
 
@@ -791,6 +791,6 @@ func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 		collision_dialog.start(current_texture_image, current_tile_size, 
 			current_tile_spacing, current_smoothing)
 	else:
-		collision_dialog.collisions_accepted = false
+		collision_dialog.collisions_accepted_by_user = false
 		collision_shapes_to_id = {}
 	temp_tile_row.set_collisions(button_pressed)

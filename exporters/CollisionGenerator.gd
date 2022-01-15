@@ -14,7 +14,7 @@ var full_image: Image = null
 var tile_size: Vector2
 var tile_spacing: Vector2
 var collision_contours: Dictionary # {template_poisiton (Vector2): contour_points(PoolVector2Array)}
-var collisions_accepted := false
+var collisions_accepted_by_user := false
 var has_error_contour := false
 
 onready var viewport := $VBoxContainer/MarginContainer/Viewport
@@ -26,10 +26,17 @@ onready var accept_button := $VBoxContainer/MarginContainer2/HBoxContainer/SaveB
 onready var cancel_button := $VBoxContainer/MarginContainer2/HBoxContainer/CancelButton
 onready var grid_label := $VBoxContainer/MarginContainer3/HBoxContainer/GridLabel
 onready var grid_value_label := $VBoxContainer/MarginContainer3/HBoxContainer/GridValueLabel
+onready var status_container := $VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer
+onready var status_progress := status_container.get_node("StatusProgress")
+onready var status_fail := status_container.get_node("StatusFail")
+onready var status_ok := status_container.get_node("StatusOk")
 
 
 func start(new_image: Image, new_tile_size: Vector2, new_tile_spacing: int, smoothing: bool = false):
-	collisions_accepted = false
+	collisions_accepted_by_user = false
+	status_fail.hide()
+	status_ok.hide()
+	status_progress.show()
 	block_ui()
 	full_image = new_image
 	tile_size = new_tile_size
@@ -244,7 +251,6 @@ func remove_side_overlap(side: PoolVector2Array, top_cutoff: Vector2, bottom_cut
 		if point.y > top_cutoff.y and point.y < bottom_cutoff.y:
 			result.append(point)
 	result = remove_close_side_end_points(result, top_cutoff, bottom_cutoff)
-	
 	return result
 
 
@@ -285,6 +291,13 @@ func remove_close_side_end_points(side: PoolVector2Array, top_point: Vector2, bo
 
 
 func on_contours_drawn():
+	status_progress.hide()
+	if has_error_contour:
+		status_ok.hide()
+		status_fail.show()
+	else:
+		status_fail.hide()
+		status_ok.show()
 	contours_texture_rect.disconnect("drawn", self, "on_contours_drawn")
 	yield(VisualServer, "frame_post_draw")
 	viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
@@ -292,16 +305,19 @@ func on_contours_drawn():
 	itex.create_from_image(viewport.get_texture().get_data())
 	contours_display_texture_rect.texture = itex
 	unblock_ui()
+	if has_error_contour:
+		accept_button.disabled = true
+	else:
+		accept_button.disabled = false
 
 
 func get_side_overlap(side_points: Array, cutoff: Vector2, vertical_direction: int) -> int:
-	print("cutoff: ", cutoff.y)
+#	print("cutoff: ", cutoff.y)
 	var range_from := 0 if vertical_direction == DIRECTION_FORWARD else side_points.size() - 1
 	var increment: int = 1 if vertical_direction == DIRECTION_FORWARD else -1
 	var range_to: int = side_points.size() - 1 - range_from
 	var overlap_index := range_from
 	for i in range(range_from, range_to, increment):
-		
 		var is_y_overlapping: bool = side_points[i].y >= cutoff.y if \
 			vertical_direction == DIRECTION_FORWARD else side_points[i].y <= cutoff.y
 		print(i, " ", side_points[i].y, " ", is_y_overlapping)
@@ -380,15 +396,13 @@ func simplify_contour(contour: PoolVector2Array) -> PoolVector2Array:
 
 
 func _on_CloseButton_pressed():
-	collisions_accepted = false
+	collisions_accepted_by_user = false
 	hide()
 
 
 func _on_SaveButton_pressed():
-	if has_error_contour:
-		pass
-	else:
-		collisions_accepted = true
+	if not has_error_contour:
+		collisions_accepted_by_user = true
 		hide()
 
 

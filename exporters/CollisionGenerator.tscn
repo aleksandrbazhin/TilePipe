@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://exporters/CollisionGenerator.gd" type="Script" id=1]
 [ext_resource path="res://exporters/ContourTextureRect.gd" type="Script" id=2]
 [ext_resource path="res://assets/header_font.tres" type="DynamicFont" id=3]
 [ext_resource path="res://assets/ui_theme.tres" type="Theme" id=4]
 [ext_resource path="res://BlockableSlider.gd" type="Script" id=5]
+[ext_resource path="res://assets/NodeWarning.svg" type="Texture" id=6]
 
 [node name="CollisionGenerator" type="PopupDialog"]
 anchor_right = 1.0
@@ -128,17 +129,96 @@ custom_constants/separation = 10
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
 margin_top = 8.0
-margin_right = 720.0
+margin_right = 546.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
+[node name="StatusContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
+margin_left = 556.0
+margin_right = 712.0
+margin_bottom = 36.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer"]
+margin_right = 62.0
+margin_bottom = 36.0
+size_flags_vertical = 3
+text = "Contours:"
+align = 2
+valign = 1
+
+[node name="StatusProgress" type="HBoxContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer"]
+margin_left = 66.0
+margin_right = 156.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 90, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer/StatusProgress"]
+margin_right = 90.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "In process"
+align = 1
+valign = 1
+
+[node name="StatusOk" type="HBoxContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer"]
+visible = false
+margin_left = 160.0
+margin_right = 250.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 90, 0 )
+
+[node name="OkLabel" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer/StatusOk"]
+margin_right = 90.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 90, 0 )
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0.411765, 0.803922, 0.0509804, 1 )
+text = "OK"
+align = 1
+valign = 1
+
+[node name="StatusFail" type="HBoxContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer"]
+visible = false
+margin_left = 160.0
+margin_right = 250.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 90, 0 )
+
+[node name="FailLabel" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer/StatusFail"]
+margin_right = 60.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 60, 0 )
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0.937255, 0.254902, 0.254902, 1 )
+text = "Failed"
+align = 1
+valign = 1
+
+[node name="ContoursStatusWarning" type="TextureRect" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer/StatusFail"]
+margin_left = 64.0
+margin_right = 80.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 16, 32 )
+texture = ExtResource( 6 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="SaveButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_left = 730.0
+margin_left = 722.0
 margin_right = 850.0
 margin_bottom = 36.0
-rect_min_size = Vector2( 120, 0 )
-text = "Set collisions"
+rect_min_size = Vector2( 128, 0 )
+text = "Save collisions"
 
 [node name="CancelButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
 margin_left = 860.0
