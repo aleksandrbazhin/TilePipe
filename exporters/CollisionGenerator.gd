@@ -256,18 +256,11 @@ func remove_side_overlap(side: PoolVector2Array, top_cutoff: Vector2, bottom_cut
 
 func merge_side_lines(top: PoolVector2Array, bottom: PoolVector2Array, left: PoolVector2Array, right: PoolVector2Array) -> PoolVector2Array:
 	var contour_result: PoolVector2Array = []
-#	var left_start := get_side_overlap(left, top[0], DIRECTION_FORWARD)
-#	var left_end := get_side_overlap(left, bottom[0], DIRECTION_BACK)
-#	var fixed_left := PoolVector2Array(Array(left).slice(left_start, left_end))
-	var fixed_left := remove_side_overlap(left, top[0], bottom[0])
-#	print("left: ", left, " - ", fixed_left)
-#	var right_start := get_side_overlap(right, top[-1], DIRECTION_FORWARD)
-#	var right_end := get_side_overlap(right, bottom[-1], DIRECTION_BACK)
-#	var fixed_right := PoolVector2Array(Array(right).slice(right_start, right_end))
-	
-	var fixed_right := remove_side_overlap(right, top[-1], bottom[-1])
-#	print("right: ", right, " - ", fixed_right)
-	#fixed_right = remove_close_side_end_points(fixed_right, top[-1], bottom[-1])
+	var fixed_left := left
+	var fixed_right := right
+	if not top.empty() and not bottom.empty():
+		fixed_left = remove_side_overlap(left, top[0], bottom[0])
+		fixed_right = remove_side_overlap(right, top[-1], bottom[-1])
 	contour_result.append_array(top)
 	contour_result.append_array(fixed_right)
 	bottom.invert()
