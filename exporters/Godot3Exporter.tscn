@@ -9,6 +9,7 @@
 [ext_resource path="res://exporters/GodotExistingTileRow.tscn" type="PackedScene" id=7]
 
 [node name="GodotExportDialog" type="PopupDialog"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -266.0
@@ -188,7 +189,7 @@ valign = 1
 
 [node name="LineEditTexture" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
 margin_left = 529.0
-margin_right = 744.0
+margin_right = 754.0
 margin_bottom = 40.0
 hint_tooltip = "Texture file"
 size_flags_horizontal = 3
@@ -200,24 +201,24 @@ __meta__ = {
 }
 
 [node name="SelectTextureButton" type="Button" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 752.0
-margin_right = 852.0
+margin_left = 762.0
+margin_right = 862.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 100, 32 )
 text = "Select"
 icon = ExtResource( 4 )
 
 [node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 860.0
-margin_right = 860.0
+margin_left = 870.0
+margin_right = 870.0
 margin_bottom = 40.0
 
 [node name="CollsionsLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 868.0
+margin_left = 878.0
 margin_right = 962.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 94, 40 )
-text = "Add collisions:"
+rect_min_size = Vector2( 84, 40 )
+text = "Collisions:"
 align = 2
 valign = 1
 
