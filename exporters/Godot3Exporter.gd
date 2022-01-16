@@ -752,8 +752,8 @@ func make_collision_subresources_string(collision_contours: Dictionary, start_id
 		var points := PoolStringArray()
 		points.resize(polygon.size() * 2)
 		for i in range(polygon.size()):
-			points[i * 2] = str(polygon[i].x)
-			points[i * 2 + 1] = str(polygon[i].y)
+			points[i * 2] = str(stepify(polygon[i].x, 0.0001))
+			points[i * 2 + 1] = str(stepify(polygon[i].y, 0.0001))
 		polygon_string += points.join(", ") + " )"
 		strings.append(polygon_string)
 		collision_shapes_to_id[polygon_position] = id
