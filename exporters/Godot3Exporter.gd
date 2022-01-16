@@ -276,7 +276,7 @@ func _resource_add_collision_subresources(tileset_content: String, existing_subr
 
 func save_tileset_resource() -> bool:
 	var file := File.new()
-	var tileset_path: String = resource_path.get_basename( ) + ".tres"
+	var tileset_path: String = resource_path.get_basename() + ".tres"
 	if overwrite_tileset_select.pressed:
 		file.open(tileset_path, File.WRITE)
 		file.store_string('[gd_resource type="TileSet" load_steps=1 format=2]\n\n[resource]\n')
@@ -554,7 +554,7 @@ func populate_new_from_exisiting_tile(row: GodotTileRow):
 
 
 func is_a_valid_resource_path(test_resource_path: String):
-	if test_resource_path.get_file().split(".")[0].empty() or not test_resource_path.get_file().is_valid_filename():
+	if test_resource_path.get_basename().get_file().empty() or not test_resource_path.get_file().is_valid_filename():
 		report_error_inside_dialog("Error: %s is not a valid filename" % test_resource_path.get_file())
 		return false
 	var resource_project_path := get_godot_project_path(test_resource_path)	
@@ -565,7 +565,7 @@ func is_a_valid_resource_path(test_resource_path: String):
 
 
 func is_a_valid_texture_path(test_texture_path: String, test_resource_path: String):
-	if test_texture_path.get_file().split(".")[0].empty() or not test_texture_path.get_file().is_valid_filename():
+	if test_texture_path.get_basename().get_file().empty() or not test_texture_path.get_file().is_valid_filename():
 		report_error_inside_dialog("Error: %s is not a valid filename" % test_texture_path.get_file())
 		return false
 	var resource_project_path := get_godot_project_path(test_resource_path)
@@ -687,7 +687,7 @@ func _on_OptionButton_item_selected(index):
 
 func _on_TextureFileDialog_file_selected(path: String):
 	if is_a_valid_texture_path(path, resource_path):
-		set_texture_path(path.get_base_dir(), path.get_file().split(".")[0])
+		set_texture_path(path.get_base_dir(), path.get_basename().get_file())
 		check_existing_for_matches()
 		save_settings()
 
