@@ -96,18 +96,7 @@ func start_export_dialog(
 	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
 	autotile_type_select.selected = autotile_type
-	var texture_relative_path: String = project_export_relative_path(texture_path).replace("res://", "")
-	temp_tile_row.populate(
-		tile_name,
-		-1,
-		texture_relative_path,
-		current_texture_image,
-		Rect2(Vector2.ZERO, current_tile_size),
-		TileSet.AUTO_TILE,
-		autotile_type,
-		false,
-		true
-	)
+	populate_temp_tile_from_inputs()
 	if is_a_valid_resource_path(resource_path):
 		set_lineedit_text(resource_name_edit, resource_path)
 		resource_dialog.current_path = resource_path
@@ -504,6 +493,7 @@ func load_tileset(tileset_path: String):
 				overwrite_tileset_select.pressed = true
 				report_error_inside_dialog("Error parsing tileset file, can only overwrite")
 			enable_tiles_editing(tileset_name, project_name)
+			yield(get_tree(), "idle_frame")
 			check_existing_for_matches()
 		else:
 			overwrite_tileset_select.disabled = true
@@ -523,22 +513,16 @@ func check_existing_for_matches():
 		is_tile_match = is_tile_match or tile_match
 		var texture_match: bool = row.texture_path == current_texture_relative_path and not row == temp_tile_row
 		var error_duplicate_textures: bool = (not tile_match) and texture_match
-		if row == temp_tile_row:
-			continue
-		row.highlight_name(tile_match)
-		row.highlight_path(texture_match, error_duplicate_textures)
-		is_match_error_found = is_match_error_found or error_duplicate_textures
+		if not row == temp_tile_row:
+			row.highlight_name(tile_match)
+			row.highlight_path(texture_match, error_duplicate_textures)
+			is_match_error_found = is_match_error_found or error_duplicate_textures
 	if is_tile_match:
 		temp_tile_row.hide()
 	else:
+		populate_temp_tile_from_inputs()
 		temp_tile_row.show()
 		scroll_deferred = true
-		# scroll container size is not recalulated
-#		yield(get_tree(), "idle_frame")
-#		yield(get_tree(), "idle_frame")
-#		tiles_scroll_container.call_deferred("set_v_scroll", tiles_scroll_container.rect_size.y + 50)
-#		tiles_scroll_container.call_deferred("ensure_control_visible", temp_tile_row)
-#		tiles_scroll_container.ensure_control_visible(temp_tile_row)
 
 
 func populate_new_from_exisiting_tile(row: GodotTileRow):
@@ -661,7 +645,10 @@ func _on_ResourceFileDialog_file_selected(path: String):
 	if is_a_valid_resource_path(path):
 		resource_path = path
 		set_lineedit_text(resource_name_edit, resource_path)
+#		if texture_path == "":
 		set_texture_path(resource_path.get_base_dir(), tile_name)
+#		else:
+#			set_texture_path(resource_path.get_base_dir(), texture_path)
 		load_tileset(resource_path)
 		save_settings()
 	else:
@@ -766,22 +753,25 @@ func on_collsions_dialog_hide():
 		collisions_check.pressed = false
 
 
+func populate_temp_tile_from_inputs():
+	var texture_relative_path: String = project_export_relative_path(texture_path).replace("res://", "")
+	temp_tile_row.populate(
+		tile_name,
+		-1,
+		texture_relative_path,
+		current_texture_image,
+		Rect2(Vector2.ZERO, current_tile_size),
+		TileSet.AUTO_TILE,
+		autotile_type,
+		false,
+		true
+	)
+
 func _on_OverrideCheckButton_toggled(button_pressed):
 	if button_pressed:
 		free_loaded_tile_rows_ui()
+		populate_temp_tile_from_inputs()
 		temp_tile_row.show()
-		var texture_relative_path: String = project_export_relative_path(texture_path).replace("res://", "")
-		temp_tile_row.populate(
-			tile_name,
-			-1,
-			texture_relative_path,
-			current_texture_image,
-			Rect2(Vector2.ZERO, current_tile_size),
-			TileSet.AUTO_TILE,
-			autotile_type,
-			false,
-			true
-		)
 	else:
 		load_tileset(resource_path)
 
