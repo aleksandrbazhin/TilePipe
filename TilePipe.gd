@@ -663,10 +663,6 @@ func exit():
 	get_tree().quit()
 
 
-func _on_CloseButton_pressed():
-	exit()
-
-
 func _on_Save_pressed():
 	if out_texture.texture == null:
 		report_error("Error: No generated texture")
@@ -715,11 +711,6 @@ func _on_TemplateDialog_file_selected(path):
 func _on_TemplateButton_pressed():
 	template_file_dialog.invalidate()
 	template_file_dialog.popup_centered()
-
-
-func _on_Button_pressed():
-	texture_file_dialog.invalidate()
-	texture_file_dialog.popup_centered()
 
 
 func save_texture_png(path: String):

@@ -10,8 +10,8 @@
 [ext_resource path="res://assets/Load.svg" type="Texture" id=8]
 [ext_resource path="res://assets/Save.svg" type="Texture" id=9]
 [ext_resource path="res://assets/Godot.svg" type="Texture" id=10]
+[ext_resource path="res://ProjectTree.tscn" type="PackedScene" id=11]
 [ext_resource path="res://assets/checkers.png" type="Texture" id=12]
-[ext_resource path="res://assets/header_font.tres" type="DynamicFont" id=13]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 3 )
@@ -105,9 +105,15 @@ margin_top = 7.0
 margin_right = 1359.0
 margin_bottom = 761.0
 mouse_filter = 2
-alignment = 1
+
+[node name="ProjectTree" parent="Panel/HBox" instance=ExtResource( 11 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 280.0
+margin_bottom = 754.0
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
+margin_left = 284.0
 margin_right = 1112.0
 margin_bottom = 754.0
 mouse_filter = 2
@@ -116,37 +122,13 @@ size_flags_vertical = 3
 custom_constants/separation = 5
 
 [node name="InContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
-margin_right = 1112.0
+margin_right = 828.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 0, 300 )
 custom_constants/separation = 12
 
-[node name="BlockLabel" type="Control" parent="Panel/HBox/Images/InContainer"]
-margin_right = 40.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 40, 32 )
-
-[node name="Label" type="Label" parent="Panel/HBox/Images/InContainer/BlockLabel"]
-margin_left = 2.0
-margin_top = 300.0
-margin_right = 305.0
-margin_bottom = 332.0
-rect_min_size = Vector2( 0, 32 )
-rect_rotation = 270.0
-hint_tooltip = "Setup how your tiles are built"
-mouse_filter = 0
-custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
-custom_fonts/font = ExtResource( 13 )
-text = "Input"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="VBoxInput" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 52.0
-margin_right = 372.0
+margin_right = 320.0
 margin_bottom = 300.0
 
 [node name="LoadButtonBox" type="HBoxContainer" parent="Panel/HBox/Images/InContainer/VBoxInput"]
@@ -156,22 +138,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LoadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=["blockable"]]
-margin_right = 276.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 0, 40 )
-hint_tooltip = "Select the image with which all the manipulations will be done. 
-To get a hint how to create an image, look at the examples."
-size_flags_horizontal = 3
-text = "Load input texture"
-icon = ExtResource( 8 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="ReloadButton" type="Button" parent="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox" groups=["blockable"]]
-margin_left = 280.0
-margin_right = 320.0
+margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
 hint_tooltip = "(F5) Reload input image, if you made any changes to it"
@@ -252,8 +220,8 @@ __meta__ = {
 }
 
 [node name="VBoxPreset" type="VBoxContainer" parent="Panel/HBox/Images/InContainer"]
-margin_left = 384.0
-margin_right = 782.0
+margin_left = 332.0
+margin_right = 730.0
 margin_bottom = 300.0
 custom_constants/separation = 10
 
@@ -421,7 +389,7 @@ rect_min_size = Vector2( 0, 26 )
 text = " Use random seed"
 valign = 1
 
-[node name="RandomCheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/HBoxContainer" groups=["blockable"]]
+[node name="RandomCheckButton" type="CheckButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/RandomContainer/HBoxContainer" groups=["blockable", "snapshottable"]]
 margin_left = 118.0
 margin_right = 194.0
 margin_bottom = 40.0
@@ -455,8 +423,8 @@ __meta__ = {
 }
 
 [node name="Preview" type="Control" parent="Panel/HBox/Images/InContainer"]
-margin_left = 794.0
-margin_right = 1112.0
+margin_left = 742.0
+margin_right = 828.0
 margin_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -472,7 +440,7 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/InContainer/Preview/PreviewContainer"]
-margin_right = 318.0
+margin_right = 256.0
 margin_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -596,48 +564,24 @@ __meta__ = {
 
 [node name="HSeparator" type="HSeparator" parent="Panel/HBox/Images"]
 margin_top = 305.0
-margin_right = 1112.0
+margin_right = 828.0
 margin_bottom = 317.0
 
 [node name="TemplateContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 322.0
-margin_right = 1112.0
+margin_right = 828.0
 margin_bottom = 452.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
-[node name="BlockLabel" type="Control" parent="Panel/HBox/Images/TemplateContainer"]
-margin_right = 40.0
-margin_bottom = 130.0
-rect_min_size = Vector2( 40, 32 )
-
-[node name="Label" type="Label" parent="Panel/HBox/Images/TemplateContainer/BlockLabel"]
-margin_left = 2.0
-margin_top = 128.0
-margin_right = 133.0
-margin_bottom = 160.0
-rect_min_size = Vector2( 0, 32 )
-rect_rotation = 270.0
-hint_tooltip = "Setup how your tiles are placed"
-mouse_filter = 0
-custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
-custom_fonts/font = ExtResource( 13 )
-text = "Template"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/TemplateContainer"]
-margin_left = 48.0
-margin_right = 896.0
+margin_right = 612.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 0, 130 )
 size_flags_horizontal = 3
 
 [node name="TemplateTextureRect" type="TextureRect" parent="Panel/HBox/Images/TemplateContainer/ScrollContainer"]
-margin_right = 848.0
+margin_right = 612.0
 margin_bottom = 130.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -647,9 +591,9 @@ __meta__ = {
 }
 
 [node name="NameControl" type="Control" parent="Panel/HBox/Images/TemplateContainer"]
-margin_left = 904.0
+margin_left = 620.0
 margin_top = 130.0
-margin_right = 904.0
+margin_right = 620.0
 margin_bottom = 130.0
 size_flags_horizontal = 8
 size_flags_vertical = 8
@@ -673,8 +617,8 @@ __meta__ = {
 }
 
 [node name="ButtonBox" type="VBoxContainer" parent="Panel/HBox/Images/TemplateContainer"]
-margin_left = 912.0
-margin_right = 1112.0
+margin_left = 628.0
+margin_right = 828.0
 margin_bottom = 130.0
 custom_constants/separation = 8
 
@@ -710,13 +654,13 @@ __meta__ = {
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/HBox/Images"]
 margin_top = 457.0
-margin_right = 1112.0
+margin_right = 828.0
 margin_bottom = 469.0
 size_flags_horizontal = 3
 
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 474.0
-margin_right = 1112.0
+margin_right = 828.0
 margin_bottom = 754.0
 rect_min_size = Vector2( 0, 270 )
 mouse_filter = 2
@@ -724,35 +668,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 8
 
-[node name="BlockLabel" type="Control" parent="Panel/HBox/Images/OutputContainer"]
-margin_right = 40.0
-margin_bottom = 280.0
-rect_min_size = Vector2( 40, 32 )
-size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="Panel/HBox/Images/OutputContainer/BlockLabel"]
-anchor_right = 1.0
-margin_left = 2.0
-margin_top = 270.0
-margin_bottom = 302.0
-rect_min_size = Vector2( 268, 32 )
-rect_rotation = 270.0
-hint_tooltip = "Preview and tweak the resulting tileset"
-mouse_filter = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_colors/font_color = Color( 0.615686, 0.67451, 0.815686, 1 )
-custom_fonts/font = ExtResource( 13 )
-text = "Result"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Output" type="Control" parent="Panel/HBox/Images/OutputContainer"]
-margin_left = 48.0
-margin_right = 1112.0
+margin_right = 828.0
 margin_bottom = 280.0
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -770,7 +687,7 @@ __meta__ = {
 }
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer"]
-margin_right = 1064.0
+margin_right = 900.0
 margin_bottom = 280.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -935,25 +852,19 @@ margin_left = 1132.0
 margin_right = 1352.0
 margin_bottom = 754.0
 rect_min_size = Vector2( 220, 0 )
-
-[node name="CloseButton" type="Button" parent="Panel/HBox/Settings" groups=["blockable"]]
-margin_right = 220.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 80, 40 )
-text = "Exit"
+size_flags_vertical = 3
 
 [node name="HSeparator" type="HSeparator" parent="Panel/HBox/Settings"]
-margin_top = 44.0
 margin_right = 220.0
-margin_bottom = 56.0
+margin_bottom = 12.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Tileset Label2" type="Label" parent="Panel/HBox/Settings"]
-margin_top = 60.0
+margin_top = 16.0
 margin_right = 220.0
-margin_bottom = 88.0
+margin_bottom = 44.0
 rect_min_size = Vector2( 0, 28 )
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -964,9 +875,9 @@ __meta__ = {
 }
 
 [node name="Save" type="Button" parent="Panel/HBox/Settings" groups=["blockable"]]
-margin_top = 92.0
+margin_top = 48.0
 margin_right = 220.0
-margin_bottom = 132.0
+margin_bottom = 88.0
 rect_min_size = Vector2( 0, 40 )
 text = "Save texture"
 icon = ExtResource( 9 )
@@ -975,14 +886,14 @@ __meta__ = {
 }
 
 [node name="HSeparator3" type="HSeparator" parent="Panel/HBox/Settings"]
-margin_top = 136.0
+margin_top = 92.0
 margin_right = 220.0
-margin_bottom = 148.0
+margin_bottom = 104.0
 
 [node name="Tileset Label" type="Label" parent="Panel/HBox/Settings"]
-margin_top = 152.0
+margin_top = 108.0
 margin_right = 220.0
-margin_bottom = 180.0
+margin_bottom = 136.0
 rect_min_size = Vector2( 0, 28 )
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -993,9 +904,9 @@ __meta__ = {
 }
 
 [node name="GodotExportButton" type="Button" parent="Panel/HBox/Settings" groups=["blockable"]]
-margin_top = 184.0
+margin_top = 140.0
 margin_right = 220.0
-margin_bottom = 224.0
+margin_bottom = 180.0
 rect_min_size = Vector2( 0, 40 )
 rect_pivot_offset = Vector2( 227, -255 )
 hint_tooltip = "You can create a new Godot 3.x tileset resource or add a new autotile
@@ -1032,7 +943,6 @@ window_title = "Errors occured"
 [connection signal="file_selected" from="TextureDialog" to="." method="_on_TextureDialog_file_selected"]
 [connection signal="file_selected" from="TemplateDialog" to="." method="_on_TemplateDialog_file_selected"]
 [connection signal="file_selected" from="SaveTextureDialog" to="." method="_on_SaveTextureDialog_file_selected"]
-[connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/LoadButton" to="." method="_on_Button_pressed"]
 [connection signal="pressed" from="Panel/HBox/Images/InContainer/VBoxInput/LoadButtonBox/ReloadButton" to="." method="_on_ReloadButton_pressed"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/OverlaySettings/OverlayOptionButton" to="." method="_on_OverlayOptionButton_item_selected"]
 [connection signal="item_selected" from="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/ColorProcessContainer/ColorProcessType" to="." method="_on_ColorProcessType_item_selected"]
@@ -1046,7 +956,6 @@ window_title = "Errors occured"
 [connection signal="item_selected" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateOption" to="." method="_on_TemplateOption_item_selected"]
 [connection signal="pressed" from="Panel/HBox/Images/TemplateContainer/ButtonBox/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer/OffsetButton" to="." method="_on_OffsetButton_pressed"]
-[connection signal="pressed" from="Panel/HBox/Settings/CloseButton" to="." method="_on_CloseButton_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/Save" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="Panel/HBox/Settings/GodotExportButton" to="." method="_on_GodotExportButton_pressed"]
 [connection signal="confirmed" from="PopupDialog" to="." method="_on_PopupDialog_confirmed"]

@@ -37,6 +37,8 @@ func set_element_state(node: Node, value):
 		node.text = value
 	elif node is OptionButton:
 		node.selected = value
+	elif node is CheckButton:
+		node.pressed = value
 	elif node is Range:
 		node.value = value
 	elif node is FileDialog:
@@ -48,6 +50,8 @@ func get_element_state(node):
 		return node.text
 	elif node is OptionButton:
 		return node.selected
+	elif node is CheckButton:
+		return node.pressed
 	elif node is Range:
 		return node.value
 	elif node is FileDialog:
@@ -56,7 +60,7 @@ func get_element_state(node):
 
 
 func get_json() -> String:
-	return to_json(state)
+	return JSON.print(state, "\t")
 
 
 func set_json(json: String) -> bool :
