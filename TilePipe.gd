@@ -63,7 +63,6 @@ onready var render_progressbar: ProgressBar = render_progress_overlay.get_node("
 
 onready var godot_export_dialog: GodotExporter = $GodotExportDialog
 
-
 var is_ui_blocked: bool = false
 var is_slider_changed: bool = false
 var generation_data: GenerationData
@@ -121,6 +120,8 @@ func _ready():
 	load_settings()
 	preprocess_input_image()
 	is_ready = true
+	var snap := UISnapshot.new(self)
+	snap.capture_state()
 #	adjust_for_small_resolution()
 
 
@@ -200,7 +201,7 @@ func capture_setting_values() -> Dictionary:
 		"last_template_file_dialog_path": template_file_dialog_path,
 		"last_save_texture_path": save_png_file_dialog_path,
 		"output_tile_size": Const.OUTPUT_SIZES.keys()[output_size_select.selected],
-		"overlay_preset": overlay_merge_type_select.selected,
+		"ruleset": overlay_merge_type_select.selected,
 		"template_type": template_type_select.selected,
 		"smoothing": smoothing_check.pressed,
 		"merge_level": overlay_merge_rate_slider.value,
@@ -222,7 +223,7 @@ func load_input_texture(path: String) -> String:
 		pass
 	last_input_texture_path = path
 	texture_in.texture = loaded_texture
-	current_texture_basename = path.get_file().split(".")[0]
+	current_texture_basename = path.get_basename().get_file()
 	texture_input_container.get_node("InputInfo/InputNameLabel").text = path.get_file()
 	return path
 
@@ -243,7 +244,7 @@ func load_template_texture(path: String) -> String:
 
 func apply_tile_specific_settings(data: Dictionary, exclude_keys: Array = []):
 	generation_data = GenerationData.new(data["last_gen_preset_path"])
-	overlay_merge_type_select.selected = data["overlay_preset"]
+	overlay_merge_type_select.selected = data["ruleset"]
 	template_file_dialog_path = data["last_template_file_dialog_path"]
 	template_file_dialog.current_path = Helpers.clear_path(input_file_dialog_path)
 	template_type_select.selected = data["template_type"]
@@ -324,8 +325,7 @@ func write_settings(settings_path: String, settings: Dictionary, write_before_on
 	if is_ready or write_before_onready:
 		var save = File.new()
 		save.open(settings_path, File.WRITE)
-		var data := settings
-		save.store_string(to_json(data))
+		save.store_string(to_json(settings))
 		save.close()
 
 
@@ -728,7 +728,7 @@ func save_texture_png(path: String):
 
 
 func _on_SaveTextureDialog_file_selected(path: String):
-	if not path.get_file().split(".")[0].empty() and path.get_file().is_valid_filename():
+	if not path.get_basename().get_file().empty() and path.get_file().is_valid_filename():
 		save_texture_png(path)
 	else:
 		report_error("Error: %s is not a valid filename" % path.get_file())

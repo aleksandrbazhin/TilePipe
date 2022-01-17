@@ -48,7 +48,7 @@ __meta__ = {
 
 [node name="TileRenderer" parent="." instance=ExtResource( 5 )]
 
-[node name="TextureDialog" type="FileDialog" parent="."]
+[node name="TextureDialog" type="FileDialog" parent="." groups=["snapshottable"]]
 margin_left = 7.0
 margin_top = 229.0
 margin_right = 607.0
@@ -283,7 +283,7 @@ mouse_filter = 1
 text = " Overlay preset"
 valign = 2
 
-[node name="OverlayOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/OverlaySettings" groups=["blockable"]]
+[node name="OverlayOptionButton" type="OptionButton" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxContainer/OverlaySettings" groups=["blockable", "snapshottable"]]
 margin_top = 30.0
 margin_right = 194.0
 margin_bottom = 62.0
@@ -342,7 +342,7 @@ rect_min_size = Vector2( 0, 26 )
 text = " Merge amount"
 valign = 2
 
-[node name="RateSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/HSliderContainer" groups=["blockable"]]
+[node name="RateSlider" type="HSlider" parent="Panel/HBox/Images/InContainer/VBoxPreset/HBox/VBoxSettings/HSliderContainer" groups=["blockable", "snapshottable"]]
 margin_top = 30.0
 margin_right = 194.0
 margin_bottom = 46.0
