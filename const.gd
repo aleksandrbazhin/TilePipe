@@ -3,7 +3,7 @@ extends Node
 const SETTINGS_PATH := "user://user_settings.sav"
 const TILE_SETTINGS_DIR := "user://tile_settings"
 # version comparison works in godot due to str comparison (is_str_les() in ustring.h)
-const MIN_SETTINGS_COMPATIBLE_VERSION: String = "0.2"
+const MIN_SETTINGS_COMPATIBLE_VERSION: String = "0.5"
 
 const FULL_HD := Vector2(1920, 1080)
 
@@ -35,40 +35,17 @@ const COLOR_PROCESS_TYPE_NAMES: Dictionary = {
 	COLOR_PROCESS_TYPES.FLOW_MAP: "Flow map",
 #	COLOR_PROCESS_TYPES.NORMAL_MAP: "Normal map",
 }
-enum INPUT_TYPES {CORNERS, OVERLAY}
-const INPUT_TYPE_NAMES : Dictionary = {
-	INPUT_TYPES.CORNERS: "Quarters",
-	INPUT_TYPES.OVERLAY: "Overlay"
-}
 
-enum CORNERS_INPUT_PRESETS {
-	FIVE, 
-	FOUR
-}
-const CORNERS_INPUT_PRESETS_NAMES: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "5 quarters, symmety: full",
-	CORNERS_INPUT_PRESETS.FOUR: "4 quarters, symmety: full",
-}
-const CORNERS_INPUT_PRESETS_DATA_PATH: Dictionary = {
-	CORNERS_INPUT_PRESETS.FIVE: "res://generation_data/quarters_5.json",
-	CORNERS_INPUT_PRESETS.FOUR: "res://generation_data/quarters_4.json",
-}
 
 enum OVERLAY_INPUT_PRESETS {
-#	TOP_DOWN_2, 
-#	TOP_DOWN_3, 
 	TOP_DOWN_4, 
-#	SIDEVIEW_6, 
 	SIDEVIEW_8,
 	SIDEVIEW_13,
 	SIDEVIEW_25_255,
 	SIDEVIEW_7_255,
 }
 const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
-#	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "Top down without corners (2 tiles)",
-#	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "Top down with corners (3 tiles)",
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "4 parts, symmetry: full",
-#	OVERLAY_INPUT_PRESETS.SIDEVIEW_6: "Sideview (6 tiles)",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "8 parts, symmetry: sideway",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_13: "13 parts, symmetry: no",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_25_255: "Full 255 tile template (25 parts)",
@@ -76,8 +53,6 @@ const OVERLAY_INPUT_PRESET_NAMES: Dictionary = {
 }
 
 const OVERLAY_INPUT_PRESETS_DATA_PATH: Dictionary = {
-#	OVERLAY_INPUT_PRESETS.TOP_DOWN_2: "res://generation_data/overlay_2.json",
-#	OVERLAY_INPUT_PRESETS.TOP_DOWN_3: "res://generation_data/overlay_3.json",
 	OVERLAY_INPUT_PRESETS.TOP_DOWN_4: "res://generation_data/overlay_4_full.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_8: "res://generation_data/overlay_8_full.json",
 	OVERLAY_INPUT_PRESETS.SIDEVIEW_13: "res://generation_data/overlay_13_full.json",
@@ -164,18 +139,14 @@ const COMMON_DEFAULT_SETTINGS: Dictionary = {
 }
 
 
-
 const TILE_SPECIFIC_DEFAULT_SETTINGS: Dictionary = {
-	
 	"last_texture_path": DEFAULT_INPUT_TEXTURE_PATH,
-	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
+	"last_gen_preset_path": OVERLAY_INPUT_PRESETS_DATA_PATH[OVERLAY_INPUT_PRESETS.SIDEVIEW_8],
 	"last_template_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
 	"last_save_texture_path": "res://generated_tile_texture.png",
 	"last_texture_file_dialog_path": DEFAULT_INPUT_TEXTURE_PATH,
 	"last_template_file_dialog_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
 	"output_tile_size": DEFAULT_OUTPUT_SIZE,
-	"input_type": 0,
-	"corner_preset": 0,
 	"overlay_preset": 0,
 	"template_type": 0,
 	"smoothing": false,
@@ -184,7 +155,6 @@ const TILE_SPECIFIC_DEFAULT_SETTINGS: Dictionary = {
 	"use_random_seed": false,
 	"random_seed_value": 0,
 	"output_tile_offset": 0,
-	"use_example": true,
 	"godot_export_resource_path": DEFAULT_GODOT_RESOURCE_PATH,
 	"godot_export_texture_path": DEFAULT_GODOT_TEXTURE_PATH,
 	"godot_export_tile_name": "",
@@ -199,14 +169,12 @@ const TILE_SPECIFIC_DEFAULT_SETTINGS: Dictionary = {
 const DEFAULT_SETTINGS: Dictionary = {
 	"program_version": "0.2",
 	"last_texture_path": DEFAULT_INPUT_TEXTURE_PATH,
-	"last_gen_preset_path": CORNERS_INPUT_PRESETS_DATA_PATH[CORNERS_INPUT_PRESETS.FIVE],
+	"last_gen_preset_path": OVERLAY_INPUT_PRESETS_DATA_PATH[OVERLAY_INPUT_PRESETS.SIDEVIEW_8],
 	"last_template_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
 	"last_save_texture_path": "res://generated_autotile.png",
 	"last_texture_file_dialog_path": DEFAULT_INPUT_TEXTURE_PATH,
 	"last_template_file_dialog_path": TEMPLATE_PATHS[TEMPLATE_TYPES.BLOB_47],
 	"output_tile_size": DEFAULT_OUTPUT_SIZE,
-	"input_type": 0,
-	"corner_preset": 0,
 	"overlay_preset": 0,
 	"template_type": 0,
 	"smoothing": false,
@@ -215,7 +183,6 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"use_random_seed": false,
 	"random_seed_value": 0,
 	"output_tile_offset": 0,
-	"use_example": true,
 	"godot_export_resource_path": DEFAULT_GODOT_RESOURCE_PATH,
 	"godot_export_texture_path": DEFAULT_GODOT_TEXTURE_PATH,
 	"godot_export_tile_name": "",
