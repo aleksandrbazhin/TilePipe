@@ -5,7 +5,7 @@
 [node name="MenuPanel" type="HBoxContainer"]
 margin_right = 800.0
 margin_bottom = 20.0
-rect_min_size = Vector2( 0, 28 )
+rect_min_size = Vector2( 0, 30 )
 custom_constants/separation = 0
 script = ExtResource( 1 )
 __meta__ = {
@@ -14,35 +14,35 @@ __meta__ = {
 
 [node name="Button" type="Button" parent="."]
 margin_right = 100.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 text = "File"
 
 [node name="Button2" type="Button" parent="."]
 margin_left = 100.0
 margin_right = 200.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 text = "File"
 
 [node name="Button3" type="Button" parent="."]
 margin_left = 200.0
 margin_right = 300.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 text = "File"
 
 [node name="Button4" type="Button" parent="."]
 margin_left = 300.0
 margin_right = 400.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 text = "File"
 
 [node name="MenuButton" type="MenuButton" parent="."]
 margin_left = 400.0
 margin_right = 500.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 focus_mode = 2
 toggle_mode = false
@@ -55,7 +55,7 @@ __meta__ = {
 [node name="MenuButton2" type="MenuButton" parent="."]
 margin_left = 500.0
 margin_right = 600.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 focus_mode = 2
 text = "Tile"
@@ -67,7 +67,7 @@ __meta__ = {
 [node name="MenuButton3" type="MenuButton" parent="."]
 margin_left = 600.0
 margin_right = 700.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 focus_mode = 2
 text = "Export"
@@ -79,7 +79,7 @@ __meta__ = {
 [node name="MenuButton4" type="MenuButton" parent="."]
 margin_left = 700.0
 margin_right = 800.0
-margin_bottom = 28.0
+margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 focus_mode = 2
 text = "Help!"

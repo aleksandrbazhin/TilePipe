@@ -5,7 +5,7 @@ class_name TileInTree
 signal row_selected(row)
 
 const HEIGHT_EXPANDED := 140
-const HEIGHT_COLLAPSED := 40
+const HEIGHT_COLLAPSED := 44
 
 
 var tile_name: String
@@ -33,6 +33,8 @@ func _ready():
 
 func _on_Tree_item_selected():
 	var selected_row: TreeItem = tree.get_selected()
+	if selected_row == tree.get_root():
+		tree.get_root().collapsed = false
 	emit_signal("row_selected", selected_row)
 	set_highlight(true)
 
@@ -56,3 +58,9 @@ func _on_Tree_item_collapsed(item: TreeItem):
 		rect_min_size.y = HEIGHT_COLLAPSED
 	else:
 		rect_min_size.y = HEIGHT_EXPANDED
+
+#
+#func _on_Tree_item_rmb_selected(position):
+#	var root: TreeItem = tree.get_root()
+#	root.collapsed = not root.collapsed
+		

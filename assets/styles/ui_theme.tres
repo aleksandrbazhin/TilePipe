@@ -1,6 +1,11 @@
-[gd_resource type="Theme" load_steps=18 format=2]
+[gd_resource type="Theme" load_steps=23 format=2]
 
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://assets/images/tree_arrow2.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/tree_arrow.png" type="Texture" id=3]
+[ext_resource path="res://assets/images/folder.png" type="Texture" id=4]
+[ext_resource path="res://assets/images/v_grabber.png" type="Texture" id=5]
+[ext_resource path="res://assets/images/h_grabber.png" type="Texture" id=6]
 
 [sub_resource type="StyleBoxFlat" id=6]
 content_margin_left = 12.0
@@ -89,6 +94,7 @@ Button/styles/hover = SubResource( 8 )
 Button/styles/normal = SubResource( 9 )
 Button/styles/pressed = SubResource( 7 )
 FileDialog/colors/files_disabled = Color( 0.380392, 0.372549, 0.372549, 1 )
+FileDialog/icons/folder = ExtResource( 4 )
 HScrollBar/icons/decrement = null
 HScrollBar/icons/decrement_highlight = null
 HScrollBar/icons/increment = null
@@ -100,6 +106,8 @@ HScrollBar/styles/scroll = null
 HScrollBar/styles/scroll_focus = null
 HSeparator/constants/separation = 12
 HSeparator/styles/separator = SubResource( 1 )
+HSplitContainer/constants/separation = 6
+HSplitContainer/icons/grabber = ExtResource( 5 )
 LineEdit/colors/font_color_uneditable = Color( 0.803922, 0.803922, 0.803922, 0.705882 )
 Panel/styles/panel = SubResource( 13 )
 PopupMenu/constants/hseparation = 6
@@ -114,14 +122,17 @@ ProgressBar/styles/fg = null
 Tree/colors/guide_color = Color( 0, 0, 0, 0 )
 Tree/constants/draw_guides = 0
 Tree/constants/draw_relationship_lines = 1
-Tree/constants/hseparation = 6
-Tree/constants/item_margin = 16
+Tree/constants/item_margin = 20
 Tree/constants/vseparation = 6
+Tree/icons/arrow = ExtResource( 2 )
+Tree/icons/arrow_collapsed = ExtResource( 3 )
 Tree/styles/bg = SubResource( 18 )
 Tree/styles/selected = SubResource( 14 )
 Tree/styles/selected_focus = SubResource( 15 )
 VSeparator/constants/separation = 12
 VSeparator/styles/separator = SubResource( 2 )
+VSplitContainer/constants/separation = 6
+VSplitContainer/icons/grabber = ExtResource( 6 )
 WindowDialog/colors/title_color = Color( 0.886275, 0.886275, 0.886275, 1 )
 WindowDialog/fonts/title_font = ExtResource( 1 )
 WindowDialog/styles/panel = SubResource( 17 )
