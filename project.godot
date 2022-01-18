@@ -12,12 +12,12 @@ _global_script_classes=[ {
 "base": "PopupDialog",
 "class": "CollisionGenerator",
 "language": "GDScript",
-"path": "res://exporters/CollisionGenerator.gd"
+"path": "res://src/exporters/CollisionGenerator.gd"
 }, {
 "base": "Resource",
 "class": "GeneratedTile",
 "language": "GDScript",
-"path": "res://GeneratedTile.gd"
+"path": "res://src/nodes/GeneratedTile.gd"
 }, {
 "base": "Resource",
 "class": "GenerationData",
@@ -27,12 +27,17 @@ _global_script_classes=[ {
 "base": "PopupDialog",
 "class": "GodotExporter",
 "language": "GDScript",
-"path": "res://exporters/Godot3Exporter.gd"
+"path": "res://src/exporters/Godot3/Godot3Exporter.gd"
 }, {
 "base": "ColorRect",
 "class": "GodotTileRow",
 "language": "GDScript",
-"path": "res://exporters/GodotExistingTileRow.gd"
+"path": "res://src/exporters/Godot3/GodotExistingTileRow.gd"
+}, {
+"base": "HBoxContainer",
+"class": "MenuPanel",
+"language": "GDScript",
+"path": "res://src/nodes/MenuPanel.gd"
 }, {
 "base": "Panel",
 "class": "MonitorPlotPanel",
@@ -42,22 +47,22 @@ _global_script_classes=[ {
 "base": "Panel",
 "class": "ProjectTree",
 "language": "GDScript",
-"path": "res://ProjectTree.gd"
+"path": "res://src/nodes/ProjectTree.gd"
 }, {
 "base": "Control",
 "class": "TileInTree",
 "language": "GDScript",
-"path": "res://TileInTree.gd"
+"path": "res://src/nodes/TileInTree.gd"
 }, {
 "base": "Node",
 "class": "TileRenderer",
 "language": "GDScript",
-"path": "res://TileRenderer.gd"
+"path": "res://src/TileRenderer.gd"
 }, {
 "base": "Node",
 "class": "UISnapshot",
 "language": "GDScript",
-"path": "res://UISnapshot.gd"
+"path": "res://src/UISnapshot.gd"
 } ]
 _global_script_class_icons={
 "CollisionGenerator": "",
@@ -65,6 +70,7 @@ _global_script_class_icons={
 "GenerationData": "",
 "GodotExporter": "",
 "GodotTileRow": "",
+"MenuPanel": "",
 "MonitorPlotPanel": "",
 "ProjectTree": "",
 "TileInTree": "",
@@ -76,22 +82,22 @@ _global_script_class_icons={
 
 config/name="TilePipe"
 config/description="Tool to compose tilesets"
-run/main_scene="res://TilePipe.tscn"
+run/main_scene="res://src/TilePipe.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="TilePipe"
 run/low_processor_mode=true
-boot_splash/image="res://assets/boot_splash.png"
+boot_splash/image="res://assets/images/boot_splash.png"
 boot_splash/fullsize=false
-boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 1 )
-config/icon="res://assets/icon.png"
+boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 0 )
+config/icon="res://assets/images/icon.png"
 config/macos_native_icon="res://icon.icns"
 config/windows_native_icon="res://icon.ico"
 config/version="0.5"
 
 [autoload]
 
-Const="*res://Const.gd"
-Helpers="*res://Helpers.gd"
+Const="*res://src/Const.gd"
+Helpers="*res://src/Helpers.gd"
 
 [debug]
 
@@ -100,9 +106,11 @@ gdscript/warnings/return_value_discarded=false
 
 [display]
 
-window/size/width=1366
-window/size/height=768
+window/size/width=1280
+window/size/height=720
+window/size/borderless=true
 window/vsync/use_vsync=false
+window/energy_saving/keep_screen_on=false
 window/stretch/aspect="expand"
 
 [editor_plugins]

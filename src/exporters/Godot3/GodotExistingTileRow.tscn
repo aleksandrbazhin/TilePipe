@@ -1,0 +1,174 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/images/NodeWarning.svg" type="Texture" id=1]
+[ext_resource path="res://src/exporters/Godot3/GodotExistingTileRow.gd" type="Script" id=2]
+[ext_resource path="res://assets/images/new_row.png" type="Texture" id=3]
+
+[node name="Existing" type="ColorRect"]
+margin_right = 850.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 1032, 34 )
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 0
+color = Color( 0.894118, 0.898039, 0.886275, 0.0784314 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBox" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 12
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spacer" type="Control" parent="HBox"]
+visible = false
+margin_right = 10.0
+margin_bottom = 32.0
+
+[node name="Name" type="ColorRect" parent="HBox"]
+margin_right = 200.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 200, 0 )
+mouse_filter = 2
+size_flags_vertical = 3
+color = Color( 0.470588, 0.529412, 0.6, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HBox/Name"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 14.0
+margin_right = 2.0
+rect_min_size = Vector2( 188, 32 )
+size_flags_vertical = 3
+text = "Tile name"
+valign = 1
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Icon" type="TextureRect" parent="HBox"]
+margin_left = 212.0
+margin_right = 244.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 32, 32 )
+
+[node name="TileMode" type="Label" parent="HBox"]
+margin_left = 256.0
+margin_right = 372.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 116, 0 )
+size_flags_vertical = 3
+text = "Unknown mode"
+align = 1
+valign = 1
+
+[node name="Spacer4" type="Control" parent="HBox"]
+margin_left = 384.0
+margin_right = 402.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 18, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Path" type="ColorRect" parent="HBox"]
+margin_left = 414.0
+margin_right = 936.0
+margin_bottom = 34.0
+mouse_filter = 2
+size_flags_horizontal = 3
+color = Color( 0.654902, 0.247059, 0, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBox" type="HBoxContainer" parent="HBox/Path"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control2" type="Control" parent="HBox/Path/HBox"]
+margin_right = 32.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 32, 32 )
+mouse_filter = 2
+
+[node name="WarningSign" type="TextureRect" parent="HBox/Path/HBox/Control2"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 32, 32 )
+hint_tooltip = "You will overwrite a texture that is used by other tiles, damaging the tileset. Select another texture name to save to."
+mouse_filter = 0
+texture = ExtResource( 1 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HBox/Path/HBox"]
+margin_left = 36.0
+margin_top = 10.0
+margin_right = 508.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "Texture path"
+valign = 1
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="HBox/Path/HBox"]
+margin_left = 512.0
+margin_right = 522.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="Spacer2" type="Control" parent="HBox"]
+margin_left = 948.0
+margin_right = 958.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 10, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Collisions" type="CheckBox" parent="HBox"]
+margin_left = 970.0
+margin_right = 1010.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 40, 0 )
+hint_tooltip = "If this tile has collisions"
+disabled = true
+align = 2
+
+[node name="Spacer3" type="Control" parent="HBox"]
+margin_left = 1022.0
+margin_right = 1032.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+margin_left = 1.0
+margin_right = 1048.0
+margin_bottom = 36.0
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="gui_input" from="." to="." method="_on_Existing_gui_input"]

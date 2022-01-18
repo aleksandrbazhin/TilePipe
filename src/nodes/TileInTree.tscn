@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/nodes/TileInTree.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[node name="TileInTree" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1186.0
+margin_bottom = -688.0
+rect_min_size = Vector2( 180, 0 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0.0980392, 0.105882, 0.109804, 0.156863 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tree" type="Tree" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/bg = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]
+[connection signal="item_selected" from="Tree" to="." method="_on_Tree_item_selected"]

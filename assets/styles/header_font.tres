@@ -1,0 +1,9 @@
+[gd_resource type="DynamicFont" load_steps=2 format=2]
+
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://assets/IBMPlexSans-Medium.ttf"
+
+[resource]
+extra_spacing_top = 2
+extra_spacing_bottom = 2
+font_data = SubResource( 1 )

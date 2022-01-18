@@ -1,0 +1,233 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/exporters/CollisionGenerator.gd" type="Script" id=1]
+[ext_resource path="res://src/exporters/ContourTextureRect.gd" type="Script" id=2]
+[ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=3]
+[ext_resource path="res://assets/styles/ui_theme.tres" type="Theme" id=4]
+[ext_resource path="res://src/nodes/BlockableSlider.gd" type="Script" id=5]
+[ext_resource path="res://assets/images/NodeWarning.svg" type="Texture" id=6]
+
+[node name="CollisionGenerator" type="PopupDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -386.0
+margin_bottom = -208.0
+theme = ExtResource( 4 )
+popup_exclusive = true
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_right = 980.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+custom_fonts/font = ExtResource( 3 )
+text = "Naive collision generation"
+align = 1
+valign = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 44.0
+margin_right = 980.0
+margin_bottom = 83.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer3"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 970.0
+margin_bottom = 29.0
+custom_constants/separation = 12
+
+[node name="GridLabel" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
+margin_right = 99.0
+margin_bottom = 19.0
+hint_tooltip = "How many cells are computed per tile"
+mouse_filter = 0
+text = "Grid resolution:"
+
+[node name="GridSlider" type="HSlider" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
+margin_left = 111.0
+margin_right = 922.0
+margin_bottom = 16.0
+hint_tooltip = "Roughly corresponds to the amount of points in the contour"
+size_flags_horizontal = 3
+rounded = true
+ticks_on_borders = true
+script = ExtResource( 5 )
+
+[node name="GridValueLabel" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
+margin_left = 934.0
+margin_right = 960.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 26, 0 )
+text = "10"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 87.0
+margin_right = 980.0
+margin_bottom = 500.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+
+[node name="Viewport" type="Viewport" parent="VBoxContainer/MarginContainer"]
+transparent_bg = true
+disable_3d = true
+usage = 1
+render_target_v_flip = true
+
+[node name="ContourTextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/Viewport"]
+margin_right = 860.0
+margin_bottom = 312.0
+rect_min_size = Vector2( 860, 312 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 2 )
+
+[node name="VisibleTextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 960.0
+margin_bottom = 393.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand = true
+stretch_mode = 6
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 504.0
+margin_right = 980.0
+margin_bottom = 560.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 970.0
+margin_bottom = 46.0
+rect_min_size = Vector2( 0, 36 )
+custom_constants/separation = 10
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
+margin_top = 8.0
+margin_right = 546.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="StatusContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
+margin_left = 556.0
+margin_right = 712.0
+margin_bottom = 36.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer"]
+margin_right = 62.0
+margin_bottom = 36.0
+size_flags_vertical = 3
+text = "Contours:"
+align = 2
+valign = 1
+
+[node name="StatusProgress" type="HBoxContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer"]
+margin_left = 66.0
+margin_right = 156.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 90, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer/StatusProgress"]
+margin_right = 90.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "In process"
+align = 1
+valign = 1
+
+[node name="StatusOk" type="HBoxContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer"]
+visible = false
+margin_left = 160.0
+margin_right = 250.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 90, 0 )
+
+[node name="OkLabel" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer/StatusOk"]
+margin_right = 90.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 90, 0 )
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0.411765, 0.803922, 0.0509804, 1 )
+text = "OK"
+align = 1
+valign = 1
+
+[node name="StatusFail" type="HBoxContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer"]
+visible = false
+margin_left = 160.0
+margin_right = 250.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 90, 0 )
+
+[node name="FailLabel" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer/StatusFail"]
+margin_right = 60.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 60, 0 )
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0.937255, 0.254902, 0.254902, 1 )
+text = "Failed"
+align = 1
+valign = 1
+
+[node name="ContoursStatusWarning" type="TextureRect" parent="VBoxContainer/MarginContainer2/HBoxContainer/StatusContainer/StatusFail"]
+margin_left = 64.0
+margin_right = 80.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 16, 32 )
+texture = ExtResource( 6 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SaveButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
+margin_left = 722.0
+margin_right = 850.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 128, 0 )
+text = "Save collisions"
+
+[node name="CancelButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
+margin_left = 860.0
+margin_right = 960.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 100, 0 )
+text = "Cancel"
+
+[connection signal="released" from="VBoxContainer/MarginContainer3/HBoxContainer/GridSlider" to="." method="_on_GridSlider_released"]
+[connection signal="value_changed" from="VBoxContainer/MarginContainer3/HBoxContainer/GridSlider" to="." method="_on_GridSlider_value_changed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/SaveButton" to="." method="_on_SaveButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer2/HBoxContainer/CancelButton" to="." method="_on_CloseButton_pressed"]
