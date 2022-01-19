@@ -120,8 +120,8 @@ func _ready():
 	load_settings()
 	preprocess_input_image()
 	is_ready = true
-	var snap := UISnapshot.new(self)
-	snap.capture_state()
+#	var snap := UISnapshot.new(self)
+#	snap.capture_state()
 #	adjust_for_small_resolution()
 
 

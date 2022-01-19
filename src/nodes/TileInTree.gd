@@ -3,12 +3,17 @@ extends Control
 class_name TileInTree
 
 signal row_selected(row)
+signal error_loading()
 
-const HEIGHT_EXPANDED := 140
-const HEIGHT_COLLAPSED := 44
+const HEIGHT_EXPANDED := 144
+const HEIGHT_COLLAPSED := 50
+
+var is_loaded := false
+var tile_data: Dictionary
+var current_directory: String
+var tile_file_name: String
 
 
-var tile_name: String
 var tree_root: TreeItem
 var tree_texture: TreeItem
 var tree_ruleset: TreeItem
@@ -19,16 +24,49 @@ onready var highlight_rect := $ColorRect
 
 
 func _ready():
+	if is_loaded:
+		create_tree_items()
+		rect_min_size.y = HEIGHT_EXPANDED
+
+
+func load_file(directory: String, tile_file: String):
+	current_directory = directory
+	tile_file_name = tile_file
+	var path := directory + "/" + tile_file
+	var file := File.new()
+	file.open(path, File.READ)
+	var file_text := file.get_as_text()
+	file.close()
+	var parsed_data = parse_json(file_text)
+	if typeof(parsed_data) == TYPE_DICTIONARY:
+		tile_data = parsed_data
+		is_loaded = true
+	else:
+		emit_signal("error_loading")
+		return
+	
+
+func create_tree_items():
 	tree_root = tree.create_item()
-	tree_root.set_text(0, "Tile %s" % tile_name)
+	tree_root.set_text(0, tile_file_name)
+	add_texture_item(tile_data["texture"])
+	add_ruleset_item(tile_data["ruleset"])
+	add_template_item(tile_data["template"])
+
+
+func add_texture_item(file_name: String):
 	tree_texture = tree.create_item(tree_root)
-	tree_texture.set_text(0, "Texture %s" % tile_name)
+	tree_texture.set_text(0, "Texture: %s" % file_name)
+
+
+func add_ruleset_item(file_name: String):
 	tree_ruleset = tree.create_item(tree_root)
-	tree_ruleset.set_text(0, "Ruleset %s" % tile_name)
+	tree_ruleset.set_text(0, "Ruleset: %s" % file_name)
+
+
+func add_template_item(file_name: String):
 	tree_template = tree.create_item(tree_root)
-	tree_template.set_text(0, "Template %s" % tile_name)
-	yield(get_tree(), "idle_frame")
-	rect_min_size.y = 140
+	tree_template.set_text(0, "Template: %s" % file_name)
 
 
 func _on_Tree_item_selected():

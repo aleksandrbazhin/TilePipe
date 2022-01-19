@@ -1,6 +1,12 @@
 extends Node
 
-const SETTINGS_PATH := "user://user_settings.sav"
+const SETTINGS_PATH := "user://settings.json"
+
+const TILE_EXTENXSION := "tptile"
+const MIN_WINDOW_SIZE := Vector2(640, 360)
+const DRAG_END_MSEC := 200
+
+
 const TILE_SETTINGS_DIR := "user://tile_settings"
 # version comparison works in godot due to str comparison (is_str_les() in ustring.h)
 const MIN_SETTINGS_COMPATIBLE_VERSION: String = "0.5"
@@ -137,6 +143,26 @@ const COMMON_DEFAULT_SETTINGS: Dictionary = {
 	
 	
 }
+
+var DEFAULT_USER_SETTINGS := { ".": {
+	"last_open_project_dir": "generation_data",
+	"last_selected_tile": "",
+	"split_container_h_position": 0,
+	"split_container_v_position": 0,
+	"window_maximized": true,
+	"window_position": Vector2.ZERO,
+	"window_size": Vector2(1280, 720)
+}}
+
+#var DEFAULT_USER_SETTINGS := {
+#	"last_open_project_dir": "generation_data",
+#	"last_selected_tile": "",
+#	"split_container_h_position": 0,
+#	"split_container_v_position": 0,
+#	"window_maximized": true,
+#	"window_position": Vector2.ZERO,
+#	"window_size": Vector2(1280, 720)
+#}
 
 
 const TILE_SPECIFIC_DEFAULT_SETTINGS: Dictionary = {

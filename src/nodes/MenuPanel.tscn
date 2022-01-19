@@ -13,35 +13,35 @@ __meta__ = {
 }
 
 [node name="Button" type="Button" parent="."]
-margin_right = 100.0
+margin_right = 120.0
 margin_bottom = 30.0
-rect_min_size = Vector2( 100, 0 )
+rect_min_size = Vector2( 120, 0 )
 text = "File"
 
 [node name="Button2" type="Button" parent="."]
-margin_left = 100.0
-margin_right = 200.0
+margin_left = 120.0
+margin_right = 240.0
 margin_bottom = 30.0
-rect_min_size = Vector2( 100, 0 )
-text = "File"
+rect_min_size = Vector2( 120, 0 )
+text = "Tile"
 
 [node name="Button3" type="Button" parent="."]
-margin_left = 200.0
-margin_right = 300.0
+margin_left = 240.0
+margin_right = 360.0
 margin_bottom = 30.0
-rect_min_size = Vector2( 100, 0 )
-text = "File"
+rect_min_size = Vector2( 120, 0 )
+text = "Export"
 
 [node name="Button4" type="Button" parent="."]
-margin_left = 300.0
-margin_right = 400.0
+margin_left = 360.0
+margin_right = 480.0
 margin_bottom = 30.0
-rect_min_size = Vector2( 100, 0 )
-text = "File"
+rect_min_size = Vector2( 120, 0 )
+text = "Plz Halp!"
 
 [node name="MenuButton" type="MenuButton" parent="."]
-margin_left = 400.0
-margin_right = 500.0
+margin_left = 480.0
+margin_right = 580.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 focus_mode = 2
@@ -53,8 +53,8 @@ __meta__ = {
 }
 
 [node name="MenuButton2" type="MenuButton" parent="."]
-margin_left = 500.0
-margin_right = 600.0
+margin_left = 580.0
+margin_right = 680.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 focus_mode = 2
@@ -65,8 +65,8 @@ __meta__ = {
 }
 
 [node name="MenuButton3" type="MenuButton" parent="."]
-margin_left = 600.0
-margin_right = 700.0
+margin_left = 680.0
+margin_right = 780.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 focus_mode = 2
@@ -77,8 +77,8 @@ __meta__ = {
 }
 
 [node name="MenuButton4" type="MenuButton" parent="."]
-margin_left = 700.0
-margin_right = 800.0
+margin_left = 780.0
+margin_right = 880.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 100, 0 )
 focus_mode = 2

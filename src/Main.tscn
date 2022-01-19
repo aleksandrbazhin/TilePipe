@@ -1,20 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/nodes/ProjectTree.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Main.gd" type="Script" id=3]
 [ext_resource path="res://assets/styles/ui_theme.tres" type="Theme" id=4]
 [ext_resource path="res://src/nodes/MenuPanel.tscn" type="PackedScene" id=6]
 
-[sub_resource type="StyleBoxFlat" id=1]
-
-[sub_resource type="StyleBoxFlat" id=2]
-content_margin_left = 10.0
-content_margin_right = 10.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
-shadow_size = 5
-
-[node name="Main" type="Panel"]
+[node name="Main" type="Panel" groups=["snapshottable"]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 4 )
@@ -26,89 +17,105 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/separation = 14
+custom_constants/separation = 8
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="MenuPanel" parent="VBoxContainer" instance=ExtResource( 6 )]
+visible = false
 margin_right = 1280.0
 margin_bottom = 31.0
 
-[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer"]
-margin_top = 45.0
+[node name="Spacer" type="Control" parent="VBoxContainer"]
+margin_right = 1280.0
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer" groups=["snapshottable"]]
+margin_top = 8.0
 margin_right = 1280.0
 margin_bottom = 720.0
 size_flags_vertical = 3
+split_offset = 80
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HSplitContainer"]
-margin_right = 290.0
-margin_bottom = 675.0
+margin_right = 286.0
+margin_bottom = 712.0
 custom_constants/margin_right = 0
-custom_constants/margin_left = 10
+custom_constants/margin_left = 6
+custom_constants/margin_bottom = 6
 
 [node name="ProjectTree" parent="VBoxContainer/HSplitContainer/MarginContainer" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 10.0
-margin_right = 290.0
-margin_bottom = 675.0
+margin_left = 6.0
+margin_right = 286.0
+margin_bottom = 706.0
+rect_min_size = Vector2( 200, 500 )
 
-[node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer/HSplitContainer"]
-margin_left = 296.0
+[node name="VSplitContainer" type="VSplitContainer" parent="VBoxContainer/HSplitContainer" groups=["snapshottable"]]
+margin_left = 292.0
 margin_right = 1280.0
-margin_bottom = 675.0
-rect_min_size = Vector2( 200, 0 )
+margin_bottom = 712.0
+split_offset = -100
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/HSplitContainer/VSplitContainer"]
-margin_right = 984.0
-margin_bottom = 369.0
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/HSplitContainer/VSplitContainer" groups=["snapshottable"]]
+margin_right = 988.0
+margin_bottom = 426.0
 rect_min_size = Vector2( 0, 180 )
 size_flags_vertical = 3
 color = Color( 0.27451, 0.419608, 0.513726, 1 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/VSplitContainer"]
-margin_top = 375.0
-margin_right = 984.0
-margin_bottom = 675.0
+margin_top = 432.0
+margin_right = 988.0
+margin_bottom = 712.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ColorRect" type="ColorRect" parent="VBoxContainer/HSplitContainer/VSplitContainer/HBoxContainer"]
 margin_right = 300.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 300, 300 )
+margin_bottom = 280.0
+rect_min_size = Vector2( 300, 180 )
 size_flags_vertical = 3
 color = Color( 0.271362, 0.350431, 0.445313, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRect2" type="ColorRect" parent="VBoxContainer/HSplitContainer/VSplitContainer/HBoxContainer"]
-margin_left = 304.0
-margin_right = 984.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 0, 250 )
-size_flags_horizontal = 3
-color = Color( 0.137589, 0.201114, 0.277344, 1 )
-
-[node name="PopupMenu" type="PopupMenu" parent="VBoxContainer/HSplitContainer/VSplitContainer/HBoxContainer/ColorRect2"]
-margin_left = 23.0132
-margin_top = 16.4256
-margin_right = 123.013
-margin_bottom = 116.426
-rect_min_size = Vector2( 100, 100 )
-custom_constants/vseparation = 10
-custom_styles/hover = SubResource( 1 )
-custom_styles/panel = SubResource( 2 )
-items = [ "Item 0", null, 0, false, false, 0, 0, null, "", false, "Item 1", null, 0, false, false, 1, 0, null, "", false, "Item 2", null, 0, false, false, 2, 0, null, "", false ]
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HSplitContainer/VSplitContainer/HBoxContainer/ColorRect" groups=["snapshottable"]]
+margin_left = 80.8978
+margin_top = 51.7145
+margin_right = 223.898
+margin_bottom = 107.714
+text = "Item 0"
+items = [ "Item 0", null, false, 0, null, "Item 1", null, false, 1, null, "Item 2", null, false, 2, null, "Item 3", null, false, 3, null ]
+selected = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ColorRect2" type="ColorRect" parent="VBoxContainer/HSplitContainer/VSplitContainer/HBoxContainer"]
+margin_left = 304.0
+margin_right = 988.0
+margin_bottom = 280.0
+rect_min_size = Vector2( 0, 180 )
+size_flags_horizontal = 3
+color = Color( 0.137589, 0.201114, 0.277344, 1 )
+
+[node name="BlockingOverlay" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.215686, 0.247059, 0.290196, 0.678431 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="dragged" from="VBoxContainer/HSplitContainer" to="." method="on_dragged"]

@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/nodes/ProjectTree.gd" type="Script" id=1]
 [ext_resource path="res://assets/images/Load.svg" type="Texture" id=2]
+[ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=4]
 
-[node name="ProjectTree" type="Panel"]
+[node name="ProjectTree" type="Panel" groups=["snapshottable"]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 280, 500 )
@@ -13,68 +14,91 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OpenFolderDialog" type="FileDialog" parent="."]
+[node name="OpenFolderDialog" type="FileDialog" parent="." groups=["snapshottable"]]
 margin_right = 315.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 600, 480 )
 hint_tooltip = "Open project folder"
-window_title = "Open a Directory"
+popup_exclusive = true
+window_title = "Open a Project Folder"
+mode_overrides_title = false
 mode = 2
 access = 2
-current_dir = "/Users/user/Documents/tilepipe"
-current_path = "/Users/user/Documents/tilepipe/"
+current_dir = "/Users/user/Documents/tilepipe/generation_data"
+current_path = "/Users/user/Documents/tilepipe/generation_data/"
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/margin_right = 0
-custom_constants/margin_top = 0
-custom_constants/margin_left = 5
-custom_constants/margin_bottom = 5
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-margin_left = 5.0
-margin_right = 1280.0
-margin_bottom = 715.0
 custom_constants/separation = 12
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_right = 1275.0
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 1280.0
 margin_bottom = 34.0
 size_flags_horizontal = 3
 
-[node name="DirLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-margin_right = 1239.0
+[node name="DirLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+margin_right = 1244.0
 margin_bottom = 34.0
 rect_min_size = Vector2( 0, 34 )
 size_flags_horizontal = 3
-text = "C:/a/b/c/"
+align = 2
 editable = false
+placeholder_text = "Select project folder "
+placeholder_alpha = 0.7
 
-[node name="DirLoadButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-margin_left = 1243.0
-margin_right = 1275.0
+[node name="DirLoadButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 1248.0
+margin_right = 1280.0
 margin_bottom = 34.0
 rect_min_size = Vector2( 32, 32 )
 icon = ExtResource( 2 )
 
-[node name="TileScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 margin_top = 46.0
-margin_right = 1275.0
-margin_bottom = 715.0
+margin_right = 1280.0
+margin_bottom = 688.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_left = 2
+
+[node name="TileScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer"]
+margin_left = 2.0
+margin_right = 1280.0
+margin_bottom = 642.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="TileVBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TileScrollContainer"]
-margin_right = 1275.0
+[node name="TileVBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/TileScrollContainer"]
+margin_right = 1278.0
 size_flags_horizontal = 3
 
+[node name="NewButton" type="Button" parent="VBoxContainer"]
+margin_top = 700.0
+margin_right = 1280.0
+margin_bottom = 720.0
+text = "New Tile"
+
+[node name="NoTilesFound" type="Label" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 40.0
+margin_bottom = 40.0
+custom_fonts/font = ExtResource( 4 )
+text = "No tiles found"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="about_to_show" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_about_to_show"]
 [connection signal="dir_selected" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_dir_selected"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/DirLoadButton" to="." method="_on_DirLoadButton_pressed"]
+[connection signal="popup_hide" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_popup_hide"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/DirLoadButton" to="." method="_on_DirLoadButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/NewButton" to="." method="_on_NewButton_pressed"]
