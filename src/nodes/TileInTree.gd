@@ -14,10 +14,10 @@ var current_directory: String
 var tile_file_name: String
 var is_selected := false
 
-var tree_root: TreeItem
-var tree_texture: TreeItem
-var tree_ruleset: TreeItem
-var tree_template: TreeItem
+var tile_row: TreeItem
+var texture_row: TreeItem
+var ruleset_row: TreeItem
+var template_row: TreeItem
 
 onready var tree := $Tree
 onready var highlight_rect := $ColorRect
@@ -47,26 +47,26 @@ func load_file(directory: String, tile_file: String):
 	
 
 func create_tree_items():
-	tree_root = tree.create_item()
-	tree_root.set_text(0, tile_file_name)
+	tile_row = tree.create_item()
+	tile_row.set_text(0, tile_file_name)
 	add_texture_item(tile_data["texture"])
 	add_ruleset_item(tile_data["ruleset"])
 	add_template_item(tile_data["template"])
 
 
 func add_texture_item(file_name: String):
-	tree_texture = tree.create_item(tree_root)
-	tree_texture.set_text(0, "Texture: %s" % file_name)
+	texture_row = tree.create_item(tile_row)
+	texture_row.set_text(0, "Texture: %s" % file_name)
 
 
 func add_ruleset_item(file_name: String):
-	tree_ruleset = tree.create_item(tree_root)
-	tree_ruleset.set_text(0, "Ruleset: %s" % file_name)
+	ruleset_row = tree.create_item(tile_row)
+	ruleset_row.set_text(0, "Ruleset: %s" % file_name)
 
 
 func add_template_item(file_name: String):
-	tree_template = tree.create_item(tree_root)
-	tree_template.set_text(0, "Template: %s" % file_name)
+	template_row = tree.create_item(tile_row)
+	template_row.set_text(0, "Template: %s" % file_name)
 
 
 func _on_Tree_item_selected():
@@ -75,6 +75,10 @@ func _on_Tree_item_selected():
 		tree.get_root().collapsed = false
 	emit_signal("row_selected", selected_row)
 	set_selected(true)
+
+
+func select_root():
+	tree.get_root().select(0)
 
 
 func set_selected(selected: bool):

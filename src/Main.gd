@@ -10,11 +10,13 @@ signal _snapshot_state_changed_continous()
 
 onready var project_tree: ProjectTree = $VBoxContainer/HSplitContainer/MarginContainer/ProjectTree
 onready var blocking_overlay := $BlockingOverlay
+onready var work_rect := $VBoxContainer/HSplitContainer/WorkRect
 
 
 func _ready():
 #	OS.window_fullscreen = false
 #	OS.window_borderless = false
+	connect_signals()
 	OS.min_window_size = Const.MIN_WINDOW_SIZE
 	ui_snapshot = UISnapshot.new(self, Const.SETTINGS_PATH)
 	ui_snapshot.init_snapshot(Const.DEFAULT_USER_SETTINGS)
@@ -22,12 +24,13 @@ func _ready():
 	print("TilePipe v%s running in %s mode" % [VERSION, mode])
 	OS.set_window_title("TilePipe v.%s" % VERSION)
 	rng.randomize()
-	connect_signals()
+
 
 
 func connect_signals():
 	project_tree.connect("file_dialog_started", blocking_overlay, "show")
 	project_tree.connect("file_dialog_ended", blocking_overlay, "hide")
+	project_tree.connect("tile_selected", work_rect, "on_tile_selected")
 	get_tree().get_root().connect("size_changed", self, "on_size_changed")
 
 

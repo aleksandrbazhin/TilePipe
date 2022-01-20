@@ -132,7 +132,7 @@ func apply_state():
 	var initiator: Node = initiator_ref.get_ref()
 	for node_path in _state.keys():
 		var value = _state[node_path]
-		var node = initiator.get_node(node_path)
+		var node = initiator.get_node_or_null(node_path)
 		if node != null:
 			_set_element_state(node, value)
 

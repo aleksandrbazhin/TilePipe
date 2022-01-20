@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/nodes/WorkRect.gd" type="Script" id=1]
+[ext_resource path="res://src/nodes/RulesetView.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/nodes/TileMainView.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/nodes/InputTextureView.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/nodes/TemplateView.tscn" type="PackedScene" id=5]
+
+[node name="WorkRect" type="ColorRect"]
+margin_left = 292.0
+margin_right = 1280.0
+margin_bottom = 712.0
+rect_min_size = Vector2( 0, 180 )
+size_flags_vertical = 3
+color = Color( 0.137255, 0.2, 0.278431, 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileMainView" parent="." instance=ExtResource( 3 )]
+visible = false
+
+[node name="InputTextureView" parent="." instance=ExtResource( 4 )]
+visible = false
+
+[node name="RulesetView" parent="." instance=ExtResource( 2 )]
+visible = false
+
+[node name="TemplateView" parent="." instance=ExtResource( 5 )]
+visible = false

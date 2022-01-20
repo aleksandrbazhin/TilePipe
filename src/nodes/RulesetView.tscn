@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/nodes/RulesetView.gd" type="Script" id=1]
+[ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=2]
+
+[node name="RulesetView" type="ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.364706, 0.411765, 0.376471, 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+margin_right = 1280.0
+margin_bottom = 26.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/CenterContainer"]
+margin_left = 607.0
+margin_right = 672.0
+margin_bottom = 26.0
+
+[node name="CaptionLabel" type="Label" parent="VBoxContainer/CenterContainer/HBoxContainer"]
+margin_right = 61.0
+margin_bottom = 26.0
+custom_fonts/font = ExtResource( 2 )
+text = "Ruleset:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RulesetNameLabel" type="Label" parent="VBoxContainer/CenterContainer/HBoxContainer"]
+margin_left = 65.0
+margin_right = 65.0
+margin_bottom = 26.0
+custom_fonts/font = ExtResource( 2 )
+
+[node name="TextureRect" type="ColorRect" parent="VBoxContainer"]
+margin_top = 30.0
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_vertical = 3
+color = Color( 0.270588, 0.333333, 0.368627, 1 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TextureRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RulesetData" type="Label" parent="VBoxContainer/TextureRect/ScrollContainer"]
+margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -4,10 +4,10 @@ class_name ProjectTree
 
 signal file_dialog_started()
 signal file_dialog_ended()
-signal tile_selected(tile_name)
-signal texture_selected(tile_name)
-signal ruleset_selected(tile_name)
-signal template_selected(tile_name)
+signal tile_selected(tile_node, row_item)
+#signal texture_selected(tile_name)
+#signal ruleset_selected(tile_name)
+#signal template_selected(tile_name)
 signal _snapshot_state_changed()
 
 var is_file_dialog_active := false
@@ -34,6 +34,7 @@ func _apply_snapshot(settings: Dictionary):
 		var tile: TileInTree = tile_container.get_child(int(settings["selected_tile"]))
 		if tile != null:
 			tile.set_selected(true)
+			tile.select_root()
 
 
 func on_tile_row_selected(row: TreeItem, tile: TileInTree):
@@ -42,15 +43,7 @@ func on_tile_row_selected(row: TreeItem, tile: TileInTree):
 		if other_tile.is_selected:
 			other_tile.set_selected(false)
 	tile.set_selected(true)
-	match row:
-		tile.tree_root:
-			emit_signal("tile_selected", tile)
-		tile.tree_texture:
-			emit_signal("texture_selected", tile)
-		tile.tree_ruleset:
-			emit_signal("ruleset_selected", tile)
-		tile.tree_template:
-			emit_signal("template_selected", tile)
+	emit_signal("tile_selected", tile, row)
 	emit_signal("_snapshot_state_changed")
 
 
@@ -76,6 +69,7 @@ func scan_directory(path: String) -> Array:
 
 func load_project_directory(directory_path: String):
 	dir_edit.text = directory_path
+	Const.current_dir = directory_path
 	clear_tree()
 	var tiles_found := scan_directory(directory_path)
 	if tiles_found.empty():

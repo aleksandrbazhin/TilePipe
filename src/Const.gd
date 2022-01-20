@@ -1,11 +1,11 @@
 extends Node
 
 const SETTINGS_PATH := "user://settings.json"
+const EXAMPLES_DIR := "generation_data"
 
 const TILE_EXTENXSION := "tptile"
 const MIN_WINDOW_SIZE := Vector2(640, 640)
 const DRAG_END_MSEC := 200
-
 
 var DEFAULT_USER_SETTINGS := {
 	".": {
@@ -13,10 +13,10 @@ var DEFAULT_USER_SETTINGS := {
 		"window_position": Vector2.ZERO,
 		"window_size": Vector2(1280, 720)
 	},
-	"VBoxContainer/HSplitContainer/MarginContainer/ProjectTree/OpenFolderDialog": "generation_data",
+	"VBoxContainer/HSplitContainer/MarginContainer/ProjectTree/OpenFolderDialog": EXAMPLES_DIR,
 }
 
-
+var current_dir := OS.get_executable_path().get_base_dir() + "/" + EXAMPLES_DIR
 
 
 const TILE_SETTINGS_DIR := "user://tile_settings"
