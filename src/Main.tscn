@@ -89,18 +89,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HSplitContainer/VSplitContainer/HBoxContainer/ColorRect" groups=["snapshottable"]]
-margin_left = 80.8978
-margin_top = 51.7145
-margin_right = 223.898
-margin_bottom = 107.714
-text = "Item 0"
-items = [ "Item 0", null, false, 0, null, "Item 1", null, false, 1, null, "Item 2", null, false, 2, null, "Item 3", null, false, 3, null ]
-selected = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="ColorRect2" type="ColorRect" parent="VBoxContainer/HSplitContainer/VSplitContainer/HBoxContainer"]
 margin_left = 304.0
 margin_right = 988.0
@@ -117,5 +105,3 @@ color = Color( 0.215686, 0.247059, 0.290196, 0.678431 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[connection signal="dragged" from="VBoxContainer/HSplitContainer" to="." method="on_dragged"]

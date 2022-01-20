@@ -63,11 +63,6 @@ _global_script_classes=[ {
 "class": "UISnapshot",
 "language": "GDScript",
 "path": "res://src/UISnapshot.gd"
-}, {
-"base": "Reference",
-"class": "UserSettings",
-"language": "GDScript",
-"path": "res://src/UserSettings.gd"
 } ]
 _global_script_class_icons={
 "CollisionGenerator": "",
@@ -80,8 +75,7 @@ _global_script_class_icons={
 "ProjectTree": "",
 "TileInTree": "",
 "TileRenderer": "",
-"UISnapshot": "",
-"UserSettings": ""
+"UISnapshot": ""
 }
 
 [application]
@@ -114,7 +108,6 @@ gdscript/warnings/return_value_discarded=false
 
 window/size/width=1280
 window/size/height=720
-window/size/borderless=true
 window/vsync/use_vsync=false
 window/energy_saving/keep_screen_on=false
 window/stretch/aspect="expand"

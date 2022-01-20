@@ -2,13 +2,13 @@ extends Panel
 
 class_name ProjectTree
 
-
 signal file_dialog_started()
 signal file_dialog_ended()
 signal tile_selected(tile_name)
 signal texture_selected(tile_name)
 signal ruleset_selected(tile_name)
 signal template_selected(tile_name)
+signal _snapshot_state_changed()
 
 var is_file_dialog_active := false
 
@@ -18,18 +18,30 @@ onready var open_project_dialog := $OpenFolderDialog
 onready var no_tiles_found := $NoTilesFound
 
 
-#func take_snapshot():
-#	pass
-#
+func _take_snapshot() -> Dictionary:
+	var settings := {"selected_tile": 0}
+	var index := 0
+	for tile in tile_container.get_children():
+		if tile.is_selected:
+			settings["selected_tile"] = index
+			break
+		index += 1
+	return settings
 
 
-func apply_snapshot(data):
-	open_project_dialog.emit_signal("dir_selected", open_project_dialog.current_dir)
+func _apply_snapshot(settings: Dictionary):
+	if tile_container.get_child_count() > 0:
+		var tile: TileInTree = tile_container.get_child(int(settings["selected_tile"]))
+		if tile != null:
+			tile.set_selected(true)
 
 
 func on_tile_row_selected(row: TreeItem, tile: TileInTree):
-	for tile in tile_container.get_children():
-		tile.deselect_except(row)
+	for other_tile in tile_container.get_children():
+		other_tile.deselect_except(row)
+		if other_tile.is_selected:
+			other_tile.set_selected(false)
+	tile.set_selected(true)
 	match row:
 		tile.tree_root:
 			emit_signal("tile_selected", tile)
@@ -39,6 +51,7 @@ func on_tile_row_selected(row: TreeItem, tile: TileInTree):
 			emit_signal("ruleset_selected", tile)
 		tile.tree_template:
 			emit_signal("template_selected", tile)
+	emit_signal("_snapshot_state_changed")
 
 
 func clear_tree():

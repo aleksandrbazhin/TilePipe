@@ -12,7 +12,7 @@ var is_loaded := false
 var tile_data: Dictionary
 var current_directory: String
 var tile_file_name: String
-
+var is_selected := false
 
 var tree_root: TreeItem
 var tree_texture: TreeItem
@@ -74,21 +74,23 @@ func _on_Tree_item_selected():
 	if selected_row == tree.get_root():
 		tree.get_root().collapsed = false
 	emit_signal("row_selected", selected_row)
-	set_highlight(true)
+	set_selected(true)
 
 
-func set_highlight(is_highlighted: bool):
-	if is_highlighted:
+func set_selected(selected: bool):
+	if selected:
 		highlight_rect.show()
+		is_selected = true
 	else:
 		highlight_rect.hide()
+		is_selected = false
 
 
 func deselect_except(row: TreeItem):
 	var selected_row: TreeItem = tree.get_selected()
 	if is_instance_valid(selected_row) and row != selected_row:
 		selected_row.deselect(0)
-		set_highlight(false)
+		set_selected(false)
 
 
 func _on_Tree_item_collapsed(item: TreeItem):

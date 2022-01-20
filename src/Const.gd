@@ -3,8 +3,20 @@ extends Node
 const SETTINGS_PATH := "user://settings.json"
 
 const TILE_EXTENXSION := "tptile"
-const MIN_WINDOW_SIZE := Vector2(640, 360)
+const MIN_WINDOW_SIZE := Vector2(640, 640)
 const DRAG_END_MSEC := 200
+
+
+var DEFAULT_USER_SETTINGS := {
+	".": {
+		"window_maximized": true,
+		"window_position": Vector2.ZERO,
+		"window_size": Vector2(1280, 720)
+	},
+	"VBoxContainer/HSplitContainer/MarginContainer/ProjectTree/OpenFolderDialog": "generation_data",
+}
+
+
 
 
 const TILE_SETTINGS_DIR := "user://tile_settings"
@@ -143,27 +155,6 @@ const COMMON_DEFAULT_SETTINGS: Dictionary = {
 	
 	
 }
-
-var DEFAULT_USER_SETTINGS := { ".": {
-	"last_open_project_dir": "generation_data",
-	"last_selected_tile": "",
-	"split_container_h_position": 0,
-	"split_container_v_position": 0,
-	"window_maximized": true,
-	"window_position": Vector2.ZERO,
-	"window_size": Vector2(1280, 720)
-}}
-
-#var DEFAULT_USER_SETTINGS := {
-#	"last_open_project_dir": "generation_data",
-#	"last_selected_tile": "",
-#	"split_container_h_position": 0,
-#	"split_container_v_position": 0,
-#	"window_maximized": true,
-#	"window_position": Vector2.ZERO,
-#	"window_size": Vector2(1280, 720)
-#}
-
 
 const TILE_SPECIFIC_DEFAULT_SETTINGS: Dictionary = {
 	"last_texture_path": DEFAULT_INPUT_TEXTURE_PATH,
