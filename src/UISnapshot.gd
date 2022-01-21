@@ -3,7 +3,7 @@ extends Reference
 class_name UISnapshot
 
 const NODE_GROUP_NAME := "snapshottable"
-const MIN_SAVE_DELAY_MSEC := 150
+const MIN_SAVE_DELAY_MSEC := 200
 
 var initiator_ref: WeakRef = null
 var save_path: String
@@ -28,6 +28,7 @@ func _set_element_state(node: Node, value):
 	elif node is Range:
 		node.value = value
 	elif node is FileDialog:
+		node.current_path = value
 		match node.mode:
 			FileDialog.MODE_OPEN_DIR:
 				node.current_dir = value
@@ -52,9 +53,11 @@ func _get_element_state(node: Node):
 		return node.value
 	elif node is FileDialog:
 		var value: String = node.current_path
-		match node.mode:
-			FileDialog.MODE_OPEN_DIR:
-				value = node.current_dir
+#		match node.mode:
+#			FileDialog.MODE_OPEN_DIR:
+#				value = node.current_dir
+#			FileDialog.MODE_OPEN_FILE, FileDialog.MODE_OPEN_FILES, FileDialog.MODE_OPEN_ANY:
+#				value = node.current_path
 		return value
 	elif node is SplitContainer:
 		return node.split_offset 
@@ -75,13 +78,16 @@ func _watch_element_changes(node: Node):
 	elif node is Range:
 		node.connect("value_change", self, "capture_and_save")
 	elif node is FileDialog:
-		match node.mode:
-			FileDialog.MODE_OPEN_DIR:
-				node.connect("dir_selected", self, "capture_and_save")
-			FileDialog.MODE_OPEN_FILE, FileDialog.MODE_OPEN_ANY:
-				node.connect("file_selected", self, "capture_and_save")
-			FileDialog.MODE_OPEN_FILES:
-				node.connect("files_selected", self, "capture_and_save")
+		node.connect("dir_selected", self, "capture_and_save")
+		node.connect("file_selected", self, "capture_and_save")
+		node.connect("files_selected", self, "capture_and_save")
+#		match node.mode:
+#			FileDialog.MODE_OPEN_DIR:
+#				node.connect("dir_selected", self, "capture_and_save")
+#			FileDialog.MODE_OPEN_FILE, FileDialog.MODE_OPEN_ANY:
+#				node.connect("file_selected", self, "capture_and_save")
+#			FileDialog.MODE_OPEN_FILES:
+#				node.connect("files_selected", self, "capture_and_save")
 	elif node is SplitContainer:
 		node.connect("dragged", self, "capture_and_save_continuous")
 
@@ -100,6 +106,14 @@ func _from_json(json: String) -> bool:
 	return false
 
 
+func get_state(node: Node) -> Dictionary:
+	var initiator: Node = initiator_ref.get_ref()
+	if initiator == node or initiator.is_a_parent_of(node):
+		var path := initiator.get_path_to(node)
+		if _state.has(path):
+			return _state[path]
+	return {}
+
 func init_snapshot(default_settings: Dictionary = {}):
 	var f := File.new()
 	if not f.file_exists(save_path):
@@ -113,12 +127,13 @@ func init_snapshot(default_settings: Dictionary = {}):
 
 func _init_watchers():
 	var initiator: Node = initiator_ref.get_ref()
+	initiator.connect("tree_exiting", self, "save_file")
 	for node in initiator.get_tree().get_nodes_in_group(NODE_GROUP_NAME):
 		if initiator == node or initiator.is_a_parent_of(node):
 			_watch_element_changes(node)
 
 
-func capture_state():
+func capture_state(_param = null):
 	var initiator: Node = initiator_ref.get_ref()
 	for node in initiator.get_tree().get_nodes_in_group(NODE_GROUP_NAME):
 		if initiator == node or initiator.is_a_parent_of(node):
@@ -137,6 +152,13 @@ func apply_state():
 			_set_element_state(node, value)
 
 
+func capture_continuous(_param = null):
+	var time_ms := OS.get_ticks_msec()
+	if time_ms - _last_saved_ms > MIN_SAVE_DELAY_MSEC:
+		_last_saved_ms = time_ms
+		capture_state()
+
+
 func capture_and_save(_param = null):
 	capture_state()
 	save_file()
@@ -147,10 +169,10 @@ func capture_and_save_continuous(_param = null):
 	if time_ms - _last_saved_ms > MIN_SAVE_DELAY_MSEC:
 		_last_saved_ms = time_ms
 		capture_and_save()
-		
 
 
 func save_file(_param = null) -> bool:
+	print("writing file")
 	var file := File.new()
 	if file.open(save_path, File.WRITE) == OK:
 		file.store_string(_get_json())

@@ -88,6 +88,9 @@ func add_tile_to_tree(directory: String, tile_file: String):
 
 
 func _on_OpenFolderDialog_dir_selected(dir: String):
+	if dir + "/" != open_project_dialog.current_path:
+		open_project_dialog.current_path = dir + "/"
+#	print(, "  ", dir)
 	load_project_directory(dir)
 
 

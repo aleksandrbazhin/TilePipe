@@ -52,11 +52,12 @@ func _apply_snapshot(settings: Dictionary):
 
 
 func on_size_changed():
-	emit_signal("_snapshot_state_changed_continous")
-
-
-func _exit_tree():
-	ui_snapshot.capture_and_save()
+	var saved_state := ui_snapshot.get_state(self)
+	if not saved_state.empty() and (\
+			saved_state["window_position"] != var2str(OS.window_position) or \
+			saved_state["window_maximized"] != OS.window_maximized or \
+			saved_state["window_size"] != var2str(OS.window_size)):
+		emit_signal("_snapshot_state_changed_continous")
 
 
 func _process(_delta: float):
