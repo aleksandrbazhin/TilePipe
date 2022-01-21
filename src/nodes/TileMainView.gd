@@ -3,12 +3,12 @@ extends VBoxContainer
 class_name TileMainView
 
 onready var title := $Title/Label
-onready var input_title := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer/Label2
+onready var input_title := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer/HBoxContainer/FileName
 onready var input_texture := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer/TextureRect
-onready var ruleset_title := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/RulesetContainer/Label2
-onready var ruleset_texture := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/RulesetContainer/TextureRect
-onready var template_title := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/VBoxContainer/Label2
-onready var template_texture := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/VBoxContainer/TextureRect
+onready var ruleset_title := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer/FileName
+onready var ruleset_texture := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/TextureRect
+onready var template_title := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/TemplateContainer/HBoxContainer/FileName
+onready var template_texture := $ColorRect/VSplitContainer/MarginContainer/VBoxContainer/TemplateContainer/TextureRect
 
 
 func load_data(tile_data: Dictionary, file_name: String):

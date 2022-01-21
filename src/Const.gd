@@ -4,7 +4,7 @@ const SETTINGS_PATH := "user://settings.json"
 const EXAMPLES_DIR := "generation_data"
 
 const TILE_EXTENXSION := "tptile"
-const MIN_WINDOW_SIZE := Vector2(640, 640)
+const MIN_WINDOW_SIZE := Vector2(800, 600)
 const DRAG_END_MSEC := 200
 
 var DEFAULT_USER_SETTINGS := {

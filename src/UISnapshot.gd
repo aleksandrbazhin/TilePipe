@@ -3,7 +3,7 @@ extends Reference
 class_name UISnapshot
 
 const NODE_GROUP_NAME := "snapshottable"
-const MIN_SAVE_DELAY_MSEC := 200
+const MIN_SAVE_DELAY_MSEC := 100
 
 var initiator_ref: WeakRef = null
 var save_path: String
@@ -109,7 +109,7 @@ func _from_json(json: String) -> bool:
 func get_state(node: Node) -> Dictionary:
 	var initiator: Node = initiator_ref.get_ref()
 	if initiator == node or initiator.is_a_parent_of(node):
-		var path := initiator.get_path_to(node)
+		var path:String = initiator.get_path_to(node)
 		if _state.has(path):
 			return _state[path]
 	return {}

@@ -10,7 +10,7 @@
 margin_left = 292.0
 margin_right = 1280.0
 margin_bottom = 712.0
-rect_min_size = Vector2( 0, 180 )
+rect_min_size = Vector2( 360, 180 )
 size_flags_vertical = 3
 color = Color( 0.137255, 0.2, 0.278431, 1 )
 script = ExtResource( 1 )

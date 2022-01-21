@@ -7,6 +7,7 @@
 [node name="TileMainView" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_constants/separation = 6
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -14,13 +15,14 @@ __meta__ = {
 
 [node name="Title" type="ColorRect" parent="."]
 margin_right = 1280.0
-margin_bottom = 36.0
-rect_min_size = Vector2( 0, 36 )
-color = Color( 0.286275, 0.286275, 0.356863, 1 )
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+color = Color( 0.266667, 0.305882, 0.384314, 1 )
 
 [node name="Label" type="Label" parent="Title"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+rect_min_size = Vector2( 0, 32 )
 custom_fonts/font = ExtResource( 3 )
 text = "Title"
 align = 1
@@ -30,12 +32,12 @@ __meta__ = {
 }
 
 [node name="ColorRect" type="ColorRect" parent="."]
-margin_top = 40.0
+margin_top = 38.0
 margin_right = 1280.0
-margin_bottom = 616.0
+margin_bottom = 612.0
 rect_min_size = Vector2( 0, 180 )
 size_flags_vertical = 3
-color = Color( 0.27451, 0.419608, 0.513726, 1 )
+color = Color( 0.156863, 0.176471, 0.2, 1 )
 
 [node name="VSplitContainer" type="VSplitContainer" parent="ColorRect" groups=["snapshottable"]]
 anchor_right = 1.0
@@ -46,9 +48,9 @@ __meta__ = {
 
 [node name="MarginContainer" type="MarginContainer" parent="ColorRect/VSplitContainer"]
 margin_right = 1280.0
-margin_bottom = 216.0
+margin_bottom = 202.0
 custom_constants/margin_right = 12
-custom_constants/margin_top = 12
+custom_constants/margin_top = 0
 custom_constants/margin_left = 12
 __meta__ = {
 "_edit_use_anchors_": false
@@ -56,227 +58,238 @@ __meta__ = {
 
 [node name="VBoxContainer" type="HBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer"]
 margin_left = 12.0
-margin_top = 12.0
 margin_right = 1268.0
-margin_bottom = 216.0
+margin_bottom = 202.0
 rect_min_size = Vector2( 250, 180 )
-custom_constants/separation = 18
+custom_constants/separation = 12
 
 [node name="InputContainer" type="VBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer"]
-margin_right = 406.0
-margin_bottom = 204.0
+margin_right = 410.0
+margin_bottom = 202.0
 size_flags_horizontal = 3
+custom_constants/separation = 6
 
 [node name="Label" type="Label" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer"]
-margin_right = 406.0
+margin_right = 410.0
 margin_bottom = 26.0
-custom_fonts/font = ExtResource( 3 )
-text = "Input:"
+rect_min_size = Vector2( 0, 26 )
+text = "Texture:"
 align = 1
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer"]
-margin_top = 30.0
-margin_right = 406.0
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer"]
+margin_top = 32.0
+margin_right = 410.0
 margin_bottom = 56.0
-custom_fonts/font = ExtResource( 3 )
+
+[node name="FileName" type="LineEdit" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer/HBoxContainer"]
+margin_right = 358.0
+margin_bottom = 24.0
+focus_mode = 0
+size_flags_horizontal = 3
 text = "Name"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+editable = false
+
+[node name="Button" type="Button" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer/HBoxContainer"]
+margin_left = 362.0
+margin_right = 410.0
+margin_bottom = 24.0
+text = "Setup"
 
 [node name="TextureRect" type="TextureRect" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer"]
-margin_top = 60.0
-margin_right = 406.0
-margin_bottom = 180.0
-rect_min_size = Vector2( 200, 120 )
-size_flags_vertical = 3
+margin_top = 62.0
+margin_right = 410.0
+margin_bottom = 182.0
+rect_min_size = Vector2( 180, 120 )
 expand = true
 stretch_mode = 6
 
-[node name="CenterContainer" type="CenterContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer"]
-margin_top = 184.0
-margin_right = 406.0
-margin_bottom = 204.0
+[node name="Spacer" type="Control" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer"]
+margin_top = 188.0
+margin_right = 410.0
+margin_bottom = 202.0
+size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer/CenterContainer"]
-margin_left = 153.0
-margin_right = 253.0
-margin_bottom = 20.0
-custom_constants/separation = 10
-
-[node name="Button" type="Button" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer/CenterContainer/HBoxContainer"]
-margin_right = 42.0
-margin_bottom = 20.0
-text = "Load"
-
-[node name="Button2" type="Button" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/InputContainer/CenterContainer/HBoxContainer"]
-margin_left = 52.0
-margin_right = 100.0
-margin_bottom = 20.0
-text = "Setup"
-
-[node name="RulesetContainer" type="VBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer"]
-margin_left = 424.0
-margin_right = 831.0
-margin_bottom = 204.0
+[node name="PanelContainer" type="PanelContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer"]
+margin_left = 422.0
+margin_right = 833.0
+margin_bottom = 202.0
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/RulesetContainer"]
-margin_right = 407.0
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 404.0
+margin_bottom = 195.0
+custom_constants/margin_right = 8
+custom_constants/margin_left = 8
+
+[node name="RulesetContainer" type="VBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
+margin_left = 8.0
+margin_right = 389.0
+margin_bottom = 188.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
+margin_right = 381.0
 margin_bottom = 26.0
-custom_fonts/font = ExtResource( 3 )
+rect_min_size = Vector2( 0, 26 )
 text = "Ruleset:"
 align = 1
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/RulesetContainer"]
-margin_top = 30.0
-margin_right = 407.0
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
+margin_top = 32.0
+margin_right = 381.0
 margin_bottom = 56.0
-custom_fonts/font = ExtResource( 3 )
+
+[node name="FileName" type="LineEdit" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer"]
+margin_right = 317.0
+margin_bottom = 24.0
+focus_mode = 0
+size_flags_horizontal = 3
 text = "Name"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+editable = false
 
-[node name="TextureRect" type="TextureRect" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/RulesetContainer"]
-margin_top = 60.0
-margin_right = 407.0
-margin_bottom = 180.0
-rect_min_size = Vector2( 200, 120 )
-size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CenterContainer" type="CenterContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/RulesetContainer"]
-margin_top = 184.0
-margin_right = 407.0
-margin_bottom = 204.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/RulesetContainer/CenterContainer"]
-margin_left = 153.0
-margin_right = 253.0
-margin_bottom = 20.0
-custom_constants/separation = 10
-
-[node name="Button" type="Button" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/RulesetContainer/CenterContainer/HBoxContainer"]
-margin_right = 42.0
-margin_bottom = 20.0
-text = "Load"
-
-[node name="Button2" type="Button" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/RulesetContainer/CenterContainer/HBoxContainer"]
-margin_left = 52.0
-margin_right = 100.0
-margin_bottom = 20.0
+[node name="Button" type="Button" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer"]
+margin_left = 321.0
+margin_right = 381.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 60, 0 )
 text = "Setup"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer"]
-margin_left = 849.0
-margin_right = 1256.0
-margin_bottom = 204.0
-size_flags_horizontal = 3
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
+margin_top = 62.0
+margin_right = 381.0
+margin_bottom = 182.0
+rect_min_size = Vector2( 160, 120 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Label" type="Label" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/VBoxContainer"]
-margin_right = 407.0
+[node name="Spacer" type="Control" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
+margin_top = 188.0
+margin_right = 381.0
+margin_bottom = 188.0
+size_flags_vertical = 3
+
+[node name="TemplateContainer" type="VBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer"]
+margin_left = 845.0
+margin_right = 1256.0
+margin_bottom = 202.0
+size_flags_horizontal = 3
+custom_constants/separation = 6
+
+[node name="Label" type="Label" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/TemplateContainer"]
+margin_right = 411.0
 margin_bottom = 26.0
-custom_fonts/font = ExtResource( 3 )
+rect_min_size = Vector2( 0, 26 )
 text = "Template:"
 align = 1
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/VBoxContainer"]
-margin_top = 30.0
-margin_right = 407.0
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/TemplateContainer"]
+margin_top = 32.0
+margin_right = 411.0
 margin_bottom = 56.0
-custom_fonts/font = ExtResource( 3 )
+
+[node name="FileName" type="LineEdit" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/TemplateContainer/HBoxContainer"]
+margin_right = 347.0
+margin_bottom = 24.0
+focus_mode = 0
+size_flags_horizontal = 3
 text = "Name"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+editable = false
 
-[node name="TextureRect" type="TextureRect" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/VBoxContainer"]
-margin_top = 60.0
-margin_right = 407.0
-margin_bottom = 180.0
-rect_min_size = Vector2( 200, 120 )
-size_flags_vertical = 3
+[node name="Button" type="Button" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/TemplateContainer/HBoxContainer"]
+margin_left = 351.0
+margin_right = 411.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 60, 0 )
+text = "Setup"
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/TemplateContainer"]
+margin_top = 62.0
+margin_right = 411.0
+margin_bottom = 182.0
+rect_min_size = Vector2( 180, 120 )
 expand = true
 stretch_mode = 6
 
-[node name="CenterContainer" type="CenterContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/VBoxContainer"]
-margin_top = 184.0
-margin_right = 407.0
-margin_bottom = 204.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/VBoxContainer/CenterContainer"]
-margin_left = 153.0
-margin_right = 253.0
-margin_bottom = 20.0
-custom_constants/separation = 10
-
-[node name="Button" type="Button" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/VBoxContainer/CenterContainer/HBoxContainer"]
-margin_right = 42.0
-margin_bottom = 20.0
-text = "Load"
-
-[node name="Button2" type="Button" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/VBoxContainer/CenterContainer/HBoxContainer"]
-margin_left = 52.0
-margin_right = 100.0
-margin_bottom = 20.0
-text = "Setup"
+[node name="Spacer" type="Control" parent="ColorRect/VSplitContainer/MarginContainer/VBoxContainer/TemplateContainer"]
+margin_top = 188.0
+margin_right = 411.0
+margin_bottom = 202.0
+size_flags_vertical = 3
 
 [node name="ResultPreview" parent="ColorRect/VSplitContainer" instance=ExtResource( 2 )]
-margin_top = 228.0
-margin_bottom = 576.0
+margin_top = 214.0
+margin_bottom = 574.0
 size_flags_horizontal = 3
 single_tile_visible = false
 
-[node name="ColorRect2" type="ColorRect" parent="."]
-margin_top = 620.0
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_top = 618.0
 margin_right = 1280.0
 margin_bottom = 720.0
-rect_min_size = Vector2( 0, 100 )
-color = Color( 0.203922, 0.282353, 0.196078, 1 )
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect2"]
-anchor_right = 1.0
-anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="ColorRect2/VBoxContainer"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer"]
 margin_right = 1280.0
-margin_bottom = 26.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.266667, 0.305882, 0.384314, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 custom_fonts/font = ExtResource( 3 )
 text = "Export"
 align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="MarginContainer" type="MarginContainer" parent="ColorRect2/VBoxContainer"]
-margin_top = 30.0
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_top = 36.0
 margin_right = 1280.0
-margin_bottom = 100.0
+margin_bottom = 102.0
 size_flags_vertical = 3
 custom_constants/margin_right = 32
 custom_constants/margin_top = 10
 custom_constants/margin_left = 32
-custom_constants/margin_bottom = 10
+custom_constants/margin_bottom = 24
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect2/VBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
 margin_left = 32.0
 margin_top = 10.0
 margin_right = 1248.0
@@ -285,15 +298,15 @@ rect_min_size = Vector2( 0, 32 )
 size_flags_vertical = 0
 custom_constants/separation = 10
 
-[node name="Label" type="Label" parent="ColorRect2/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 margin_top = 9.0
 margin_right = 100.0
 margin_bottom = 23.0
 rect_min_size = Vector2( 100, 0 )
-text = "Exported to:"
+text = "Exported as:"
 align = 2
 
-[node name="OptionButton" type="OptionButton" parent="ColorRect2/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 110.0
 margin_right = 230.0
 margin_bottom = 32.0
@@ -302,13 +315,13 @@ text = "Texture"
 items = [ "Texture", null, false, 0, null, "Godot 3 Tileset", null, false, 1, null ]
 selected = 0
 
-[node name="LineEdit" type="LineEdit" parent="ColorRect2/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 240.0
 margin_right = 1154.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="ColorRect2/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 1164.0
 margin_right = 1216.0
 margin_bottom = 32.0

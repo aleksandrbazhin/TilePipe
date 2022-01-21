@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=25 format=2]
+[gd_resource type="Theme" load_steps=27 format=2]
 
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://assets/images/tree_arrow2.png" type="Texture" id=2]
@@ -26,7 +26,7 @@ content_margin_left = 12.0
 content_margin_right = 12.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
-bg_color = Color( 0.257629, 0.361877, 0.492188, 1 )
+bg_color = Color( 0.258824, 0.360784, 0.494118, 1 )
 
 [sub_resource type="StyleBoxFlat" id=9]
 content_margin_left = 12.0
@@ -46,7 +46,10 @@ bg_color = Color( 0.131989, 0.149259, 0.195313, 1 )
 color = Color( 0.439216, 0.470588, 0.52549, 1 )
 
 [sub_resource type="StyleBoxFlat" id=13]
-bg_color = Color( 0.156863, 0.176471, 0.2, 1 )
+bg_color = Color( 0.117647, 0.12549, 0.133333, 1 )
+
+[sub_resource type="StyleBoxFlat" id=19]
+bg_color = Color( 0.113725, 0.121569, 0.133333, 1 )
 
 [sub_resource type="StyleBoxFlat" id=11]
 bg_color = Color( 0.6, 0.6, 0.6, 0.32549 )
@@ -57,6 +60,13 @@ content_margin_right = 10.0
 content_margin_top = 10.0
 content_margin_bottom = 10.0
 bg_color = Color( 0.219608, 0.286275, 0.368627, 1 )
+
+[sub_resource type="StyleBoxFlat" id=20]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color( 0.670588, 0.745098, 0.796078, 0.854902 )
 
 [sub_resource type="StyleBoxFlat" id=18]
 content_margin_top = 8.0
@@ -114,6 +124,7 @@ HSplitContainer/constants/separation = 6
 HSplitContainer/icons/grabber = ExtResource( 5 )
 LineEdit/colors/font_color_uneditable = Color( 0.803922, 0.803922, 0.803922, 0.705882 )
 Panel/styles/panel = SubResource( 13 )
+PanelContainer/styles/panel = SubResource( 19 )
 PopupMenu/constants/hseparation = 6
 PopupMenu/constants/vseparation = 12
 PopupMenu/styles/hover = SubResource( 11 )
@@ -123,6 +134,7 @@ ProgressBar/colors/font_color_shadow = Color( 0, 0, 0, 1 )
 ProgressBar/fonts/font = null
 ProgressBar/styles/bg = null
 ProgressBar/styles/fg = null
+TooltipPanel/styles/panel = SubResource( 20 )
 Tree/colors/font_color = Color( 0.611765, 0.756863, 0.909804, 1 )
 Tree/colors/guide_color = Color( 0, 0, 0, 0 )
 Tree/constants/draw_guides = 0

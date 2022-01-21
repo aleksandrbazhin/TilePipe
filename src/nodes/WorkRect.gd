@@ -3,11 +3,17 @@ extends ColorRect
 class_name WorkRect
 
 var loaded_tile_ref: WeakRef
+var last_visible_tab
 
 onready var tile_main_view: TileMainView = $TileMainView
 onready var input_texture_view: InputTextureView = $InputTextureView
 onready var ruleset_view := $RulesetView
 onready var template_view: TemplateView = $TemplateView
+
+
+func unhide_all():
+	if is_instance_valid(last_visible_tab):
+		last_visible_tab.show()
 
 
 func hide_all():
@@ -32,9 +38,13 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 	match row:
 		tile.tile_row:
 			tile_main_view.show()
+			last_visible_tab = tile_main_view
 		tile.texture_row:
 			input_texture_view.show()
+			last_visible_tab = input_texture_view
 		tile.ruleset_row:
 			ruleset_view.show()
+			last_visible_tab = ruleset_view
 		tile.template_row:
 			template_view.show()
+			last_visible_tab = template_view

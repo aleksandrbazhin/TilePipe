@@ -57,6 +57,7 @@ margin_bottom = 706.0
 rect_min_size = Vector2( 200, 500 )
 
 [node name="WorkRect" parent="VBoxContainer/HSplitContainer" instance=ExtResource( 1 )]
+color = Color( 0.156863, 0.176471, 0.2, 1 )
 
 [node name="BlockingOverlay" type="ColorRect" parent="."]
 visible = false

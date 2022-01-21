@@ -71,8 +71,8 @@ func add_template_item(file_name: String):
 
 func _on_Tree_item_selected():
 	var selected_row: TreeItem = tree.get_selected()
-	if selected_row == tree.get_root():
-		tree.get_root().collapsed = false
+#	if selected_row == tree.get_root():
+#		tree.get_root().collapsed = false
 	emit_signal("row_selected", selected_row)
 	set_selected(true)
 
