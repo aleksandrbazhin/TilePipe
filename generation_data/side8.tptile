@@ -1,7 +1,7 @@
 {
-    "texture": "overlay_4.png",
-    "ruleset": "overlay_4_full.json",
-    "template": "template_255_16x16.png",
+    "texture": "overlay_8_pixelart.png",
+    "ruleset": "overlay_8_full.json",
+    "template": "template_47.png",
     "merge_level": 0.25,
     "output_tile_offset": 0,
     "output_tile_size": 64,

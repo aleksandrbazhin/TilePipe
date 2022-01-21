@@ -172,7 +172,6 @@ func capture_and_save_continuous(_param = null):
 
 
 func save_file(_param = null) -> bool:
-	print("writing file")
 	var file := File.new()
 	if file.open(save_path, File.WRITE) == OK:
 		file.store_string(_get_json())

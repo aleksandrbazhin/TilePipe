@@ -1,0 +1,12 @@
+{
+    "texture": "overlay_13_pixelart.png",
+    "ruleset": "overlay_13_full.json",
+    "template": "template_47.png",
+    "merge_level": 0.25,
+    "output_tile_offset": 0,
+    "output_tile_size": 64,
+    "overlap_level": 0.25,
+    "smoothing": false,
+    "use_random_seed": false,
+    "random_seed_value": 0
+}
