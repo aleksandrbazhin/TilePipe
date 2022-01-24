@@ -1,7 +1,7 @@
 extends Node
 
 const SETTINGS_PATH := "user://settings.json"
-const EXAMPLES_DIR := "generation_data"
+const EXAMPLES_DIR := "examples"
 
 const TILE_EXTENXSION := "tptile"
 const MIN_WINDOW_SIZE := Vector2(800, 600)
@@ -146,7 +146,7 @@ const TEMPLATE_MASK_CHECK_POINTS := {
 
 const DEFAULT_MERGE: float = 0.25
 const DEFAULT_OVERLAP: float = 0.25
-const DEFAULT_INPUT_TEXTURE_PATH: String = "res://generation_data/quarters_5.png"
+const DEFAULT_INPUT_TEXTURE_PATH: String = "res://generation_data/overlay_4.png"
 const DEFAULT_GODOT_RESOURCE_PATH := "res://tileset.tres"
 const DEFAULT_GODOT_TEXTURE_PATH := "res://generated_autotile.png"
 

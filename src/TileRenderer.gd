@@ -96,7 +96,7 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 
 func setup_tile_render(mask: int, viewport: Viewport):
 	var overlap_vectors: Array = ruleset.get_overlap_vectors()
-	var overlap_vector_rotations: Array = ruleset.get_overlap_vector_rotations()
+#	var overlap_vector_rotations: Array = ruleset.get_overlap_vector_rotations()
 	var random_center_index: int = rng.randi_range(0, input_tile_parts[0].size() - 1)
 	var center_image: Image = input_tile_parts[0][random_center_index]
 	var tile_rules_data: Dictionary = ruleset.get_mask_data(mask)
@@ -136,9 +136,12 @@ func setup_tile_render(mask: int, viewport: Viewport):
 		texture_rect.material.set_shader_param("overlay_texture_%s" % mask_key, piece_itex)
 		texture_rect.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
 		var overlap_vec: Vector2 = overlap_vectors[piece_index]
-		if overlap_vector_rotations[piece_index] and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
-			overlap_vec.x = 0.0 if overlap_vec.x == 1.0 else 1.0
-			overlap_vec.y = 0.0 if overlap_vec.y == 1.0 else 1.0
+		if overlap_vec.length() == 1.0 and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
+			overlap_vec = overlap_vec.rotated(-PI / 2.0)
+
+#		if overlap_vector_rotations[piece_index] and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
+#			overlap_vec.x = 0.0 if overlap_vec.x == 1.0 else 1.0
+#			overlap_vec.y = 0.0 if overlap_vec.y == 1.0 else 1.0
 		texture_rect.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_vec)
 		mask_index += 1
 

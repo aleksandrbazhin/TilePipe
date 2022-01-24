@@ -307,7 +307,8 @@ func compute_tile_settings_path(tile_texture_path: String) -> String:
 func create_settings():
 	var data := Const.DEFAULT_SETTINGS
 	data["program_version"] = VERSION
-	write_settings(Const.SETTINGS_PATH, data, true)
+	var OLD_SETTINGS := "user://user_settings.sav"
+	write_settings(OLD_SETTINGS, data, true)
 
 
 func save_settings_for_tile(tile_texture_path: String, settings: Dictionary):
@@ -317,7 +318,8 @@ func save_settings_for_tile(tile_texture_path: String, settings: Dictionary):
 
 func save_settings():
 	var settings_values := capture_setting_values()
-	write_settings(Const.SETTINGS_PATH, settings_values)
+	var OLD_SETTINGS := "user://user_settings.sav"
+	write_settings(OLD_SETTINGS, settings_values)
 	save_settings_for_tile(last_input_texture_path, settings_values)
 
 
@@ -348,12 +350,13 @@ func load_fixed_settings(tile_texture_path: String, fix_with: Dictionary = Const
 # If settings data doesn't have some value, then it is populated with 
 # value from Const.DEFAULT_SETTINGS, it is not considered incompatibility.
 func load_settings():
+	var OLD_SETTINGS := "user://user_settings.sav"
 	if not Helpers.dir_exists(Const.TILE_SETTINGS_DIR):
 		var dir := Directory.new()
 		dir.make_dir(Const.TILE_SETTINGS_DIR)
-	if not Helpers.file_exists(Const.SETTINGS_PATH):
+	if not Helpers.file_exists(OLD_SETTINGS):
 		create_settings()
-	var saved_settings_data: Dictionary = read_settings(Const.SETTINGS_PATH)
+	var saved_settings_data: Dictionary = read_settings(OLD_SETTINGS)
 	if saved_settings_data["program_version"] < Const.MIN_SETTINGS_COMPATIBLE_VERSION:
 		saved_settings_data = Const.DEFAULT_SETTINGS
 		create_settings()

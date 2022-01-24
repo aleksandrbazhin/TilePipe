@@ -1,4 +1,3 @@
-from xml.dom import ValidationErr
 from jsonschema import validate, ValidationError
 import json
 
@@ -10,7 +9,7 @@ def validate_files():
 
     is_ok = True
 
-    for file_name in ['basic_4.json']:
+    for file_name in ['basic_4_part.json', 'sideview_8_part.json', 'no_symmetry_13_part.json', 'full_256_7_part.json']:
         json_file = open(file_name)
         data = json.load(json_file)
         json_file.close()
@@ -22,6 +21,7 @@ def validate_files():
             print( "Error validating \"" + file_name + "\":\n" + e.message + "\nPath in json:\n" + e.json_path)
     if is_ok:
         print("All rulesets are validated: OK")
+
 
 if __name__ == "__main__":
     validate_files()

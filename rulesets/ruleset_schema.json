@@ -3,7 +3,7 @@
   "title": "TilePipe Ruleset",
   "description": "Ruleset for tile generation used by TilePipe software",
   "type": "object",
-  "required": [ "ruleset_name", "ruleset_description", "input_parts", "tile_data" ],
+  "required": [ "ruleset_name", "ruleset_description", "tile_parts", "tiles" ],
   "properties": {
     "ruleset_name": {
       "description": "Ruleset name",
@@ -13,7 +13,7 @@
       "description": "Ruleset descriprion",
       "type": "string"
     },
-    "input_parts": {
+    "tile_parts": {
       "description": "Tile parts used to construct a tile. First one should always be FULL.",
       "type": "array",
       "prefixItems": [
@@ -50,7 +50,7 @@
         }
       }
     },
-    "tile_data": {
+    "tiles": {
       "type": "array",
       "items": {
         "type": "object",

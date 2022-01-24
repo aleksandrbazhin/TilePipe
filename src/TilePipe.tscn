@@ -100,29 +100,27 @@ __meta__ = {
 }
 
 [node name="HBox" type="HBoxContainer" parent="Panel"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 1359.0
-margin_bottom = 761.0
+margin_right = 1366.0
+margin_bottom = 768.0
 mouse_filter = 2
 
 [node name="ProjectTree" parent="Panel/HBox" instance=ExtResource( 11 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 280.0
-margin_bottom = 754.0
+margin_bottom = 768.0
 
 [node name="Images" type="VBoxContainer" parent="Panel/HBox"]
 margin_left = 284.0
-margin_right = 1112.0
-margin_bottom = 754.0
+margin_right = 1126.0
+margin_bottom = 768.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 5
 
 [node name="InContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
-margin_right = 828.0
+margin_right = 842.0
 margin_bottom = 300.0
 rect_min_size = Vector2( 0, 300 )
 custom_constants/separation = 12
@@ -424,7 +422,7 @@ __meta__ = {
 
 [node name="Preview" type="Control" parent="Panel/HBox/Images/InContainer"]
 margin_left = 754.0
-margin_right = 828.0
+margin_right = 842.0
 margin_bottom = 300.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -564,24 +562,24 @@ __meta__ = {
 
 [node name="HSeparator" type="HSeparator" parent="Panel/HBox/Images"]
 margin_top = 305.0
-margin_right = 828.0
+margin_right = 842.0
 margin_bottom = 317.0
 
 [node name="TemplateContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 322.0
-margin_right = 828.0
+margin_right = 842.0
 margin_bottom = 452.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBox/Images/TemplateContainer"]
-margin_right = 612.0
+margin_right = 626.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 0, 130 )
 size_flags_horizontal = 3
 
 [node name="TemplateTextureRect" type="TextureRect" parent="Panel/HBox/Images/TemplateContainer/ScrollContainer"]
-margin_right = 612.0
+margin_right = 626.0
 margin_bottom = 130.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -591,9 +589,9 @@ __meta__ = {
 }
 
 [node name="NameControl" type="Control" parent="Panel/HBox/Images/TemplateContainer"]
-margin_left = 620.0
+margin_left = 634.0
 margin_top = 130.0
-margin_right = 620.0
+margin_right = 634.0
 margin_bottom = 130.0
 size_flags_horizontal = 8
 size_flags_vertical = 8
@@ -617,8 +615,8 @@ __meta__ = {
 }
 
 [node name="ButtonBox" type="VBoxContainer" parent="Panel/HBox/Images/TemplateContainer"]
-margin_left = 628.0
-margin_right = 828.0
+margin_left = 642.0
+margin_right = 842.0
 margin_bottom = 130.0
 custom_constants/separation = 8
 
@@ -654,14 +652,14 @@ __meta__ = {
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/HBox/Images"]
 margin_top = 457.0
-margin_right = 828.0
+margin_right = 842.0
 margin_bottom = 469.0
 size_flags_horizontal = 3
 
 [node name="OutputContainer" type="HBoxContainer" parent="Panel/HBox/Images"]
 margin_top = 474.0
-margin_right = 828.0
-margin_bottom = 754.0
+margin_right = 842.0
+margin_bottom = 768.0
 rect_min_size = Vector2( 0, 270 )
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -669,8 +667,8 @@ size_flags_vertical = 3
 custom_constants/separation = 8
 
 [node name="Output" type="Control" parent="Panel/HBox/Images/OutputContainer"]
-margin_right = 828.0
-margin_bottom = 280.0
+margin_right = 842.0
+margin_bottom = 294.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -688,7 +686,7 @@ __meta__ = {
 
 [node name="Control" type="Control" parent="Panel/HBox/Images/OutputContainer/Output/ScrollContainer"]
 margin_right = 900.0
-margin_bottom = 280.0
+margin_bottom = 294.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -843,14 +841,14 @@ __meta__ = {
 }
 
 [node name="VSeparator" type="VSeparator" parent="Panel/HBox"]
-margin_left = 1116.0
-margin_right = 1128.0
-margin_bottom = 754.0
+margin_left = 1130.0
+margin_right = 1142.0
+margin_bottom = 768.0
 
 [node name="Settings" type="VBoxContainer" parent="Panel/HBox"]
-margin_left = 1132.0
-margin_right = 1352.0
-margin_bottom = 754.0
+margin_left = 1146.0
+margin_right = 1366.0
+margin_bottom = 768.0
 rect_min_size = Vector2( 220, 0 )
 size_flags_vertical = 3
 
