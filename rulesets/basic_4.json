@@ -1,0 +1,37 @@
+{
+"ruleset_name": "Basic 4-part ruleset",
+"ruleset_description": "A basic ruleset with full symmetry, where the input parts are always rotated, with only 47 tile patterns",
+"input_parts": [
+	{
+		"part_type": "FULL",
+		"orientation": "FULL"
+	},
+	{
+		"part_type": "CORNER_IN",
+		"orientation": "TOP_RIGHT"
+	},
+	{
+		"part_type": "SIDE",
+		"orientation": "TOP"
+	},
+	{
+		"part_type": "CORNER_OUT",
+		"orientation": "TOP_RIGHT"
+	}
+],
+"tile_data": [
+	{
+		"mask_variants": [64, 1, 4, 16],
+		"part_indexes":   [2, 3, 2, 3, 2, 2, 0, 2],
+		"part_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
+		"part_flip_x":    [false, false, false, false, false, false, false, false],
+		"part_flip_y":    [false, false, false, false, false, false, false, false]
+	},
+	{
+		"mask_variants": [0],
+		"part_indexes":   [2, 3, 2, 3, 2, 2, 0, 2],
+		"part_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
+		"part_flip_x":    [false, false, false, false, false, false, false, false],
+		"part_flip_y":    [false, false, false, false, false, false, false, false]
+	}
+]}

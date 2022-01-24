@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TilePipe Ruleset",
+  "description": "Ruleset for tile generation used by TilePipe software",
+  "type": "object",
+  "required": [ "ruleset_name", "ruleset_description", "input_parts", "tile_data" ],
+  "properties": {
+    "ruleset_name": {
+      "description": "Ruleset name",
+      "type": "string"
+    },
+    "ruleset_description": {
+      "description": "Ruleset descriprion",
+      "type": "string"
+    },
+    "input_parts": {
+      "description": "Tile parts used to construct a tile. First one should always be FULL.",
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "object",
+          "required": [ "part_type", "orientation" ],
+          "properties": {
+            "part_type": {
+              "type": "string",
+              "enum": ["FULL"]
+            },
+            "orientation": {
+              "type": "string",
+              "enum": ["FULL"]
+            }
+          }
+        }
+      ],
+      "items": {
+        "type": "object",
+        "description": "Input texture description, parts to compose tiles from. Parts are supposed to be placed in a line from left to right.",
+        "required": [ "part_type", "orientation" ],
+        "properties": {
+          "part_type": {
+            "type": "string",
+            "enum": ["FULL", "SIDE", "CORNER_OUT", "CORNER_IN"],
+            "description": "Part type or how to use the part during generation: full tile, side or one of 2 types of corner - inner or outer."
+          },
+          "orientation": {
+            "type": "string",
+            "enum": ["FULL", "TOP", "TOP_RIGHT", "RIGHT", "BOTTOM_RIGHT", "BOTTOM", "BOTTOM_LEFT", "LEFT", "TOP_LEFT"],
+            "description": "In which direction the part is turned. Mostly used to display the ruleset. For full tile its ignored."
+          }
+        }
+      }
+    },
+    "tile_data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [ "mask_variants", "part_indexes", "part_rotations", "part_flip_x", "part_flip_y"],
+        "properties": {
+          "mask_variants": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 256,
+              "description": "8-bit mask describing tile neighbours, neighbours are checked clockwise starting from the top direction."
+            }
+          },
+          "part_indexes": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "What input parts to take to use in specified positions. The length is always 8, parts are place clockwise starting from the top direction. Maximum should not be grater than the length of Input parts array."
+            },
+            "minItems": 8,
+            "maxItems": 8
+          },
+          "part_rotations": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3,
+              "description": "How many times the input part is rotated on placement. Each rotation is 90 degrees clockwise. From 0 to 3."
+            },
+            "minItems": 8,
+            "maxItems": 8
+          },
+          "part_flip_x": {
+            "type": "array",
+            "items": {
+              "type": "boolean",
+              "description": "If the input part is flipped on placement over the X-axis."
+            },
+            "minItems": 8,
+            "maxItems": 8
+          },
+          "part_flip_y": {
+            "type": "array",
+            "items": {
+              "type": "boolean",
+              "description": "If the input part is flipped on placement over the Y-axis."
+            },
+            "minItems": 8,
+            "maxItems": 8
+          }
+        }
+      }
+    }
+  }
+}
