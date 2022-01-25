@@ -1,4 +1,4 @@
-extends VSplitContainer
+extends VBoxContainer
 
 class_name InputTextureView
 

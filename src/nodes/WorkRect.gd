@@ -5,10 +5,11 @@ class_name WorkRect
 var loaded_tile_ref: WeakRef
 var last_visible_tab
 
-onready var tile_main_view: TileMainView = $TileMainView
-onready var input_texture_view: InputTextureView = $InputTextureView
-onready var ruleset_view := $RulesetView
-onready var template_view: TemplateView = $TemplateView
+onready var tile_main_view: TileMainView = $VSplitContainer/Control/TileMainView
+onready var input_texture_view: InputTextureView = $VSplitContainer/Control/InputTextureView
+onready var ruleset_view := $VSplitContainer/Control/RulesetView
+onready var template_view: TemplateView = $VSplitContainer/Control/TemplateView
+onready var result_view: ResultView = $VSplitContainer/ResultPreview
 
 
 func unhide_all():

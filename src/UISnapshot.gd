@@ -76,7 +76,7 @@ func _watch_element_changes(node: Node):
 	elif node is CheckButton:
 		node.connect("toggled", self, "capture_and_save")
 	elif node is Range:
-		node.connect("value_change", self, "capture_and_save")
+		node.connect("value_changed", self, "capture_and_save")
 	elif node is FileDialog:
 		node.connect("dir_selected", self, "capture_and_save")
 		node.connect("file_selected", self, "capture_and_save")

@@ -6,6 +6,7 @@ onready var texture_rect := $VBoxContainer/TextureRect
 onready var name_label := $VBoxContainer/CenterContainer/HBoxContainer/TemplateNameLabel
 
 
+
 func load_data(tile_data: Dictionary):
 	var template_file: String = tile_data["template"]
 	var template_path: String = Const.current_dir + "/" + template_file

@@ -1,23 +1,324 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://src/nodes/ResultPreview.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/images/folder.png" type="Texture" id=1]
 [ext_resource path="res://src/nodes/InputTextureView.gd" type="Script" id=2]
+[ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=3]
+[ext_resource path="res://assets/images/checkers.png" type="Texture" id=4]
+[ext_resource path="res://src/nodes/BlockableSlider.gd" type="Script" id=5]
 
-[node name="InputTextureView" type="VSplitContainer"]
+[node name="InputTextureView" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-split_offset = 300
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="HEader" type="CenterContainer" parent="."]
+visible = false
 margin_right = 1280.0
-margin_bottom = 500.0
-rect_min_size = Vector2( 0, 200 )
-color = Color( 0.654902, 0.501961, 0, 1 )
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
 
-[node name="ResultPreview" parent="." instance=ExtResource( 1 )]
-margin_top = 512.0
+[node name="HBoxContainer" type="HBoxContainer" parent="HEader"]
+margin_left = 607.0
+margin_top = 3.0
+margin_right = 672.0
+margin_bottom = 29.0
+
+[node name="CaptionLabel" type="Label" parent="HEader/HBoxContainer"]
+margin_right = 61.0
+margin_bottom = 26.0
+custom_fonts/font = ExtResource( 3 )
+text = "Texture:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureNameLabel" type="Label" parent="HEader/HBoxContainer"]
+margin_left = 65.0
+margin_right = 65.0
+margin_bottom = 26.0
+custom_fonts/font = ExtResource( 3 )
+
+[node name="HBox" type="HBoxContainer" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_vertical = 3
+custom_constants/separation = 16
+alignment = 1
+
+[node name="TextureContainer" type="VBoxContainer" parent="HBox"]
+margin_right = 632.0
+margin_bottom = 720.0
 size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="HBox/TextureContainer"]
+margin_right = 632.0
+margin_bottom = 680.0
+rect_min_size = Vector2( 320, 256 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BGTextureRect" type="TextureRect" parent="HBox/TextureContainer/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="HBox/TextureContainer/Control/BGTextureRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch_mode = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InputInfo" type="Control" parent="HBox/TextureContainer/Control"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileSizeLabel" type="Label" parent="HBox/TextureContainer/Control/InputInfo"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -56.0
+margin_top = -21.0
+margin_right = -2.0
+margin_bottom = -2.0
+grow_horizontal = 0
+size_flags_vertical = 1
+custom_colors/font_color = Color( 0.666667, 0.686275, 0.72549, 1 )
+text = "64x64px"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBox/TextureContainer"]
+margin_top = 684.0
+margin_right = 632.0
+margin_bottom = 720.0
+rect_min_size = Vector2( 0, 32 )
+
+[node name="FileName" type="LineEdit" parent="HBox/TextureContainer/HBoxContainer"]
+margin_right = 548.0
+margin_bottom = 36.0
+focus_mode = 0
+size_flags_horizontal = 3
+text = "Name"
+align = 1
+editable = false
+
+[node name="Button" type="Button" parent="HBox/TextureContainer/HBoxContainer"]
+margin_left = 552.0
+margin_right = 632.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 80, 36 )
+text = "Load"
+icon = ExtResource( 1 )
+
+[node name="SettingsContainer" type="MarginContainer" parent="HBox"]
+margin_left = 648.0
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 24
+custom_constants/margin_top = 16
+custom_constants/margin_left = 16
+
+[node name="VBox" type="VBoxContainer" parent="HBox/SettingsContainer"]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 608.0
+margin_bottom = 720.0
+custom_constants/separation = 40
+
+[node name="Composition" type="VBoxContainer" parent="HBox/SettingsContainer/VBox"]
+margin_right = 592.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 194, 0 )
+custom_constants/separation = 10
+alignment = 2
+
+[node name="Header" type="ColorRect" parent="HBox/SettingsContainer/VBox/Composition"]
+margin_right = 592.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 0, 28 )
+color = Color( 0.266667, 0.305882, 0.384314, 1 )
+
+[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/Header"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+rect_min_size = Vector2( 0, 28 )
+text = "Composition"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorProcessContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition"]
+visible = false
+margin_right = 194.0
+margin_bottom = 62.0
+
+[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/ColorProcessContainer"]
+margin_right = 194.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 26 )
+text = "Color processing type"
+valign = 2
+
+[node name="ColorProcessType" type="OptionButton" parent="HBox/SettingsContainer/VBox/Composition/ColorProcessContainer" groups=["blockable"]]
+margin_top = 30.0
+margin_right = 194.0
+margin_bottom = 62.0
+rect_min_size = Vector2( 0, 32 )
+align = 1
+
+[node name="HSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition"]
+margin_top = 38.0
+margin_right = 592.0
+margin_bottom = 84.0
+hint_tooltip = "How much of the corners and sides \"take\" of  the central part:
+maximum - no central part used,
+minimum - only central part is used"
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/HSliderContainer" groups=["blockable"]]
+margin_right = 592.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 26 )
+text = " Merge amount"
+valign = 2
+
+[node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/HSliderContainer" groups=["blockable", "snapshottable"]]
+margin_top = 30.0
+margin_right = 592.0
+margin_bottom = 46.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+max_value = 0.5
+step = 0.01
+value = 0.25
+scrollable = false
+tick_count = 11
+ticks_on_borders = true
+script = ExtResource( 5 )
+
+[node name="OverlapSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition"]
+margin_top = 94.0
+margin_right = 592.0
+margin_bottom = 140.0
+hint_tooltip = "How much of the central part will be “shoved” under the corners and side. 
+Only matters if sides have some transparency."
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/OverlapSliderContainer" groups=["blockable"]]
+margin_right = 592.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 26 )
+text = " Overlap amount"
+valign = 2
+
+[node name="OverlapSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/OverlapSliderContainer" groups=["blockable"]]
+margin_top = 30.0
+margin_right = 592.0
+margin_bottom = 46.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+max_value = 0.5
+step = 0.01
+value = 0.25
+scrollable = false
+tick_count = 11
+ticks_on_borders = true
+script = ExtResource( 5 )
+
+[node name="RandomContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox" groups=["corners_settings", "overlay_settings"]]
+margin_top = 180.0
+margin_right = 592.0
+margin_bottom = 280.0
+hint_tooltip = "If you have multiple rows in your input image, the result can and will be randomized. 
+(If aspect ratio of a texture is more than 1:4 for a 4-part preset)"
+
+[node name="Header" type="ColorRect" parent="HBox/SettingsContainer/VBox/RandomContainer"]
+margin_right = 592.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 0, 28 )
+color = Color( 0.266667, 0.305882, 0.384314, 1 )
+
+[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/RandomContainer/Header"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+rect_min_size = Vector2( 0, 28 )
+text = "Randomization"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBox/SettingsContainer/VBox/RandomContainer"]
+margin_top = 32.0
+margin_right = 592.0
+margin_bottom = 72.0
+hint_tooltip = "Use some interger seed to have consistent randomization result"
+
+[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/RandomContainer/HBoxContainer"]
+margin_top = 7.0
+margin_right = 117.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 0, 26 )
+text = " Use random seed"
+valign = 1
+
+[node name="RandomCheckButton" type="CheckButton" parent="HBox/SettingsContainer/VBox/RandomContainer/HBoxContainer" groups=["blockable", "snapshottable"]]
+margin_left = 121.0
+margin_right = 197.0
+margin_bottom = 40.0
+hint_tooltip = "Use some interger seed to have consistent randomization result"
+shortcut_in_tooltip = false
+
+[node name="EditContainer" type="HBoxContainer" parent="HBox/SettingsContainer/VBox/RandomContainer"]
+margin_top = 76.0
+margin_right = 592.0
+margin_bottom = 100.0
+custom_constants/separation = 0
+
+[node name="SeedLineEdit" type="LineEdit" parent="HBox/SettingsContainer/VBox/RandomContainer/EditContainer" groups=["blockable"]]
+margin_right = 544.0
+margin_bottom = 24.0
+hint_tooltip = "Use some interger seed to have consistent randomization result"
+size_flags_horizontal = 3
+max_length = 16
+editable = false
+placeholder_text = "Integer value"
+placeholder_alpha = 0.4
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="SeedButton" type="Button" parent="HBox/SettingsContainer/VBox/RandomContainer/EditContainer" groups=["blockable"]]
+margin_left = 544.0
+margin_right = 592.0
+margin_bottom = 24.0
+disabled = true
+text = "Apply"
+__meta__ = {
+"_edit_use_anchors_": false
+}

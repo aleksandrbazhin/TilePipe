@@ -70,10 +70,6 @@ func get_tile_parts() -> Array:
 func get_tiles() -> Array:
 	return _data["tiles"]
 
-#
-#func get_ruleset() -> Dictionary:
-#	return _data
-
 
 func get_name() -> String:
 	return _data["ruleset_name"]
