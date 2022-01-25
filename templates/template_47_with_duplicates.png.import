@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/template_47_with_duplicates.png-8bedff322b7480054d9984697a645262.stex"
+path="res://.import/template_47_with_duplicates.png-c334dbeb01c6b5091f267595d7e0fed2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://examples/templates/template_47_with_duplicates.png"
-dest_files=[ "res://.import/template_47_with_duplicates.png-8bedff322b7480054d9984697a645262.stex" ]
+source_file="res://templates/template_47_with_duplicates.png"
+dest_files=[ "res://.import/template_47_with_duplicates.png-c334dbeb01c6b5091f267595d7e0fed2.stex" ]
 
 [params]
 

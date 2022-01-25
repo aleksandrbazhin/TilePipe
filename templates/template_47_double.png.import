@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/template_rpg_maker.png-5f25985c10e73efc937d66472791a039.stex"
+path="res://.import/template_47_double.png-ef8db322093c10e3753bdbf3688caa5b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://examples/templates/template_rpg_maker.png"
-dest_files=[ "res://.import/template_rpg_maker.png-5f25985c10e73efc937d66472791a039.stex" ]
+source_file="res://templates/template_47_double.png"
+dest_files=[ "res://.import/template_47_double.png-ef8db322093c10e3753bdbf3688caa5b.stex" ]
 
 [params]
 
