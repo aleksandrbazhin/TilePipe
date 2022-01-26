@@ -11,39 +11,27 @@ onready var template_title := $MarginContainer/VBoxContainer/TemplateContainer/H
 onready var template_texture := $MarginContainer/VBoxContainer/TemplateContainer/TextureRect
 
 
-func load_data(tile_data: Dictionary, file_name: String):
-	title.text = file_name
-	var input_file: String = tile_data["texture"]
-	var input_path: String = Const.current_dir + "/" + input_file
-	var input_image = Image.new()
-	var err: int
-	err = input_image.load(input_path)
-	if err == OK:
-		input_title.text = input_file
-		var texture = ImageTexture.new()
-		texture.create_from_image(input_image, 0)
-		input_texture.texture = texture
-	else:
-		template_title.text = "NO"
-	
-	var ruleset_file: String = tile_data["ruleset"]
-	var file_path: String = Const.current_dir + "/" + ruleset_file
-	var file := File.new()
-	if file.open(file_path, File.READ) == OK:
-		ruleset_title.text = ruleset_file
-#		data.text = file.get_as_text()
-	else:
-		ruleset_title.text = "NO"
+#func _ready():
+#	print("ready")
+#	get_tree().get_root().connect("size_changed", self, "set_texture_scale_mode")
+#
+#
+#func set_texture_scale_mode(test_size := Vector2.ZERO):
+#	print("scale", input_texture.texture.get_size().x, " ", input_texture.rect_size.x)
+#	if input_texture.texture.get_size().x < input_texture.rect_size.x:
+#		input_texture.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+#	else:
+#		input_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+#
 
-
-	var template_file: String = tile_data["template"]
-	var template_path: String = Const.current_dir + "/" + template_file
-	var template_image = Image.new()
-	err = template_image.load(template_path)
-	if err == OK:
-		template_title.text = template_file
-		var texture = ImageTexture.new()
-		texture.create_from_image(template_image, 0)
-		template_texture.texture = texture
-	else:
-		template_title.text = "NO"
+func load_data(tile: TileInTree):
+	title.text = tile.tile_file_name
+	if tile.texture_path != "":
+		input_title.text = tile.texture_path.get_file()
+		input_texture.texture = tile.loaded_texture
+#		set_texture_scale_mode()
+	if tile.template_path != "":
+		template_title.text = tile.template_path.get_file()
+		template_texture.texture = tile.loaded_template
+	if tile.loaded_ruleset.is_loaded:
+		ruleset_title.text = tile.ruleset_path.get_file()

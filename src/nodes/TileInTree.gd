@@ -3,16 +3,25 @@ extends Control
 class_name TileInTree
 
 signal row_selected(row)
-signal error_loading()
+#signal error_loading()
 
 const HEIGHT_EXPANDED := 144
 const HEIGHT_COLLAPSED := 50
 
 var is_loaded := false
-var tile_data: Dictionary
+var _tile_data: Dictionary
+
 var current_directory: String
 var tile_file_name: String
 var is_selected := false
+
+var loaded_texture: Texture
+var loaded_ruleset: Ruleset
+var loaded_template: Texture
+
+var texture_path: String
+var template_path: String
+var ruleset_path: String
 
 var tile_row: TreeItem
 var texture_row: TreeItem
@@ -29,7 +38,7 @@ func _ready():
 		rect_min_size.y = HEIGHT_EXPANDED
 
 
-func load_file(directory: String, tile_file: String):
+func load_tile(directory: String, tile_file: String) -> bool:
 	current_directory = directory
 	tile_file_name = tile_file
 	var path := directory + "/" + tile_file
@@ -39,19 +48,58 @@ func load_file(directory: String, tile_file: String):
 	file.close()
 	var parsed_data = parse_json(file_text)
 	if typeof(parsed_data) == TYPE_DICTIONARY:
-		tile_data = parsed_data
+		_tile_data = parsed_data
 		is_loaded = true
-	else:
-		emit_signal("error_loading")
-		return
+		load_texture()
+		load_ruleset()
+		load_template()
+		return true
+			
+#	else:
+#		emit_signal("error_loading")
+	return false
 	
+
+func load_texture() -> bool:
+	var file_path: String = current_directory + "/" + _tile_data["texture"]
+	var image = Image.new()
+	var err: int
+	err = image.load(file_path)
+	if err == OK:
+		texture_path = file_path
+		loaded_texture = ImageTexture.new()
+		loaded_texture.create_from_image(image, 0)
+		return true
+	return false
+
+
+func load_ruleset() -> bool:
+	var file_path: String = current_directory + "/" + _tile_data["ruleset"]
+	loaded_ruleset = Ruleset.new(file_path)
+	if loaded_ruleset.is_loaded:
+		ruleset_path = file_path
+		return true
+	return false
+
+func load_template() -> bool:
+	var file_path: String = current_directory + "/" + _tile_data["template"]
+	var image = Image.new()
+	var err: int
+	err = image.load(file_path)
+	if err == OK:
+		template_path = file_path
+		loaded_template = ImageTexture.new()
+		loaded_template.create_from_image(image, 0)
+		return true
+	return false
+
 
 func create_tree_items():
 	tile_row = tree.create_item()
 	tile_row.set_text(0, tile_file_name)
-	add_texture_item(tile_data["texture"])
-	add_ruleset_item(tile_data["ruleset"])
-	add_template_item(tile_data["template"])
+	add_texture_item(_tile_data["texture"])
+	add_ruleset_item(_tile_data["ruleset"])
+	add_template_item(_tile_data["template"])
 
 
 func add_texture_item(file_name: String):

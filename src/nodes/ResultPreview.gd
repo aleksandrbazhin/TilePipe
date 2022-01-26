@@ -9,6 +9,7 @@ onready var single_tile := $VBoxContainer/HSplitContainer/SingleTile
 onready var result_texture := $VBoxContainer/HSplitContainer/Result/TextureRect
 onready var controls := $VBoxContainer/HSplitContainer/Result/ImageSettings
 
+
 func _ready():
 	if not single_tile_visible:
 		single_tile.hide()

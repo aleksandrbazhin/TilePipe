@@ -7,7 +7,7 @@ var last_visible_tab
 
 onready var tile_main_view: TileMainView = $VSplitContainer/Control/TileMainView
 onready var input_texture_view: InputTextureView = $VSplitContainer/Control/InputTextureView
-onready var ruleset_view := $VSplitContainer/Control/RulesetView
+onready var ruleset_view: RulesetView = $VSplitContainer/Control/RulesetView
 onready var template_view: TemplateView = $VSplitContainer/Control/TemplateView
 onready var result_view: ResultView = $VSplitContainer/ResultPreview
 
@@ -27,10 +27,10 @@ func hide_all():
 func load_tile_data(tile: TileInTree):
 	if loaded_tile_ref == null or loaded_tile_ref.get_ref() != tile:
 		loaded_tile_ref = weakref(tile)
-		tile_main_view.load_data(tile.tile_data, tile.tile_file_name)
-		input_texture_view.load_data(tile.tile_data)
-		ruleset_view.load_data(tile.tile_data)
-		template_view.load_data(tile.tile_data)
+		tile_main_view.load_data(tile)
+		input_texture_view.load_data(tile)
+		ruleset_view.load_data(tile)
+		template_view.load_data(tile)
 
 
 func on_tile_selected(tile: TileInTree, row: TreeItem):

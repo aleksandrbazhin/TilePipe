@@ -7,6 +7,7 @@ const SCHEMA_PATH := "res://rulesets/ruleset_schema.json"
 enum {ERROR_WRONG_FILE, ERROR_INVALID_JSON, ERROR_SCHEMA_MISMATCH}
 
 var _data := {}
+var raw_json: String
 var is_loaded := false
 var last_error := -1
 var last_error_message := ""
@@ -38,6 +39,7 @@ func load_data_from_json(data_path: String):
 				json_error = validate_ruleset_json_to_schema(parse_result.result)
 				if json_error == "":
 					_data = parse_result.result
+					raw_json = data_string
 					is_loaded = true
 				else:
 					last_error = ERROR_SCHEMA_MISMATCH
@@ -55,7 +57,6 @@ func load_data_from_json(data_path: String):
 			last_error_message += "Path to json:\n" + data_path + "\n"
 			last_error_message += "Error message:\n" + json_error + "\n"
 			print(last_error_message)
-			
 	else:
 		last_error = ERROR_WRONG_FILE
 		last_error_message = "Data loader error: invalid path to ruleset JSON in .tptile.\n" 

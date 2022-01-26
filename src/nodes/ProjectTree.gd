@@ -82,10 +82,12 @@ func load_project_directory(directory_path: String):
 
 func add_tile_to_tree(directory: String, tile_file: String):
 	var tile: TileInTree = preload("res://src/nodes/TileInTree.tscn").instance()
-	tile.load_file(directory, tile_file)
-	tile.connect("row_selected", self, "on_tile_row_selected", [tile])
-	tile_container.add_child(tile)
-
+	if tile.load_tile(directory, tile_file):
+		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
+		tile_container.add_child(tile)
+	else:
+		#TODO: emit signal
+		print("Tile loading error!")
 
 func _on_OpenFolderDialog_dir_selected(dir: String):
 	if dir + "/" != open_project_dialog.current_path:
