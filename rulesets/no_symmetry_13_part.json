@@ -1,21 +1,9 @@
 {
     "ruleset_name": "No-symmetry 13-part ruleset",
     "ruleset_description": "Basic ruleset with no symmetry between sides",
-    "tile_parts": [
-        {"part_type": "FULL", "orientation": "FULL"},
-        {"part_type": "CORNER_IN", "orientation": "TOP_RIGHT"},
-        {"part_type": "SIDE", "orientation": "TOP"},
-        {"part_type": "CORNER_OUT", "orientation": "TOP_RIGHT"},
-        {"part_type": "SIDE", "orientation": "RIGHT"},
-        {"part_type": "CORNER_IN", "orientation": "BOTTOM_RIGHT"},
-        {"part_type": "SIDE", "orientation": "BOTTOM"},
-        {"part_type": "CORNER_OUT", "orientation": "BOTTOM_RIGHT"},
-        {"part_type": "CORNER_OUT", "orientation": "BOTTOM_LEFT"},
-        {"part_type": "CORNER_IN", "orientation": "BOTTOM_LEFT"},
-        {"part_type": "SIDE", "orientation": "LEFT"},
-        {"part_type": "CORNER_OUT", "orientation": "TOP_LEFT"},
-        {"part_type": "CORNER_IN", "orientation": "TOP_LEFT"}
-    ],
+    "tile_parts": ["FULL", "CORNER_IN_TOP_RIGHT", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT", "SIDE_RIGHT", "CORNER_IN_BOTTOM_RIGHT", 
+        "SIDE_BOTTOM", "CORNER_OUT_BOTTOM_RIGHT", "CORNER_OUT_BOTTOM_LEFT", "CORNER_IN_BOTTOM_LEFT", "CORNER_OUT_BOTTOM_LEFT", 
+        "SIDE_LEFT", "CORNER_OUT_TOP_LEFT", "CORNER_IN_TOP_LEFT"],
     "tiles": [
         {
             "mask_variants": [64],

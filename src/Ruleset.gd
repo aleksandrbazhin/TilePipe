@@ -14,28 +14,21 @@ var last_error := -1
 var last_error_message := ""
 
 var part_textures := {
-	"FULL": {
-		"FULL": preload("res://assets/images/ruleset_tile_full.png")
-	},
-	"SIDE": {
-		"TOP": preload("res://assets/images/ruleset_tile_top.png"),
-		"RIGHT": preload("res://assets/images/ruleset_tile_right.png"),
-		"BOTTOM": preload("res://assets/images/ruleset_tile_bottom.png"),
-		"LEFT": preload("res://assets/images/ruleset_tile_left.png")
-	},
-	"CORNER_OUT": {
-		"TOP_RIGHT": preload("res://assets/images/ruleset_tile_out_top_right.png"), 
-		"BOTTOM_RIGHT": preload("res://assets/images/ruleset_tile_out_bottom_right.png"), 
-		"BOTTOM_LEFT": preload("res://assets/images/ruleset_tile_out_bottom_left.png"), 
-		"TOP_LEFT": preload("res://assets/images/ruleset_tile_out_top_left.png")
-	},
-	"CORNER_IN": {
-		"TOP_RIGHT": preload("res://assets/images/ruleset_tile_in_top_right.png"), 
-		"BOTTOM_RIGHT": preload("res://assets/images/ruleset_tile_in_bottom_right.png"), 
-		"BOTTOM_LEFT": preload("res://assets/images/ruleset_tile_in_bottom_left.png"), 
-		"TOP_LEFT": preload("res://assets/images/ruleset_tile_in_top_left.png")
-	}
+	"FULL": preload("res://assets/images/ruleset_tile_full.png"), 
+	"SIDE_TOP": preload("res://assets/images/ruleset_tile_top.png"),
+	"SIDE_RIGHT": preload("res://assets/images/ruleset_tile_right.png"),
+	"SIDE_BOTTOM": preload("res://assets/images/ruleset_tile_bottom.png"),
+	"SIDE_LEFT": preload("res://assets/images/ruleset_tile_left.png"),
+	"CORNER_IN_TOP_RIGHT": preload("res://assets/images/ruleset_tile_in_top_right.png"),
+	"CORNER_IN_BOTTOM_RIGHT": preload("res://assets/images/ruleset_tile_in_bottom_right.png"),
+	"CORNER_IN_BOTTOM_LEFT": preload("res://assets/images/ruleset_tile_in_bottom_left.png"),
+	"CORNER_IN_TOP_LEFT": preload("res://assets/images/ruleset_tile_in_top_left.png"),
+	"CORNER_OUT_TOP_RIGHT": preload("res://assets/images/ruleset_tile_out_top_right.png"),
+	"CORNER_OUT_BOTTOM_RIGHT": preload("res://assets/images/ruleset_tile_out_bottom_right.png"), 
+	"CORNER_OUT_BOTTOM_LEFT": preload("res://assets/images/ruleset_tile_out_bottom_left.png"), 
+	"CORNER_OUT_TOP_LEFT": preload("res://assets/images/ruleset_tile_out_top_left.png")
 }
+
 var preview_texture: Texture
 
 
@@ -120,13 +113,13 @@ func get_mask_data(mask: int) -> Dictionary:
 
 func generate_preview() -> Texture:
 	var parts := get_tile_parts()
-	var format: int = part_textures[parts[0]["part_type"]][parts[0]["orientation"]].get_data().get_format()
+	var format: int = part_textures[parts[0]].get_data().get_format()
 	var image := Image.new()
 	image.create(PREVIEW_SIZE_PX * parts.size(), PREVIEW_SIZE_PX, false, format)
 	var part_copy_rect := Rect2(Vector2.ZERO, Vector2(PREVIEW_SIZE_PX, PREVIEW_SIZE_PX))
 	var part_index := 0
 	for part in parts:
-		var part_image: Image = part_textures[part["part_type"]][part["orientation"]].get_data() 
+		var part_image: Image = part_textures[part].get_data() 
 		image.blit_rect(part_image, part_copy_rect, Vector2(part_index * PREVIEW_SIZE_PX, 0))
 		part_index += 1
 	var itex := ImageTexture.new()

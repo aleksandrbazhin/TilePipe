@@ -1,16 +1,7 @@
 {
     "ruleset_name": "A simple sideview ruleset",
     "ruleset_description": "A simple ruleset with sideview symmetry - left and right are symmetrical (achieved by flipping), but top and down aren't",
-    "tile_parts": [
-        {"part_type": "FULL", "orientation": "FULL"},
-        {"part_type": "CORNER_IN", "orientation": "TOP_RIGHT"},
-        {"part_type": "SIDE", "orientation": "TOP"},
-        {"part_type": "CORNER_OUT", "orientation": "TOP_RIGHT"},
-        {"part_type": "SIDE", "orientation": "RIGHT"},
-        {"part_type": "CORNER_IN", "orientation": "BOTTOM_RIGHT"},
-        {"part_type": "SIDE", "orientation": "BOTTOM"},
-        {"part_type": "CORNER_OUT", "orientation": "BOTTOM_RIGHT"}
-    ],
+    "tile_parts": ["FULL", "CORNER_IN_TOP_RIGHT", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT", "SIDE_RIGHT", "CORNER_IN_BOTTOM_RIGHT", "SIDE_BOTTOM", "CORNER_OUT_BOTTOM_RIGHT"],
     "tiles": [
         {
             "mask_variants": [64],

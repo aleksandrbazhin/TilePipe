@@ -14,40 +14,19 @@
       "type": "string"
     },
     "tile_parts": {
-      "description": "Tile parts used to construct a tile. First one should always be FULL.",
+      "description": "Tile parts used to construct a tile as an array of string constants describing part role. There are 13 possible part roles. First one should always be 'FULL'.",
       "type": "array",
       "prefixItems": [
         {
-          "type": "object",
-          "required": [ "part_type", "orientation" ],
-          "properties": {
-            "part_type": {
-              "type": "string",
-              "enum": ["FULL"]
-            },
-            "orientation": {
-              "type": "string",
-              "enum": ["FULL"]
-            }
-          }
+          "type": "string",
+          "const": "FULL"
         }
       ],
       "items": {
-        "type": "object",
-        "description": "Input texture description, parts to compose tiles from. Parts are supposed to be placed in a line from left to right.",
-        "required": [ "part_type", "orientation" ],
-        "properties": {
-          "part_type": {
-            "type": "string",
-            "enum": ["FULL", "SIDE", "CORNER_OUT", "CORNER_IN"],
-            "description": "Part type or how to use the part during generation: full tile, side or one of 2 types of corner - inner or outer."
-          },
-          "orientation": {
-            "type": "string",
-            "enum": ["FULL", "TOP", "TOP_RIGHT", "RIGHT", "BOTTOM_RIGHT", "BOTTOM", "BOTTOM_LEFT", "LEFT", "TOP_LEFT"],
-            "description": "In which direction the part is turned. Mostly used to display the ruleset. For full tile its ignored."
-          }
-        }
+        "type": "string",
+        "enum": ["FULL", "CORNER_IN_TOP_RIGHT", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT", "SIDE_RIGHT", "CORNER_IN_BOTTOM_RIGHT", 
+          "SIDE_BOTTOM", "CORNER_OUT_BOTTOM_RIGHT", "CORNER_OUT_BOTTOM_LEFT", "CORNER_IN_BOTTOM_LEFT", "CORNER_OUT_BOTTOM_LEFT", 
+          "SIDE_LEFT", "CORNER_OUT_TOP_LEFT", "CORNER_IN_TOP_LEFT"]
       }
     },
     "tiles": {

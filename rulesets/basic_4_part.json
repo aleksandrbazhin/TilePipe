@@ -1,12 +1,7 @@
 {
     "ruleset_name": "Basic 4-part ruleset",
     "ruleset_description": "A basic ruleset with full symmetry, where the input parts are always rotated, with only 47 tile patterns",
-    "tile_parts": [
-        {"part_type": "FULL", "orientation": "FULL"},
-        {"part_type": "CORNER_IN", "orientation": "TOP_RIGHT"},
-        {"part_type": "SIDE", "orientation": "TOP"},
-        {"part_type": "CORNER_OUT", "orientation": "TOP_RIGHT"}
-    ],
+    "tile_parts": ["FULL", "CORNER_IN_TOP_RIGHT", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT"],
     "tiles": [
         {
             "mask_variants": [64, 1, 4, 16],

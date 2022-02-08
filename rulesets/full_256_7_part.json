@@ -1,15 +1,7 @@
 {
     "ruleset_name": "256-tile ruleset 7-part",
     "ruleset_description": "7-part fully symmetric ruleset to generate 256 different tiles (with no 47-tile simplification)",
-    "tile_parts": [
-        {"part_type": "FULL", "orientation": "FULL"},
-        {"part_type": "CORNER_IN", "orientation": "TOP_RIGHT"},
-        {"part_type": "SIDE", "orientation": "TOP"},
-        {"part_type": "CORNER_OUT", "orientation": "TOP_RIGHT"},
-        {"part_type": "CORNER_OUT", "orientation": "TOP_RIGHT"},
-        {"part_type": "CORNER_OUT", "orientation": "TOP_RIGHT"},
-        {"part_type": "CORNER_OUT", "orientation": "TOP_RIGHT"}
-    ],
+    "tile_parts": ["FULL", "CORNER_IN_TOP_RIGHT", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT", "CORNER_OUT_TOP_RIGHT", "CORNER_OUT_TOP_RIGHT", "CORNER_OUT_TOP_RIGHT"],
     "tiles": [
         {
             "mask_variants": [64],
