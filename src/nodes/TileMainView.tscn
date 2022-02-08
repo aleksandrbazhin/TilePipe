@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/nodes/TileMainView.gd" type="Script" id=1]
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
 
 [node name="TileMainView" type="VBoxContainer"]
 anchor_right = 1.0
@@ -105,19 +108,18 @@ margin_right = 833.0
 margin_bottom = 618.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 404.0
-margin_bottom = 611.0
+margin_right = 411.0
+margin_bottom = 618.0
 custom_constants/margin_right = 8
 custom_constants/margin_left = 8
 
 [node name="RulesetContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
 margin_left = 8.0
-margin_right = 389.0
-margin_bottom = 604.0
+margin_right = 403.0
+margin_bottom = 618.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 6
@@ -126,7 +128,7 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_right = 381.0
+margin_right = 395.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
 text = "Ruleset:"
@@ -138,11 +140,11 @@ __meta__ = {
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
 margin_top = 32.0
-margin_right = 381.0
+margin_right = 395.0
 margin_bottom = 56.0
 
 [node name="FileName" type="LineEdit" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer"]
-margin_right = 317.0
+margin_right = 331.0
 margin_bottom = 24.0
 focus_mode = 0
 size_flags_horizontal = 3
@@ -151,15 +153,15 @@ align = 1
 editable = false
 
 [node name="Button" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer"]
-margin_left = 321.0
-margin_right = 381.0
+margin_left = 335.0
+margin_right = 395.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 60, 0 )
 text = "Setup"
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
 margin_top = 62.0
-margin_right = 381.0
+margin_right = 395.0
 margin_bottom = 182.0
 rect_min_size = Vector2( 160, 120 )
 __meta__ = {
@@ -168,8 +170,8 @@ __meta__ = {
 
 [node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
 margin_top = 188.0
-margin_right = 381.0
-margin_bottom = 604.0
+margin_right = 395.0
+margin_bottom = 618.0
 size_flags_vertical = 3
 
 [node name="TemplateContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]

@@ -35,3 +35,4 @@ func load_data(tile: TileInTree):
 		template_texture.texture = tile.loaded_template
 	if tile.loaded_ruleset.is_loaded:
 		ruleset_title.text = tile.ruleset_path.get_file()
+		ruleset_texture.texture = tile.loaded_ruleset.preview_texture

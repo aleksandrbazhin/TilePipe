@@ -81,6 +81,7 @@ func load_ruleset() -> bool:
 		return true
 	return false
 
+
 func load_template() -> bool:
 	var file_path: String = current_directory + "/" + _tile_data["template"]
 	var image = Image.new()

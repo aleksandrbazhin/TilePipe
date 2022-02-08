@@ -3,6 +3,7 @@ extends Resource
 class_name Ruleset
 
 const SCHEMA_PATH := "res://rulesets/ruleset_schema.json"
+const PREVIEW_SIZE_PX := 48
 
 enum {ERROR_WRONG_FILE, ERROR_INVALID_JSON, ERROR_SCHEMA_MISMATCH}
 
@@ -12,10 +13,35 @@ var is_loaded := false
 var last_error := -1
 var last_error_message := ""
 
+var part_textures := {
+	"FULL": {
+		"FULL": preload("res://assets/images/ruleset_tile_full.png")
+	},
+	"SIDE": {
+		"TOP": preload("res://assets/images/ruleset_tile_top.png"),
+		"RIGHT": preload("res://assets/images/ruleset_tile_right.png"),
+		"BOTTOM": preload("res://assets/images/ruleset_tile_bottom.png"),
+		"LEFT": preload("res://assets/images/ruleset_tile_left.png")
+	},
+	"CORNER_OUT": {
+		"TOP_RIGHT": preload("res://assets/images/ruleset_tile_out_top_right.png"), 
+		"BOTTOM_RIGHT": preload("res://assets/images/ruleset_tile_out_bottom_right.png"), 
+		"BOTTOM_LEFT": preload("res://assets/images/ruleset_tile_out_bottom_left.png"), 
+		"TOP_LEFT": preload("res://assets/images/ruleset_tile_out_top_left.png")
+	},
+	"CORNER_IN": {
+		"TOP_RIGHT": preload("res://assets/images/ruleset_tile_in_top_right.png"), 
+		"BOTTOM_RIGHT": preload("res://assets/images/ruleset_tile_in_bottom_right.png"), 
+		"BOTTOM_LEFT": preload("res://assets/images/ruleset_tile_in_bottom_left.png"), 
+		"TOP_LEFT": preload("res://assets/images/ruleset_tile_in_top_left.png")
+	}
+}
+var preview_texture: Texture
+
 
 func _init(data_path: String):
 	load_data_from_json(data_path)
-	
+	preview_texture = generate_preview()
 
 
 func validate_ruleset_json_to_schema(_json_data: Dictionary) -> String:
@@ -80,8 +106,8 @@ func get_description() -> String:
 	return _data["description"]
 
 
-func get_input_size() -> int:
-	return _data["input_parts"].size()
+#func get_input_size() -> int:
+#	return get_tile_parts().size()
 
 
 func get_mask_data(mask: int) -> Dictionary:
@@ -90,3 +116,19 @@ func get_mask_data(mask: int) -> Dictionary:
 			return tile_data
 	print("ERROR: invalid mask '%s'" % mask)
 	return {}
+
+
+func generate_preview() -> Texture:
+	var parts := get_tile_parts()
+	var format: int = part_textures[parts[0]["part_type"]][parts[0]["orientation"]].get_data().get_format()
+	var image := Image.new()
+	image.create(PREVIEW_SIZE_PX * parts.size(), PREVIEW_SIZE_PX, false, format)
+	var part_copy_rect := Rect2(Vector2.ZERO, Vector2(PREVIEW_SIZE_PX, PREVIEW_SIZE_PX))
+	var part_index := 0
+	for part in parts:
+		var part_image: Image = part_textures[part["part_type"]][part["orientation"]].get_data() 
+		image.blit_rect(part_image, part_copy_rect, Vector2(part_index * PREVIEW_SIZE_PX, 0))
+		part_index += 1
+	var itex := ImageTexture.new()
+	itex.create_from_image(image)
+	return itex
