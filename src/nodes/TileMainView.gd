@@ -5,8 +5,10 @@ class_name TileMainView
 onready var title := $Title/Label
 onready var input_title := $MarginContainer/VBoxContainer/InputContainer/HBoxContainer/FileName
 onready var input_texture := $MarginContainer/VBoxContainer/InputContainer/TextureRect
-onready var ruleset_title := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer/FileName
-onready var ruleset_texture := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/TextureRect
+onready var ruleset_filename := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer/FileName
+onready var ruleset_name := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/Name
+onready var ruleset_description := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/Description
+onready var ruleset_texture := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/ScrollContainer/TextureRect
 onready var template_title := $MarginContainer/VBoxContainer/TemplateContainer/HBoxContainer/FileName
 onready var template_texture := $MarginContainer/VBoxContainer/TemplateContainer/TextureRect
 
@@ -34,5 +36,7 @@ func load_data(tile: TileInTree):
 		template_title.text = tile.template_path.get_file()
 		template_texture.texture = tile.loaded_template
 	if tile.loaded_ruleset.is_loaded:
-		ruleset_title.text = tile.ruleset_path.get_file()
+		ruleset_filename.text = tile.ruleset_path.get_file()
+		ruleset_name.text = tile.loaded_ruleset.get_name()
+		ruleset_description.text = tile.loaded_ruleset.get_description()
 		ruleset_texture.texture = tile.loaded_ruleset.preview_texture

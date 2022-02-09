@@ -96,7 +96,7 @@ func get_name() -> String:
 
 
 func get_description() -> String:
-	return _data["description"]
+	return _data["ruleset_description"]
 
 
 #func get_input_size() -> int:
