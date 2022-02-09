@@ -1,0 +1,106 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/nodes/TileInRuleset.gd" type="Script" id=1]
+[ext_resource path="res://assets/images/_temp2.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/_temp.png" type="Texture" id=3]
+
+[node name="TileInRuleset" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -620.0
+rect_min_size = Vector2( 0, 48 )
+custom_constants/separation = 8
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TilesMasks" type="HBoxContainer" parent="."]
+margin_right = 1280.0
+margin_bottom = 49.0
+
+[node name="Label" type="Label" parent="TilesMasks"]
+margin_top = 17.0
+margin_right = 42.0
+margin_bottom = 31.0
+text = "Tiles:  "
+align = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TilesMasks"]
+margin_left = 46.0
+margin_right = 1280.0
+margin_bottom = 49.0
+rect_min_size = Vector2( 0, 32 )
+size_flags_horizontal = 3
+scroll_vertical_enabled = false
+
+[node name="TextureRect" type="TextureRect" parent="TilesMasks/ScrollContainer"]
+margin_right = 1234.0
+margin_bottom = 49.0
+size_flags_horizontal = 3
+texture = ExtResource( 2 )
+stretch_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_top = 57.0
+margin_right = 1280.0
+margin_bottom = 137.0
+
+[node name="Parts" type="HBoxContainer" parent="HBoxContainer"]
+margin_right = 424.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HBoxContainer/Parts"]
+margin_top = 33.0
+margin_right = 85.0
+margin_bottom = 47.0
+text = "Composition:"
+align = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Parts"]
+margin_left = 89.0
+margin_right = 424.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+texture = ExtResource( 3 )
+
+[node name="Rotations" type="HBoxContainer" parent="HBoxContainer"]
+margin_left = 428.0
+margin_right = 852.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HBoxContainer/Rotations"]
+margin_top = 33.0
+margin_right = 68.0
+margin_bottom = 47.0
+text = "Rotations: "
+align = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Rotations"]
+margin_left = 72.0
+margin_right = 424.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+texture = ExtResource( 3 )
+
+[node name="Flips" type="HBoxContainer" parent="HBoxContainer"]
+margin_left = 856.0
+margin_right = 1280.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HBoxContainer/Flips"]
+margin_top = 33.0
+margin_right = 38.0
+margin_bottom = 47.0
+text = "Flips: "
+align = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Flips"]
+margin_left = 42.0
+margin_right = 424.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+texture = ExtResource( 3 )

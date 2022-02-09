@@ -187,6 +187,7 @@ __meta__ = {
 }
 
 [node name="Description" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
+visible = false
 margin_top = 102.0
 margin_right = 395.0
 margin_bottom = 128.0
@@ -200,15 +201,16 @@ __meta__ = {
 }
 
 [node name="Spacer3" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_top = 134.0
+visible = false
+margin_top = 102.0
 margin_right = 395.0
-margin_bottom = 146.0
+margin_bottom = 114.0
 rect_min_size = Vector2( 0, 12 )
 
 [node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_top = 152.0
+margin_top = 102.0
 margin_right = 395.0
-margin_bottom = 178.0
+margin_bottom = 128.0
 rect_min_size = Vector2( 0, 26 )
 text = "Needed parts:"
 align = 1
@@ -218,9 +220,9 @@ __meta__ = {
 }
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_top = 184.0
+margin_top = 134.0
 margin_right = 395.0
-margin_bottom = 248.0
+margin_bottom = 208.0
 scroll_vertical_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -228,16 +230,16 @@ __meta__ = {
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/ScrollContainer"]
 margin_right = 395.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 160, 64 )
+margin_bottom = 74.0
+rect_min_size = Vector2( 160, 74 )
 size_flags_horizontal = 3
-stretch_mode = 4
+stretch_mode = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_top = 254.0
+margin_top = 214.0
 margin_right = 395.0
 margin_bottom = 618.0
 size_flags_vertical = 3
@@ -290,13 +292,14 @@ rect_min_size = Vector2( 0, 10 )
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/TemplateContainer"]
 margin_top = 78.0
 margin_right = 411.0
-margin_bottom = 198.0
-rect_min_size = Vector2( 180, 120 )
+margin_bottom = 218.0
+rect_min_size = Vector2( 180, 140 )
+size_flags_horizontal = 3
 expand = true
 stretch_mode = 6
 
 [node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/TemplateContainer"]
-margin_top = 204.0
+margin_top = 224.0
 margin_right = 411.0
 margin_bottom = 618.0
 size_flags_vertical = 3

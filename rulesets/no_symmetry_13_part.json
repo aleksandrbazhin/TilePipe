@@ -2,8 +2,8 @@
     "ruleset_name": "No-symmetry 13-part ruleset",
     "ruleset_description": "Basic ruleset with no symmetry between sides",
     "tile_parts": ["FULL", "CORNER_IN_TOP_RIGHT", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT", "SIDE_RIGHT", "CORNER_IN_BOTTOM_RIGHT", 
-        "SIDE_BOTTOM", "CORNER_OUT_BOTTOM_RIGHT", "CORNER_OUT_BOTTOM_LEFT", "CORNER_IN_BOTTOM_LEFT", "CORNER_OUT_BOTTOM_LEFT", 
-        "SIDE_LEFT", "CORNER_OUT_TOP_LEFT", "CORNER_IN_TOP_LEFT"],
+        "SIDE_BOTTOM", "CORNER_OUT_BOTTOM_RIGHT", "CORNER_OUT_BOTTOM_LEFT", "CORNER_IN_BOTTOM_LEFT", "SIDE_LEFT",
+        "CORNER_OUT_TOP_LEFT", "CORNER_IN_TOP_LEFT"],
     "tiles": [
         {
             "mask_variants": [64],

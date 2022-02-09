@@ -75,6 +75,16 @@ _global_script_classes=[ {
 "path": "res://src/nodes/TemplateView.gd"
 }, {
 "base": "Control",
+"class": "TileHighlight",
+"language": "GDScript",
+"path": "res://src/nodes/TileHighlight.gd"
+}, {
+"base": "VBoxContainer",
+"class": "TileInRuleset",
+"language": "GDScript",
+"path": "res://src/nodes/TileInRuleset.gd"
+}, {
+"base": "Control",
 "class": "TileInTree",
 "language": "GDScript",
 "path": "res://src/nodes/TileInTree.gd"
@@ -113,6 +123,8 @@ _global_script_class_icons={
 "Ruleset": "",
 "RulesetView": "",
 "TemplateView": "",
+"TileHighlight": "",
+"TileInRuleset": "",
 "TileInTree": "",
 "TileMainView": "",
 "TileRenderer": "",

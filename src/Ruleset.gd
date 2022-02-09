@@ -4,6 +4,7 @@ class_name Ruleset
 
 const SCHEMA_PATH := "res://rulesets/ruleset_schema.json"
 const PREVIEW_SIZE_PX := 48
+const PREVIEW_SPACE_PX := 6
 
 enum {ERROR_WRONG_FILE, ERROR_INVALID_JSON, ERROR_SCHEMA_MISMATCH}
 
@@ -115,12 +116,12 @@ func generate_preview() -> Texture:
 	var parts := get_tile_parts()
 	var format: int = part_textures[parts[0]].get_data().get_format()
 	var image := Image.new()
-	image.create(PREVIEW_SIZE_PX * parts.size(), PREVIEW_SIZE_PX, false, format)
+	image.create(PREVIEW_SIZE_PX * parts.size() + PREVIEW_SPACE_PX * parts.size() - 1, PREVIEW_SIZE_PX, false, format)
 	var part_copy_rect := Rect2(Vector2.ZERO, Vector2(PREVIEW_SIZE_PX, PREVIEW_SIZE_PX))
 	var part_index := 0
 	for part in parts:
 		var part_image: Image = part_textures[part].get_data() 
-		image.blit_rect(part_image, part_copy_rect, Vector2(part_index * PREVIEW_SIZE_PX, 0))
+		image.blit_rect(part_image, part_copy_rect, Vector2(part_index * (PREVIEW_SIZE_PX + PREVIEW_SPACE_PX), 0))
 		part_index += 1
 	var itex := ImageTexture.new()
 	itex.create_from_image(image)

@@ -32,11 +32,25 @@ func load_data(tile: TileInTree):
 		input_title.text = tile.texture_path.get_file()
 		input_texture.texture = tile.loaded_texture
 #		set_texture_scale_mode()
-	if tile.template_path != "":
-		template_title.text = tile.template_path.get_file()
-		template_texture.texture = tile.loaded_template
 	if tile.loaded_ruleset.is_loaded:
 		ruleset_filename.text = tile.ruleset_path.get_file()
 		ruleset_name.text = tile.loaded_ruleset.get_name()
 		ruleset_description.text = tile.loaded_ruleset.get_description()
 		ruleset_texture.texture = tile.loaded_ruleset.preview_texture
+		add_ruleset_highlights(tile.loaded_ruleset)
+	if tile.template_path != "":
+		template_title.text = tile.template_path.get_file()
+		template_texture.texture = tile.loaded_template
+
+
+func add_ruleset_highlights(ruleset: Ruleset):
+#	var index := 0
+	for old_highlight in ruleset_texture.get_children():
+		old_highlight.queue_free()
+	for i in ruleset.get_tile_parts().size():
+		var highlight := preload("res://src/nodes/TileHighlight.tscn").instance()
+		ruleset_texture.add_child(highlight)
+		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)
+		highlight.set_id(i + 1)
+#		print (part)
+#		index += 1

@@ -6,7 +6,7 @@
 [node name="RulesetView" type="ColorRect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.364706, 0.411765, 0.376471, 1 )
+color = Color( 0.156863, 0.176471, 0.2, 1 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -43,26 +43,123 @@ margin_right = 65.0
 margin_bottom = 26.0
 custom_fonts/font = ExtResource( 2 )
 
-[node name="TextureRect" type="ColorRect" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 30.0
+margin_right = 1280.0
+margin_bottom = 44.0
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_right = 638.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+text = "Raw"
+align = 1
+valign = 1
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_left = 642.0
+margin_right = 1280.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+text = "Parsed"
+align = 1
+valign = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+margin_top = 48.0
 margin_right = 1280.0
 margin_bottom = 720.0
 size_flags_vertical = 3
-color = Color( 0.270588, 0.333333, 0.368627, 1 )
-
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TextureRect"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RulesetData" type="Label" parent="VBoxContainer/TextureRect/ScrollContainer"]
+[node name="HSplitContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer"]
+margin_right = 1280.0
+margin_bottom = 672.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer"]
+margin_right = 638.0
+margin_bottom = 672.0
+size_flags_horizontal = 3
+custom_constants/margin_top = 4
+custom_constants/margin_left = 8
+custom_constants/margin_bottom = 4
+
+[node name="RulesetData" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer"]
+margin_left = 8.0
+margin_top = 4.0
+margin_right = 638.0
+margin_bottom = 668.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+autowrap = true
+
+[node name="MarginContainer2" type="PanelContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer"]
+margin_left = 642.0
+margin_right = 1280.0
+margin_bottom = 672.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 631.0
+margin_bottom = 665.0
+custom_constants/separation = 8
+
+[node name="Name" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer"]
+margin_right = 624.0
 margin_bottom = 14.0
+text = "Name"
+align = 1
+valign = 1
+autowrap = true
+uppercase = true
+
+[node name="Description" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer"]
+margin_top = 22.0
+margin_right = 624.0
+margin_bottom = 53.0
+text = "Description
+"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="PartsLabel" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer"]
+margin_top = 61.0
+margin_right = 624.0
+margin_bottom = 75.0
+text = "Tile parts:"
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer"]
+margin_top = 83.0
+margin_right = 624.0
+margin_bottom = 157.0
+scroll_vertical_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer/ScrollContainer"]
+margin_right = 624.0
+margin_bottom = 74.0
+rect_min_size = Vector2( 160, 74 )
+size_flags_horizontal = 3
+stretch_mode = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer"]
+margin_top = 165.0
+margin_right = 624.0
+margin_bottom = 165.0
+custom_constants/separation = 20

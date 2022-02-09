@@ -29,7 +29,7 @@ __meta__ = {
 [node name="Control" type="Control" parent="VSplitContainer"]
 margin_right = 988.0
 margin_bottom = 468.0
-rect_min_size = Vector2( 0, 412 )
+rect_min_size = Vector2( 0, 420 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -37,6 +37,7 @@ size_flags_vertical = 3
 visible = false
 
 [node name="TemplateView" parent="VSplitContainer/Control" instance=ExtResource( 5 )]
+margin_bottom = 20.0
 
 [node name="RulesetView" parent="VSplitContainer/Control" instance=ExtResource( 2 )]
 visible = false
