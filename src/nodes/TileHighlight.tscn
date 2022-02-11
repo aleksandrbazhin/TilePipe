@@ -15,7 +15,6 @@ border_width_bottom = 2
 bg_color = Color( 0.8, 0.8, 0.8, 1 )
 
 [node name="TileHighlight" type="Control"]
-visible = false
 margin_right = 48.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 74 )

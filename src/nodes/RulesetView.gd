@@ -2,13 +2,17 @@ extends ColorRect
 
 class_name RulesetView
 
+#var current_ruleset
+
+
 onready var name_label := $VBoxContainer/CenterContainer/HBoxContainer/RulesetNameLabel
 onready var data := $VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer/RulesetData
-onready var ruleset_name := $VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer/Name
-onready var description := $VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer/Description
-onready var parts_texture := $VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer/ScrollContainer/TextureRect
-onready var tiles_container := $VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer/VBoxContainer
+onready var ruleset_name := $VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer/Name
+onready var description := $VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer/Description
+onready var parts_texture := $VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer/ScrollContainer/TextureRect
+onready var tiles_container := $VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer/VBoxContainer
 onready var scroll_container := $VBoxContainer/ScrollContainer
+
 
 func load_data(tile: TileInTree):
 	if tile.ruleset_path != "":

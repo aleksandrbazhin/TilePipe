@@ -74,15 +74,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HSplitContainer" type="HBoxContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer/ScrollContainer"]
 margin_right = 1280.0
 margin_bottom = 672.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer"]
-margin_right = 638.0
+margin_right = 634.0
 margin_bottom = 672.0
+rect_min_size = Vector2( 320, 0 )
 size_flags_horizontal = 3
 custom_constants/margin_top = 4
 custom_constants/margin_left = 8
@@ -91,27 +92,28 @@ custom_constants/margin_bottom = 4
 [node name="RulesetData" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer"]
 margin_left = 8.0
 margin_top = 4.0
-margin_right = 638.0
+margin_right = 634.0
 margin_bottom = 668.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 autowrap = true
 
-[node name="MarginContainer2" type="PanelContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer"]
-margin_left = 642.0
+[node name="TilesPanel" type="PanelContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer"]
+margin_left = 646.0
 margin_right = 1280.0
 margin_bottom = 672.0
+rect_min_size = Vector2( 320, 0 )
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 631.0
+margin_right = 627.0
 margin_bottom = 665.0
 custom_constants/separation = 8
 
-[node name="Name" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer"]
-margin_right = 624.0
+[node name="Name" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer"]
+margin_right = 620.0
 margin_bottom = 14.0
 text = "Name"
 align = 1
@@ -119,9 +121,9 @@ valign = 1
 autowrap = true
 uppercase = true
 
-[node name="Description" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer"]
+[node name="Description" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer"]
 margin_top = 22.0
-margin_right = 624.0
+margin_right = 620.0
 margin_bottom = 53.0
 text = "Description
 "
@@ -129,9 +131,9 @@ align = 1
 valign = 1
 autowrap = true
 
-[node name="PartsLabel" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer"]
+[node name="PartsLabel" type="Label" parent="VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer"]
 margin_top = 61.0
-margin_right = 624.0
+margin_right = 620.0
 margin_bottom = 75.0
 text = "Tile parts:"
 valign = 2
@@ -139,17 +141,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer"]
 margin_top = 83.0
-margin_right = 624.0
+margin_right = 620.0
 margin_bottom = 157.0
 scroll_vertical_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer/ScrollContainer"]
-margin_right = 624.0
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer/ScrollContainer"]
+margin_right = 620.0
 margin_bottom = 74.0
 rect_min_size = Vector2( 160, 74 )
 size_flags_horizontal = 3
@@ -158,8 +160,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer2/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer"]
 margin_top = 165.0
-margin_right = 624.0
+margin_right = 620.0
 margin_bottom = 165.0
 custom_constants/separation = 20

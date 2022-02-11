@@ -29,7 +29,7 @@ func load_tile_data(tile: TileInTree):
 		loaded_tile_ref = weakref(tile)
 		tile_main_view.load_data(tile)
 		input_texture_view.load_data(tile)
-		ruleset_view.load_data(tile)
+#		ruleset_view.load_data(tile)
 		template_view.load_data(tile)
 
 
@@ -45,6 +45,7 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 			last_visible_tab = input_texture_view
 		tile.ruleset_row:
 			ruleset_view.show()
+			ruleset_view.load_data(tile)
 			last_visible_tab = ruleset_view
 		tile.template_row:
 			template_view.show()

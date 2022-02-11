@@ -94,6 +94,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/nodes/TileMainView.gd"
 }, {
+"base": "ColorRect",
+"class": "TileMaskPreview",
+"language": "GDScript",
+"path": "res://src/nodes/TileMaskPreview.gd"
+}, {
 "base": "Node",
 "class": "TileRenderer",
 "language": "GDScript",
@@ -127,6 +132,7 @@ _global_script_class_icons={
 "TileInRuleset": "",
 "TileInTree": "",
 "TileMainView": "",
+"TileMaskPreview": "",
 "TileRenderer": "",
 "UISnapshot": "",
 "WorkRect": ""

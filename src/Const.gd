@@ -19,7 +19,21 @@ var DEFAULT_USER_SETTINGS := {
 var current_dir := OS.get_executable_path().get_base_dir() + "/" + EXAMPLES_DIR
 
 
-const HIGHLIGHT_COLORS := [Color("f59d00"), Color("1aaf5d"),Color("2278b2"), Color("c23824"), Color("9c56b8"), Color("3ca7fe"), Color("7f8c8d")]
+const HIGHLIGHT_COLORS := [
+	Color("98c0ef"), 
+	Color("f59d00"), 
+	Color("1aaf5d"),
+	Color("2278b2"),
+	Color("c23824"),
+	Color("9c56b8"),
+	Color("3ca7fe"),
+	Color("7f8c8d"),
+	Color("58bb1e"),
+	Color("d02365"),
+	Color("1b5e04"),
+	Color("0b2743"),
+	Color("e0c01c")
+]
 
 const TILE_SETTINGS_DIR := "user://tile_settings"
 # version comparison works in godot due to str comparison (is_str_les() in ustring.h)
