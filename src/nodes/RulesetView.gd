@@ -6,18 +6,18 @@ class_name RulesetView
 
 
 onready var name_label := $VBoxContainer/CenterContainer/HBoxContainer/RulesetNameLabel
-onready var data := $VBoxContainer/ScrollContainer/HSplitContainer/MarginContainer/RulesetData
-onready var ruleset_name := $VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer/Name
-onready var description := $VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer/Description
-onready var parts_texture := $VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer/ScrollContainer/TextureRect
-onready var tiles_container := $VBoxContainer/ScrollContainer/HSplitContainer/TilesPanel/VBoxContainer/VBoxContainer
+onready var header_data := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/RawHeader
+onready var ruleset_name := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer/Name
+onready var description := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer/Description
+onready var parts_texture := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer/ScrollContainer/TextureRect
+onready var tiles_container := $VBoxContainer/ScrollContainer/VBoxContainer
 onready var scroll_container := $VBoxContainer/ScrollContainer
 
 
 func load_data(tile: TileInTree):
 	if tile.ruleset_path != "":
 		name_label.text = tile.ruleset_path.get_file()
-		data.text = tile.loaded_ruleset.raw_json
+		header_data.text = tile.loaded_ruleset.get_raw_header()
 		ruleset_name.text = tile.loaded_ruleset.get_name()
 		description.text = tile.loaded_ruleset.get_description()
 		parts_texture.texture = tile.loaded_ruleset.preview_texture
@@ -38,7 +38,6 @@ func add_ruleset_highlights(ruleset: Ruleset):
 
 func add_tiles(ruleset: Ruleset):
 #	ruleset.preview_texture
-
 	for old_tile in tiles_container.get_children():
 		old_tile.queue_free()
 	for tile_index in ruleset.get_tiles().size():

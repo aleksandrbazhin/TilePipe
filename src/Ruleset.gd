@@ -9,11 +9,11 @@ const PREVIEW_SPACE_PX := 6
 enum {ERROR_WRONG_FILE, ERROR_INVALID_JSON, ERROR_SCHEMA_MISMATCH}
 
 var _data := {}
-var raw_json: String
+var _raw_json: String
+var _raw_tile_data: PoolStringArray
 var is_loaded := false
 var last_error := -1
 var last_error_message := ""
-
 var part_textures := {
 	"FULL": preload("res://assets/images/ruleset_tile_full.png"), 
 	"SIDE_TOP": preload("res://assets/images/ruleset_tile_top.png"),
@@ -29,7 +29,6 @@ var part_textures := {
 	"CORNER_OUT_BOTTOM_LEFT": preload("res://assets/images/ruleset_tile_out_bottom_left.png"), 
 	"CORNER_OUT_TOP_LEFT": preload("res://assets/images/ruleset_tile_out_top_left.png")
 }
-
 var preview_texture: Texture
 
 
@@ -59,7 +58,8 @@ func load_data_from_json(data_path: String):
 				json_error = validate_ruleset_json_to_schema(parse_result.result)
 				if json_error == "":
 					_data = parse_result.result
-					raw_json = data_string
+					_raw_json = data_string
+					_raw_tile_data = split_data_into_tiles(data_string)
 					is_loaded = true
 				else:
 					last_error = ERROR_SCHEMA_MISMATCH
@@ -126,3 +126,24 @@ func generate_preview() -> Texture:
 	var itex := ImageTexture.new()
 	itex.create_from_image(image)
 	return itex
+
+
+func get_raw_header() -> String:
+	var end_of_header := _raw_json.find('"tiles":')
+	if end_of_header != -1:
+		return _raw_json.substr(0, end_of_header).lstrip("{").rstrip(", \n")
+	return ""
+
+
+func get_raw_tile_data(tile_index: int) -> String:
+	if not _raw_tile_data.empty() and _raw_tile_data.size() > tile_index:
+		return _raw_tile_data[tile_index].lstrip("{[\n").trim_prefix("        {").rstrip(" \n}").trim_suffix("        }\n    ]")
+	return ""
+
+
+func split_data_into_tiles(data: String) -> PoolStringArray:
+	var result: PoolStringArray
+	var end_of_header := _raw_json.find('"tiles":')
+	if end_of_header != -1:
+		result = _raw_json.substr(end_of_header + 9).split("},")
+	return result

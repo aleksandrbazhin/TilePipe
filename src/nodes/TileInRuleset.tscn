@@ -10,93 +10,159 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_bottom = -620.0
 rect_min_size = Vector2( 0, 48 )
+size_flags_horizontal = 3
 custom_constants/separation = 8
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TilesMasks" type="HBoxContainer" parent="."]
+[node name="Label" type="Label" parent="."]
 margin_right = 1280.0
-margin_bottom = 32.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 0, 24 )
+align = 1
+valign = 2
 
-[node name="Label" type="Label" parent="TilesMasks"]
-margin_top = 9.0
-margin_right = 85.0
-margin_bottom = 23.0
+[node name="Data" type="PanelContainer" parent="."]
+margin_top = 32.0
+margin_right = 1280.0
+margin_bottom = 134.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Data"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1273.0
+margin_bottom = 95.0
+custom_constants/margin_right = 6
+custom_constants/margin_top = 6
+custom_constants/margin_left = 6
+custom_constants/margin_bottom = 6
+
+[node name="HBox" type="HBoxContainer" parent="Data/MarginContainer"]
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 1260.0
+margin_bottom = 82.0
+
+[node name="Preview" type="VBoxContainer" parent="Data/MarginContainer/HBox"]
+margin_right = 625.0
+margin_bottom = 76.0
+size_flags_horizontal = 3
+
+[node name="TilesMasks" type="VBoxContainer" parent="Data/MarginContainer/HBox/Preview"]
+margin_right = 625.0
+margin_bottom = 50.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Data/MarginContainer/HBox/Preview/TilesMasks"]
+margin_right = 625.0
+margin_bottom = 14.0
 text = "Neighbours:  "
 align = 1
+valign = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="TilesMasks"]
-margin_left = 89.0
-margin_right = 1280.0
-margin_bottom = 32.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Data/MarginContainer/HBox/Preview/TilesMasks"]
+margin_top = 18.0
+margin_right = 625.0
+margin_bottom = 50.0
 rect_min_size = Vector2( 0, 32 )
 size_flags_horizontal = 3
 scroll_vertical_enabled = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TilesMasks/ScrollContainer"]
-margin_right = 1191.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Data/MarginContainer/HBox/Preview/TilesMasks/ScrollContainer"]
+margin_right = 625.0
+margin_bottom = 32.0
 size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_constants/separation = 8
+alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_top = 40.0
-margin_right = 1280.0
+[node name="CenterContainer" type="CenterContainer" parent="Data/MarginContainer/HBox/Preview"]
+margin_top = 54.0
+margin_right = 625.0
 margin_bottom = 54.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="Parts" type="HBoxContainer" parent="HBoxContainer"]
-margin_right = 424.0
-margin_bottom = 14.0
+[node name="HBox" type="HBoxContainer" parent="Data/MarginContainer/HBox/Preview"]
+margin_top = 58.0
+margin_right = 625.0
+margin_bottom = 76.0
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="HBoxContainer/Parts"]
-margin_right = 85.0
+[node name="Parts" type="VBoxContainer" parent="Data/MarginContainer/HBox/Preview/HBox"]
+margin_right = 205.0
+margin_bottom = 18.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Data/MarginContainer/HBox/Preview/HBox/Parts"]
+margin_right = 205.0
 margin_bottom = 14.0
 text = "Composition:"
-align = 2
+align = 1
 
-[node name="TileCompositionPreview" type="Control" parent="HBoxContainer/Parts"]
-margin_left = 89.0
-margin_right = 424.0
-margin_bottom = 14.0
+[node name="CenterContainer" type="CenterContainer" parent="Data/MarginContainer/HBox/Preview/HBox/Parts"]
+margin_top = 18.0
+margin_right = 205.0
+margin_bottom = 18.0
+
+[node name="TileCompositionPreview" type="Control" parent="Data/MarginContainer/HBox/Preview/HBox/Parts/CenterContainer"]
+margin_left = 102.0
+margin_right = 102.0
 size_flags_horizontal = 3
 script = ExtResource( 2 )
 
-[node name="Rotations" type="HBoxContainer" parent="HBoxContainer"]
-margin_left = 428.0
-margin_right = 852.0
-margin_bottom = 14.0
+[node name="Rotations" type="VBoxContainer" parent="Data/MarginContainer/HBox/Preview/HBox"]
+margin_left = 209.0
+margin_right = 415.0
+margin_bottom = 18.0
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="HBoxContainer/Rotations"]
-margin_right = 68.0
+[node name="Label" type="Label" parent="Data/MarginContainer/HBox/Preview/HBox/Rotations"]
+margin_right = 206.0
 margin_bottom = 14.0
 text = "Rotations: "
-align = 2
+align = 1
 
-[node name="TileRotationsPreview" type="Control" parent="HBoxContainer/Rotations"]
-margin_left = 72.0
-margin_right = 424.0
-margin_bottom = 14.0
+[node name="CenterContainer" type="CenterContainer" parent="Data/MarginContainer/HBox/Preview/HBox/Rotations"]
+margin_top = 18.0
+margin_right = 206.0
+margin_bottom = 18.0
+
+[node name="TileRotationsPreview" type="Control" parent="Data/MarginContainer/HBox/Preview/HBox/Rotations/CenterContainer"]
+margin_left = 103.0
+margin_right = 103.0
 size_flags_horizontal = 3
 script = ExtResource( 3 )
 
-[node name="Flips" type="HBoxContainer" parent="HBoxContainer"]
-margin_left = 856.0
-margin_right = 1280.0
-margin_bottom = 14.0
+[node name="Flips" type="VBoxContainer" parent="Data/MarginContainer/HBox/Preview/HBox"]
+margin_left = 419.0
+margin_right = 625.0
+margin_bottom = 18.0
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="HBoxContainer/Flips"]
-margin_right = 38.0
+[node name="Label" type="Label" parent="Data/MarginContainer/HBox/Preview/HBox/Flips"]
+margin_right = 206.0
 margin_bottom = 14.0
 text = "Flips: "
-align = 2
+align = 1
 
-[node name="TileFlipsPreview" type="Control" parent="HBoxContainer/Flips"]
-margin_left = 42.0
-margin_right = 424.0
-margin_bottom = 14.0
+[node name="CenterContainer" type="CenterContainer" parent="Data/MarginContainer/HBox/Preview/HBox/Flips"]
+margin_top = 18.0
+margin_right = 206.0
+margin_bottom = 18.0
+
+[node name="TileFlipsPreview" type="Control" parent="Data/MarginContainer/HBox/Preview/HBox/Flips/CenterContainer"]
+margin_left = 103.0
+margin_right = 103.0
 size_flags_horizontal = 3
 script = ExtResource( 4 )
+
+[node name="RawData" type="TextEdit" parent="Data/MarginContainer/HBox"]
+margin_left = 629.0
+margin_right = 1254.0
+margin_bottom = 76.0
+size_flags_horizontal = 3
+readonly = true
+wrap_enabled = true
