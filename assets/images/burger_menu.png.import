@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/full_256_7_part.png-7ab1baf5d97f13b46e3678e6775577a5.stex"
+path="res://.import/burger_menu.png-56b3bbd89f98c12fd64b702d4712416b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://examples/part_textures/full_256_7_part.png"
-dest_files=[ "res://.import/full_256_7_part.png-7ab1baf5d97f13b46e3678e6775577a5.stex" ]
+source_file="res://assets/images/burger_menu.png"
+dest_files=[ "res://.import/burger_menu.png-56b3bbd89f98c12fd64b702d4712416b.stex" ]
 
 [params]
 

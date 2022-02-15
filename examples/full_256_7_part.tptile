@@ -1,7 +1,7 @@
 {
     "texture": "part_textures/full_256_diagonal_7_part.png",
-    "ruleset": "../rulesets/full_256_7_part.json",
-    "template": "../templates/template_256.png",
+    "ruleset": "rulesets/full_256_7_part.json",
+    "template": "templates/template_256.png",
     "merge_level": 0.25,
     "output_tile_offset": 0,
     "output_tile_size": 64,

@@ -35,6 +35,25 @@ const HIGHLIGHT_COLORS := [
 	Color("e0c01c")
 ]
 
+const BUILT_IN_RULESETS := [
+	"res://rulesets/basic_4_part.json",
+	"res://rulesets/sideview_8_part.json",
+	"res://rulesets/basic_4_part_256_ready.json",
+	"res://rulesets/full_256_7_part.json",
+	"res://rulesets/no_symmetry_13_part.json"
+]
+
+const BUILT_IN_TEMPLATES := []
+
+
+
+
+
+
+
+
+
+
 const TILE_SETTINGS_DIR := "user://tile_settings"
 # version comparison works in godot due to str comparison (is_str_les() in ustring.h)
 const MIN_SETTINGS_COMPATIBLE_VERSION: String = "0.5"

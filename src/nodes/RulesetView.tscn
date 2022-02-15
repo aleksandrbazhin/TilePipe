@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/nodes/RulesetView.gd" type="Script" id=1]
-[ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://assets/images/burger_menu.png" type="Texture" id=2]
+[ext_resource path="res://src/nodes/RulesetManager.tscn" type="PackedScene" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
 
 [node name="RulesetView" type="ColorRect"]
 anchor_right = 1.0
@@ -15,46 +19,80 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_constants/separation = 6
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 1280.0
 margin_bottom = 26.0
+size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/CenterContainer"]
-margin_left = 607.0
-margin_right = 672.0
-margin_bottom = 26.0
+[node name="TileNameLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_top = 6.0
+margin_right = 427.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 180, 0 )
+size_flags_horizontal = 3
+align = 2
 
-[node name="CaptionLabel" type="Label" parent="VBoxContainer/CenterContainer/HBoxContainer"]
-margin_right = 61.0
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_left = 431.0
+margin_top = 6.0
+margin_right = 444.0
+margin_bottom = 20.0
+text = " / "
+align = 1
+
+[node name="CaptionLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_left = 448.0
+margin_right = 500.0
 margin_bottom = 26.0
-rect_min_size = Vector2( 0, 30 )
-custom_fonts/font = ExtResource( 2 )
+size_flags_vertical = 3
 text = "Ruleset:"
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RulesetNameLabel" type="Label" parent="VBoxContainer/CenterContainer/HBoxContainer"]
-margin_left = 65.0
-margin_right = 65.0
+[node name="RulesetFileName" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
+margin_left = 504.0
+margin_right = 684.0
 margin_bottom = 26.0
-custom_fonts/font = ExtResource( 2 )
+rect_min_size = Vector2( 180, 0 )
+
+[node name="RulesetDialogButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 688.0
+margin_right = 848.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 160, 0 )
+text = " Manage rulesets"
+icon = ExtResource( 2 )
+
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+margin_left = 852.0
+margin_right = 1280.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+visible = false
+margin_top = 32.0
+margin_right = 1280.0
+margin_bottom = 68.0
+rect_min_size = Vector2( 0, 36 )
+size_flags_horizontal = 3
 
 [node name="HeaderContainer" type="PanelContainer" parent="VBoxContainer"]
-margin_top = 30.0
+margin_top = 32.0
 margin_right = 1280.0
-margin_bottom = 213.0
+margin_bottom = 201.0
+custom_styles/panel = SubResource( 1 )
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HeaderContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 1273.0
-margin_bottom = 176.0
+margin_right = 1280.0
+margin_bottom = 169.0
 custom_constants/margin_right = 16
 custom_constants/margin_top = 6
 custom_constants/margin_left = 16
@@ -63,17 +101,17 @@ custom_constants/margin_bottom = 6
 [node name="Hbox" type="HBoxContainer" parent="VBoxContainer/HeaderContainer/MarginContainer"]
 margin_left = 16.0
 margin_top = 6.0
-margin_right = 1250.0
+margin_right = 1264.0
 margin_bottom = 163.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HeaderContainer/MarginContainer/Hbox"]
-margin_right = 615.0
+margin_right = 622.0
 margin_bottom = 157.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
 [node name="Name" type="Label" parent="VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer"]
-margin_right = 615.0
+margin_right = 622.0
 margin_bottom = 14.0
 text = "Name"
 align = 1
@@ -82,7 +120,7 @@ autowrap = true
 
 [node name="Description" type="Label" parent="VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer"]
 margin_top = 22.0
-margin_right = 615.0
+margin_right = 622.0
 margin_bottom = 53.0
 text = "Description
 "
@@ -92,7 +130,7 @@ autowrap = true
 
 [node name="PartsLabel" type="Label" parent="VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer"]
 margin_top = 61.0
-margin_right = 615.0
+margin_right = 622.0
 margin_bottom = 75.0
 text = "Tile parts:"
 valign = 2
@@ -102,7 +140,7 @@ __meta__ = {
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer"]
 margin_top = 83.0
-margin_right = 615.0
+margin_right = 622.0
 margin_bottom = 157.0
 scroll_vertical_enabled = false
 __meta__ = {
@@ -110,7 +148,7 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer/ScrollContainer"]
-margin_right = 615.0
+margin_right = 622.0
 margin_bottom = 74.0
 rect_min_size = Vector2( 160, 74 )
 size_flags_horizontal = 3
@@ -120,8 +158,8 @@ __meta__ = {
 }
 
 [node name="RawHeader" type="TextEdit" parent="VBoxContainer/HeaderContainer/MarginContainer/Hbox"]
-margin_left = 619.0
-margin_right = 1234.0
+margin_left = 626.0
+margin_right = 1248.0
 margin_bottom = 157.0
 size_flags_horizontal = 3
 text = "Raw"
@@ -129,7 +167,7 @@ readonly = true
 wrap_enabled = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
-margin_top = 217.0
+margin_top = 207.0
 margin_right = 1280.0
 margin_bottom = 720.0
 size_flags_vertical = 3
@@ -141,3 +179,8 @@ __meta__ = {
 margin_right = 1280.0
 size_flags_horizontal = 3
 custom_constants/separation = 20
+
+[node name="RulesetManager" parent="." instance=ExtResource( 3 )]
+visible = false
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/RulesetDialogButton" to="." method="_on_RulesetDialogButton_pressed"]

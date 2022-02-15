@@ -1,7 +1,7 @@
 {
     "texture": "part_textures/sideview_pixelart_with_random_8_part.png",
-    "ruleset": "../rulesets/sideview_8_part.json",
-    "template": "../templates/template_47.png",
+    "ruleset": "rulesets/sideview_8_part.json",
+    "template": "templates/template_47.png",
     "merge_level": 0.25,
     "output_tile_offset": 0,
     "output_tile_size": 64,
