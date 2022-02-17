@@ -50,9 +50,9 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	if typeof(parsed_data) == TYPE_DICTIONARY:
 		_tile_data = parsed_data
 		is_loaded = true
-		load_texture()
-		load_ruleset()
-		load_template()
+		load_texture(_tile_data["texture"])
+		load_ruleset(_tile_data["ruleset"])
+		load_template(_tile_data["template"])
 		return true
 			
 #	else:
@@ -60,8 +60,8 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	return false
 	
 
-func load_texture() -> bool:
-	var file_path: String = current_directory + "/" + _tile_data["texture"]
+func load_texture(path: String) -> bool:
+	var file_path: String = current_directory + "/" + path
 	var image = Image.new()
 	var err: int
 	err = image.load(file_path)
@@ -73,8 +73,8 @@ func load_texture() -> bool:
 	return false
 
 
-func load_ruleset() -> bool:
-	var file_path: String = current_directory + "/" + _tile_data["ruleset"]
+func load_ruleset(path: String) -> bool:
+	var file_path: String = current_directory + "/" + path
 	loaded_ruleset = Ruleset.new(file_path)
 	if loaded_ruleset.is_loaded:
 		ruleset_path = file_path
@@ -82,8 +82,8 @@ func load_ruleset() -> bool:
 	return false
 
 
-func load_template() -> bool:
-	var file_path: String = current_directory + "/" + _tile_data["template"]
+func load_template(path: String) -> bool:
+	var file_path: String = current_directory + "/" + path
 	var image = Image.new()
 	var err: int
 	err = image.load(file_path)
@@ -152,8 +152,12 @@ func _on_Tree_item_collapsed(item: TreeItem):
 	else:
 		rect_min_size.y = HEIGHT_EXPANDED
 
-#
-#func _on_Tree_item_rmb_selected(position):
-#	var root: TreeItem = tree.get_root()
-#	root.collapsed = not root.collapsed
-		
+
+func set_ruleset(abs_path: String):
+	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
+	load_ruleset(rel_path)
+	ruleset_row.set_text(0, "Ruleset: %s" % rel_path)
+
+
+func save():
+	pass

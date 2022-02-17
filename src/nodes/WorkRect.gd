@@ -85,3 +85,10 @@ func _on_InputTextureView_file_dialog_started():
 
 func _on_InputTextureView_file_dialog_ended():
 	emit_signal("file_dialog_ended")
+
+
+func _on_RulesetView_tile_ruleset_changed(path: String):
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	tile.set_ruleset(path)
+	tile.save()
+	ruleset_view.load_data(tile)

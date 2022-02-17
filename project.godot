@@ -64,11 +64,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/Ruleset.gd"
 }, {
-"base": "PopupDialog",
-"class": "RulesetMananger",
-"language": "GDScript",
-"path": "res://src/nodes/RulesetManager.gd"
-}, {
 "base": "ColorRect",
 "class": "RulesetView",
 "language": "GDScript",
@@ -131,7 +126,6 @@ _global_script_class_icons={
 "ProjectTree": "",
 "ResultView": "",
 "Ruleset": "",
-"RulesetMananger": "",
 "RulesetView": "",
 "TemplateView": "",
 "TileHighlight": "",

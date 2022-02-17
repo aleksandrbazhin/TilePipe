@@ -80,7 +80,7 @@ func load_data_from_json(data_path: String):
 	else:
 		last_error = ERROR_WRONG_FILE
 		last_error_message = "Data loader error: invalid path to ruleset JSON in .tptile.\n" 
-		last_error_message += "Invalid path:" + data_path + "\n"
+		last_error_message += "Invalid path: " + data_path + "\n"
 		print(last_error_message)
 
 

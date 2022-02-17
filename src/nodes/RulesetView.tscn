@@ -23,7 +23,10 @@ popup_exclusive = true
 window_title = "Open a File"
 mode_overrides_title = false
 mode = 0
+access = 2
 filters = PoolStringArray( "*.json; Ruleset json files" )
+current_dir = "/Users/user/Documents/tilepipe"
+current_path = "/Users/user/Documents/tilepipe/"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0

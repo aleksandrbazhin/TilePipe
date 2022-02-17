@@ -2,9 +2,12 @@ extends ColorRect
 
 class_name RulesetView
 
+const TILE_UPDATE_CHUNK := 8
+
 signal file_dialog_started()
 signal file_dialog_ended()
 signal report_error(text)
+signal tile_ruleset_changed(path)
 
 var current_ruleset_path := ""
 
@@ -50,6 +53,8 @@ func add_tiles(ruleset: Ruleset):
 		var tile_view: TileInRuleset = preload("res://src/nodes/TileInRuleset.tscn").instance()
 		tile_view.setup(ruleset, tile_index)
 		tiles_container.add_child(tile_view)
+		if tile_index % TILE_UPDATE_CHUNK == 0:
+			yield(get_tree(), "idle_frame")
 
 
 func _on_RulesetDialogButton_pressed():
@@ -59,11 +64,14 @@ func _on_RulesetDialogButton_pressed():
 func populate_ruleset_opions():
 	ruleset_options.clear()
 	var rulesets_found := get_rulesets_in_project()
-	for i in rulesets_found.size():
-		if is_file_a_ruleset(rulesets_found[i]):
-			ruleset_options.add_item(rulesets_found[i].get_file())
-			if rulesets_found[i] == current_ruleset_path:
-				ruleset_options.selected = i
+	var index := 0
+	for ruleset_path in rulesets_found:
+		if is_file_a_ruleset(ruleset_path):
+			ruleset_options.add_item(ruleset_path.get_file())
+			ruleset_options.set_item_metadata(index, ruleset_path)
+			if ruleset_path == current_ruleset_path:
+				ruleset_options.selected = index
+			index += 1
 
 
 func scan_for_rulesets_in_project(path: String) -> PoolStringArray:
@@ -97,15 +105,17 @@ func _on_AddRulesetFileDialog_about_to_show():
 
 func _on_AddRulesetFileDialog_file_selected(path: String):
 	if is_file_a_ruleset(path):
+		if not Helpers.ensure_directory_exists(Const.current_dir, Const.RULESET_DIR):
+			emit_signal("report_error", "Error: Creating directory \"/rulesets/\" error")
+			return
+		var new_ruleset_path := Const.current_dir + "/" + Const.RULESET_DIR + "/" + path.get_file()
 		var dir := Directory.new()
-		var ruleset_dir := Const.current_dir + "/rulesets/"
-		if not dir.dir_exists(ruleset_dir):
-			dir.make_dir(ruleset_dir)
-		var error := dir.copy(path, ruleset_dir + path.get_file())
+		var error := dir.copy(path, new_ruleset_path)
 		if error == OK:
+			current_ruleset_path = new_ruleset_path
 			populate_ruleset_opions()
 		else:
-			emit_signal("report_error", "Error copying file: Copy error number %d." % error)
+			emit_signal("report_error", "Error: Copy file error number %d." % error)
 	else:
 		emit_signal("report_error", "Error: Selected file is not a ruleset.")
 
@@ -119,5 +129,6 @@ func is_file_a_ruleset(path: String) -> String:
 	return typeof(parsed_data) == TYPE_DICTIONARY and parsed_data.has("ruleset_name")
 
 
-func _on_RulesetFileName_item_selected(index):
-	pass # Replace with function body.
+func _on_RulesetFileName_item_selected(index: int):
+	current_ruleset_path = ruleset_options.get_item_metadata(index)
+	emit_signal("tile_ruleset_changed", current_ruleset_path)

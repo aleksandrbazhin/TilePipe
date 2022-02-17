@@ -16,6 +16,9 @@ var DEFAULT_USER_SETTINGS := {
 	"VBoxContainer/HSplitContainer/MarginContainer/ProjectTree/OpenFolderDialog": EXAMPLES_DIR,
 }
 
+const RULESET_DIR := "rulesets"
+const TEMPLATE_DIR := "templates"
+
 var current_dir := OS.get_executable_path().get_base_dir() + "/" + EXAMPLES_DIR
 
 

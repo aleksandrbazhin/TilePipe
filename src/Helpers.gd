@@ -22,8 +22,19 @@ func file_exists(path: String) -> bool:
 
 
 func dir_exists(path: String) -> bool:
-	var d := Directory.new()
-	return d.dir_exists(path)
+	var dir := Directory.new()
+	return dir.dir_exists(path)
+
+
+func ensure_directory_exists(parent_path: String, dir_name: String) -> bool:
+	var dir := Directory.new()
+	var dir_path := parent_path + "/" + dir_name
+	if not dir.dir_exists(dir_path):
+		dir.open(parent_path)
+		var dir_error := dir.make_dir(dir_name)
+		if dir_error != OK:
+			return false
+	return true
 
 
 # snap to closest bigger power of 2, for less than 1 x returns snapped fraction
