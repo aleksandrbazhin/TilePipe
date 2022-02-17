@@ -37,7 +37,6 @@ size_flags_vertical = 3
 visible = false
 
 [node name="TemplateView" parent="VSplitContainer/Control" instance=ExtResource( 5 )]
-margin_bottom = 20.0
 
 [node name="RulesetView" parent="VSplitContainer/Control" instance=ExtResource( 2 )]
 visible = false
@@ -50,10 +49,9 @@ margin_top = 480.0
 margin_right = 988.0
 margin_bottom = 712.0
 
-[connection signal="file_dialog_ended" from="VSplitContainer/Control/TileMainView" to="." method="_on_TileMainView_file_dialog_ended"]
-[connection signal="file_dialog_started" from="VSplitContainer/Control/TileMainView" to="." method="_on_TileMainView_file_dialog_started"]
 [connection signal="file_dialog_ended" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_file_dialog_ended"]
 [connection signal="file_dialog_started" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_file_dialog_started"]
+[connection signal="tile_template_changed" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_tile_template_changed"]
 [connection signal="file_dialog_ended" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_file_dialog_ended"]
 [connection signal="file_dialog_started" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_file_dialog_started"]
 [connection signal="tile_ruleset_changed" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_tile_ruleset_changed"]

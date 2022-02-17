@@ -92,3 +92,10 @@ func _on_RulesetView_tile_ruleset_changed(path: String):
 	tile.set_ruleset(path)
 	tile.save()
 	ruleset_view.load_data(tile)
+
+
+func _on_TemplateView_tile_template_changed(path: String):
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	tile.set_template(path)
+	tile.save()
+	template_view.load_data(tile)

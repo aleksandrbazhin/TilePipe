@@ -43,23 +43,24 @@ size_flags_horizontal = 3
 
 [node name="TileNameLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
 margin_top = 4.0
-margin_right = 427.0
+margin_right = 357.0
 margin_bottom = 18.0
 rect_min_size = Vector2( 180, 0 )
 size_flags_horizontal = 3
+text = "Tilename.tptile"
 align = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
-margin_left = 431.0
+margin_left = 361.0
 margin_top = 4.0
-margin_right = 444.0
+margin_right = 374.0
 margin_bottom = 18.0
 text = " / "
 align = 1
 
 [node name="CaptionLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
-margin_left = 448.0
-margin_right = 500.0
+margin_left = 378.0
+margin_right = 430.0
 margin_bottom = 22.0
 size_flags_vertical = 3
 text = "Ruleset:"
@@ -69,14 +70,15 @@ __meta__ = {
 }
 
 [node name="RulesetFileName" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
-margin_left = 504.0
-margin_right = 684.0
+margin_left = 434.0
+margin_right = 754.0
 margin_bottom = 22.0
-rect_min_size = Vector2( 180, 0 )
+rect_min_size = Vector2( 320, 0 )
+align = 1
 
 [node name="RulesetDialogButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 688.0
-margin_right = 848.0
+margin_left = 758.0
+margin_right = 918.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 160, 0 )
 hint_tooltip = "Copies ruleset to your working directory/rulesets. You can also do that outside of TilePipe."
@@ -84,17 +86,9 @@ text = "Add ruleset"
 icon = ExtResource( 2 )
 
 [node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
-margin_left = 852.0
+margin_left = 922.0
 margin_right = 1280.0
 margin_bottom = 22.0
-size_flags_horizontal = 3
-
-[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
-visible = false
-margin_top = 32.0
-margin_right = 1280.0
-margin_bottom = 68.0
-rect_min_size = Vector2( 0, 36 )
 size_flags_horizontal = 3
 
 [node name="HeaderContainer" type="PanelContainer" parent="VBoxContainer"]

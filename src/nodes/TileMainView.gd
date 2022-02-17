@@ -2,7 +2,7 @@ extends VBoxContainer
 
 class_name TileMainView
 
-onready var title := $Title/Label
+onready var title := $Label
 onready var input_title := $MarginContainer/VBoxContainer/InputContainer/HBoxContainer/FileName
 onready var input_texture := $MarginContainer/VBoxContainer/InputContainer/TextureRect
 onready var ruleset_filename := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer/FileName
@@ -13,8 +13,8 @@ onready var template_title := $MarginContainer/VBoxContainer/TemplateContainer/H
 onready var template_texture := $MarginContainer/VBoxContainer/TemplateContainer/TextureRect
 
 
-signal file_dialog_started()
-signal file_dialog_ended()
+#signal file_dialog_started()
+#signal file_dialog_ended()
 
 #func _ready():
 #	print("ready")

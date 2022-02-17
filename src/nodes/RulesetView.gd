@@ -22,14 +22,14 @@ onready var scroll_container := $VBoxContainer/ScrollContainer
 
 
 func load_data(tile: TileInTree):
+	tile_name.text = tile.tile_file_name
+	current_ruleset_path = tile.ruleset_path
+	populate_ruleset_options()
 	if tile.ruleset_path != "":
-		current_ruleset_path = tile.ruleset_path
-		tile_name.text = tile.tile_file_name
 		header_data.text = tile.loaded_ruleset.get_raw_header()
 		ruleset_name.text = tile.loaded_ruleset.get_name()
 		description.text = tile.loaded_ruleset.get_description()
 		parts_texture.texture = tile.loaded_ruleset.preview_texture
-		populate_ruleset_opions()
 		add_ruleset_highlights(tile.loaded_ruleset)
 		add_tiles(tile.loaded_ruleset)
 	
@@ -61,7 +61,7 @@ func _on_RulesetDialogButton_pressed():
 	$AddRulesetFileDialog.popup_centered()
 
 
-func populate_ruleset_opions():
+func populate_ruleset_options():
 	ruleset_options.clear()
 	var rulesets_found := get_rulesets_in_project()
 	var index := 0
@@ -74,7 +74,7 @@ func populate_ruleset_opions():
 			index += 1
 
 
-func scan_for_rulesets_in_project(path: String) -> PoolStringArray:
+func scan_for_rulesets_in_dir(path: String) -> PoolStringArray:
 	var files := PoolStringArray([])
 	var dir := Directory.new()
 	dir.open(path)
@@ -90,8 +90,8 @@ func scan_for_rulesets_in_project(path: String) -> PoolStringArray:
 
 
 func get_rulesets_in_project() -> PoolStringArray:
-	var rulesets_found := scan_for_rulesets_in_project(Const.current_dir)
-	rulesets_found += scan_for_rulesets_in_project(Const.current_dir + "/rulesets")
+	var rulesets_found := scan_for_rulesets_in_dir(Const.current_dir)
+	rulesets_found += scan_for_rulesets_in_dir(Const.current_dir + "/" + Const.RULESET_DIR)
 	return rulesets_found
 	
 	
@@ -106,14 +106,15 @@ func _on_AddRulesetFileDialog_about_to_show():
 func _on_AddRulesetFileDialog_file_selected(path: String):
 	if is_file_a_ruleset(path):
 		if not Helpers.ensure_directory_exists(Const.current_dir, Const.RULESET_DIR):
-			emit_signal("report_error", "Error: Creating directory \"/rulesets/\" error")
+			emit_signal("report_error", "Error: Creating directory \"/%s/\" error" % Const.RULESET_DIR)
 			return
 		var new_ruleset_path := Const.current_dir + "/" + Const.RULESET_DIR + "/" + path.get_file()
 		var dir := Directory.new()
 		var error := dir.copy(path, new_ruleset_path)
 		if error == OK:
 			current_ruleset_path = new_ruleset_path
-			populate_ruleset_opions()
+			populate_ruleset_options()
+			emit_signal("tile_ruleset_changed", current_ruleset_path)
 		else:
 			emit_signal("report_error", "Error: Copy file error number %d." % error)
 	else:

@@ -150,9 +150,9 @@ func render_next_batch():
 	for viewport in render_pool:
 		var tile: GeneratedTile = get_next_tile()
 		if tile != null:
-			last_mask = tile.mask
+			last_mask = tile.bitmask
 			tile.is_rendering = true
-			setup_tile_render(tile.mask, viewport)
+			setup_tile_render(tile.bitmask, viewport)
 			viewport.set_meta("tile", tile)
 		else:
 			viewport.remove_meta("tile")

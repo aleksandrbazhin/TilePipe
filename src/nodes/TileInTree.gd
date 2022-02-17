@@ -18,6 +18,7 @@ var is_selected := false
 var loaded_texture: Texture
 var loaded_ruleset: Ruleset
 var loaded_template: Texture
+var result_tiles_by_bitmask: Dictionary
 
 var texture_path: String
 var template_path: String
@@ -88,11 +89,52 @@ func load_template(path: String) -> bool:
 	var err: int
 	err = image.load(file_path)
 	if err == OK:
+		if image.get_size().x < Const.TEMPLATE_TILE_SIZE or image.get_size().y < Const.TEMPLATE_TILE_SIZE:
+#			print("Template texture size should be at least 32x32px")
+			return false
 		template_path = file_path
 		loaded_template = ImageTexture.new()
 		loaded_template.create_from_image(image, 0)
+		parse_template()
 		return true
 	return false
+
+
+func parse_template():
+	result_tiles_by_bitmask.clear()
+	if loaded_template == null:
+		return
+	var template_size := loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
+	for x in range(template_size.x):
+		for y in range(template_size.y):
+			var mask: int = get_template_mask_value(loaded_template.get_data(), x, y)
+			var has_tile: bool = get_template_has_tile(loaded_template.get_data(), x, y)
+			if has_tile:
+				if not result_tiles_by_bitmask.has(mask):
+					result_tiles_by_bitmask[mask] = []
+				result_tiles_by_bitmask[mask].append(GeneratedTile.new(mask, Vector2(x, y)))
+
+
+func get_template_mask_value(template_image: Image, x: int, y: int) -> int:
+	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS
+	var mask_value: int = 0
+	template_image.lock()
+	for mask in mask_check_points:
+		var pixel_x: int = x * Const.TEMPLATE_TILE_SIZE + mask_check_points[mask].x
+		var pixel_y: int = y * Const.TEMPLATE_TILE_SIZE + mask_check_points[mask].y
+		if not template_image.get_pixel(pixel_x, pixel_y).is_equal_approx(Color.white):
+			mask_value += mask
+	template_image.unlock()
+	return mask_value
+
+
+func get_template_has_tile(template_image: Image, x: int, y: int) -> bool:
+	template_image.lock()
+	var pixel_x: int = x * Const.TEMPLATE_TILE_SIZE + int(Const.MASK_CHECK_CENTER.x)
+	var pixel_y: int = y * Const.TEMPLATE_TILE_SIZE + int(Const.MASK_CHECK_CENTER.y)
+	var has_tile: bool = not template_image.get_pixel(pixel_x, pixel_y).is_equal_approx(Color.white)
+	template_image.unlock()
+	return has_tile
 
 
 func create_tree_items():
@@ -158,6 +200,12 @@ func set_ruleset(abs_path: String):
 	load_ruleset(rel_path)
 	ruleset_row.set_text(0, "Ruleset: %s" % rel_path)
 
+
+func set_template(abs_path: String):
+	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
+	load_template(rel_path)
+	template_row.set_text(0, "Template: %s" % rel_path)
+	
 
 func save():
 	pass
