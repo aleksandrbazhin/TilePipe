@@ -66,3 +66,8 @@ color = Color( 0.215686, 0.247059, 0.290196, 0.678431 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[connection signal="file_dialog_ended" from="VBoxContainer/HSplitContainer/MarginContainer/ProjectTree" to="." method="_on_ProjectTree_file_dialog_ended"]
+[connection signal="file_dialog_started" from="VBoxContainer/HSplitContainer/MarginContainer/ProjectTree" to="." method="_on_ProjectTree_file_dialog_started"]
+[connection signal="file_dialog_ended" from="VBoxContainer/HSplitContainer/WorkRect" to="." method="_on_WorkRect_file_dialog_ended"]
+[connection signal="file_dialog_started" from="VBoxContainer/HSplitContainer/WorkRect" to="." method="_on_WorkRect_file_dialog_started"]

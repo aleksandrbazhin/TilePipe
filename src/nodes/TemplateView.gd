@@ -2,6 +2,9 @@ extends ColorRect
 
 class_name TemplateView
 
+signal file_dialog_started()
+signal file_dialog_ended()
+
 onready var texture_rect := $VBoxContainer/TextureRect
 onready var name_label := $VBoxContainer/CenterContainer/HBoxContainer/TemplateNameLabel
 

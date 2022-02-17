@@ -2,6 +2,9 @@ extends ColorRect
 
 class_name WorkRect
 
+signal file_dialog_started()
+signal file_dialog_ended()
+
 var loaded_tile_ref: WeakRef
 var last_visible_tab
 
@@ -50,3 +53,35 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 		tile.template_row:
 			template_view.show()
 			last_visible_tab = template_view
+
+
+func _on_RulesetView_file_dialog_started():
+	emit_signal("file_dialog_started")
+
+
+func _on_RulesetView_file_dialog_ended():
+	emit_signal("file_dialog_ended")
+
+
+func _on_TileMainView_file_dialog_started():
+	emit_signal("file_dialog_started")
+
+
+func _on_TileMainView_file_dialog_ended():
+	emit_signal("file_dialog_ended")
+
+
+func _on_TemplateView_file_dialog_started():
+	emit_signal("file_dialog_started")
+
+
+func _on_TemplateView_file_dialog_ended():
+	emit_signal("file_dialog_ended")
+
+
+func _on_InputTextureView_file_dialog_started():
+	emit_signal("file_dialog_started")
+
+
+func _on_InputTextureView_file_dialog_ended():
+	emit_signal("file_dialog_ended")

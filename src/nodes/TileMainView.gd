@@ -13,6 +13,9 @@ onready var template_title := $MarginContainer/VBoxContainer/TemplateContainer/H
 onready var template_texture := $MarginContainer/VBoxContainer/TemplateContainer/TextureRect
 
 
+signal file_dialog_started()
+signal file_dialog_ended()
+
 #func _ready():
 #	print("ready")
 #	get_tree().get_root().connect("size_changed", self, "set_texture_scale_mode")

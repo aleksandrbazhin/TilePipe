@@ -17,7 +17,7 @@ __meta__ = {
 [node name="OpenFolderDialog" type="FileDialog" parent="." groups=["snapshottable"]]
 margin_right = 315.0
 margin_bottom = 130.0
-rect_min_size = Vector2( 600, 480 )
+rect_min_size = Vector2( 800, 600 )
 hint_tooltip = "Open project folder"
 popup_exclusive = true
 window_title = "Open a Project Folder"

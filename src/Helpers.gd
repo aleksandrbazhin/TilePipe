@@ -117,4 +117,4 @@ func assume_godot_autotile_type(tiles_by_bitmask: Dictionary) -> int:
 				if not mask in Const.GODOT_AUTOTILE_BITMASKS[Const.GODOT_AUTOTILE_TYPE.BLOB_3x3]:
 					return Const.GODOT_AUTOTILE_TYPE.FULL_3x3
 	return type
-	
+

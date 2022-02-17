@@ -28,8 +28,6 @@ func _ready():
 
 
 func connect_signals():
-	project_tree.connect("file_dialog_started", blocking_overlay, "show")
-	project_tree.connect("file_dialog_ended", blocking_overlay, "hide")
 	project_tree.connect("tile_selected", work_rect, "on_tile_selected")
 	get_tree().get_root().connect("size_changed", self, "on_size_changed")
 
@@ -76,3 +74,18 @@ func _process(_delta: float):
 #		else:
 #			exit()
 
+
+func _on_WorkRect_file_dialog_started():
+	blocking_overlay.show()
+
+
+func _on_WorkRect_file_dialog_ended():
+	blocking_overlay.hide()
+
+
+func _on_ProjectTree_file_dialog_started():
+	blocking_overlay.show()
+
+
+func _on_ProjectTree_file_dialog_ended():
+	blocking_overlay.hide()

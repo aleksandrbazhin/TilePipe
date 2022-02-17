@@ -49,3 +49,12 @@ visible = false
 margin_top = 480.0
 margin_right = 988.0
 margin_bottom = 712.0
+
+[connection signal="file_dialog_ended" from="VSplitContainer/Control/TileMainView" to="." method="_on_TileMainView_file_dialog_ended"]
+[connection signal="file_dialog_started" from="VSplitContainer/Control/TileMainView" to="." method="_on_TileMainView_file_dialog_started"]
+[connection signal="file_dialog_ended" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_file_dialog_ended"]
+[connection signal="file_dialog_started" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_file_dialog_started"]
+[connection signal="file_dialog_ended" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_file_dialog_ended"]
+[connection signal="file_dialog_started" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_file_dialog_started"]
+[connection signal="file_dialog_ended" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_file_dialog_ended"]
+[connection signal="file_dialog_started" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_file_dialog_started"]
