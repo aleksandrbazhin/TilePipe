@@ -3,10 +3,13 @@ extends Control
 class_name TileInTree
 
 signal row_selected(row)
-#signal error_loading()
+signal report_error(text)
 
 const HEIGHT_EXPANDED := 144
 const HEIGHT_COLLAPSED := 50
+const RULESET_PREFIX := "Ruleset: "
+const TEXTURE_PREFIX := "Texture: "
+const TEMPLATE_PREFIX := "Template: "
 
 var is_loaded := false
 var _tile_data: Dictionary
@@ -55,9 +58,7 @@ func load_tile(directory: String, tile_file: String) -> bool:
 		load_ruleset(_tile_data["ruleset"])
 		load_template(_tile_data["template"])
 		return true
-			
-#	else:
-#		emit_signal("error_loading")
+	emit_signal("report_error", "Error loading tile: " + tile_file)
 	return false
 	
 
@@ -79,8 +80,11 @@ func load_ruleset(path: String) -> bool:
 	loaded_ruleset = Ruleset.new(file_path)
 	if loaded_ruleset.is_loaded:
 		ruleset_path = file_path
-		return true
-	return false
+	if loaded_ruleset.last_error != -1:
+		print("In ruleset %s :\n" % file_path + loaded_ruleset.last_error_message)
+#		emit_signal("report_error", loaded_ruleset.last_error_message)
+		return false
+	return true
 
 
 func load_template(path: String) -> bool:
@@ -147,17 +151,17 @@ func create_tree_items():
 
 func add_texture_item(file_name: String):
 	texture_row = tree.create_item(tile_row)
-	texture_row.set_text(0, "Texture: %s" % file_name)
+	texture_row.set_text(0, TEXTURE_PREFIX + file_name)
 
 
 func add_ruleset_item(file_name: String):
 	ruleset_row = tree.create_item(tile_row)
-	ruleset_row.set_text(0, "Ruleset: %s" % file_name)
+	ruleset_row.set_text(0, RULESET_PREFIX + file_name)
 
 
 func add_template_item(file_name: String):
 	template_row = tree.create_item(tile_row)
-	template_row.set_text(0, "Template: %s" % file_name)
+	template_row.set_text(0, TEMPLATE_PREFIX + file_name)
 
 
 func _on_Tree_item_selected():
@@ -195,22 +199,23 @@ func _on_Tree_item_collapsed(item: TreeItem):
 		rect_min_size.y = HEIGHT_EXPANDED
 
 
+func set_texture(abs_path: String):
+	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
+	load_texture(rel_path)
+	texture_row.set_text(0, TEXTURE_PREFIX + rel_path)
+
+
 func set_ruleset(abs_path: String):
 	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
 	load_ruleset(rel_path)
-	ruleset_row.set_text(0, "Ruleset: %s" % rel_path)
+	ruleset_row.set_text(0, RULESET_PREFIX + rel_path)
 
 
 func set_template(abs_path: String):
 	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
 	load_template(rel_path)
-	template_row.set_text(0, "Template: %s" % rel_path)
+	template_row.set_text(0, TEMPLATE_PREFIX + rel_path)
 
-
-func set_texture(abs_path: String):
-	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
-	load_texture(rel_path)
-	texture_row.set_text(0, "Texture: %s" % rel_path)
 
 func save():
 	pass

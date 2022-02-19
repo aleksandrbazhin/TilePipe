@@ -5,10 +5,8 @@ class_name ProjectTree
 signal file_dialog_started()
 signal file_dialog_ended()
 signal tile_selected(tile_node, row_item)
-#signal texture_selected(tile_name)
-#signal ruleset_selected(tile_name)
-#signal template_selected(tile_name)
 signal _snapshot_state_changed()
+signal report_error(text)
 
 var is_file_dialog_active := false
 
@@ -80,14 +78,20 @@ func load_project_directory(directory_path: String):
 			add_tile_to_tree(directory_path, tile_fname)
 
 
+func on_error_reported(text: String):
+	emit_signal("report_error", text)
+
+
 func add_tile_to_tree(directory: String, tile_file: String):
 	var tile: TileInTree = preload("res://src/nodes/TileInTree.tscn").instance()
+	tile.connect("report_error", self, "on_error_reported")
 	if tile.load_tile(directory, tile_file):
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
 		tile_container.add_child(tile)
-	else:
-		#TODO: emit signal
-		print("Tile loading error!")
+#	else:
+#		#TODO: emit signal
+#		on_error_reported("Tile loading error!")
+#		print()
 
 
 func _on_OpenFolderDialog_dir_selected(dir: String):

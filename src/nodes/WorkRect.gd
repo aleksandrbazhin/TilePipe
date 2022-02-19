@@ -4,6 +4,7 @@ class_name WorkRect
 
 signal file_dialog_started()
 signal file_dialog_ended()
+signal report_error(text)
 
 var loaded_tile_ref: WeakRef
 var last_visible_tab
@@ -106,3 +107,15 @@ func _on_InputTextureView_tile_texture_changed(path: String):
 	tile.set_texture(path)
 	tile.save()
 	input_texture_view.load_data(tile)
+
+
+func _on_InputTextureView_report_error(text: String):
+	emit_signal("report_error", text)
+
+
+func _on_RulesetView_report_error(text: String):
+	emit_signal("report_error", text)
+
+
+func _on_TemplateView_report_error(text: String):
+	emit_signal("report_error", text)

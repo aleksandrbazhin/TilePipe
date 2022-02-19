@@ -11,6 +11,7 @@ signal _snapshot_state_changed_continous()
 onready var project_tree: ProjectTree = $VBoxContainer/HSplitContainer/MarginContainer/ProjectTree
 onready var blocking_overlay := $BlockingOverlay
 onready var work_rect := $VBoxContainer/HSplitContainer/WorkRect
+onready var error_dialog := $ErrorDialog
 
 
 func _ready():
@@ -24,6 +25,7 @@ func _ready():
 	print("TilePipe v%s running in %s mode" % [VERSION, mode])
 	OS.set_window_title("TilePipe v.%s" % VERSION)
 	rng.randomize()
+	error_dialog.get_label().align = Label.ALIGN_CENTER
 
 
 
@@ -88,4 +90,15 @@ func _on_ProjectTree_file_dialog_started():
 
 
 func _on_ProjectTree_file_dialog_ended():
+	blocking_overlay.hide()
+
+
+func add_error_report(text: String):
+	blocking_overlay.show()
+	error_dialog.dialog_text += text + "\n"
+	error_dialog.popup_centered()
+
+
+func _on_ErrorDialog_popup_hide():
+	error_dialog.dialog_text = ""
 	blocking_overlay.hide()

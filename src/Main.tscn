@@ -67,7 +67,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="ErrorDialog" type="AcceptDialog" parent="."]
+margin_right = 320.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 320, 120 )
+popup_exclusive = true
+window_title = "Oops!"
+dialog_autowrap = true
+
 [connection signal="file_dialog_ended" from="VBoxContainer/HSplitContainer/MarginContainer/ProjectTree" to="." method="_on_ProjectTree_file_dialog_ended"]
 [connection signal="file_dialog_started" from="VBoxContainer/HSplitContainer/MarginContainer/ProjectTree" to="." method="_on_ProjectTree_file_dialog_started"]
+[connection signal="report_error" from="VBoxContainer/HSplitContainer/MarginContainer/ProjectTree" to="." method="add_error_report"]
 [connection signal="file_dialog_ended" from="VBoxContainer/HSplitContainer/WorkRect" to="." method="_on_WorkRect_file_dialog_ended"]
 [connection signal="file_dialog_started" from="VBoxContainer/HSplitContainer/WorkRect" to="." method="_on_WorkRect_file_dialog_started"]
+[connection signal="report_error" from="VBoxContainer/HSplitContainer/WorkRect" to="." method="add_error_report"]
+[connection signal="popup_hide" from="ErrorDialog" to="." method="_on_ErrorDialog_popup_hide"]

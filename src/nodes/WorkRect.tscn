@@ -51,10 +51,13 @@ margin_bottom = 712.0
 
 [connection signal="file_dialog_ended" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_file_dialog_ended"]
 [connection signal="file_dialog_started" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_file_dialog_started"]
+[connection signal="report_error" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_report_error"]
 [connection signal="tile_template_changed" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_tile_template_changed"]
 [connection signal="file_dialog_ended" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_file_dialog_ended"]
 [connection signal="file_dialog_started" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_file_dialog_started"]
+[connection signal="report_error" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_report_error"]
 [connection signal="tile_ruleset_changed" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_tile_ruleset_changed"]
 [connection signal="file_dialog_ended" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_file_dialog_ended"]
 [connection signal="file_dialog_started" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_file_dialog_started"]
+[connection signal="report_error" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_report_error"]
 [connection signal="tile_texture_changed" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_tile_texture_changed"]

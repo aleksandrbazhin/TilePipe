@@ -32,6 +32,8 @@ func load_data(tile: TileInTree):
 		parts_texture.texture = tile.loaded_ruleset.preview_texture
 		add_ruleset_highlights(tile.loaded_ruleset)
 		add_tiles(tile.loaded_ruleset)
+		if tile.loaded_ruleset.last_error != -1:
+			emit_signal("report_error", tile.loaded_ruleset.last_error_message)
 	
 
 func add_ruleset_highlights(ruleset: Ruleset):

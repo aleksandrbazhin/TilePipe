@@ -85,19 +85,39 @@ func load_data_from_json(data_path: String):
 
 
 func get_tile_parts() -> Array:
-	return _data["tile_parts"]
+	if _data.has("tile_parts"):
+		return _data["tile_parts"]
+	else:
+		last_error = ERROR_SCHEMA_MISMATCH
+		last_error_message = "Error: wrong ruleset format."
+		return []
 
 
 func get_tiles() -> Array:
-	return _data["tiles"]
+	if _data.has("tiles"):
+		return _data["tiles"]
+	else:
+		last_error = ERROR_SCHEMA_MISMATCH
+		last_error_message = "Error: wrong ruleset format."
+		return []
 
 
 func get_name() -> String:
-	return _data["ruleset_name"]
+	if _data.has("ruleset_name"):
+		return _data["ruleset_name"]
+	else:
+		last_error = ERROR_SCHEMA_MISMATCH
+		last_error_message = "Error: wrong ruleset format."
+		return "Error:"
 
 
 func get_description() -> String:
-	return _data["ruleset_description"]
+	if _data.has("ruleset_description"):
+		return _data["ruleset_description"]
+	else:
+		last_error = ERROR_SCHEMA_MISMATCH
+		last_error_message = "Error: wrong ruleset format."
+		return ""
 
 
 #func get_input_size() -> int:
@@ -108,24 +128,29 @@ func get_mask_data(mask: int) -> Dictionary:
 	for tile_data in get_tiles():
 		if tile_data["mask_variants"].has(float(mask)):
 			return tile_data
+	last_error_message = "Error: wrong ruleset format. \n"
+	last_error_message += "Invalid mask '%s'" % mask
 	print("ERROR: invalid mask '%s'" % mask)
 	return {}
 
 
 func generate_preview() -> Texture:
 	var parts := get_tile_parts()
-	var format: int = part_textures[parts[0]].get_data().get_format()
-	var image := Image.new()
-	image.create(PREVIEW_SIZE_PX * parts.size() + PREVIEW_SPACE_PX * parts.size() - 1, PREVIEW_SIZE_PX, false, format)
-	var part_copy_rect := Rect2(Vector2.ZERO, Vector2(PREVIEW_SIZE_PX, PREVIEW_SIZE_PX))
-	var part_index := 0
-	for part in parts:
-		var part_image: Image = part_textures[part].get_data() 
-		image.blit_rect(part_image, part_copy_rect, Vector2(part_index * (PREVIEW_SIZE_PX + PREVIEW_SPACE_PX), 0))
-		part_index += 1
-	var itex := ImageTexture.new()
-	itex.create_from_image(image)
-	return itex
+	if not parts.empty():
+		var format: int = part_textures[parts[0]].get_data().get_format()
+		var image := Image.new()
+		image.create(PREVIEW_SIZE_PX * parts.size() + PREVIEW_SPACE_PX * parts.size() - 1, PREVIEW_SIZE_PX, false, format)
+		var part_copy_rect := Rect2(Vector2.ZERO, Vector2(PREVIEW_SIZE_PX, PREVIEW_SIZE_PX))
+		var part_index := 0
+		for part in parts:
+			var part_image: Image = part_textures[part].get_data() 
+			image.blit_rect(part_image, part_copy_rect, Vector2(part_index * (PREVIEW_SIZE_PX + PREVIEW_SPACE_PX), 0))
+			part_index += 1
+		var itex := ImageTexture.new()
+		itex.create_from_image(image)
+		return itex
+	else:
+		return ImageTexture.new()
 
 
 func get_raw_header() -> String:
