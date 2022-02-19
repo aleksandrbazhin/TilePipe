@@ -99,3 +99,10 @@ func _on_TemplateView_tile_template_changed(path: String):
 	tile.set_template(path)
 	tile.save()
 	template_view.load_data(tile)
+
+
+func _on_InputTextureView_tile_texture_changed(path: String):
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	tile.set_texture(path)
+	tile.save()
+	input_texture_view.load_data(tile)

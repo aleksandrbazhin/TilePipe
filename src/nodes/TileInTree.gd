@@ -205,7 +205,12 @@ func set_template(abs_path: String):
 	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
 	load_template(rel_path)
 	template_row.set_text(0, "Template: %s" % rel_path)
-	
+
+
+func set_texture(abs_path: String):
+	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
+	load_texture(rel_path)
+	texture_row.set_text(0, "Texture: %s" % rel_path)
 
 func save():
 	pass

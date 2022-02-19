@@ -11,7 +11,7 @@ var current_template_path := ""
 
 onready var tile_name := $HBoxContainer/TileNameLabel
 onready var template_texture_rect := $ScrollContainer/MarginContainer/TextureRect
-onready var template_options: OptionButton = $HBoxContainer/TemplateFileName
+onready var template_option: OptionButton = $HBoxContainer/TemplateFileName
 
 
 func load_data(tile: TileInTree):
@@ -46,15 +46,15 @@ func label_tile(generated_tile: GeneratedTile):
 
 
 func populate_ruleset_options():
-	template_options.clear()
+	template_option.clear()
 	var templates_found := scan_for_templates_in_dir(Const.current_dir + "/" + Const.TEMPLATE_DIR)
 	var index := 0
 	for template_path in templates_found:
 #		if is_file_a_ruleset(ruleset_path):
-		template_options.add_item(template_path.get_file())
-		template_options.set_item_metadata(index, template_path)
+		template_option.add_item(template_path.get_file())
+		template_option.set_item_metadata(index, template_path)
 		if template_path == current_template_path:
-			template_options.selected = index
+			template_option.selected = index
 		index += 1
 
 
@@ -73,8 +73,8 @@ func scan_for_templates_in_dir(path: String) -> PoolStringArray:
 	return files
 
 
-func _on_TemplateFileName_item_selected(index):
-	current_template_path = template_options.get_item_metadata(index)
+func _on_TemplateFileName_item_selected(index: int):
+	current_template_path = template_option.get_item_metadata(index)
 	emit_signal("tile_template_changed", current_template_path)
 
 

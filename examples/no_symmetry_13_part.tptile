@@ -1,5 +1,5 @@
 {
-    "texture": "part_textures/no_symmetry_pixelart_13_part.png",
+    "texture": "no_symmetry_pixelart_13_part.png",
     "ruleset": "rulesets/no_symmetry_13_part.json",
     "template": "templates/template_47.png",
     "merge_level": 0.25,

@@ -41,26 +41,30 @@ margin_right = 1280.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
 
-[node name="TileNameLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
-margin_top = 4.0
-margin_right = 357.0
-margin_bottom = 18.0
-rect_min_size = Vector2( 180, 0 )
+[node name="Spacer" type="Control" parent="VBoxContainer/HBoxContainer"]
+margin_right = 307.0
+margin_bottom = 22.0
 size_flags_horizontal = 3
+
+[node name="TileNameLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_left = 311.0
+margin_top = 4.0
+margin_right = 408.0
+margin_bottom = 18.0
 text = "Tilename.tptile"
 align = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
-margin_left = 361.0
+margin_left = 412.0
 margin_top = 4.0
-margin_right = 374.0
+margin_right = 425.0
 margin_bottom = 18.0
 text = " / "
 align = 1
 
 [node name="CaptionLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
-margin_left = 378.0
-margin_right = 430.0
+margin_left = 429.0
+margin_right = 481.0
 margin_bottom = 22.0
 size_flags_vertical = 3
 text = "Ruleset:"
@@ -70,23 +74,23 @@ __meta__ = {
 }
 
 [node name="RulesetFileName" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
-margin_left = 434.0
-margin_right = 754.0
+margin_left = 485.0
+margin_right = 805.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 320, 0 )
 align = 1
 
 [node name="RulesetDialogButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 758.0
-margin_right = 918.0
+margin_left = 809.0
+margin_right = 969.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 160, 0 )
 hint_tooltip = "Copies ruleset to your working directory/rulesets. You can also do that outside of TilePipe."
 text = "Add ruleset"
 icon = ExtResource( 2 )
 
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
-margin_left = 922.0
+[node name="Spacer2" type="Control" parent="VBoxContainer/HBoxContainer"]
+margin_left = 973.0
 margin_right = 1280.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
