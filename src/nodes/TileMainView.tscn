@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/nodes/TileMainView.gd" type="Script" id=1]
+[ext_resource path="res://src/nodes/ScalableTextureContainer.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -87,17 +88,26 @@ margin_right = 410.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 0, 10 )
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/InputContainer"]
+[node name="ScalableTextureContainer" parent="MarginContainer/VBoxContainer/InputContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_top = 78.0
 margin_right = 410.0
-margin_bottom = 142.0
+margin_bottom = 618.0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/InputContainer"]
+visible = false
+margin_top = 554.0
+margin_right = 410.0
+margin_bottom = 618.0
 rect_min_size = Vector2( 180, 64 )
 size_flags_horizontal = 3
 expand = true
 stretch_mode = 6
 
 [node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/InputContainer"]
-margin_top = 148.0
+visible = false
+margin_top = 386.0
 margin_right = 410.0
 margin_bottom = 618.0
 size_flags_vertical = 3
@@ -349,3 +359,5 @@ margin_right = 1216.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 72, 36 )
 text = "Export"
+
+[connection signal="tile_size_changed" from="MarginContainer/VBoxContainer/InputContainer/ScalableTextureContainer" to="." method="_on_ScalableTextureContainer_tile_size_changed"]

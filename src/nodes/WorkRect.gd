@@ -121,3 +121,9 @@ func _on_RulesetView_report_error(text: String):
 
 func _on_TemplateView_report_error(text: String):
 	emit_signal("report_error", text)
+
+
+func _on_TileMainView_tile_size_changed(size: Vector2):
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	tile.set_input_tile_size(size)
+	tile.save()

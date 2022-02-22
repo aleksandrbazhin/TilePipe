@@ -15,6 +15,7 @@ onready var texture_option := $HeaderContainer/TextureFileName
 onready var texture_container: ScalableTextureContainer = $HBox/ScalableTextureContainer
 
 func load_data(tile: TileInTree):
+	print(tile.tile_size)
 	tile_name.text = tile.tile_file_name
 	current_texture_path = tile.texture_path
 	current_input_tile_size = tile.tile_size

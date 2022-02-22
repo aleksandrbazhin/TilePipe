@@ -219,5 +219,9 @@ func set_template(abs_path: String):
 	template_row.set_text(0, TEMPLATE_PREFIX + rel_path)
 
 
+func set_input_tile_size(new_size: Vector2):
+	if tile_size.x > 0 and tile_size.y > 0:
+		tile_size = new_size
+
 func save():
 	pass

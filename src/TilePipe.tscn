@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://src/TilePipe.gd" type="Script" id=1]
 [ext_resource path="res://assets/IBMPlexSans-Medium.ttf" type="DynamicFontData" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://assets/images/Godot.svg" type="Texture" id=10]
 [ext_resource path="res://src/nodes/ProjectTree.tscn" type="PackedScene" id=11]
 [ext_resource path="res://assets/images/checkers.png" type="Texture" id=12]
+[ext_resource path="res://src/nodes/AdvancedSpinBox.tscn" type="PackedScene" id=13]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 3 )
@@ -758,13 +759,7 @@ margin_right = 149.0
 margin_bottom = 56.0
 mouse_filter = 2
 
-[node name="OffsetSpinBox" type="SpinBox" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" groups=["blockable"]]
-margin_right = 85.0
-margin_bottom = 31.0
-size_flags_horizontal = 3
-max_value = 255.0
-rounded = true
-align = 1
+[node name="OffsetSpinBox" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" instance=ExtResource( 13 )]
 
 [node name="OffsetButton" type="Button" parent="Panel/HBox/Images/OutputContainer/Output/OutputSettings/OutputControlContainer/SpinBoxContainer" groups=["blockable"]]
 margin_left = 89.0

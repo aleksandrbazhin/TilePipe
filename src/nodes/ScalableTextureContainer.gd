@@ -2,12 +2,16 @@ extends Control
 
 class_name ScalableTextureContainer
 
+signal tile_size_changed(size)
+
 var current_tile_size: Vector2
 var is_ready := false
 
 onready var bg_rect := $BGTextureRect
 onready var texture_rect := $TextureRect
-onready var size_label := $InputInfo/TileSizeLabel
+onready var x_spinbox := $InputInfo/HBoxContainer/XSpinBox
+onready var y_spinbox := $InputInfo/HBoxContainer/YSpinBox
+
 
 func _ready():
 	is_ready = true
@@ -32,10 +36,30 @@ func set_input_tile_size(tile_size: Vector2):
 	var bg_scale :=  scale_factor * tile_size / Const.DEFAULT_TILE_SIZE
 	bg_rect.rect_size = texture_rect.rect_size / bg_scale
 	bg_rect.rect_scale = bg_scale
-	size_label.text = "Tile size: %dx%dpx" % [tile_size.x, tile_size.y]
+	setup_size_display(tile_size)
+
+
+func setup_size_display(tile_size: Vector2):
+	x_spinbox.value = tile_size.x
+	y_spinbox.value = tile_size.y
 
 
 func _draw():
 	#TODO: redraws 2 times instead of one
 	if is_ready:
 		set_input_tile_size(current_tile_size)
+
+
+func _on_XSpinBox_value_changed(value: float):
+	var is_square := current_tile_size.x == current_tile_size.y
+	current_tile_size.x = value
+	if is_square:
+		y_spinbox.value = x_spinbox.value
+	else:
+		emit_signal("tile_size_changed", current_tile_size)
+		update()
+
+func _on_YSpinBox_value_changed(value: float):
+	current_tile_size.y = value
+	emit_signal("tile_size_changed", current_tile_size)
+	update()
