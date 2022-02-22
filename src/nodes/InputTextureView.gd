@@ -8,14 +8,16 @@ signal report_error(text)
 signal tile_texture_changed(path)
 
 var current_texture_path := ""
+var current_input_tile_size := Const.DEFAULT_TILE_SIZE
 
 onready var tile_name := $HeaderContainer/TileNameLabel
 onready var texture_option := $HeaderContainer/TextureFileName
-onready var texture_rect := $HBox/TextureContainer/Control/BGTextureRect/TextureRect
+onready var texture_container: ScalableTextureContainer = $HBox/ScalableTextureContainer
 
 func load_data(tile: TileInTree):
 	tile_name.text = tile.tile_file_name
 	current_texture_path = tile.texture_path
+	current_input_tile_size = tile.tile_size
 	populate_texture_options()
 	if current_texture_path != "":
 		load_texture(tile.loaded_texture)
@@ -53,8 +55,8 @@ func scan_for_textures(path: String) -> PoolStringArray:
 
 
 func load_texture(texture: Texture):
-	texture_rect.texture = texture
-
+	texture_container.set_texture(texture, current_input_tile_size)
+	
 
 func _on_TextureFileName_item_selected(index: int):
 	current_texture_path = texture_option.get_item_metadata(index)

@@ -26,6 +26,7 @@ var result_tiles_by_bitmask: Dictionary
 var texture_path: String
 var template_path: String
 var ruleset_path: String
+var tile_size: Vector2
 
 var tile_row: TreeItem
 var texture_row: TreeItem
@@ -54,6 +55,7 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	if typeof(parsed_data) == TYPE_DICTIONARY:
 		_tile_data = parsed_data
 		is_loaded = true
+		tile_size = Vector2(_tile_data["input_tile_size"]["x"], _tile_data["input_tile_size"]["y"])
 		load_texture(_tile_data["texture"])
 		load_ruleset(_tile_data["ruleset"])
 		load_template(_tile_data["template"])

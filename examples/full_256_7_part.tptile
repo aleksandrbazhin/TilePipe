@@ -2,9 +2,16 @@
     "texture": "full_256_diagonal_7_part.png",
     "ruleset": "rulesets/full_256_7_part.json",
     "template": "templates/template_256.png",
+    "input_tile_size": {
+        "x": 16,
+        "y": 16
+    },  
     "merge_level": 0.25,
     "output_tile_offset": 0,
-    "output_tile_size": 64,
+    "output_tile_size": {
+        "x": 64,
+        "y": 64
+    },
     "overlap_level": 0.25,
     "smoothing": false,
     "use_random_seed": false,

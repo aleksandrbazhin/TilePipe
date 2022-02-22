@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=2]
 
+[ext_resource path="res://src/nodes/ScalableTextureContainer.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/nodes/InputTextureView.gd" type="Script" id=2]
 [ext_resource path="res://assets/images/Load.svg" type="Texture" id=3]
-[ext_resource path="res://assets/images/checkers.png" type="Texture" id=4]
 [ext_resource path="res://src/nodes/BlockableSlider.gd" type="Script" id=5]
 
 [node name="InputTextureView" type="VBoxContainer"]
@@ -93,64 +93,8 @@ size_flags_vertical = 3
 custom_constants/separation = 16
 alignment = 1
 
-[node name="TextureContainer" type="VBoxContainer" parent="HBox"]
-margin_right = 632.0
-margin_bottom = 694.0
-size_flags_horizontal = 3
-
-[node name="Control" type="Control" parent="HBox/TextureContainer"]
-margin_right = 632.0
-margin_bottom = 694.0
-rect_min_size = Vector2( 320, 256 )
-size_flags_horizontal = 3
+[node name="ScalableTextureContainer" parent="HBox" instance=ExtResource( 1 )]
 size_flags_vertical = 3
-
-[node name="BGTextureRect" type="TextureRect" parent="HBox/TextureContainer/Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = ExtResource( 4 )
-expand = true
-stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextureRect" type="TextureRect" parent="HBox/TextureContainer/Control/BGTextureRect"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-stretch_mode = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="InputInfo" type="Control" parent="HBox/TextureContainer/Control"]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TileSizeLabel" type="Label" parent="HBox/TextureContainer/Control/InputInfo"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -56.0
-margin_top = -21.0
-margin_right = -2.0
-margin_bottom = -2.0
-grow_horizontal = 0
-size_flags_vertical = 1
-custom_colors/font_color = Color( 0.666667, 0.686275, 0.72549, 1 )
-text = "64x64px"
-align = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="SettingsContainer" type="MarginContainer" parent="HBox"]
 margin_left = 648.0

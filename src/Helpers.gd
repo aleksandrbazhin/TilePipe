@@ -46,6 +46,8 @@ func snap_up_to_po2(x: float) -> float:
 
 
 func snap_down_to_po2(x: float) -> float:
+	if x == 0.0:
+		return 0.0
 	if x >= 1.0:
 		return float(nearest_po2(int(ceil(x)))) / 2.0
 	else:

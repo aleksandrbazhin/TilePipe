@@ -6,6 +6,7 @@ const EXAMPLES_DIR := "examples"
 const TILE_EXTENXSION := "tptile"
 const MIN_WINDOW_SIZE := Vector2(800, 600)
 const DRAG_END_MSEC := 200
+const DEFAULT_TILE_SIZE := Vector2(64, 64)
 
 var DEFAULT_USER_SETTINGS := {
 	".": {
