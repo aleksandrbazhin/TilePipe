@@ -6,6 +6,7 @@ signal file_dialog_started()
 signal file_dialog_ended()
 signal report_error(text)
 signal tile_texture_changed(path)
+signal tile_size_changed(size)
 
 var current_texture_path := ""
 var current_input_tile_size := Const.DEFAULT_TILE_SIZE
@@ -13,13 +14,18 @@ var current_input_tile_size := Const.DEFAULT_TILE_SIZE
 onready var tile_name := $HeaderContainer/TileNameLabel
 onready var texture_option := $HeaderContainer/TextureFileName
 onready var texture_container: ScalableTextureContainer = $HBox/ScalableTextureContainer
+onready var merge_slider_x: AdvancedSlider = $HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/RateSlider
+onready var merge_slider_y: AdvancedSlider = $HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeYSliderContainer/RateSlider
+onready var overlay_slider_x: AdvancedSlider = $HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSlider
+onready var overlay_slider_y: AdvancedSlider = $HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer/OverlapSlider
+
 
 func load_data(tile: TileInTree):
-	print(tile.tile_size)
 	tile_name.text = tile.tile_file_name
 	current_texture_path = tile.texture_path
 	current_input_tile_size = tile.tile_size
 	populate_texture_options()
+	setup_sliders()
 	if current_texture_path != "":
 		load_texture(tile.loaded_texture)
 
@@ -59,6 +65,13 @@ func load_texture(texture: Texture):
 	texture_container.set_texture(texture, current_input_tile_size)
 	
 
+func setup_sliders():
+	merge_slider_x.quantize(int(current_input_tile_size.x / 2))
+	merge_slider_y.quantize(int(current_input_tile_size.y / 2))
+	overlay_slider_x.quantize(int(current_input_tile_size.x / 2))
+	overlay_slider_y.quantize(int(current_input_tile_size.y / 2))
+
+
 func _on_TextureFileName_item_selected(index: int):
 	current_texture_path = texture_option.get_item_metadata(index)
 	emit_signal("tile_texture_changed", current_texture_path)
@@ -86,3 +99,9 @@ func _on_AddTextureFileDialog_file_selected(path: String):
 		emit_signal("tile_texture_changed", current_texture_path)
 	else:
 		emit_signal("report_error", "Error: Copy file error number %d." % error)
+
+
+func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
+	emit_signal("tile_size_changed", size)
+	current_input_tile_size = size
+	setup_sliders()

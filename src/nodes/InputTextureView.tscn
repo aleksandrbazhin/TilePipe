@@ -3,7 +3,7 @@
 [ext_resource path="res://src/nodes/ScalableTextureContainer.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/nodes/InputTextureView.gd" type="Script" id=2]
 [ext_resource path="res://assets/images/Load.svg" type="Texture" id=3]
-[ext_resource path="res://src/nodes/BlockableSlider.gd" type="Script" id=5]
+[ext_resource path="res://src/nodes/AdvancedSlider.gd" type="Script" id=5]
 
 [node name="InputTextureView" type="VBoxContainer"]
 anchor_right = 1.0
@@ -94,7 +94,10 @@ custom_constants/separation = 16
 alignment = 1
 
 [node name="ScalableTextureContainer" parent="HBox" instance=ExtResource( 1 )]
-size_flags_vertical = 3
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 632.0
+margin_bottom = 694.0
 
 [node name="SettingsContainer" type="MarginContainer" parent="HBox"]
 margin_left = 648.0
@@ -136,45 +139,31 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorProcessContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition"]
-visible = false
-margin_right = 194.0
-margin_bottom = 62.0
-
-[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/ColorProcessContainer"]
-margin_right = 194.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 0, 26 )
-text = "Color processing type"
-valign = 2
-
-[node name="ColorProcessType" type="OptionButton" parent="HBox/SettingsContainer/VBox/Composition/ColorProcessContainer" groups=["blockable"]]
-margin_top = 30.0
-margin_right = 194.0
-margin_bottom = 62.0
-rect_min_size = Vector2( 0, 32 )
-align = 1
-
-[node name="HSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition"]
+[node name="MergeContainer" type="HBoxContainer" parent="HBox/SettingsContainer/VBox/Composition"]
 margin_top = 38.0
 margin_right = 592.0
 margin_bottom = 84.0
+custom_constants/separation = 12
+
+[node name="MergeXSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer"]
+margin_right = 290.0
+margin_bottom = 46.0
 hint_tooltip = "How much of the corners and sides \"take\" of  the central part:
 maximum - no central part used,
 minimum - only central part is used"
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/HSliderContainer" groups=["blockable"]]
-margin_right = 592.0
+[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeXSliderContainer" groups=["blockable"]]
+margin_right = 290.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
-text = " Merge amount"
+text = " Merge pixels X"
 valign = 2
 
-[node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/HSliderContainer" groups=["blockable", "snapshottable"]]
+[node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeXSliderContainer" groups=["blockable", "snapshottable"]]
 margin_top = 30.0
-margin_right = 592.0
+margin_right = 290.0
 margin_bottom = 46.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
@@ -186,25 +175,91 @@ tick_count = 11
 ticks_on_borders = true
 script = ExtResource( 5 )
 
-[node name="OverlapSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition"]
+[node name="MergeYSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer"]
+margin_left = 302.0
+margin_right = 592.0
+margin_bottom = 46.0
+hint_tooltip = "How much of the corners and sides \"take\" of  the central part:
+maximum - no central part used,
+minimum - only central part is used"
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeYSliderContainer" groups=["blockable"]]
+margin_right = 290.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 26 )
+text = "Merge pixels Y"
+valign = 2
+
+[node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeYSliderContainer" groups=["blockable", "snapshottable"]]
+margin_top = 30.0
+margin_right = 290.0
+margin_bottom = 46.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+max_value = 0.5
+step = 0.01
+value = 0.25
+scrollable = false
+tick_count = 11
+ticks_on_borders = true
+script = ExtResource( 5 )
+
+[node name="OverlapContainer" type="HBoxContainer" parent="HBox/SettingsContainer/VBox/Composition"]
 margin_top = 94.0
 margin_right = 592.0
 margin_bottom = 140.0
+custom_constants/separation = 12
+
+[node name="OverlapXSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition/OverlapContainer"]
+margin_right = 290.0
+margin_bottom = 46.0
 hint_tooltip = "How much of the central part will be “shoved” under the corners and side. 
 Only matters if sides have some transparency."
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/OverlapSliderContainer" groups=["blockable"]]
-margin_right = 592.0
+[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer" groups=["blockable"]]
+margin_right = 290.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
-text = " Overlap amount"
+text = " Overlap pixels X"
 valign = 2
 
-[node name="OverlapSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/OverlapSliderContainer" groups=["blockable"]]
+[node name="OverlapSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer" groups=["blockable"]]
 margin_top = 30.0
+margin_right = 290.0
+margin_bottom = 46.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+max_value = 0.5
+step = 0.01
+value = 0.25
+scrollable = false
+tick_count = 11
+ticks_on_borders = true
+script = ExtResource( 5 )
+
+[node name="OverlapYSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition/OverlapContainer"]
+margin_left = 302.0
 margin_right = 592.0
+margin_bottom = 46.0
+hint_tooltip = "How much of the central part will be “shoved” under the corners and side. 
+Only matters if sides have some transparency."
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer" groups=["blockable"]]
+margin_right = 290.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 0, 26 )
+text = " Overlap pixels Y"
+valign = 2
+
+[node name="OverlapSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer" groups=["blockable"]]
+margin_top = 30.0
+margin_right = 290.0
 margin_bottom = 46.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
@@ -294,3 +349,4 @@ __meta__ = {
 [connection signal="popup_hide" from="AddTextureFileDialog" to="." method="_on_AddTextureFileDialog_popup_hide"]
 [connection signal="item_selected" from="HeaderContainer/TextureFileName" to="." method="_on_TextureFileName_item_selected"]
 [connection signal="pressed" from="HeaderContainer/TextureDialogButton" to="." method="_on_TextureDialogButton_pressed"]
+[connection signal="tile_size_changed" from="HBox/ScalableTextureContainer" to="." method="_on_ScalableTextureContainer_tile_size_changed"]

@@ -1,5 +1,7 @@
 extends HSlider
 
+class_name AdvancedSlider
+
 # this file exists only because Godot "editable" implementation is bugged for sliders
 # they are tied to the mouse if set not editable during click callback
 
@@ -15,6 +17,7 @@ func _gui_input(event):
 
 
 func quantize(levels: int):
-	step = MAX / float(levels)
-	tick_count = levels + 1
+	var safe_levels = max(levels, 1)
+	step = MAX / float(safe_levels)
+	tick_count = safe_levels + 1
 	value = step * round(value / step)

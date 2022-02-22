@@ -48,7 +48,7 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -235.0
+margin_left = -278.0
 margin_top = -32.0
 margin_right = -2.0
 margin_bottom = -2.0
@@ -58,33 +58,33 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="InputInfo/HBoxContainer"]
 margin_top = 8.0
-margin_right = 53.0
+margin_right = 97.0
 margin_bottom = 22.0
-text = "TileSize:"
+text = "Input tile size: "
 
 [node name="Label2" type="Label" parent="InputInfo/HBoxContainer"]
-margin_left = 57.0
+margin_left = 101.0
 margin_top = 8.0
-margin_right = 65.0
+margin_right = 109.0
 margin_bottom = 22.0
 text = "X"
 
 [node name="XSpinBox" parent="InputInfo/HBoxContainer" instance=ExtResource( 3 )]
-margin_left = 69.0
-margin_right = 143.0
+margin_left = 113.0
+margin_right = 187.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
 
 [node name="Label3" type="Label" parent="InputInfo/HBoxContainer"]
-margin_left = 147.0
+margin_left = 191.0
 margin_top = 8.0
-margin_right = 154.0
+margin_right = 198.0
 margin_bottom = 22.0
 text = "Y"
 
 [node name="YSpinBox" parent="InputInfo/HBoxContainer" instance=ExtResource( 3 )]
-margin_left = 158.0
-margin_right = 233.0
+margin_left = 202.0
+margin_right = 276.0
 margin_bottom = 30.0
 
 [connection signal="value_changed" from="InputInfo/HBoxContainer/XSpinBox" to="." method="_on_XSpinBox_value_changed"]

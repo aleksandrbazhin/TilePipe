@@ -31,7 +31,7 @@ func hide_all():
 func load_tile_data(tile: TileInTree):
 	if loaded_tile_ref == null or loaded_tile_ref.get_ref() != tile:
 		loaded_tile_ref = weakref(tile)
-		tile_main_view.load_data(tile)
+#		tile_main_view.load_data(tile)
 #		input_texture_view.load_data(tile)
 #		ruleset_view.load_data(tile)
 #		template_view.load_data(tile)
@@ -43,6 +43,7 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 	match row:
 		tile.tile_row:
 			tile_main_view.show()
+			tile_main_view.load_data(tile)
 			last_visible_tab = tile_main_view
 		tile.texture_row:
 			input_texture_view.show()
@@ -124,6 +125,12 @@ func _on_TemplateView_report_error(text: String):
 
 
 func _on_TileMainView_tile_size_changed(size: Vector2):
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	tile.set_input_tile_size(size)
+	tile.save()
+
+
+func _on_InputTextureView_tile_size_changed(size):
 	var tile: TileInTree = loaded_tile_ref.get_ref()
 	tile.set_input_tile_size(size)
 	tile.save()

@@ -6,7 +6,9 @@
 margin_right = 85.0
 margin_bottom = 31.0
 size_flags_horizontal = 3
-max_value = 255.0
+min_value = 1.0
+max_value = 256.0
+value = 1.0
 rounded = true
 align = 1
 script = ExtResource( 1 )
