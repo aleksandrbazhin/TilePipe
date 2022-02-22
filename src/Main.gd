@@ -8,9 +8,9 @@ var ui_snapshot: UISnapshot
 
 signal _snapshot_state_changed_continous()
 
-onready var project_tree: ProjectTree = $VBoxContainer/HSplitContainer/MarginContainer/ProjectTree
+onready var project_tree: ProjectTree = $VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree
 onready var blocking_overlay := $BlockingOverlay
-onready var work_rect := $VBoxContainer/HSplitContainer/WorkRect
+onready var work_zone: WorkZone = $VBoxContainer/HSplitContainer/WorkZone
 onready var error_dialog := $ErrorDialog
 
 
@@ -30,7 +30,7 @@ func _ready():
 
 
 func connect_signals():
-	project_tree.connect("tile_selected", work_rect, "on_tile_selected")
+	project_tree.connect("tile_selected", work_zone, "on_tile_selected")
 	get_tree().get_root().connect("size_changed", self, "on_size_changed")
 
 

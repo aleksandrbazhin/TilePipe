@@ -117,9 +117,9 @@ custom_constants/separation = 40
 
 [node name="Composition" type="VBoxContainer" parent="HBox/SettingsContainer/VBox"]
 margin_right = 592.0
-margin_bottom = 140.0
+margin_bottom = 144.0
 rect_min_size = Vector2( 194, 0 )
-custom_constants/separation = 10
+custom_constants/separation = 12
 alignment = 2
 
 [node name="Header" type="ColorRect" parent="HBox/SettingsContainer/VBox/Composition"]
@@ -140,13 +140,13 @@ __meta__ = {
 }
 
 [node name="MergeContainer" type="HBoxContainer" parent="HBox/SettingsContainer/VBox/Composition"]
-margin_top = 38.0
+margin_top = 40.0
 margin_right = 592.0
-margin_bottom = 84.0
+margin_bottom = 86.0
 custom_constants/separation = 12
 
 [node name="MergeXSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer"]
-margin_right = 290.0
+margin_right = 592.0
 margin_bottom = 46.0
 hint_tooltip = "How much of the corners and sides \"take\" of  the central part:
 maximum - no central part used,
@@ -155,15 +155,15 @@ size_flags_horizontal = 3
 alignment = 2
 
 [node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeXSliderContainer" groups=["blockable"]]
-margin_right = 290.0
+margin_right = 592.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
-text = " Merge pixels X"
+text = " Merge pixels"
 valign = 2
 
 [node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeXSliderContainer" groups=["blockable", "snapshottable"]]
 margin_top = 30.0
-margin_right = 290.0
+margin_right = 592.0
 margin_bottom = 46.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
@@ -176,6 +176,7 @@ ticks_on_borders = true
 script = ExtResource( 5 )
 
 [node name="MergeYSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer"]
+visible = false
 margin_left = 302.0
 margin_right = 592.0
 margin_bottom = 46.0
@@ -207,13 +208,13 @@ ticks_on_borders = true
 script = ExtResource( 5 )
 
 [node name="OverlapContainer" type="HBoxContainer" parent="HBox/SettingsContainer/VBox/Composition"]
-margin_top = 94.0
+margin_top = 98.0
 margin_right = 592.0
-margin_bottom = 140.0
+margin_bottom = 144.0
 custom_constants/separation = 12
 
 [node name="OverlapXSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition/OverlapContainer"]
-margin_right = 290.0
+margin_right = 592.0
 margin_bottom = 46.0
 hint_tooltip = "How much of the central part will be “shoved” under the corners and side. 
 Only matters if sides have some transparency."
@@ -221,15 +222,15 @@ size_flags_horizontal = 3
 alignment = 2
 
 [node name="Label" type="Label" parent="HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer" groups=["blockable"]]
-margin_right = 290.0
+margin_right = 592.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 26 )
-text = " Overlap pixels X"
+text = " Overlap pixels"
 valign = 2
 
 [node name="OverlapSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer" groups=["blockable"]]
 margin_top = 30.0
-margin_right = 290.0
+margin_right = 592.0
 margin_bottom = 46.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
@@ -242,6 +243,7 @@ ticks_on_borders = true
 script = ExtResource( 5 )
 
 [node name="OverlapYSliderContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox/Composition/OverlapContainer"]
+visible = false
 margin_left = 302.0
 margin_right = 592.0
 margin_bottom = 46.0
@@ -272,9 +274,9 @@ ticks_on_borders = true
 script = ExtResource( 5 )
 
 [node name="RandomContainer" type="VBoxContainer" parent="HBox/SettingsContainer/VBox" groups=["corners_settings", "overlay_settings"]]
-margin_top = 180.0
+margin_top = 184.0
 margin_right = 592.0
-margin_bottom = 280.0
+margin_bottom = 284.0
 hint_tooltip = "If you have multiple rows in your input image, the result can and will be randomized. 
 (If aspect ratio of a texture is more than 1:4 for a 4-part preset)"
 

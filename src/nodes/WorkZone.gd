@@ -1,6 +1,6 @@
 extends ColorRect
 
-class_name WorkRect
+class_name WorkZone
 
 signal file_dialog_started()
 signal file_dialog_ended()

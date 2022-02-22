@@ -82,7 +82,7 @@ margin_right = 410.0
 margin_bottom = 24.0
 text = "Setup"
 
-[node name="Spacer4" type="Control" parent="MarginContainer/VBoxContainer/InputContainer"]
+[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/InputContainer"]
 margin_top = 62.0
 margin_right = 410.0
 margin_bottom = 72.0
@@ -94,23 +94,6 @@ anchor_bottom = 0.0
 margin_top = 78.0
 margin_right = 410.0
 margin_bottom = 618.0
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/InputContainer"]
-visible = false
-margin_top = 554.0
-margin_right = 410.0
-margin_bottom = 618.0
-rect_min_size = Vector2( 180, 64 )
-size_flags_horizontal = 3
-expand = true
-stretch_mode = 6
-
-[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/InputContainer"]
-visible = false
-margin_top = 386.0
-margin_right = 410.0
-margin_bottom = 618.0
-size_flags_vertical = 3
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
 margin_left = 422.0

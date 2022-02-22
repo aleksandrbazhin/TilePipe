@@ -18,8 +18,10 @@ const DRAW_NEIGHBOUR_OFFSETS: Dictionary = {
 }
 const font := preload("res://assets/styles/subscribe_font.tres")
 
+
 func setup(new_rotations: Array):
 	rotations = new_rotations
+
 
 func _draw():
 	draw_rect(Rect2(Vector2.ZERO, SIZE), Color("32353d"))

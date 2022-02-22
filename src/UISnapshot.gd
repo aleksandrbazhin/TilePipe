@@ -109,10 +109,11 @@ func _from_json(json: String) -> bool:
 func get_state(node: Node) -> Dictionary:
 	var initiator: Node = initiator_ref.get_ref()
 	if initiator == node or initiator.is_a_parent_of(node):
-		var path:String = initiator.get_path_to(node)
+		var path: String = initiator.get_path_to(node)
 		if _state.has(path):
 			return _state[path]
 	return {}
+
 
 func init_snapshot(default_settings: Dictionary = {}):
 	var f := File.new()
@@ -135,7 +136,9 @@ func _init_watchers():
 
 func capture_state(_param = null):
 	var initiator: Node = initiator_ref.get_ref()
-	for node in initiator.get_tree().get_nodes_in_group(NODE_GROUP_NAME):
+	var snapshottables: Array = initiator.get_tree().get_nodes_in_group(NODE_GROUP_NAME)
+	snapshottables.invert()
+	for node in snapshottables: # invert for nodes to load children first
 		if initiator == node or initiator.is_a_parent_of(node):
 			var key: String = initiator.get_path_to(node)
 			var value = _get_element_state(node)

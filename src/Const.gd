@@ -11,8 +11,8 @@ const DEFAULT_TILE_SIZE := Vector2(64, 64)
 var DEFAULT_USER_SETTINGS := {
 	".": {
 		"window_maximized": true,
-		"window_position": Vector2.ZERO,
-		"window_size": Vector2(1280, 720)
+		"window_position": var2str(Vector2.ZERO),
+		"window_size": var2str(Vector2(1280, 720))
 	},
 	"VBoxContainer/HSplitContainer/MarginContainer/ProjectTree/OpenFolderDialog": EXAMPLES_DIR,
 }
