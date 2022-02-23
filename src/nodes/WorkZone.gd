@@ -189,3 +189,18 @@ func on_tiles_rendered():
 
 func _on_InputTextureView_merge_level_changed(level):
 	render_tiles()
+
+
+func _on_TileMainView_input_texture_view_called():
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	tile.select_row(tile.texture_row)
+
+
+func _on_TileMainView_ruleset_view_called():
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	tile.select_row(tile.ruleset_row)
+
+
+func _on_TileMainView_template_view_called():
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	tile.select_row(tile.template_row)

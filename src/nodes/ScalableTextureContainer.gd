@@ -20,7 +20,7 @@ func _ready():
 func set_texture(texture: Texture, tile_size: Vector2 = Const.DEFAULT_TILE_SIZE):
 	texture_rect.texture = texture
 	current_tile_size = tile_size
-#	set_input_tile_size(tile_size)
+	set_input_tile_size(tile_size)
 
 
 func set_input_tile_size(tile_size: Vector2):

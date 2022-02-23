@@ -110,8 +110,8 @@ func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
 
 
 func _on_OverlapSlider_released(value: float):
-	emit_signal("merge_level_changed", Vector2(value, value))
+	emit_signal("overlap_level_changed", Vector2(value, value))
 
 
 func _on_RateSlider_released(value: float):
-	emit_signal("overlap_level_changed", Vector2(value, value))
+	emit_signal("merge_level_changed", Vector2(value, value))

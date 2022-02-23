@@ -2,20 +2,23 @@ extends VBoxContainer
 
 class_name TileMainView
 
+
+signal tile_size_changed(size)
+signal input_texture_view_called()
+signal ruleset_view_called()
+signal template_view_called()
+#signal file_dialog_started()
+#signal file_dialog_ended()
+
 onready var title := $Label
-onready var input_title := $MarginContainer/VBoxContainer/InputContainer/HBoxContainer/FileName
+onready var input_title := $MarginContainer/VBoxContainer/InputContainer/HBoxContainer/TextureButton
 onready var input_texture_container := $MarginContainer/VBoxContainer/InputContainer/ScalableTextureContainer
-onready var ruleset_filename := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer/FileName
+onready var ruleset_filename := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer/RulesetButton
 onready var ruleset_name := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/Name
 onready var ruleset_description := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/Description
 onready var ruleset_texture := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/ScrollContainer/TextureRect
-onready var template_title := $MarginContainer/VBoxContainer/TemplateContainer/HBoxContainer/FileName
+onready var template_title := $MarginContainer/VBoxContainer/TemplateContainer/HBoxContainer/TemplateButton
 onready var template_texture := $MarginContainer/VBoxContainer/TemplateContainer/TextureRect
-
-
-signal tile_size_changed(size)
-#signal file_dialog_started()
-#signal file_dialog_ended()
 
 
 func load_data(tile: TileInTree):
@@ -46,3 +49,15 @@ func add_ruleset_highlights(ruleset: Ruleset):
 
 func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
 	emit_signal("tile_size_changed", size)
+
+
+func _on_TextureButton_pressed():
+	emit_signal("input_texture_view_called")
+
+
+func _on_RulesetButton_pressed():
+	emit_signal("ruleset_view_called")
+
+
+func _on_TemplateButton_pressed():
+	emit_signal("template_view_called")

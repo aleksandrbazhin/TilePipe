@@ -60,9 +60,3 @@ func set_output_texture(texture: Texture):
 #	else:
 #		output_control.rect_min_size = Vector2.ZERO
 #	render_progress_overlay.hide()
-
-
-#func set_result_image(image: Image):
-#	var itex := ImageTexture.new()
-#	itex.create_from_image(image)
-#	result_texture.texture = itex

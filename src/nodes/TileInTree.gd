@@ -37,7 +37,7 @@ var texture_row: TreeItem
 var ruleset_row: TreeItem
 var template_row: TreeItem
 
-onready var tree := $Tree
+onready var tree: Tree = $Tree
 onready var highlight_rect := $ColorRect
 
 
@@ -180,6 +180,10 @@ func _on_Tree_item_selected():
 
 func select_root():
 	tree.get_root().select(0)
+
+
+func select_row(row: TreeItem):
+	row.select(0)
 
 
 func set_selected(selected: bool):

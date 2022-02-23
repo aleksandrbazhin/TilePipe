@@ -39,6 +39,9 @@ func _draw():
 		LABEL_DRAW_Y))
 	if value != max_value and value != min_value:
 		var value_label := str(int(value * 2.0 * (tick_count - 1)))
+#		draw_word(value_label, Vector2(
+#			9 + (rect_size.x - 14) * value * 2.0 - value_label.length() * CHAR_WIDTH_ESTIMATE, 
+#			LABEL_DRAW_Y))
 		draw_word(value_label, Vector2(
-			9 + (rect_size.x - 14) * value * 2.0 - value_label.length() * CHAR_WIDTH_ESTIMATE, 
+			8 + (rect_size.x - 15) * value * 2.0 - CHAR_WIDTH_ESTIMATE, 
 			LABEL_DRAW_Y))
