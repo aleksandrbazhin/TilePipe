@@ -7,6 +7,8 @@ signal file_dialog_ended()
 signal report_error(text)
 signal tile_texture_changed(path)
 signal tile_size_changed(size)
+signal merge_level_changed(level)
+signal overlap_level_changed(level)
 
 var current_texture_path := ""
 var current_input_tile_size := Const.DEFAULT_TILE_SIZE
@@ -23,7 +25,7 @@ onready var overlay_slider_y: AdvancedSlider = $HBox/SettingsContainer/VBox/Comp
 func load_data(tile: TileInTree):
 	tile_name.text = tile.tile_file_name
 	current_texture_path = tile.texture_path
-	current_input_tile_size = tile.tile_size
+	current_input_tile_size = tile.input_tile_size
 	populate_texture_options()
 	setup_sliders()
 	if current_texture_path != "":
@@ -105,3 +107,11 @@ func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
 	emit_signal("tile_size_changed", size)
 	current_input_tile_size = size
 	setup_sliders()
+
+
+func _on_OverlapSlider_released(value: float):
+	emit_signal("merge_level_changed", Vector2(value, value))
+
+
+func _on_RateSlider_released(value: float):
+	emit_signal("overlap_level_changed", Vector2(value, value))

@@ -30,7 +30,6 @@ func _take_snapshot() -> Dictionary:
 func _apply_snapshot(settings: Dictionary):
 	if tile_container.get_child_count() > 0:
 		var tile: TileInTree = tile_container.get_child(int(settings["selected_tile"]))
-		print(tile)
 		if tile != null:
 			tile.set_selected(true)
 			tile.select_root()

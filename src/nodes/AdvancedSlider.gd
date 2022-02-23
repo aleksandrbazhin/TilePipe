@@ -42,5 +42,3 @@ func _draw():
 		draw_word(value_label, Vector2(
 			9 + (rect_size.x - 14) * value * 2.0 - value_label.length() * CHAR_WIDTH_ESTIMATE, 
 			LABEL_DRAW_Y))
-
-

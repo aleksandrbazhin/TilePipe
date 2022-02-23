@@ -50,6 +50,24 @@ const BUILT_IN_RULESETS := [
 const BUILT_IN_TEMPLATES := []
 
 
+#    "piece_overlap_vectors": [[0, 0], [-1, -1], [0, 1], [1, 1]],
+#"piece_overlap_vectors": [[0, 0], [-1, -1], [0, 1], [1, 1], [1, 0], [-1, -1], [0, 1], [1, 1], [1, 1], [-1, -1], [1, 0], [1, 1], [-1, -1]],
+const PART_OVERLAP_VECTORS := {
+	"FULL": Vector2.ZERO,
+	"SIDE_TOP": Vector2(0, 1),
+	"SIDE_RIGHT": Vector2(1, 0),
+	"SIDE_BOTTOM": Vector2(0, 1),
+	"SIDE_LEFT": Vector2(1, 0),
+	"CORNER_IN_TOP_RIGHT": Vector2(-1, -1),
+	"CORNER_IN_BOTTOM_RIGHT": Vector2(-1, -1),
+	"CORNER_IN_BOTTOM_LEFT": Vector2(-1, -1),
+	"CORNER_IN_TOP_LEFT": Vector2(-1, -1),
+	"CORNER_OUT_TOP_RIGHT": Vector2(1, 1),
+	"CORNER_OUT_BOTTOM_RIGHT": Vector2(1, 1),
+	"CORNER_OUT_BOTTOM_LEFT": Vector2(1, 1),
+	"CORNER_OUT_TOP_LEFT": Vector2(1, 1)
+}
+
 
 
 

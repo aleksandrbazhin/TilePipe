@@ -13,8 +13,8 @@ onready var tile_main_view: TileMainView = $VSplitContainer/Control/TileMainView
 onready var input_texture_view: InputTextureView = $VSplitContainer/Control/InputTextureView
 onready var ruleset_view: RulesetView = $VSplitContainer/Control/RulesetView
 onready var template_view: TemplateView = $VSplitContainer/Control/TemplateView
-onready var result_view: ResultView = $VSplitContainer/ResultPreview
-
+onready var result_view: ResultView = $VSplitContainer/ResultView
+onready var renderer: TileRenderer = $TileRenderer
 
 func unhide_all():
 	if is_instance_valid(last_visible_tab):
@@ -134,3 +134,58 @@ func _on_InputTextureView_tile_size_changed(size):
 	var tile: TileInTree = loaded_tile_ref.get_ref()
 	tile.set_input_tile_size(size)
 	tile.save()
+
+
+func render_tiles():
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	var input_image: Image = tile.loaded_texture.get_data()
+#	var parts_in_ruleset := int(tile.loaded_ruleset.get_tile_parts().size())
+#	var min_input_tiles := Vector2(, 1)
+#	var old_style_input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
+#	var input_tile_size := Vector2(old_style_input_tile_size, old_style_input_tile_size)
+#	var old_style_ouput_tile_size := get_output_tile_size()
+#	var output_tile_size := Vector2(old_style_ouput_tile_size, old_style_ouput_tile_size)
+
+	var input_tile_size := tile.input_tile_size
+	var output_tile_size := Vector2(64, 64)
+
+
+
+#	var merge_rate: float = overlay_merge_rate_slider.value
+#	var overlap_rate: float = overlay_overlap_slider.value
+#
+#	if rand_seed_check.pressed:
+#		var random_seed_int: int = int(rand_seed_value.text)
+#		var random_seed = rand_seed(random_seed_int)
+#		rng.seed = random_seed[1]
+#
+
+	renderer.start_render(tile.loaded_ruleset, input_tile_size, output_tile_size,
+		input_image, tile.result_tiles_by_bitmask, tile.smoothing,
+		tile.merge_level.x, tile.overlap_level.x)
+	if not renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
+		renderer.connect("tiles_ready", self, "on_tiles_rendered")
+#		renderer.connect("report_progress", self, "update_progress")
+#	update_progress(0)
+#	render_progress_overlay.show()
+
+
+
+#func update_progress(progress: int):
+#	render_progressbar.value = progress
+
+
+func on_tiles_rendered():
+#	update_progress(100)
+	if renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
+		renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
+#		renderer.disconnect("report_progress", self, "update_progress")
+#	rendered_tiles = renderer.tiles
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+#	print(tile.result_tiles_by_bitmask)
+#	emit_signal("input_image_processed")
+	result_view.render_from_tile(tile)
+
+
+func _on_InputTextureView_merge_level_changed(level):
+	render_tiles()

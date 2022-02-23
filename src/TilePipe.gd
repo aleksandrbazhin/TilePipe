@@ -613,7 +613,7 @@ func render_tiles():
 		var random_seed = rand_seed(random_seed_int)
 		rng.seed = random_seed[1]
 	
-	var renderer: TileRenderer = $TileRenderer
+	var renderer: TileRenderer2 = $TileRenderer2
 	renderer.start_render(generation_data, input_tile_size, output_tile_size,
 		texture_in.texture.get_data(), tiles_by_bitmasks, smoothing_check.pressed,
 		merge_rate, overlap_rate, rng)
@@ -630,7 +630,7 @@ func update_progress(progress: int):
 
 func on_tiles_rendered():
 	update_progress(100)
-	var renderer: TileRenderer = $TileRenderer
+	var renderer: TileRenderer = $TileRenderer2
 	if renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
 		renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
 		renderer.disconnect("report_progress", self, "update_progress")

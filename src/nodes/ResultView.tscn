@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=1]
-[ext_resource path="res://src/nodes/ResultPreview.gd" type="Script" id=2]
+[ext_resource path="res://src/nodes/ResultView.gd" type="Script" id=2]
 
 [node name="ResultPreview" type="ColorRect"]
 margin_top = 440.0

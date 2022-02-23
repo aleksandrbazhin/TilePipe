@@ -1,6 +1,6 @@
 extends Node
 
-class_name TileRenderer
+class_name TileRenderer2
 
 signal tiles_ready()
 signal report_progress(progress)
@@ -14,7 +14,7 @@ var render_pool := []
 var render_progress := 0 # from 0 to 100
 var input_tile_parts := {}
 var template
-var ruleset: Ruleset
+var ruleset: GenerationData
 var input_tile_size := Vector2.ZERO
 var output_tile_size := Vector2.ZERO
 var rng: RandomNumberGenerator
@@ -49,9 +49,9 @@ func init_render_pool():
 		add_child(viewport)
 
 
-func start_render(new_ruleset: Ruleset, new_input_tile_size: Vector2, new_output_tile_size: Vector2,
+func start_render(new_ruleset: GenerationData, new_input_tile_size: Vector2, new_output_tile_size: Vector2,
 		input_image: Image, template_bitmasks: Dictionary, new_smoothing_enabled: bool,
-		merge_rate: float, overlap_rate: float, active_rng: RandomNumberGenerator = RandomNumberGenerator.new()):
+		merge_rate: float, overlap_rate: float, active_rng: RandomNumberGenerator):
 	tiles = template_bitmasks
 	ruleset = new_ruleset
 	input_tile_size = new_input_tile_size
@@ -73,8 +73,8 @@ func start_render(new_ruleset: Ruleset, new_input_tile_size: Vector2, new_output
 
 func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 	var parts := {}
-	var min_input_tiles := ruleset.get_tile_parts().size()
-	for part_index in range(min_input_tiles):
+	var min_input_tiles := ruleset.get_min_input_size()
+	for part_index in range(min_input_tiles.x):
 		parts[part_index] = []
 		var part_is_empty := false
 		var variant_index := 0
@@ -95,15 +95,13 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 
 
 func setup_tile_render(mask: int, viewport: Viewport):
-#	var part_types := ruleset.get_tile_parts()
-#	var overlap_vectors: Array = ruleset.get_overlap_vectors()
-	
+	var overlap_vectors: Array = ruleset.get_overlap_vectors()
 #	var overlap_vector_rotations: Array = ruleset.get_overlap_vector_rotations()
 	var random_center_index: int = rng.randi_range(0, input_tile_parts[0].size() - 1)
 	var center_image: Image = input_tile_parts[0][random_center_index]
 	var tile_rules_data: Dictionary = ruleset.get_mask_data(mask)
-	var parts_rules: Array = tile_rules_data["part_indexes"]
-	var parts_rotations: Array = tile_rules_data["part_rotations"]
+	var parts_rules: Array = tile_rules_data["generate_piece_indexes"]
+	var parts_rotations: Array = tile_rules_data["generate_piece_rotations"]
 	assert (parts_rules.size() == 8 && parts_rotations.size() == 8)
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image, 0)
@@ -128,18 +126,22 @@ func setup_tile_render(mask: int, viewport: Viewport):
 		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
 		var overlay_image := Image.new()
 		overlay_image.copy_from(tile_variants[random_tile_index])
-		if bool(tile_rules_data["part_flip_x"][mask_index]):
+		if bool(tile_rules_data["generate_piece_flip_x"][mask_index]):
 			overlay_image.flip_x()
-		if bool(tile_rules_data["part_flip_y"][mask_index]):
+		if bool(tile_rules_data["generate_piece_flip_y"][mask_index]):
 			overlay_image.flip_y()
 		var piece_itex = ImageTexture.new()
 		piece_itex.create_from_image(overlay_image, 0)
 		var mask_key: int = Const.TILE_MASK[mask_name]
 		texture_rect.material.set_shader_param("overlay_texture_%s" % mask_key, piece_itex)
 		texture_rect.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
-		var overlap_vec: Vector2 = Const.PART_OVERLAP_VECTORS[ruleset.get_tile_parts()[piece_index]]
+		var overlap_vec: Vector2 = overlap_vectors[piece_index]
 		if overlap_vec.length() == 1.0 and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
 			overlap_vec = overlap_vec.rotated(-PI / 2.0)
+
+#		if overlap_vector_rotations[piece_index] and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
+#			overlap_vec.x = 0.0 if overlap_vec.x == 1.0 else 1.0
+#			overlap_vec.y = 0.0 if overlap_vec.y == 1.0 else 1.0
 		texture_rect.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_vec)
 		mask_index += 1
 

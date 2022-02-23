@@ -26,7 +26,11 @@ var result_tiles_by_bitmask: Dictionary
 var texture_path: String
 var template_path: String
 var ruleset_path: String
-var tile_size: Vector2
+var input_tile_size: Vector2
+var output_tile_size: Vector2 = Vector2(64,64)
+var merge_level := Vector2(0.25, 0.25)
+var overlap_level:= Vector2(0.25, 0.25)
+var smoothing := false
 
 var tile_row: TreeItem
 var texture_row: TreeItem
@@ -55,7 +59,7 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	if typeof(parsed_data) == TYPE_DICTIONARY:
 		_tile_data = parsed_data
 		is_loaded = true
-		tile_size = Vector2(_tile_data["input_tile_size"]["x"], _tile_data["input_tile_size"]["y"])
+		input_tile_size = Vector2(_tile_data["input_tile_size"]["x"], _tile_data["input_tile_size"]["y"])
 		load_texture(_tile_data["texture"])
 		load_ruleset(_tile_data["ruleset"])
 		load_template(_tile_data["template"])
@@ -220,8 +224,16 @@ func set_template(abs_path: String):
 
 
 func set_input_tile_size(new_size: Vector2):
-	if tile_size.x > 0 and tile_size.y > 0:
-		tile_size = new_size
+	if input_tile_size.x > 0 and input_tile_size.y > 0:
+		input_tile_size = new_size
+
+
+func set_merge_level(new_merge_level: Vector2):
+	merge_level = new_merge_level
+
+
+func set_overlap_level(new_overlap_level: Vector2):
+	overlap_level = new_overlap_level
 
 
 func save():

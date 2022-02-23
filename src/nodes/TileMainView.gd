@@ -22,7 +22,7 @@ func load_data(tile: TileInTree):
 	title.text = tile.tile_file_name
 	if tile.texture_path != "":
 		input_title.text = tile.texture_path.get_file()
-		input_texture_container.set_texture(tile.loaded_texture, tile.tile_size)
+		input_texture_container.set_texture(tile.loaded_texture, tile.input_tile_size)
 	if tile.loaded_ruleset.is_loaded:
 		ruleset_filename.text = tile.ruleset_path.get_file()
 		ruleset_name.text = tile.loaded_ruleset.get_name()

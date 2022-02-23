@@ -5,7 +5,7 @@
 [ext_resource path="res://src/nodes/TileMainView.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/nodes/InputTextureView.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/nodes/TemplateView.tscn" type="PackedScene" id=5]
-[ext_resource path="res://src/nodes/ResultPreview.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/nodes/ResultView.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/TileRenderer.tscn" type="PackedScene" id=7]
 
 [node name="WorkZone" type="ColorRect"]
@@ -46,7 +46,7 @@ visible = false
 [node name="RulesetView" parent="VSplitContainer/Control" instance=ExtResource( 2 )]
 visible = false
 
-[node name="ResultPreview" parent="VSplitContainer" instance=ExtResource( 6 )]
+[node name="ResultView" parent="VSplitContainer" instance=ExtResource( 6 )]
 margin_top = 480.0
 margin_right = 988.0
 margin_bottom = 712.0
@@ -56,6 +56,7 @@ margin_bottom = 712.0
 [connection signal="tile_size_changed" from="VSplitContainer/Control/TileMainView" to="." method="_on_TileMainView_tile_size_changed"]
 [connection signal="file_dialog_ended" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_file_dialog_ended"]
 [connection signal="file_dialog_started" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_file_dialog_started"]
+[connection signal="merge_level_changed" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_merge_level_changed"]
 [connection signal="report_error" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_report_error"]
 [connection signal="tile_size_changed" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_tile_size_changed"]
 [connection signal="tile_texture_changed" from="VSplitContainer/Control/InputTextureView" to="." method="_on_InputTextureView_tile_texture_changed"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://src/TilePipe.gd" type="Script" id=1]
 [ext_resource path="res://assets/IBMPlexSans-Medium.ttf" type="DynamicFontData" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://src/nodes/ProjectTree.tscn" type="PackedScene" id=11]
 [ext_resource path="res://assets/images/checkers.png" type="Texture" id=12]
 [ext_resource path="res://src/nodes/AdvancedSpinBox.tscn" type="PackedScene" id=13]
+[ext_resource path="res://src/TileRenderer2.tscn" type="PackedScene" id=14]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 3 )
@@ -932,6 +933,8 @@ margin_right = 98.5
 margin_bottom = 34.0
 popup_exclusive = true
 window_title = "Errors occured"
+
+[node name="TileRenderer2" parent="." instance=ExtResource( 14 )]
 
 [connection signal="file_selected" from="TextureDialog" to="." method="_on_TextureDialog_file_selected"]
 [connection signal="file_selected" from="TemplateDialog" to="." method="_on_TemplateDialog_file_selected"]

@@ -161,7 +161,7 @@ rect_min_size = Vector2( 0, 26 )
 text = " Merge pixels"
 valign = 2
 
-[node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeXSliderContainer" groups=["blockable", "snapshottable"]]
+[node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeXSliderContainer" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 592.0
 margin_bottom = 46.0
@@ -193,7 +193,7 @@ rect_min_size = Vector2( 0, 26 )
 text = "Merge pixels Y"
 valign = 2
 
-[node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeYSliderContainer" groups=["blockable", "snapshottable"]]
+[node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeYSliderContainer" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 290.0
 margin_bottom = 46.0
@@ -311,7 +311,7 @@ rect_min_size = Vector2( 0, 26 )
 text = " Use random seed"
 valign = 1
 
-[node name="RandomCheckButton" type="CheckButton" parent="HBox/SettingsContainer/VBox/RandomContainer/HBoxContainer" groups=["blockable", "snapshottable"]]
+[node name="RandomCheckButton" type="CheckButton" parent="HBox/SettingsContainer/VBox/RandomContainer/HBoxContainer" groups=["blockable"]]
 margin_left = 121.0
 margin_right = 197.0
 margin_bottom = 40.0
@@ -352,3 +352,5 @@ __meta__ = {
 [connection signal="item_selected" from="HeaderContainer/TextureFileName" to="." method="_on_TextureFileName_item_selected"]
 [connection signal="pressed" from="HeaderContainer/TextureDialogButton" to="." method="_on_TextureDialogButton_pressed"]
 [connection signal="tile_size_changed" from="HBox/ScalableTextureContainer" to="." method="_on_ScalableTextureContainer_tile_size_changed"]
+[connection signal="released" from="HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/RateSlider" to="." method="_on_RateSlider_released"]
+[connection signal="released" from="HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSlider" to="." method="_on_OverlapSlider_released"]

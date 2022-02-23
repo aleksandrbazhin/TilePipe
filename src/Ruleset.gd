@@ -120,10 +120,6 @@ func get_description() -> String:
 		return ""
 
 
-#func get_input_size() -> int:
-#	return get_tile_parts().size()
-
-
 func get_mask_data(mask: int) -> Dictionary:
 	for tile_data in get_tiles():
 		if tile_data["mask_variants"].has(float(mask)):
