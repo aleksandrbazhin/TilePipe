@@ -189,7 +189,7 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
 margin_right = 1280.0
 size_flags_horizontal = 3
-custom_constants/separation = 20
+custom_constants/separation = 12
 
 [connection signal="about_to_show" from="AddRulesetFileDialog" to="." method="_on_AddRulesetFileDialog_about_to_show"]
 [connection signal="file_selected" from="AddRulesetFileDialog" to="." method="_on_AddRulesetFileDialog_file_selected"]

@@ -89,7 +89,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/nodes/TileHighlight.gd"
 }, {
-"base": "VBoxContainer",
+"base": "PanelContainer",
 "class": "TileInRuleset",
 "language": "GDScript",
 "path": "res://src/nodes/TileInRuleset.gd"

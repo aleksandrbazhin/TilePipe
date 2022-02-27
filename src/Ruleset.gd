@@ -158,7 +158,8 @@ func get_raw_header() -> String:
 
 func get_raw_tile_data(tile_index: int) -> String:
 	if not _raw_tile_data.empty() and _raw_tile_data.size() > tile_index:
-		return _raw_tile_data[tile_index].lstrip("{[\n").trim_prefix("        {").rstrip(" \n}").trim_suffix("        }\n    ]")
+		return _raw_tile_data[tile_index].lstrip("{[\n").trim_prefix("        {").\
+			rstrip(" \n}").trim_suffix("        }\n    ]").rstrip("\n").lstrip("\n")
 	return ""
 
 
