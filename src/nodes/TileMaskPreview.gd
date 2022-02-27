@@ -2,11 +2,11 @@ extends ColorRect
 
 class_name TileMaskPreview
 
-const SIZE := Vector2(47, 47)
+const SIZE := Vector2(68, 68)
 const BG_TILE_COLOR := Color("edf5ff")
 const FG_COLOR := Color("98c0ef")
 const SELF_COLOR := Color("b8e0ff")
-const NEIGHBOUR_SIZE := 15
+const NEIGHBOUR_SIZE := 22
 const TILE_BORDER := Vector2(1, 1)
 const NEIGHBOUR_SIZE_VEC := Vector2(NEIGHBOUR_SIZE, NEIGHBOUR_SIZE)
 const SELF_OFFSET := NEIGHBOUR_SIZE_VEC

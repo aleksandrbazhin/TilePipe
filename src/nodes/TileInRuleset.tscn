@@ -54,21 +54,27 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_enabled = false
 
+[node name="HBoxContainer" type="HBoxContainer" parent="BoxContainer/NeighborMasks/ScrollContainer"]
+margin_right = 413.0
+size_flags_horizontal = 3
+custom_constants/separation = 8
+alignment = 1
+
+[node name="Spacer1" type="Control" parent="BoxContainer/NeighborMasks/ScrollContainer/HBoxContainer"]
+margin_right = 202.0
+size_flags_horizontal = 3
+
+[node name="Spacer2" type="Control" parent="BoxContainer/NeighborMasks/ScrollContainer/HBoxContainer"]
+margin_left = 210.0
+margin_right = 413.0
+size_flags_horizontal = 3
+
 [node name="CenterContainer" type="CenterContainer" parent="BoxContainer/NeighborMasks/ScrollContainer"]
+visible = false
 margin_right = 413.0
 margin_bottom = 68.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="BoxContainer/NeighborMasks/ScrollContainer/CenterContainer"]
-margin_left = 206.0
-margin_top = 34.0
-margin_right = 206.0
-margin_bottom = 34.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_constants/separation = 8
-alignment = 1
 
 [node name="Preview" type="HBoxContainer" parent="BoxContainer"]
 margin_left = 438.0
