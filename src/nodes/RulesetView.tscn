@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/nodes/RulesetView.gd" type="Script" id=1]
 [ext_resource path="res://assets/images/Load.svg" type="Texture" id=2]
+[ext_resource path="res://assets/styles/subscribe_font.tres" type="DynamicFont" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
@@ -173,6 +174,7 @@ margin_left = 626.0
 margin_right = 1248.0
 margin_bottom = 157.0
 size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 3 )
 text = "Raw"
 readonly = true
 wrap_enabled = true
