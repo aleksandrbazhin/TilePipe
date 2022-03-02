@@ -1,46 +1,45 @@
-# Godot tilesheet generator
+# Tilepipe is autotiling tileset generator
 
-### ! The project is in "barely working" state and is not likely to ever leave it
-
-## Why?
-
-To automate tile texture creation for autotiles 3x3
-
-To create those 47 and 255 tile tilesheets not by hand
-
-## How
-
-- Upload template to generate autotiles
-
-  - Size must match setting, default - 64 x 64
-  - White color is considered empty, any other - full
-  - One pixel color 10 pixels away from sides is tested
-- Choose an image of 5 tile slices, it will be upscaled or downscaled
-- Save image or image+resource
+- Project page on itch.io https://aleksandrbazhin.itch.io/tilepipe
+- Tutorial for version 0.4.x https://aleksandrbazhin.github.io/tilepipe_site/tutorial.html
 
 
+## The 0.5 branch 
+It is full rework of logic and you. Main differences
+- Ability to use custom rulesets (previously named prests). It's a json file with json schema included. There is viewer in the GUI.
+- Project-like logic for every directory
+- Everything is explicit, minimal built-in logic (no examples, no templates, no rulsets). Tile settings are aseparate json file by format .tptile. It's VCS-ready and resolves a lot of problems wuth UI logic.
 
 
+## Screens
+Tile main view (overview)
+![Tile overview (unfinished)](docs/Screen1.png)
+Ruleset viewer
+![Ruleset (unfinished)](docs/Screen2.png)
+Texture setup
+![Texture settings (unfinished)](docs/Screen3.png)
 
-## Generation templates
+## Roadmap for 0.5 branch before the release
+0.5 is not ready to be released, there is not much work left, but I am not sure when and if it will be done
 
-{
-"type": "overlay",
-"example": "overlay_7_pixelart.png",
-"name": "input_overlay_7",
-"min_size": {
-	"x": 7,
-	"y": 1
-},
-"data": [
-	{
-		"mask_variants": [64, 4],
-		"variant_rotations": [0, 0],
+- Randomization
+- Generation start logic (On every change basically. Now it's only tied to the change in the sliders)
+- Output settings use in generation
+- Ruleset validity checks
+- New tile creation UI
+- Migrate all the examples
+- In the tile main view: highlight what parts are used
+- (Optional) Result preview: show one enlarged subtile in the left rectaangle
+- Add Godot export
+- Testing and fixes
 
-​		"variant_flips": [0, 1], - flip variant instead rotation
-
-​		"generate_piece_indexes":   [2, 3, 2, 3, 2, 2, 0, 2],
-​		"generate_piece_rotations": [0, 0, 1, 1, 2, 2, 0, 0],
-​		"generate_use _flipped": [0, 0, 0, 0, 0, 0, 0, 0], - use flipped one instead of rotated, if not 0, takes the flipped by the rotation
-​		"generate_overlap_vectors": [[0, 1], [1, 1], [1, 0], [1, 1], [0, 1], [0, 1], [0, 0], [0, 1]], - the vector in which direction to overlap, (0, 0) - leave all bg, (1, 1) - remove_all_bg, like corner, (-1, -1) - leave bg like internal corner, (1, 0) - x direction, (-1, 0) - y direction
-​	},
+## Roadmap for the future
+- Setup tile input - where to get the numbered parts. That way it will be possible to use existing tilesets like rpgmaker ones.
+- Rotated tiles - for isometric tilesets
+- Rectangle tiles (not square) 
+- Animation export (side by side tiles blocks)
+- Export the entire directory as a project at once
+- Export to Tiled (https://www.mapeditor.org/)
+- Ruleset GUI editor
+- Template GUI editor
+- Rebuild Godot export presets for optimized export
