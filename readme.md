@@ -5,10 +5,10 @@
 
 
 ## The 0.5 branch 
-It is full rework of logic and you. Main differences
-- Ability to use custom rulesets (previously named prests). It's a json file with json schema included. There is viewer in the GUI.
+It is full rework of logic and UI. Main differences
+- Ability to use custom rulesets (previously named presets). Those are json files, json schema included in the project. There is a viewer in the GUI.
 - Project-like logic for every directory
-- Everything is explicit, minimal built-in logic (no examples, no templates, no rulsets). Tile settings are aseparate json file by format .tptile. It's VCS-ready and resolves a lot of problems wuth UI logic.
+- Everything is explicit, minimal built-in logic (not examples, not templates, not rulesets). Tile settings are a separate json file by extension .tptile. It's VCS-ready and resolves a lot of problems wuth UI logic.
 
 
 ## Screens
@@ -20,7 +20,7 @@ Texture setup
 ![Texture settings (unfinished)](docs/Screen3.png)
 
 ## Roadmap for 0.5 branch before the release
-0.5 is not ready to be released, there is not much work left, but I am not sure when and if it will be done
+0.5 is not ready to be released, there is not much work left, but I am not sure when and if it will be finished
 
 - Randomization
 - Generation start logic (On every change basically. Now it's only tied to the change in the sliders)
@@ -42,4 +42,5 @@ Texture setup
 - Export to Tiled (https://www.mapeditor.org/)
 - Ruleset GUI editor
 - Template GUI editor
+- Shader-based effects on tile merges
 - Rebuild Godot export presets for optimized export
