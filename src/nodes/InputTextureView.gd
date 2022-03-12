@@ -28,6 +28,10 @@ func load_data(tile: TileInTree):
 	current_input_tile_size = tile.input_tile_size
 	populate_texture_options()
 	setup_sliders()
+	merge_slider_x.value = tile.merge_level.x
+	merge_slider_y.value = tile.merge_level.y
+	overlay_slider_x.value = tile.overlap_level.x
+	overlay_slider_y.value = tile.overlap_level.y
 	if current_texture_path != "":
 		load_texture(tile.loaded_texture)
 

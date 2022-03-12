@@ -26,12 +26,12 @@ func load_data(tile: TileInTree):
 func label_bitmasks(tile: TileInTree):
 	for label in template_texture_rect.get_children():
 		label.queue_free()
-	for mask in tile.result_tiles_by_bitmask.keys():
-		for result_tile in tile.result_tiles_by_bitmask[mask]:
+	for mask in tile.result_subtiles_by_bitmask.keys():
+		for result_tile in tile.result_subtiles_by_bitmask[mask]:
 			label_tile(result_tile)
 
 
-func label_tile(generated_tile: GeneratedTile):
+func label_tile(generated_tile: GeneratedSubTile):
 	var label_offset := Vector2(0, 9)
 	var translated_mask_position := generated_tile.position_in_template * Const.TEMPLATE_TILE_SIZE
 	var mask_text_label := Label.new()

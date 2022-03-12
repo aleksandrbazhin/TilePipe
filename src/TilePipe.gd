@@ -460,7 +460,7 @@ func generate_template_bitmasks():
 			if has_tile:
 				if not tiles_by_bitmasks.has(mask):
 					tiles_by_bitmasks[mask] = []
-				tiles_by_bitmasks[mask].append(GeneratedTile.new(mask, Vector2(x, y)))
+				tiles_by_bitmasks[mask].append(GeneratedSubTile.new(mask, Vector2(x, y)))
 				mark_template_tile(mask, Vector2(x, y), true)
 
 
@@ -567,7 +567,7 @@ func make_from_overlayed():
 	itex.create_from_image(out_image, 0)
 	for mask in tiles_by_bitmasks.keys():
 		for tile_variant_index in range(tiles_by_bitmasks[mask].size()):
-			var tile: GeneratedTile = tiles_by_bitmasks[mask][tile_variant_index]
+			var tile: GeneratedSubTile = tiles_by_bitmasks[mask][tile_variant_index]
 			var tile_position: Vector2 = tile.position_in_template * (tile_size + output_tile_offset)
 			if tile.image == null:
 				continue

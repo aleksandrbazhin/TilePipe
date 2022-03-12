@@ -126,7 +126,7 @@ func get_mask_data(mask: int) -> Dictionary:
 			return tile_data
 	last_error_message = "Error: wrong ruleset format. \n"
 	last_error_message += "Invalid mask '%s'" % mask
-	print("ERROR: invalid mask '%s'" % mask)
+#	print("ERROR: invalid mask '%s'" % mask)
 	return {}
 
 

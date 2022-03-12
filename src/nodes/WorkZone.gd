@@ -16,6 +16,7 @@ onready var template_view: TemplateView = $VSplitContainer/Control/TemplateView
 onready var result_view: ResultView = $VSplitContainer/ResultView
 onready var renderer: TileRenderer = $TileRenderer
 
+
 func unhide_all():
 	if is_instance_valid(last_visible_tab):
 		last_visible_tab.show()
@@ -31,10 +32,7 @@ func hide_all():
 func load_tile_data(tile: TileInTree):
 	if loaded_tile_ref == null or loaded_tile_ref.get_ref() != tile:
 		loaded_tile_ref = weakref(tile)
-#		tile_main_view.load_data(tile)
-#		input_texture_view.load_data(tile)
-#		ruleset_view.load_data(tile)
-#		template_view.load_data(tile)
+		render_subtiles()
 
 
 func on_tile_selected(tile: TileInTree, row: TreeItem):
@@ -57,7 +55,7 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 			template_view.show()
 			template_view.load_data(tile)
 			last_visible_tab = template_view
-
+#	render_tiles()
 
 func _on_RulesetView_file_dialog_started():
 	emit_signal("file_dialog_started")
@@ -96,6 +94,7 @@ func _on_RulesetView_tile_ruleset_changed(path: String):
 	tile.set_ruleset(path)
 	tile.save()
 	ruleset_view.load_data(tile)
+	render_subtiles()
 
 
 func _on_TemplateView_tile_template_changed(path: String):
@@ -103,6 +102,7 @@ func _on_TemplateView_tile_template_changed(path: String):
 	tile.set_template(path)
 	tile.save()
 	template_view.load_data(tile)
+	render_subtiles()
 
 
 func _on_InputTextureView_tile_texture_changed(path: String):
@@ -110,33 +110,22 @@ func _on_InputTextureView_tile_texture_changed(path: String):
 	tile.set_texture(path)
 	tile.save()
 	input_texture_view.load_data(tile)
+	render_subtiles()
 
 
-func _on_InputTextureView_report_error(text: String):
+func _on_error_reported(text: String):
 	emit_signal("report_error", text)
 
 
-func _on_RulesetView_report_error(text: String):
-	emit_signal("report_error", text)
-
-
-func _on_TemplateView_report_error(text: String):
-	emit_signal("report_error", text)
-
-
-func _on_TileMainView_tile_size_changed(size: Vector2):
+func _on_tile_size_changed(size: Vector2):
 	var tile: TileInTree = loaded_tile_ref.get_ref()
-	tile.set_input_tile_size(size)
-	tile.save()
+	if tile.input_tile_size != size:
+		tile.set_input_tile_size(size)
+		tile.save()
+		render_subtiles()
 
 
-func _on_InputTextureView_tile_size_changed(size):
-	var tile: TileInTree = loaded_tile_ref.get_ref()
-	tile.set_input_tile_size(size)
-	tile.save()
-
-
-func render_tiles():
+func render_subtiles():
 	var tile: TileInTree = loaded_tile_ref.get_ref()
 	var input_image: Image = tile.loaded_texture.get_data()
 #	var parts_in_ruleset := int(tile.loaded_ruleset.get_tile_parts().size())
@@ -145,12 +134,8 @@ func render_tiles():
 #	var input_tile_size := Vector2(old_style_input_tile_size, old_style_input_tile_size)
 #	var old_style_ouput_tile_size := get_output_tile_size()
 #	var output_tile_size := Vector2(old_style_ouput_tile_size, old_style_ouput_tile_size)
-
-	var input_tile_size := tile.input_tile_size
-	var output_tile_size := Vector2(64, 64)
-
-
-
+#	var input_tile_size := tile.input_tile_size
+#	var output_tile_size := Vector2(64, 64)
 #	var merge_rate: float = overlay_merge_rate_slider.value
 #	var overlap_rate: float = overlay_overlap_slider.value
 #
@@ -159,10 +144,10 @@ func render_tiles():
 #		var random_seed = rand_seed(random_seed_int)
 #		rng.seed = random_seed[1]
 #
-
-	renderer.start_render(tile.loaded_ruleset, input_tile_size, output_tile_size,
-		input_image, tile.result_tiles_by_bitmask, tile.smoothing,
-		tile.merge_level.x, tile.overlap_level.x)
+#	renderer.start_render(tile.loaded_ruleset, input_tile_size, output_tile_size,
+#		input_image, tile.result_subtiles_by_bitmask, tile.smoothing,
+#		tile.merge_level.x, tile.overlap_level.x)
+	renderer.start_render(tile, input_image)
 	if not renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
 		renderer.connect("tiles_ready", self, "on_tiles_rendered")
 #		renderer.connect("report_progress", self, "update_progress")
@@ -182,13 +167,22 @@ func on_tiles_rendered():
 #		renderer.disconnect("report_progress", self, "update_progress")
 #	rendered_tiles = renderer.tiles
 	var tile: TileInTree = loaded_tile_ref.get_ref()
-#	print(tile.result_tiles_by_bitmask)
 #	emit_signal("input_image_processed")
 	result_view.render_from_tile(tile)
 
 
-func _on_InputTextureView_merge_level_changed(level):
-	render_tiles()
+func _on_InputTextureView_merge_level_changed(level: Vector2):
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	tile.set_merge_level(level)
+	tile.save()
+	render_subtiles()
+
+
+func _on_InputTextureView_overlap_level_changed(level: Vector2):
+	var tile: TileInTree = loaded_tile_ref.get_ref()
+	tile.set_overlap_level(level)
+	tile.save()
+	render_subtiles()
 
 
 func _on_TileMainView_input_texture_view_called():
@@ -204,3 +198,5 @@ func _on_TileMainView_ruleset_view_called():
 func _on_TileMainView_template_view_called():
 	var tile: TileInTree = loaded_tile_ref.get_ref()
 	tile.select_row(tile.template_row)
+
+

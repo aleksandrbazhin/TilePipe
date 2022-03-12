@@ -148,7 +148,7 @@ func setup_tile_render(mask: int, viewport: Viewport):
 
 func render_next_batch():
 	for viewport in render_pool:
-		var tile: GeneratedTile = get_next_tile()
+		var tile: GeneratedSubTile = get_next_tile()
 		if tile != null:
 			last_mask = tile.bitmask
 			tile.is_rendering = true
@@ -158,7 +158,7 @@ func render_next_batch():
 			viewport.remove_meta("tile")
 
 
-func get_next_tile() -> GeneratedTile:
+func get_next_tile() -> GeneratedSubTile:
 	for tile in tiles[last_mask]:
 		if tile.image == null and not tile.is_rendering:
 			return tile
@@ -172,7 +172,7 @@ func get_next_tile() -> GeneratedTile:
 func capture_rendered_batch():
 	for viewport in render_pool:
 		if viewport.has_meta("tile"):
-			var tile: GeneratedTile = viewport.get_meta("tile")
+			var tile: GeneratedSubTile = viewport.get_meta("tile")
 			var tile_texture: ViewportTexture = viewport.get_texture()
 			tile.capture_texture(tile_texture, output_tile_size, smoothing_enabled)
 

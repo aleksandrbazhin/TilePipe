@@ -5,7 +5,7 @@ class_name TileRenderer
 signal tiles_ready()
 signal report_progress(progress)
 
-const RENDER_POOL_SIZE = 16
+const RENDER_POOL_SIZE = 4
 
 
 var is_rendering = false
@@ -20,9 +20,9 @@ var output_tile_size := Vector2.ZERO
 var rng: RandomNumberGenerator
 var smoothing_enabled := false
 var ready = false
-var last_mask := 0
+var last_mask := -1
 # tiles[mask] = [random_variant1, random_variant2, ...]
-var tiles := {} 
+var subtiles := {} 
 
 
 func _ready():
@@ -49,24 +49,25 @@ func init_render_pool():
 		add_child(viewport)
 
 
-func start_render(new_ruleset: Ruleset, new_input_tile_size: Vector2, new_output_tile_size: Vector2,
-		input_image: Image, template_bitmasks: Dictionary, new_smoothing_enabled: bool,
-		merge_rate: float, overlap_rate: float, active_rng: RandomNumberGenerator = RandomNumberGenerator.new()):
-	tiles = template_bitmasks
-	ruleset = new_ruleset
-	input_tile_size = new_input_tile_size
-	output_tile_size = new_output_tile_size
+func start_render(tile: TileInTree, input_image: Image, active_rng: RandomNumberGenerator = RandomNumberGenerator.new()):
+	subtiles = tile.result_subtiles_by_bitmask
+	ruleset = tile.loaded_ruleset
+	input_tile_size = tile.input_tile_size
+	output_tile_size = tile.output_tile_size
 	input_tile_parts = split_input_into_tile_parts(input_image)
-	smoothing_enabled = new_smoothing_enabled
+	smoothing_enabled = tile.smoothing
 	rng = active_rng
-	last_mask = tiles.keys()[0]
+	last_mask = subtiles.keys()[0]
+	for bitmask in subtiles:
+		for subtile in subtiles[bitmask]:
+			subtile.reset()
 	for viewport in render_pool:
 		viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
 		viewport.size = input_tile_size
 		var texture_node = viewport.get_node("TextureRect")
 		texture_node.rect_size = input_tile_size
-		texture_node.material.set_shader_param("overlay_rate", merge_rate)
-		texture_node.material.set_shader_param("overlap", overlap_rate)
+		texture_node.material.set_shader_param("overlay_rate", tile.merge_level.x)
+		texture_node.material.set_shader_param("overlap", tile.overlap_level.x)
 	render_next_batch()
 	is_rendering = true
 
@@ -94,20 +95,24 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 	return parts
 
 
-func setup_tile_render(mask: int, viewport: Viewport):
+func setup_tile_render(bitmask: int, viewport: Viewport):
 #	var part_types := ruleset.get_tile_parts()
 #	var overlap_vectors: Array = ruleset.get_overlap_vectors()
 	
 #	var overlap_vector_rotations: Array = ruleset.get_overlap_vector_rotations()
 	var random_center_index: int = rng.randi_range(0, input_tile_parts[0].size() - 1)
 	var center_image: Image = input_tile_parts[0][random_center_index]
-	var tile_rules_data: Dictionary = ruleset.get_mask_data(mask)
+	var tile_rules_data: Dictionary = ruleset.get_mask_data(bitmask)
+	var texture_rect: TextureRect = viewport.get_node("TextureRect")
+	if tile_rules_data.empty(): # no ruleset data for mask in template
+		var itex = ImageTexture.new()
+		itex.create_from_image(center_image, 0)
+		return
 	var parts_rules: Array = tile_rules_data["part_indexes"]
 	var parts_rotations: Array = tile_rules_data["part_rotations"]
 	assert (parts_rules.size() == 8 && parts_rotations.size() == 8)
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image, 0)
-	var texture_rect: TextureRect = viewport.get_node("TextureRect")
 	texture_rect.texture = itex
 	var piece_set := [-1, -1, -1, -1, -1, -1, -1, -1]
 	var piece_random := [0, 0, 0, 0, 0, 0, 0, 0]
@@ -146,40 +151,40 @@ func setup_tile_render(mask: int, viewport: Viewport):
 
 func render_next_batch():
 	for viewport in render_pool:
-		var tile: GeneratedTile = get_next_tile()
-		if tile != null:
-			last_mask = tile.bitmask
-			tile.is_rendering = true
-			setup_tile_render(tile.bitmask, viewport)
-			viewport.set_meta("tile", tile)
+		var subtile: GeneratedSubTile = get_next_tile()
+		if subtile != null:
+			last_mask = subtile.bitmask
+			subtile.is_rendering = true
+			setup_tile_render(subtile.bitmask, viewport)
+			viewport.set_meta("subtile", subtile)
 		else:
-			viewport.remove_meta("tile")
+			viewport.remove_meta("subtile")
 
 
-func get_next_tile() -> GeneratedTile:
-	for tile in tiles[last_mask]:
-		if tile.image == null and not tile.is_rendering:
-			return tile
-	var mask_index := tiles.keys().find(last_mask)
-	if mask_index == tiles.size() - 1:
+func get_next_tile() -> GeneratedSubTile:
+	for subtile in subtiles[last_mask]: # remaining subtile variants with last_mask
+		if subtile.image == null and not subtile.is_rendering:
+			return subtile
+	var mask_index := subtiles.keys().find(last_mask)
+	if mask_index == subtiles.size() - 1: 
 		return null
-	var next_mask = tiles.keys()[mask_index + 1]
-	return tiles[next_mask][0]
+	var next_mask = subtiles.keys()[mask_index + 1]
+	return subtiles[next_mask][0]
 
 
 func capture_rendered_batch():
 	for viewport in render_pool:
-		if viewport.has_meta("tile"):
-			var tile: GeneratedTile = viewport.get_meta("tile")
-			var tile_texture: ViewportTexture = viewport.get_texture()
-			tile.capture_texture(tile_texture, output_tile_size, smoothing_enabled)
+		if viewport.has_meta("subtile"):
+			var subtile: GeneratedSubTile = viewport.get_meta("subtile")
+			var subtile_texture: ViewportTexture = viewport.get_texture()
+			subtile.capture_texture(subtile_texture, output_tile_size, smoothing_enabled)
 
 
 func on_render():
 	if is_rendering:
 		capture_rendered_batch()
 		if get_next_tile() != null:
-			var progress := int(float(tiles.keys().find(last_mask)) / float(tiles.size()) * 100)
+			var progress := int(float(subtiles.keys().find(last_mask)) / float(subtiles.size()) * 100)
 			render_next_batch()
 			emit_signal("report_progress", progress)
 		else:

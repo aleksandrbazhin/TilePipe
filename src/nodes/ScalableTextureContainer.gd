@@ -59,6 +59,7 @@ func _on_XSpinBox_value_changed(value: float):
 		emit_signal("tile_size_changed", current_tile_size)
 		update()
 
+
 func _on_YSpinBox_value_changed(value: float):
 	current_tile_size.y = value
 	emit_signal("tile_size_changed", current_tile_size)

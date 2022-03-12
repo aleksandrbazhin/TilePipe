@@ -21,7 +21,8 @@ var is_selected := false
 var loaded_texture: Texture
 var loaded_ruleset: Ruleset
 var loaded_template: Texture
-var result_tiles_by_bitmask: Dictionary
+var result_subtiles_by_bitmask: Dictionary
+var template_size: Vector2
 
 var texture_path: String
 var template_path: String
@@ -63,6 +64,8 @@ func load_tile(directory: String, tile_file: String) -> bool:
 		load_texture(_tile_data["texture"])
 		load_ruleset(_tile_data["ruleset"])
 		load_template(_tile_data["template"])
+		merge_level = Vector2(_tile_data["merge_level"], _tile_data["merge_level"])
+		overlap_level = Vector2(_tile_data["overlap_level"], _tile_data["overlap_level"])
 		return true
 	emit_signal("report_error", "Error loading tile: " + tile_file)
 	return false
@@ -111,18 +114,18 @@ func load_template(path: String) -> bool:
 
 
 func parse_template():
-	result_tiles_by_bitmask.clear()
+	result_subtiles_by_bitmask.clear()
 	if loaded_template == null:
 		return
-	var template_size := loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
+	template_size = loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
 	for x in range(template_size.x):
 		for y in range(template_size.y):
 			var mask: int = get_template_mask_value(loaded_template.get_data(), x, y)
 			var has_tile: bool = get_template_has_tile(loaded_template.get_data(), x, y)
 			if has_tile:
-				if not result_tiles_by_bitmask.has(mask):
-					result_tiles_by_bitmask[mask] = []
-				result_tiles_by_bitmask[mask].append(GeneratedTile.new(mask, Vector2(x, y)))
+				if not result_subtiles_by_bitmask.has(mask):
+					result_subtiles_by_bitmask[mask] = []
+				result_subtiles_by_bitmask[mask].append(GeneratedSubTile.new(mask, Vector2(x, y)))
 
 
 func get_template_mask_value(template_image: Image, x: int, y: int) -> int:
@@ -213,32 +216,46 @@ func set_texture(abs_path: String):
 	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
 	load_texture(rel_path)
 	texture_row.set_text(0, TEXTURE_PREFIX + rel_path)
+	_tile_data["texture"] = rel_path
 
 
 func set_ruleset(abs_path: String):
 	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
 	load_ruleset(rel_path)
 	ruleset_row.set_text(0, RULESET_PREFIX + rel_path)
+	_tile_data["ruleset"] = rel_path
 
 
 func set_template(abs_path: String):
 	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
 	load_template(rel_path)
 	template_row.set_text(0, TEMPLATE_PREFIX + rel_path)
+	_tile_data["template"] = rel_path
 
 
 func set_input_tile_size(new_size: Vector2):
 	if input_tile_size.x > 0 and input_tile_size.y > 0:
 		input_tile_size = new_size
+		_tile_data["input_tile_size"] = {
+			"x": input_tile_size.x,
+			"y": input_tile_size.y
+		}
 
 
 func set_merge_level(new_merge_level: Vector2):
 	merge_level = new_merge_level
+	_tile_data["merge_level"] = merge_level.x
 
 
 func set_overlap_level(new_overlap_level: Vector2):
 	overlap_level = new_overlap_level
+	_tile_data["overlap_level"] = overlap_level.x
 
 
 func save():
-	pass
+	print("tile %s saved" % tile_file_name)
+	var path := current_directory + "/" + tile_file_name
+	var file := File.new()
+	file.open(path, File.WRITE)
+	file.store_string(to_json(_tile_data))
+	file.close()
