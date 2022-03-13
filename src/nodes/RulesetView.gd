@@ -47,11 +47,20 @@ func add_ruleset_highlights(ruleset: Ruleset):
 		highlight.set_id(i + 1)
 
 
-func add_tiles(ruleset: Ruleset):
-#	ruleset.preview_texture
+func clear_tiles():
 	for old_tile in tiles_container.get_children():
-		old_tile.queue_free()
+		old_tile.free()
+
+func switched_to_another_ruleset(old_ruleset_path: String) -> bool:
+	return old_ruleset_path == current_ruleset_path
+
+
+func add_tiles(ruleset: Ruleset):
+	clear_tiles()
+	var working_ruleset_path := current_ruleset_path
 	for tile_index in ruleset.get_tiles().size():
+		if switched_to_another_ruleset(working_ruleset_path):
+			break
 		var tile_view: TileInRuleset = preload("res://src/nodes/TileInRuleset.tscn").instance()
 		tile_view.setup(ruleset, tile_index)
 		tiles_container.add_child(tile_view)

@@ -253,7 +253,7 @@ func set_overlap_level(new_overlap_level: Vector2):
 
 
 func save():
-	print("tile %s saved" % tile_file_name)
+#	print("tile %s saved" % tile_file_name)
 	var path := current_directory + "/" + tile_file_name
 	var file := File.new()
 	file.open(path, File.WRITE)

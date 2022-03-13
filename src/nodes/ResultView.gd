@@ -22,7 +22,7 @@ func render_from_tile(tile: TileInTree):
 #		return
 	var tiles_by_bitmasks := tile.result_subtiles_by_bitmask
 	set_output_texture(null)
-	if tiles_by_bitmasks.size() == 0:
+	if tiles_by_bitmasks.empty():
 		return
 #	var tile_size: int = tile.output_tile_size
 #	rotated_texture_in_viewport.show()
