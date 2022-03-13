@@ -1,13 +1,19 @@
 {
-    "input_tile_size": {"x": 16, "y": 16},
-    "merge_level": 0.3125,
-    "output_tile_offset": 0,
-    "output_tile_size": {"x": 64, "y": 64},
-    "overlap_level": 0.25,
-    "random_seed_value": 0,
-    "ruleset": "rulesets/no_symmetry_13_part.json",
-    "smoothing": false,
-    "template": "templates/template_47.png",
-    "texture": "no_symmetry_pixelart_13_part.png",
-    "use_random_seed": false
+	"input_tile_size": {
+		"x": 16,
+		"y": 16
+	},
+	"merge_level": 0.3125,
+	"output_tile_offset": 0,
+	"output_tile_size": {
+		"x": 64,
+		"y": 64
+	},
+	"overlap_level": 0.25,
+	"random_seed_value": 0,
+	"ruleset": "rulesets/no_symmetry_13_part.json",
+	"smoothing": false,
+	"template": "templates/template_47_with_duplicates.png",
+	"texture": "no_symmetry_pixelart_13_part.png",
+	"use_random_seed": false
 }

@@ -257,5 +257,5 @@ func save():
 	var path := current_directory + "/" + tile_file_name
 	var file := File.new()
 	file.open(path, File.WRITE)
-	file.store_string(to_json(_tile_data))
+	file.store_string(JSON.print(_tile_data, "\t"))
 	file.close()
