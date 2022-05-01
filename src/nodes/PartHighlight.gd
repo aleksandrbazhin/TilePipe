@@ -1,9 +1,11 @@
 extends Control
 
-class_name TileHighlight
+class_name PartHighlight
+
+signal focused()
+signal unfocused()
 
 var id: int = -1
-
 
 func set_id(new_id: int):
 	var color_index := (new_id - 1) % Const.HIGHLIGHT_COLORS.size()
@@ -35,7 +37,9 @@ func set_label_hew(color_index: int, label_panel: Panel):
 
 func _on_TileHighlight_mouse_entered():
 	modulate = Color("aaaaaa")
+	emit_signal("focused", self)
 
 
 func _on_TileHighlight_mouse_exited():
 	modulate = Color("ffffff")
+	emit_signal("unfocused", self)

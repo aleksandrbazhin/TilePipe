@@ -10,9 +10,11 @@ signal template_view_called()
 #signal file_dialog_started()
 #signal file_dialog_ended()
 
+var part_highlight_scene := preload("res://src/nodes/PartHighlight.tscn")
+
 onready var title := $Label
 onready var input_title := $MarginContainer/VBoxContainer/InputContainer/HBoxContainer/TextureButton
-onready var input_texture_container := $MarginContainer/VBoxContainer/InputContainer/ScalableTextureContainer
+onready var input_texture_container: ScalableTextureContainer = $MarginContainer/VBoxContainer/InputContainer/ScalableTextureContainer
 onready var ruleset_filename := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer/RulesetButton
 onready var ruleset_name := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/Name
 onready var ruleset_description := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/Description
@@ -41,10 +43,20 @@ func add_ruleset_highlights(ruleset: Ruleset):
 	for old_highlight in ruleset_texture.get_children():
 		old_highlight.queue_free()
 	for i in ruleset.get_tile_parts().size():
-		var highlight := preload("res://src/nodes/TileHighlight.tscn").instance()
+		var highlight: PartHighlight = part_highlight_scene.instance()
 		ruleset_texture.add_child(highlight)
 		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)
 		highlight.set_id(i + 1)
+		highlight.connect("focused", self, "on_part_highlight_focused")
+		highlight.connect("unfocused", self, "on_part_highlight_unfocused")
+
+
+func on_part_highlight_focused(part: PartHighlight):
+	input_texture_container.set_part_highlight(part.id, true)
+
+
+func on_part_highlight_unfocused(part: PartHighlight):
+	input_texture_container.set_part_highlight(part.id, false)
 
 
 func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):

@@ -5,13 +5,18 @@ class_name ScalableTextureContainer
 signal tile_size_changed(size)
 
 var current_tile_size: Vector2
+var current_scale := Vector2.ONE
 var is_ready := false
+var is_highlighting_tile := false
+var highlight_position := Vector2.ZERO
+#var highlight_color: Color
+var highlight_part_id := 0
 
 onready var bg_rect := $BGTextureRect
 onready var texture_rect := $TextureRect
 onready var x_spinbox := $InputInfo/HBoxContainer/XSpinBox
 onready var y_spinbox := $InputInfo/HBoxContainer/YSpinBox
-
+onready var part_highlight := $PartHihglight
 
 func _ready():
 	is_ready = true
@@ -32,6 +37,7 @@ func set_input_tile_size(tile_size: Vector2):
 	var y_scale: float = texture_rect.rect_size.y / input_size.y
 	var scale_factor: float = min(x_scale, y_scale)
 	scale_factor = Helpers.snap_down_to_po2(scale_factor)
+	current_scale = Vector2(scale_factor, scale_factor)
 	texture_rect.rect_scale = Vector2(scale_factor, scale_factor)
 	var bg_scale :=  scale_factor * tile_size / Const.DEFAULT_TILE_SIZE
 	bg_rect.rect_size = texture_rect.rect_size / bg_scale
@@ -44,10 +50,34 @@ func setup_size_display(tile_size: Vector2):
 	y_spinbox.value = tile_size.y
 
 
+func set_part_highlight(part_id: int, is_on: bool):
+	# TODO: search highlighted part by position set in ruleset or tile settings
+	if part_id == highlight_part_id and is_on == is_highlighting_tile:
+		return
+	if is_on:
+		part_highlight.show()
+		highlight_position = Vector2(part_id - 1, 0)
+		var color_index := (part_id - 1) % Const.HIGHLIGHT_COLORS.size()
+		part_highlight.color = Const.HIGHLIGHT_COLORS[color_index]
+		part_highlight.color.a = 0.6
+	else:
+		part_highlight.hide()
+	is_highlighting_tile = is_on
+	draw_part_highlight()
+
+
+func draw_part_highlight():
+	if is_highlighting_tile:
+		var tile_size := current_scale * current_tile_size
+		part_highlight.rect_position = highlight_position * tile_size
+		part_highlight.rect_size = tile_size
+
+
 func _draw():
 	#TODO: redraws 2 times instead of one
 	if is_ready:
 		set_input_tile_size(current_tile_size)
+		draw_part_highlight()
 
 
 func _on_XSpinBox_value_changed(value: float):

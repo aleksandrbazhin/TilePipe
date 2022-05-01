@@ -9,6 +9,7 @@ signal file_dialog_ended()
 signal report_error(text)
 signal tile_ruleset_changed(path)
 
+var part_highlight_scene := preload("res://src/nodes/PartHighlight.tscn")
 var current_ruleset_path := ""
 
 onready var tile_name := $VBoxContainer/HBoxContainer/TileNameLabel
@@ -41,7 +42,7 @@ func add_ruleset_highlights(ruleset: Ruleset):
 	for old_highlight in parts_texture.get_children():
 		old_highlight.queue_free()
 	for i in ruleset.get_tile_parts().size():
-		var highlight := preload("res://src/nodes/TileHighlight.tscn").instance()
+		var highlight: PartHighlight = part_highlight_scene.instance()
 		parts_texture.add_child(highlight)
 		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)
 		highlight.set_id(i + 1)

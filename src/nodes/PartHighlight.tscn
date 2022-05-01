@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/styles/subscribe_font.tres" type="DynamicFont" id=1]
-[ext_resource path="res://src/nodes/TileHighlight.gd" type="Script" id=2]
+[ext_resource path="res://src/nodes/PartHighlight.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.152941, 0.176471, 0.235294, 1 )
@@ -14,7 +14,7 @@ border_width_bottom = 2
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.8, 0.8, 0.8, 1 )
 
-[node name="TileHighlight" type="Control"]
+[node name="PartHighlight" type="Control"]
 margin_right = 48.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 74 )
