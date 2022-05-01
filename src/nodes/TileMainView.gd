@@ -42,7 +42,7 @@ func load_data(tile: TileInTree):
 func add_ruleset_highlights(ruleset: Ruleset):
 	for old_highlight in ruleset_texture.get_children():
 		old_highlight.queue_free()
-	for i in ruleset.get_tile_parts().size():
+	for i in ruleset.get_parts().size():
 		var highlight: PartHighlight = part_highlight_scene.instance()
 		ruleset_texture.add_child(highlight)
 		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)

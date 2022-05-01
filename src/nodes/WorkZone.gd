@@ -128,7 +128,7 @@ func _on_tile_size_changed(size: Vector2):
 func render_subtiles():
 	var tile: TileInTree = loaded_tile_ref.get_ref()
 	var input_image: Image = tile.loaded_texture.get_data()
-#	var parts_in_ruleset := int(tile.loaded_ruleset.get_tile_parts().size())
+#	var parts_in_ruleset := int(tile.loaded_ruleset.get_parts().size())
 #	var min_input_tiles := Vector2(, 1)
 #	var old_style_input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
 #	var input_tile_size := Vector2(old_style_input_tile_size, old_style_input_tile_size)

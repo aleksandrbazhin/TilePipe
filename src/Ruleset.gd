@@ -84,7 +84,7 @@ func load_data_from_json(data_path: String):
 		print(last_error_message)
 
 
-func get_tile_parts() -> Array:
+func get_parts() -> Array:
 	if _data.has("tile_parts"):
 		return _data["tile_parts"]
 	else:
@@ -93,7 +93,7 @@ func get_tile_parts() -> Array:
 		return []
 
 
-func get_tiles() -> Array:
+func get_subtiles() -> Array:
 	if _data.has("tiles"):
 		return _data["tiles"]
 	else:
@@ -121,7 +121,7 @@ func get_description() -> String:
 
 
 func get_mask_data(mask: int) -> Dictionary:
-	for tile_data in get_tiles():
+	for tile_data in get_subtiles():
 		if tile_data["mask_variants"].has(float(mask)):
 			return tile_data
 	last_error_message = "Error: wrong ruleset format. \n"
@@ -131,7 +131,7 @@ func get_mask_data(mask: int) -> Dictionary:
 
 
 func generate_preview() -> Texture:
-	var parts := get_tile_parts()
+	var parts := get_parts()
 	if not parts.empty():
 		var format: int = part_textures[parts[0]].get_data().get_format()
 		var image := Image.new()

@@ -41,7 +41,7 @@ func add_ruleset_highlights(ruleset: Ruleset):
 #	var index := 0
 	for old_highlight in parts_texture.get_children():
 		old_highlight.queue_free()
-	for i in ruleset.get_tile_parts().size():
+	for i in ruleset.get_parts().size():
 		var highlight: PartHighlight = part_highlight_scene.instance()
 		parts_texture.add_child(highlight)
 		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)
@@ -61,7 +61,7 @@ func add_tiles(ruleset: Ruleset):
 	clear_tiles()
 	
 	var working_ruleset_path := current_ruleset_path
-	for tile_index in ruleset.get_tiles().size():
+	for tile_index in ruleset.get_subtiles().size():
 		if switched_to_another_ruleset(working_ruleset_path):
 			break
 		var tile_view: TileInRuleset = preload("res://src/nodes/TileInRuleset.tscn").instance()

@@ -74,7 +74,7 @@ func start_render(tile: TileInTree, input_image: Image, active_rng: RandomNumber
 
 func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 	var parts := {}
-	var min_input_tiles := ruleset.get_tile_parts().size()
+	var min_input_tiles := ruleset.get_parts().size()
 	for part_index in range(min_input_tiles):
 		parts[part_index] = []
 		var part_is_empty := false
@@ -96,7 +96,7 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 
 
 func setup_tile_render(bitmask: int, viewport: Viewport):
-#	var part_types := ruleset.get_tile_parts()
+#	var part_types := ruleset.get_parts()
 #	var overlap_vectors: Array = ruleset.get_overlap_vectors()
 	
 #	var overlap_vector_rotations: Array = ruleset.get_overlap_vector_rotations()
@@ -142,7 +142,7 @@ func setup_tile_render(bitmask: int, viewport: Viewport):
 		var mask_key: int = Const.TILE_MASK[mask_name]
 		texture_rect.material.set_shader_param("overlay_texture_%s" % mask_key, piece_itex)
 		texture_rect.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
-		var overlap_vec: Vector2 = Const.PART_OVERLAP_VECTORS[ruleset.get_tile_parts()[piece_index]]
+		var overlap_vec: Vector2 = Const.PART_OVERLAP_VECTORS[ruleset.get_parts()[piece_index]]
 		if overlap_vec.length() == 1.0 and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
 			overlap_vec = overlap_vec.rotated(-PI / 2.0)
 		texture_rect.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_vec)
