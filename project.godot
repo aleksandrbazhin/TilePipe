@@ -50,11 +50,6 @@ _global_script_classes=[ {
 "path": "res://src/nodes/MenuPanel.gd"
 }, {
 "base": "Panel",
-"class": "MonitorPlotPanel",
-"language": "GDScript",
-"path": "res://addons/PerfMonitor/MonitorPlotPanel.gd"
-}, {
-"base": "Panel",
 "class": "ProjectTree",
 "language": "GDScript",
 "path": "res://src/nodes/ProjectTree.gd"
@@ -138,7 +133,6 @@ _global_script_class_icons={
 "GodotTileRow": "",
 "InputTextureView": "",
 "MenuPanel": "",
-"MonitorPlotPanel": "",
 "ProjectTree": "",
 "ResultView": "",
 "Ruleset": "",
