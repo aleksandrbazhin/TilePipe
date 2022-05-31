@@ -11,25 +11,27 @@ signal template_view_called()
 #signal file_dialog_ended()
 
 onready var title := $Label
-onready var input_title := $MarginContainer/VBoxContainer/InputContainer/HBoxContainer/TextureButton
-onready var input_texture_container := $MarginContainer/VBoxContainer/InputContainer/ScalableTextureContainer
-onready var ruleset_filename := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer/RulesetButton
-onready var ruleset_name := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/Name
-onready var ruleset_description := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/Description
-onready var ruleset_texture := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/ScrollContainer/TextureRect
-onready var template_title := $MarginContainer/VBoxContainer/TemplateContainer/HBoxContainer/TemplateButton
-onready var template_texture := $MarginContainer/VBoxContainer/TemplateContainer/TextureRect
+onready var input_texture := $InputTextureView
+#onready var input_title := $MarginContainer/VBoxContainer/InputContainer/HBoxContainer/TextureButton
+#onready var input_texture_container := $MarginContainer/VBoxContainer/InputContainer/ScalableTextureContainer
+onready var ruleset_filename := $RulesetContainer/HBoxContainer/RulesetButton
+onready var ruleset_button := $RulesetContainer/HBoxContainer/RulesetButton
+#onready var ruleset_description := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/Description
+onready var ruleset_texture := $RulesetContainer/ScrollContainer/TextureRect
+onready var template_title := $TemplateContainer/HBoxContainer/TemplateButton
+onready var template_texture := $TemplateContainer/TextureRect
 
 
 func load_data(tile: TileInTree):
 	title.text = tile.tile_file_name
 	if tile.texture_path != "":
-		input_title.text = tile.texture_path.get_file()
-		input_texture_container.set_texture(tile.loaded_texture, tile.input_tile_size)
+		input_texture.load_data(tile)
+#		input_title.text = tile.texture_path.get_file()
+#		input_texture_container.set_texture(tile.loaded_texture, tile.input_tile_size)
 	if tile.loaded_ruleset.is_loaded:
 		ruleset_filename.text = tile.ruleset_path.get_file()
-		ruleset_name.text = tile.loaded_ruleset.get_name()
-		ruleset_description.text = tile.loaded_ruleset.get_description()
+		ruleset_button.text = tile.loaded_ruleset.get_name()
+#		ruleset_description.text = tile.loaded_ruleset.get_description()
 		ruleset_texture.texture = tile.loaded_ruleset.preview_texture
 		add_ruleset_highlights(tile.loaded_ruleset)
 	if tile.template_path != "":
