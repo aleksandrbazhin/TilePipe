@@ -12,9 +12,6 @@ rect_min_size = Vector2( 0, 232 )
 theme = ExtResource( 3 )
 color = Color( 0.156863, 0.176471, 0.2, 1 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -82,96 +79,3 @@ stretch_mode = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="ImageSettings" type="ColorRect" parent="VBoxContainer/HSplitContainer/Result"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -186.0
-margin_top = 6.0
-margin_right = -16.0
-margin_bottom = 192.0
-rect_min_size = Vector2( 170, 186 )
-mouse_filter = 2
-color = Color( 0.34902, 0.396078, 0.486275, 0.705882 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="OutputControlContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/Result/ImageSettings"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 10.0
-margin_right = -6.0
-margin_bottom = -7.0
-mouse_filter = 2
-custom_constants/separation = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Texturet Label" type="Label" parent="VBoxContainer/HSplitContainer/Result/ImageSettings/OutputControlContainer" groups=["blockable"]]
-margin_right = 161.0
-margin_bottom = 19.0
-size_flags_vertical = 1
-text = "Output tile size:"
-align = 1
-valign = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SizeOptionButton" type="OptionButton" parent="VBoxContainer/HSplitContainer/Result/ImageSettings/OutputControlContainer" groups=["blockable"]]
-margin_top = 25.0
-margin_right = 161.0
-margin_bottom = 57.0
-rect_min_size = Vector2( 0, 32 )
-hint_tooltip = "Output tile are scaled up or down."
-text = "64x64"
-align = 1
-items = [ "8x8", null, false, 0, null, "16x16", null, false, 1, null, "32x32", null, false, 2, null, "64x64", null, false, 3, null, "128x128", null, false, 4, null, "8x8", null, false, 5, null, "16x16", null, false, 6, null, "32x32", null, false, 7, null, "64x64", null, false, 8, null, "128x128", null, false, 9, null ]
-selected = 3
-
-[node name="Smoothing" type="CheckButton" parent="VBoxContainer/HSplitContainer/Result/ImageSettings/OutputControlContainer" groups=["blockable"]]
-margin_top = 63.0
-margin_right = 161.0
-margin_bottom = 107.0
-hint_tooltip = "Disable for pixelart, enable for anitaliased."
-mouse_filter = 1
-shortcut_in_tooltip = false
-text = "Smoothing"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Texturet Label2" type="Label" parent="VBoxContainer/HSplitContainer/Result/ImageSettings/OutputControlContainer" groups=["blockable"]]
-margin_top = 113.0
-margin_right = 161.0
-margin_bottom = 132.0
-size_flags_vertical = 1
-text = "Tile spacing:"
-align = 1
-valign = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SpinBoxContainer" type="HBoxContainer" parent="VBoxContainer/HSplitContainer/Result/ImageSettings/OutputControlContainer"]
-margin_top = 138.0
-margin_right = 161.0
-margin_bottom = 169.0
-mouse_filter = 2
-
-[node name="OffsetSpinBox" type="SpinBox" parent="VBoxContainer/HSplitContainer/Result/ImageSettings/OutputControlContainer/SpinBoxContainer" groups=["blockable"]]
-margin_right = 97.0
-margin_bottom = 31.0
-size_flags_horizontal = 3
-max_value = 255.0
-rounded = true
-align = 1
-
-[node name="OffsetButton" type="Button" parent="VBoxContainer/HSplitContainer/Result/ImageSettings/OutputControlContainer/SpinBoxContainer" groups=["blockable"]]
-margin_left = 101.0
-margin_right = 161.0
-margin_bottom = 31.0
-text = "Apply"

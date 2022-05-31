@@ -153,14 +153,14 @@ func get_template_has_tile(template_image: Image, x: int, y: int) -> bool:
 func create_tree_items():
 	tile_row = tree.create_item()
 	tile_row.set_text(0, tile_file_name)
-	add_texture_item(_tile_data["texture"])
+#	add_texture_item(_tile_data["texture"])
 	add_ruleset_item(_tile_data["ruleset"])
 	add_template_item(_tile_data["template"])
 
 
-func add_texture_item(file_name: String):
-	texture_row = tree.create_item(tile_row)
-	texture_row.set_text(0, TEXTURE_PREFIX + file_name)
+#func add_texture_item(file_name: String):
+#	texture_row = tree.create_item(tile_row)
+#	texture_row.set_text(0, TEXTURE_PREFIX + file_name)
 
 
 func add_ruleset_item(file_name: String):

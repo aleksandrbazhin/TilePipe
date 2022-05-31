@@ -10,7 +10,6 @@ var loaded_tile_ref: WeakRef
 var last_visible_tab
 
 onready var tile_main_view: TileMainView = $VSplitContainer/Control/TileMainView
-onready var input_texture_view: InputTextureView = $VSplitContainer/Control/InputTextureView
 onready var ruleset_view: RulesetView = $VSplitContainer/Control/RulesetView
 onready var template_view: TemplateView = $VSplitContainer/Control/TemplateView
 onready var result_view: ResultView = $VSplitContainer/ResultView
@@ -24,7 +23,6 @@ func unhide_all():
 
 func hide_all():
 	tile_main_view.hide()
-	input_texture_view.hide()
 	ruleset_view.hide()
 	template_view.hide()
 
@@ -43,10 +41,6 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 			tile_main_view.show()
 			tile_main_view.load_data(tile)
 			last_visible_tab = tile_main_view
-		tile.texture_row:
-			input_texture_view.show()
-			input_texture_view.load_data(tile)
-			last_visible_tab = input_texture_view
 		tile.ruleset_row:
 			ruleset_view.show()
 			ruleset_view.load_data(tile)
@@ -57,13 +51,6 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 			last_visible_tab = template_view
 #	render_tiles()
 
-func _on_RulesetView_file_dialog_started():
-	emit_signal("file_dialog_started")
-
-
-func _on_RulesetView_file_dialog_ended():
-	emit_signal("file_dialog_ended")
-
 
 func _on_TileMainView_file_dialog_started():
 	emit_signal("file_dialog_started")
@@ -71,6 +58,15 @@ func _on_TileMainView_file_dialog_started():
 
 func _on_TileMainView_file_dialog_ended():
 	emit_signal("file_dialog_ended")
+	
+
+func _on_RulesetView_file_dialog_started():
+	emit_signal("file_dialog_started")
+
+
+func _on_RulesetView_file_dialog_ended():
+	emit_signal("file_dialog_ended")
+
 
 
 func _on_TemplateView_file_dialog_started():
@@ -80,13 +76,13 @@ func _on_TemplateView_file_dialog_started():
 func _on_TemplateView_file_dialog_ended():
 	emit_signal("file_dialog_ended")
 
-
-func _on_InputTextureView_file_dialog_started():
-	emit_signal("file_dialog_started")
-
-
-func _on_InputTextureView_file_dialog_ended():
-	emit_signal("file_dialog_ended")
+#
+#func _on_InputTextureView_file_dialog_started():
+#	emit_signal("file_dialog_started")
+#
+#
+#func _on_InputTextureView_file_dialog_ended():
+#	emit_signal("file_dialog_ended")
 
 
 func _on_RulesetView_tile_ruleset_changed(path: String):
@@ -109,7 +105,7 @@ func _on_InputTextureView_tile_texture_changed(path: String):
 	var tile: TileInTree = loaded_tile_ref.get_ref()
 	tile.set_texture(path)
 	tile.save()
-	input_texture_view.load_data(tile)
+#	input_texture_view.load_data(tile)
 	render_subtiles()
 
 
@@ -171,23 +167,23 @@ func on_tiles_rendered():
 	result_view.render_from_tile(tile)
 
 
-func _on_InputTextureView_merge_level_changed(level: Vector2):
-	var tile: TileInTree = loaded_tile_ref.get_ref()
-	tile.set_merge_level(level)
-	tile.save()
-	render_subtiles()
+#func _on_InputTextureView_merge_level_changed(level: Vector2):
+#	var tile: TileInTree = loaded_tile_ref.get_ref()
+#	tile.set_merge_level(level)
+#	tile.save()
+#	render_subtiles()
+#
+#
+#func _on_InputTextureView_overlap_level_changed(level: Vector2):
+#	var tile: TileInTree = loaded_tile_ref.get_ref()
+#	tile.set_overlap_level(level)
+#	tile.save()
+#	render_subtiles()
 
-
-func _on_InputTextureView_overlap_level_changed(level: Vector2):
-	var tile: TileInTree = loaded_tile_ref.get_ref()
-	tile.set_overlap_level(level)
-	tile.save()
-	render_subtiles()
-
-
-func _on_TileMainView_input_texture_view_called():
-	var tile: TileInTree = loaded_tile_ref.get_ref()
-	tile.select_row(tile.texture_row)
+#
+#func _on_TileMainView_input_texture_view_called():
+#	var tile: TileInTree = loaded_tile_ref.get_ref()
+#	tile.select_row(tile.texture_row)
 
 
 func _on_TileMainView_ruleset_view_called():

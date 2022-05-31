@@ -13,17 +13,16 @@ signal overlap_level_changed(level)
 var current_texture_path := ""
 var current_input_tile_size := Const.DEFAULT_TILE_SIZE
 
-onready var tile_name := $HeaderContainer/TileNameLabel
+
 onready var texture_option := $HeaderContainer/TextureFileName
 onready var texture_container: ScalableTextureContainer = $HBox/ScalableTextureContainer
-onready var merge_slider_x: AdvancedSlider = $HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/RateSlider
-onready var merge_slider_y: AdvancedSlider = $HBox/SettingsContainer/VBox/Composition/MergeContainer/MergeYSliderContainer/RateSlider
-onready var overlay_slider_x: AdvancedSlider = $HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSlider
-onready var overlay_slider_y: AdvancedSlider = $HBox/SettingsContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer/OverlapSlider
+onready var merge_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/RateSlider
+onready var merge_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeYSliderContainer/RateSlider
+onready var overlay_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSlider
+onready var overlay_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer/OverlapSlider
 
 
 func load_data(tile: TileInTree):
-	tile_name.text = tile.tile_file_name
 	current_texture_path = tile.texture_path
 	current_input_tile_size = tile.input_tile_size
 	populate_texture_options()
@@ -119,3 +118,7 @@ func _on_OverlapSlider_released(value: float):
 
 func _on_RateSlider_released(value: float):
 	emit_signal("merge_level_changed", Vector2(value, value))
+
+
+func change_part_highlight(part_id: int, is_on: bool):
+	texture_container.set_part_highlight(part_id, is_on)

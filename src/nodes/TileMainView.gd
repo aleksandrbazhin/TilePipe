@@ -14,11 +14,11 @@ onready var title := $Label
 onready var input_texture := $InputTextureView
 #onready var input_title := $MarginContainer/VBoxContainer/InputContainer/HBoxContainer/TextureButton
 #onready var input_texture_container := $MarginContainer/VBoxContainer/InputContainer/ScalableTextureContainer
-onready var ruleset_filename := $RulesetContainer/HBoxContainer/RulesetButton
-onready var ruleset_button := $RulesetContainer/HBoxContainer/RulesetButton
+onready var ruleset_filename := $RulesetContainer/RulesetButton
+onready var ruleset_button := $RulesetContainer/RulesetButton
 #onready var ruleset_description := $MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/Description
 onready var ruleset_texture := $RulesetContainer/ScrollContainer/TextureRect
-onready var template_title := $TemplateContainer/HBoxContainer/TemplateButton
+onready var template_title := $TemplateContainer/TemplateButton
 onready var template_texture := $TemplateContainer/TextureRect
 
 
@@ -42,11 +42,21 @@ func load_data(tile: TileInTree):
 func add_ruleset_highlights(ruleset: Ruleset):
 	for old_highlight in ruleset_texture.get_children():
 		old_highlight.queue_free()
-	for i in ruleset.get_tile_parts().size():
-		var highlight := preload("res://src/nodes/TileHighlight.tscn").instance()
+	for i in ruleset.get_parts().size():
+		var highlight := preload("res://src/nodes/PartHighlight.tscn").instance()
 		ruleset_texture.add_child(highlight)
 		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)
 		highlight.set_id(i + 1)
+		highlight.connect("focused", self, "on_part_highlight_focused")
+		highlight.connect("unfocused", self, "on_part_highlight_unfocused")
+
+
+func on_part_highlight_focused(part: PartHighlight):
+	input_texture.change_part_highlight(part.id, true)
+
+
+func on_part_highlight_unfocused(part: PartHighlight):
+	input_texture.change_part_highlight(part.id, false)
 
 
 func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):

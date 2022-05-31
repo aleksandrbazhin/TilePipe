@@ -13,9 +13,6 @@ margin_right = -1186.0
 margin_bottom = -688.0
 rect_min_size = Vector2( 180, 140 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false
