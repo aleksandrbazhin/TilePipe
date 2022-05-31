@@ -19,7 +19,7 @@
 
 The project is meant to be a part of the artist pipeline when creating 2D tilesets for game development. Instead of 47 or 255 tiles you can draw only a couple of parts (like corners) that differ and have everything else generated.
  
-This is the second iteration of the project, here's the origina; TilePipe project page on itch.io https://aleksandrbazhin.itch.io/tilepipe. It's source can be found in the respectale git branch.
+This is the second iteration of the project, here's the original TilePipe project page on itch.io https://aleksandrbazhin.itch.io/tilepipe. It's source can be found in the respectable git branch.
 
 ## About tiling in general
 
@@ -33,9 +33,20 @@ This is the second iteration of the project, here's the origina; TilePipe projec
 - Ruleset
 - Template
 
-### Basic usage as example
+### Basic usage on provided examples
+
 ### Creating your own tiles
-- Input texture
+
+- Project logic (add/use)
+
+First any tile asset has to be added or copied into the project folder. You can do it yourself or with the help of the provided GUI. But the easiest way is to just start off with one of the examples.
+- Input Textures are png images, consisting of tile parts that are used to construct all of the subtiles.
+- Templates are also png images, but only those placed in the templates/ subfolder of your project. They consist of 32x32 squares, every of which is divided into 9 smaller squares. Each of those nine represent tile's neighbor, which will affect the selection of the subtile. The smaller squares can be either white or transparent (no neighbor) or of any other color (there is some neighbor). The central square represents the tile itself and if it's white, no subtile will be rendered at all. These template images are then recognized by TilePipe and the result is composed by this templates. The format could as well be text or JSON based, but images are easier to manipulate for an artist.
+- Rulesets are sets of rules dictating which parts should be used in which order to create a specific subtile. They are a JSON files, which are then visualized in a separate tab in TilePipe. You can change them in any text editor ot create any kind of rules. Some of the rulesets in the examples are the most useful, so just copy them to the rulesets/ subfolder of your project. There is a JSON schema, specifying the format and autochecker script.
+
+
+GUI tour:
+- Main View 
 - Template
 - Ruleset
 - Exporting
@@ -50,7 +61,7 @@ This is the second iteration of the project, here's the origina; TilePipe projec
 1. Perfectionism
 2. Ability to save and use custom rulesets (previously named presets). These are now json files, schema is included in the project. There is a viewer in the GUI.
 3. Project-like logic for every directory. Several tile sources now from a project, which can be exported at once.
-4. Every data is now explicit, there is minimal built-in logic (not examples, not templates, not rulesets). It's a VCS-ready approach, all the cahnges are now trackable. Everything previously built-in os now distributed as the examples.
+4. Every data is now explicit, there is minimal built-in logic (not examples, not templates, not rulesets). It's a VCS-ready approach, all the changes are now trackable. Everything previously built-in os now distributed as the examples.
 
 
 ## Screens
