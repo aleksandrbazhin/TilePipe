@@ -9,9 +9,6 @@
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="AddTextureFileDialog" type="FileDialog" parent="."]
 margin_right = 800.0
@@ -23,8 +20,8 @@ mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.png; Texture PNG" )
-current_dir = "/Users/user/Documents/tilepipe"
-current_path = "/Users/user/Documents/tilepipe/"
+current_dir = "/home/alexander/GodotProjects/TilePIpe"
+current_path = "/home/alexander/GodotProjects/TilePIpe/"
 
 [node name="HeaderContainer" type="HBoxContainer" parent="."]
 margin_right = 1280.0

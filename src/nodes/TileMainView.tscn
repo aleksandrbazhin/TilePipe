@@ -1,20 +1,13 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/nodes/TileMainView.gd" type="Script" id=1]
-[ext_resource path="res://src/nodes/ScalableTextureContainer.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=3]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
+[ext_resource path="res://src/nodes/InputTextureView.tscn" type="PackedScene" id=2]
 
 [node name="TileMainView" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/separation = 6
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="."]
 margin_right = 1280.0
@@ -27,242 +20,108 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-margin_top = 38.0
-margin_right = 1280.0
-margin_bottom = 656.0
-size_flags_vertical = 3
-custom_constants/margin_right = 12
-custom_constants/margin_top = 0
-custom_constants/margin_left = 12
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer"]
-margin_left = 12.0
-margin_right = 1268.0
-margin_bottom = 618.0
-custom_constants/separation = 12
-
-[node name="InputContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_right = 410.0
-margin_bottom = 618.0
-size_flags_horizontal = 3
-custom_constants/separation = 6
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/InputContainer"]
-margin_right = 410.0
-margin_bottom = 26.0
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/InputContainer/HBoxContainer"]
-margin_right = 52.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 0, 26 )
-text = "Texture:"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextureButton" type="Button" parent="MarginContainer/VBoxContainer/InputContainer/HBoxContainer"]
-margin_left = 56.0
-margin_right = 410.0
-margin_bottom = 26.0
-focus_mode = 0
-size_flags_horizontal = 3
-text = "Name"
-
-[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/InputContainer"]
-margin_top = 32.0
-margin_right = 410.0
-margin_bottom = 42.0
-rect_min_size = Vector2( 0, 10 )
-
-[node name="ScalableTextureContainer" parent="MarginContainer/VBoxContainer/InputContainer" instance=ExtResource( 2 )]
+[node name="InputTextureView" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 48.0
-margin_right = 410.0
-margin_bottom = 618.0
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
-margin_left = 422.0
-margin_right = 833.0
-margin_bottom = 618.0
-size_flags_horizontal = 3
+margin_top = 38.0
+margin_right = 1280.0
+margin_bottom = 546.0
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 1 )
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer"]
-margin_right = 411.0
-margin_bottom = 618.0
-custom_constants/margin_right = 8
-custom_constants/margin_left = 8
-
-[node name="RulesetContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer"]
-margin_left = 8.0
-margin_right = 403.0
-margin_bottom = 618.0
+[node name="RulesetContainer" type="HBoxContainer" parent="."]
+margin_top = 552.0
+margin_right = 1280.0
+margin_bottom = 600.0
 size_flags_horizontal = 3
-size_flags_vertical = 3
 custom_constants/separation = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_right = 395.0
-margin_bottom = 26.0
+[node name="HBoxContainer" type="HBoxContainer" parent="RulesetContainer"]
+margin_right = 312.0
+margin_bottom = 48.0
+custom_constants/separation = 12
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer"]
-margin_right = 52.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 0, 26 )
+[node name="Label" type="Label" parent="RulesetContainer/HBoxContainer"]
+margin_top = 17.0
+margin_right = 100.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 100, 0 )
 text = "Ruleset:"
-align = 1
+align = 2
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RulesetButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer"]
-margin_left = 56.0
-margin_right = 395.0
-margin_bottom = 26.0
+[node name="RulesetButton" type="Button" parent="RulesetContainer/HBoxContainer"]
+margin_left = 112.0
+margin_right = 312.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 200, 0 )
 focus_mode = 0
+size_flags_vertical = 3
+text = "Name"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="RulesetContainer"]
+margin_left = 318.0
+margin_right = 1280.0
+margin_bottom = 48.0
 size_flags_horizontal = 3
-text = "Name"
-
-[node name="Spacer4" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_top = 32.0
-margin_right = 395.0
-margin_bottom = 34.0
-rect_min_size = Vector2( 0, 2 )
-
-[node name="Name" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_top = 40.0
-margin_right = 395.0
-margin_bottom = 66.0
-rect_min_size = Vector2( 0, 26 )
-custom_fonts/font = ExtResource( 3 )
-text = "Name"
-align = 1
-valign = 2
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Description" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-visible = false
-margin_top = 102.0
-margin_right = 395.0
-margin_bottom = 128.0
-rect_min_size = Vector2( 0, 26 )
-text = "Description"
-align = 1
-valign = 2
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Spacer3" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-visible = false
-margin_top = 102.0
-margin_right = 395.0
-margin_bottom = 114.0
-rect_min_size = Vector2( 0, 12 )
-
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_top = 72.0
-margin_right = 395.0
-margin_bottom = 98.0
-rect_min_size = Vector2( 0, 26 )
-text = "Needed parts:"
-align = 1
-valign = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_top = 104.0
-margin_right = 395.0
-margin_bottom = 178.0
 scroll_vertical_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/ScrollContainer"]
-margin_right = 395.0
-margin_bottom = 74.0
-rect_min_size = Vector2( 160, 74 )
+[node name="TextureRect" type="TextureRect" parent="RulesetContainer/ScrollContainer"]
+margin_right = 962.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 160, 48 )
 size_flags_horizontal = 3
 stretch_mode = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer"]
-margin_top = 184.0
-margin_right = 395.0
-margin_bottom = 618.0
-size_flags_vertical = 3
-
-[node name="TemplateContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_left = 845.0
-margin_right = 1256.0
-margin_bottom = 618.0
+[node name="TemplateContainer" type="HBoxContainer" parent="."]
+margin_top = 606.0
+margin_right = 1280.0
+margin_bottom = 656.0
 size_flags_horizontal = 3
 custom_constants/separation = 6
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TemplateContainer"]
-margin_right = 411.0
-margin_bottom = 26.0
+[node name="HBoxContainer" type="HBoxContainer" parent="TemplateContainer"]
+margin_right = 312.0
+margin_bottom = 50.0
+custom_constants/separation = 12
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TemplateContainer/HBoxContainer"]
-margin_right = 64.0
-margin_bottom = 26.0
-rect_min_size = Vector2( 0, 26 )
+[node name="Label" type="Label" parent="TemplateContainer/HBoxContainer"]
+margin_top = 18.0
+margin_right = 100.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 100, 0 )
 text = "Template:"
-align = 1
+align = 2
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TemplateButton" type="Button" parent="MarginContainer/VBoxContainer/TemplateContainer/HBoxContainer"]
-margin_left = 68.0
-margin_right = 411.0
-margin_bottom = 26.0
+[node name="TemplateButton" type="Button" parent="TemplateContainer/HBoxContainer"]
+margin_left = 112.0
+margin_right = 312.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 200, 0 )
 focus_mode = 0
-size_flags_horizontal = 3
+size_flags_vertical = 3
 text = "Name"
 
-[node name="Spacer4" type="Control" parent="MarginContainer/VBoxContainer/TemplateContainer"]
-margin_top = 32.0
-margin_right = 411.0
-margin_bottom = 42.0
-rect_min_size = Vector2( 0, 10 )
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/TemplateContainer"]
-margin_top = 48.0
-margin_right = 411.0
-margin_bottom = 188.0
-rect_min_size = Vector2( 180, 140 )
+[node name="TextureRect" type="TextureRect" parent="TemplateContainer"]
+margin_left = 318.0
+margin_right = 1280.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 180, 50 )
 size_flags_horizontal = 3
 expand = true
 stretch_mode = 6
-
-[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/TemplateContainer"]
-margin_top = 194.0
-margin_right = 411.0
-margin_bottom = 618.0
-size_flags_vertical = 3
 
 [node name="ExportContainer" type="MarginContainer" parent="."]
 margin_top = 662.0
@@ -317,7 +176,5 @@ margin_bottom = 36.0
 rect_min_size = Vector2( 72, 36 )
 text = "Export"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/InputContainer/HBoxContainer/TextureButton" to="." method="_on_TextureButton_pressed"]
-[connection signal="tile_size_changed" from="MarginContainer/VBoxContainer/InputContainer/ScalableTextureContainer" to="." method="_on_ScalableTextureContainer_tile_size_changed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer/MarginContainer/RulesetContainer/HBoxContainer/RulesetButton" to="." method="_on_RulesetButton_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/TemplateContainer/HBoxContainer/TemplateButton" to="." method="_on_TemplateButton_pressed"]
+[connection signal="pressed" from="RulesetContainer/HBoxContainer/RulesetButton" to="." method="_on_RulesetButton_pressed"]
+[connection signal="pressed" from="TemplateContainer/HBoxContainer/TemplateButton" to="." method="_on_TemplateButton_pressed"]
