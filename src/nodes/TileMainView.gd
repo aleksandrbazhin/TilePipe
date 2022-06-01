@@ -10,7 +10,7 @@ signal template_view_called()
 #signal file_dialog_started()
 #signal file_dialog_ended()
 
-onready var title := $Label
+#onready var title := $Label
 onready var input_texture := $InputTextureView
 #onready var input_title := $MarginContainer/VBoxContainer/InputContainer/HBoxContainer/TextureButton
 #onready var input_texture_container := $MarginContainer/VBoxContainer/InputContainer/ScalableTextureContainer
@@ -23,7 +23,7 @@ onready var template_texture := $TemplateContainer/TextureRect
 
 
 func load_data(tile: TileInTree):
-	title.text = tile.tile_file_name
+#	title.text = tile.tile_file_name
 	if tile.texture_path != "":
 		input_texture.load_data(tile)
 #		input_title.text = tile.texture_path.get_file()

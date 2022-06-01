@@ -23,8 +23,8 @@ mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.png; Template PNG" )
-current_dir = "/Users/user/Documents/tilepipe"
-current_path = "/Users/user/Documents/tilepipe/"
+current_dir = "/home/alexander/GodotProjects/TilePIpe"
+current_path = "/home/alexander/GodotProjects/TilePIpe/"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_right = 1280.0
@@ -32,29 +32,29 @@ margin_bottom = 22.0
 size_flags_horizontal = 3
 
 [node name="Spacer" type="Control" parent="HBoxContainer"]
-margin_right = 301.0
+margin_right = 18.0
 margin_bottom = 22.0
-size_flags_horizontal = 3
+rect_min_size = Vector2( 18, 0 )
 
 [node name="TileNameLabel" type="Label" parent="HBoxContainer"]
-margin_left = 305.0
+margin_left = 22.0
 margin_top = 4.0
-margin_right = 402.0
+margin_right = 119.0
 margin_bottom = 18.0
 text = "Tilename.tptile"
 align = 2
 
 [node name="Label" type="Label" parent="HBoxContainer"]
-margin_left = 406.0
+margin_left = 123.0
 margin_top = 4.0
-margin_right = 419.0
+margin_right = 136.0
 margin_bottom = 18.0
 text = " / "
 align = 1
 
 [node name="CaptionLabel" type="Label" parent="HBoxContainer"]
-margin_left = 423.0
-margin_right = 487.0
+margin_left = 140.0
+margin_right = 204.0
 margin_bottom = 22.0
 size_flags_vertical = 3
 text = "Template:"
@@ -64,16 +64,16 @@ __meta__ = {
 }
 
 [node name="TemplateFileName" type="OptionButton" parent="HBoxContainer"]
-margin_left = 491.0
-margin_right = 811.0
+margin_left = 208.0
+margin_right = 528.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 320, 0 )
 hint_tooltip = "PNG files in the \"templates/\" folder"
 align = 1
 
 [node name="TemplateDialogButton" type="Button" parent="HBoxContainer"]
-margin_left = 815.0
-margin_right = 975.0
+margin_left = 532.0
+margin_right = 692.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 160, 0 )
 hint_tooltip = "Add another template to the project. "
@@ -81,7 +81,7 @@ text = "Add template"
 icon = ExtResource( 3 )
 
 [node name="Spacer2" type="Control" parent="HBoxContainer"]
-margin_left = 979.0
+margin_left = 696.0
 margin_right = 1280.0
 margin_bottom = 22.0
 size_flags_horizontal = 3

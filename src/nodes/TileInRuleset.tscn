@@ -13,9 +13,6 @@ margin_bottom = -620.0
 rect_min_size = Vector2( 0, 48 )
 size_flags_horizontal = 3
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="BoxContainer" type="HBoxContainer" parent="."]
 margin_left = 7.0
