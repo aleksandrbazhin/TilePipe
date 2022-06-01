@@ -9,9 +9,6 @@ anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="AddTemplateFileDialog" type="FileDialog" parent="."]
 margin_right = 800.0
@@ -89,7 +86,7 @@ size_flags_horizontal = 3
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 margin_top = 26.0
 margin_right = 1280.0
-margin_bottom = 716.0
+margin_bottom = 720.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -109,14 +106,6 @@ margin_bottom = 10.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch_mode = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_top = 720.0
-margin_right = 1280.0
-margin_bottom = 720.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [connection signal="about_to_show" from="AddTemplateFileDialog" to="." method="_on_AddTemplateFileDialog_about_to_show"]
 [connection signal="file_selected" from="AddTemplateFileDialog" to="." method="_on_AddTemplateFileDialog_file_selected"]

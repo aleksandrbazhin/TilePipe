@@ -10,9 +10,6 @@ anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="BGTextureRect" type="TextureRect" parent="."]
 anchor_right = 1.0
@@ -22,9 +19,6 @@ size_flags_vertical = 3
 texture = ExtResource( 1 )
 expand = true
 stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TextureRect" type="TextureRect" parent="."]
 anchor_right = 1.0
@@ -78,15 +72,15 @@ rect_min_size = Vector2( 0, 30 )
 
 [node name="Label3" type="Label" parent="InputInfo/HBoxContainer"]
 visible = false
-margin_left = 101.0
+margin_left = 269.0
 margin_top = 8.0
-margin_right = 108.0
+margin_right = 276.0
 margin_bottom = 22.0
 text = "Y"
 
 [node name="YSpinBox" parent="InputInfo/HBoxContainer" instance=ExtResource( 3 )]
 visible = false
-margin_left = 101.0
+margin_left = 190.0
 margin_right = 276.0
 margin_bottom = 30.0
 

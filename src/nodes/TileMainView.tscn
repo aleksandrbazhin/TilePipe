@@ -147,14 +147,15 @@ selected = 0
 
 [node name="LineEdit" type="LineEdit" parent="ExportContainer"]
 margin_left = 366.0
-margin_right = 1212.0
+margin_right = 1184.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="Button" type="Button" parent="ExportContainer"]
-margin_left = 1220.0
+margin_left = 1192.0
 margin_right = 1272.0
 margin_bottom = 32.0
+rect_min_size = Vector2( 80, 0 )
 text = "Export"
 
 [node name="Control" type="Control" parent="ExportContainer"]

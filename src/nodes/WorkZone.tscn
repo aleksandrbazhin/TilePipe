@@ -19,14 +19,11 @@ script = ExtResource( 1 )
 [node name="VSplitContainer" type="VSplitContainer" parent="." groups=["snapshottable"]]
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Control" type="Control" parent="VSplitContainer"]
 margin_right = 988.0
 margin_bottom = 468.0
-rect_min_size = Vector2( 0, 420 )
+rect_min_size = Vector2( 0, 300 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 

@@ -50,9 +50,9 @@ align = 1
 
 [node name="TextureDialogButton" type="Button" parent="HeaderContainer"]
 margin_left = 366.0
-margin_right = 526.0
+margin_right = 616.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 160, 0 )
+rect_min_size = Vector2( 250, 0 )
 hint_tooltip = "Copies texture to project folder. You can do it manually.."
 text = "Add texture"
 icon = ExtResource( 3 )

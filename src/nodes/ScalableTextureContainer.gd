@@ -27,22 +27,26 @@ func set_texture(texture: Texture, tile_size: Vector2 = Const.DEFAULT_TILE_SIZE)
 	current_tile_size = tile_size
 	set_input_tile_size(tile_size)
 
-
+# we need to resize input texture precisely, so find the lower 
+# power of 2 that fits into the display zone
+# first we find what fits, then scale both texture and background
 func set_input_tile_size(tile_size: Vector2):
 	yield(get_tree(), "idle_frame")
 	if texture_rect.texture == null:
 		return
 	var input_size: Vector2 = texture_rect.texture.get_size()
-	var x_scale: float = texture_rect.rect_size.x / input_size.x
-	var y_scale: float = texture_rect.rect_size.y / input_size.y
+	var x_scale: float = rect_size.x / input_size.x
+	var y_scale: float = rect_size.y / input_size.y
 	var scale_factor: float = min(x_scale, y_scale)
 	scale_factor = Helpers.snap_down_to_po2(scale_factor)
 	current_scale = Vector2(scale_factor, scale_factor)
-	texture_rect.rect_scale = Vector2(scale_factor, scale_factor)
+	texture_rect.rect_scale = current_scale
+	texture_rect.rect_size /= current_scale
 	var bg_scale :=  scale_factor * tile_size / Const.DEFAULT_TILE_SIZE
-	bg_rect.rect_size = texture_rect.rect_size / bg_scale
+	bg_rect.rect_size = rect_size / bg_scale
 	bg_rect.rect_scale = bg_scale
 	setup_size_display(tile_size)
+
 
 
 func setup_size_display(tile_size: Vector2):
