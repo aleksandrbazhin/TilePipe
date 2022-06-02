@@ -47,7 +47,7 @@ func label_tile(generated_tile: GeneratedSubTile):
 
 func populate_ruleset_options():
 	template_option.clear()
-	var templates_found := scan_for_templates_in_dir(Const.current_dir + "/" + Const.TEMPLATE_DIR)
+	var templates_found := scan_for_templates_in_dir(State.current_dir + "/" + Const.TEMPLATE_DIR)
 	var index := 0
 	for template_path in templates_found:
 #		if is_file_a_ruleset(ruleset_path):
@@ -91,10 +91,10 @@ func _on_AddTemplateFileDialog_popup_hide():
 
 
 func _on_AddTemplateFileDialog_file_selected(path: String):
-	if not Helpers.ensure_directory_exists(Const.current_dir, Const.TEMPLATE_DIR):
+	if not Helpers.ensure_directory_exists(State.current_dir, Const.TEMPLATE_DIR):
 		emit_signal("report_error", "Error: Creating directory \"/%s/\" error" % Const.TEMPLATE_DIR)
 		return
-	var new_template_path := Const.current_dir + "/" + Const.TEMPLATE_DIR + "/" + path.get_file()
+	var new_template_path := State.current_dir + "/" + Const.TEMPLATE_DIR + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_template_path)
 	if error == OK:

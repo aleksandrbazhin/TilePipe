@@ -20,9 +20,6 @@ var DEFAULT_USER_SETTINGS := {
 const RULESET_DIR := "rulesets"
 const TEMPLATE_DIR := "templates"
 
-var current_dir := OS.get_executable_path().get_base_dir() + "/" + EXAMPLES_DIR
-
-
 const HIGHLIGHT_COLORS := [
 	Color("98c0ef"), 
 	Color("f59d00"), 

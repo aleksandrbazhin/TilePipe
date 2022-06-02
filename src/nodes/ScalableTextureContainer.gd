@@ -9,7 +9,6 @@ var current_scale := Vector2.ONE
 var is_ready := false
 var is_highlighting_tile := false
 var highlight_position := Vector2.ZERO
-#var highlight_color: Color
 var highlight_part_id := 0
 
 onready var bg_rect := $BGTextureRect

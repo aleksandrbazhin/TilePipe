@@ -4,7 +4,7 @@ class_name ProjectTree
 
 signal file_dialog_started()
 signal file_dialog_ended()
-signal tile_selected(tile_node, row_item)
+#signal tile_selected(tile_node, row_item)
 signal _snapshot_state_changed()
 signal report_error(text)
 
@@ -41,7 +41,8 @@ func on_tile_row_selected(row: TreeItem, tile: TileInTree):
 		if other_tile.is_selected:
 			other_tile.set_selected(false)
 	tile.set_selected(true)
-	emit_signal("tile_selected", tile, row)
+	State.set_current_tile(tile, row)
+#	emit_signal("tile_selected", tile, row)
 	emit_signal("_snapshot_state_changed")
 
 
@@ -67,7 +68,7 @@ func scan_directory(path: String) -> Array:
 
 func load_project_directory(directory_path: String):
 	dir_edit.text = directory_path
-	Const.current_dir = directory_path
+	State.current_dir = directory_path
 	clear_tree()
 	var tiles_found := scan_directory(directory_path)
 	if tiles_found.empty():

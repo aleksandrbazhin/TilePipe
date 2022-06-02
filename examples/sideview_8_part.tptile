@@ -3,7 +3,7 @@
 		"x": 16,
 		"y": 16
 	},
-	"merge_level": 0.25,
+	"merge_level": 0.142857,
 	"output_tile_offset": 0,
 	"output_tile_size": {
 		"x": 64,
@@ -11,9 +11,9 @@
 	},
 	"overlap_level": 0.25,
 	"random_seed_value": 0,
-	"ruleset": "rulesets/sideview_8_part.json",
+	"ruleset": "rulesets/no_symmetry_13_part.json",
 	"smoothing": false,
-	"template": "templates/template_47.png",
-	"texture": "sideview_pixelart_8_part.png",
+	"template": "templates/template_47_with_duplicates.png",
+	"texture": "full_256_7_part.png",
 	"use_random_seed": false
 }

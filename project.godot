@@ -170,6 +170,7 @@ config/version="0.5"
 
 Const="*res://src/Const.gd"
 Helpers="*res://src/Helpers.gd"
+State="*res://src/State.gd"
 
 [debug]
 

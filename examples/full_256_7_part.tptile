@@ -14,6 +14,6 @@
 	"ruleset": "rulesets/full_256_7_part.json",
 	"smoothing": false,
 	"template": "templates/template_256.png",
-	"texture": "full_256_diagonal_7_part.png",
+	"texture": "full_256_7_part.png",
 	"use_random_seed": false
 }

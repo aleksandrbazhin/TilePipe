@@ -104,8 +104,8 @@ func scan_for_rulesets_in_dir(path: String) -> PoolStringArray:
 
 
 func get_rulesets_in_project() -> PoolStringArray:
-	var rulesets_found := scan_for_rulesets_in_dir(Const.current_dir)
-	rulesets_found += scan_for_rulesets_in_dir(Const.current_dir + "/" + Const.RULESET_DIR)
+	var rulesets_found := scan_for_rulesets_in_dir(State.current_dir)
+	rulesets_found += scan_for_rulesets_in_dir(State.current_dir + "/" + Const.RULESET_DIR)
 	return rulesets_found
 	
 	
@@ -119,10 +119,10 @@ func _on_AddRulesetFileDialog_about_to_show():
 
 func _on_AddRulesetFileDialog_file_selected(path: String):
 	if is_file_a_ruleset(path):
-		if not Helpers.ensure_directory_exists(Const.current_dir, Const.RULESET_DIR):
+		if not Helpers.ensure_directory_exists(State.current_dir, Const.RULESET_DIR):
 			emit_signal("report_error", "Error: Creating directory \"/%s/\" error" % Const.RULESET_DIR)
 			return
-		var new_ruleset_path := Const.current_dir + "/" + Const.RULESET_DIR + "/" + path.get_file()
+		var new_ruleset_path := State.current_dir + "/" + Const.RULESET_DIR + "/" + path.get_file()
 		var dir := Directory.new()
 		var error := dir.copy(path, new_ruleset_path)
 		if error == OK:

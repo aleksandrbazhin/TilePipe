@@ -5,10 +5,10 @@ class_name InputTextureView
 signal file_dialog_started()
 signal file_dialog_ended()
 signal report_error(text)
-signal tile_texture_changed(path)
-signal tile_size_changed(size)
-signal merge_level_changed(level)
-signal overlap_level_changed(level)
+#signal tile_texture_changed(path)
+#signal tile_size_changed(size)
+#signal merge_level_changed(level)
+#signal overlap_level_changed(level)
 
 var current_texture_path := ""
 var current_input_tile_size := Const.DEFAULT_TILE_SIZE
@@ -37,7 +37,7 @@ func load_data(tile: TileInTree):
 
 func populate_texture_options():
 	texture_option.clear()
-	var templates_found := scan_for_textures(Const.current_dir)
+	var templates_found := scan_for_textures(State.current_dir)
 	var index := 0
 	for texture_path in templates_found:
 		texture_option.add_item(texture_path.get_file())
@@ -79,7 +79,8 @@ func setup_sliders():
 
 func _on_TextureFileName_item_selected(index: int):
 	current_texture_path = texture_option.get_item_metadata(index)
-	emit_signal("tile_texture_changed", current_texture_path)
+	State.update_tile_texture(current_texture_path)
+	load_data(State.current_tile_ref.get_ref())
 
 
 func _on_TextureDialogButton_pressed():
@@ -95,29 +96,33 @@ func _on_AddTextureFileDialog_popup_hide():
 
 
 func _on_AddTextureFileDialog_file_selected(path: String):
-	var new_texture_path := Const.current_dir + "/" + path.get_file()
+	var new_texture_path := State.current_dir + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_texture_path)
 	if error == OK:
 		current_texture_path = new_texture_path
 		populate_texture_options()
-		emit_signal("tile_texture_changed", current_texture_path)
+		State.update_tile_texture(current_texture_path)
+		load_data(State.current_tile_ref.get_ref())
+#		emit_signal("tile_texture_changed", current_texture_path)
 	else:
 		emit_signal("report_error", "Error: Copy file error number %d." % error)
 
 
 func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
-	emit_signal("tile_size_changed", size)
+#	emit_signal("tile_size_changed", size)
+	State.update_tile_size(size)
 	current_input_tile_size = size
 	setup_sliders()
-
-
-func _on_OverlapSlider_released(value: float):
-	emit_signal("overlap_level_changed", Vector2(value, value))
+	
 
 
 func _on_RateSlider_released(value: float):
-	emit_signal("merge_level_changed", Vector2(value, value))
+	State.update_tile_merge_level(Vector2(value, value))
+
+
+func _on_OverlapSlider_released(value: float):
+	State.update_tile_overlap_level(Vector2(value, value))
 
 
 func change_part_highlight(part_id: int, is_on: bool):

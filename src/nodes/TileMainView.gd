@@ -3,7 +3,7 @@ extends VBoxContainer
 class_name TileMainView
 
 
-signal tile_size_changed(size)
+#signal tile_size_changed(size)
 signal input_texture_view_called()
 signal ruleset_view_called()
 signal template_view_called()
@@ -58,9 +58,9 @@ func on_part_highlight_focused(part: PartHighlight):
 func on_part_highlight_unfocused(part: PartHighlight):
 	input_texture.change_part_highlight(part.id, false)
 
-
-func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
-	emit_signal("tile_size_changed", size)
+#
+#func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
+#	emit_signal("tile_size_changed", size)
 
 
 func _on_TextureButton_pressed():

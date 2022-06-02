@@ -27,15 +27,9 @@ func hide_all():
 	template_view.hide()
 
 
-func load_tile_data(tile: TileInTree):
-	if loaded_tile_ref == null or loaded_tile_ref.get_ref() != tile:
-		loaded_tile_ref = weakref(tile)
-		render_subtiles()
-
-
 func on_tile_selected(tile: TileInTree, row: TreeItem):
 	hide_all()
-	load_tile_data(tile)
+	render_subtiles()
 	match row:
 		tile.tile_row:
 			tile_main_view.show()
@@ -49,7 +43,7 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 			template_view.show()
 			template_view.load_data(tile)
 			last_visible_tab = template_view
-#	render_tiles()
+	
 
 
 func _on_TileMainView_file_dialog_started():
@@ -86,7 +80,7 @@ func _on_TemplateView_file_dialog_ended():
 
 
 func _on_RulesetView_tile_ruleset_changed(path: String):
-	var tile: TileInTree = loaded_tile_ref.get_ref()
+	var tile: TileInTree = State.current_tile_ref.get_ref()
 	tile.set_ruleset(path)
 	tile.save()
 	ruleset_view.load_data(tile)
@@ -94,35 +88,28 @@ func _on_RulesetView_tile_ruleset_changed(path: String):
 
 
 func _on_TemplateView_tile_template_changed(path: String):
-	var tile: TileInTree = loaded_tile_ref.get_ref()
+	var tile: TileInTree = State.current_tile_ref.get_ref()
 	tile.set_template(path)
 	tile.save()
 	template_view.load_data(tile)
 	render_subtiles()
 
-
-func _on_InputTextureView_tile_texture_changed(path: String):
-	var tile: TileInTree = loaded_tile_ref.get_ref()
-	tile.set_texture(path)
-	tile.save()
-#	input_texture_view.load_data(tile)
-	render_subtiles()
+#
+#func _on_InputTextureView_tile_texture_changed(path: String):
+#	var tile: TileInTree = State.current_tile_ref.get_ref()
+#	tile.set_texture(path)
+#	tile.save()
+#	tile_main_view.input_texture.load_data(tile)
+#	render_subtiles()
 
 
 func _on_error_reported(text: String):
 	emit_signal("report_error", text)
 
 
-func _on_tile_size_changed(size: Vector2):
-	var tile: TileInTree = loaded_tile_ref.get_ref()
-	if tile.input_tile_size != size:
-		tile.set_input_tile_size(size)
-		tile.save()
-		render_subtiles()
-
-
 func render_subtiles():
-	var tile: TileInTree = loaded_tile_ref.get_ref()
+#	var tile: TileInTree = loaded_tile_ref.get_ref()
+	var tile: TileInTree = State.current_tile_ref.get_ref()
 	var input_image: Image = tile.loaded_texture.get_data()
 #	var parts_in_ruleset := int(tile.loaded_ruleset.get_parts().size())
 #	var min_input_tiles := Vector2(, 1)
@@ -162,37 +149,19 @@ func on_tiles_rendered():
 		renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
 #		renderer.disconnect("report_progress", self, "update_progress")
 #	rendered_tiles = renderer.tiles
-	var tile: TileInTree = loaded_tile_ref.get_ref()
+#	var tile: TileInTree = loaded_tile_ref.get_ref()
 #	emit_signal("input_image_processed")
+	var tile: TileInTree = State.current_tile_ref.get_ref()
 	result_view.render_from_tile(tile)
 
 
-#func _on_InputTextureView_merge_level_changed(level: Vector2):
-#	var tile: TileInTree = loaded_tile_ref.get_ref()
-#	tile.set_merge_level(level)
-#	tile.save()
-#	render_subtiles()
-#
-#
-#func _on_InputTextureView_overlap_level_changed(level: Vector2):
-#	var tile: TileInTree = loaded_tile_ref.get_ref()
-#	tile.set_overlap_level(level)
-#	tile.save()
-#	render_subtiles()
-
-#
-#func _on_TileMainView_input_texture_view_called():
-#	var tile: TileInTree = loaded_tile_ref.get_ref()
-#	tile.select_row(tile.texture_row)
-
-
 func _on_TileMainView_ruleset_view_called():
-	var tile: TileInTree = loaded_tile_ref.get_ref()
+	var tile: TileInTree = State.current_tile_ref.get_ref()
 	tile.select_row(tile.ruleset_row)
 
 
 func _on_TileMainView_template_view_called():
-	var tile: TileInTree = loaded_tile_ref.get_ref()
+	var tile: TileInTree = State.current_tile_ref.get_ref()
 	tile.select_row(tile.template_row)
 
 

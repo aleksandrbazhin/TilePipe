@@ -30,7 +30,9 @@ func _ready():
 
 
 func connect_signals():
-	project_tree.connect("tile_selected", work_zone, "on_tile_selected")
+#	project_tree.connect("tile_selected", work_zone, "on_tile_selected")
+	State.connect("tile_selected", work_zone, "on_tile_selected")
+	State.connect("tile_updated", work_zone, "render_subtiles")
 	get_tree().get_root().connect("size_changed", self, "on_size_changed")
 
 

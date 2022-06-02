@@ -34,7 +34,6 @@ var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
 
 var tile_row: TreeItem
-var texture_row: TreeItem
 var ruleset_row: TreeItem
 var template_row: TreeItem
 
@@ -72,7 +71,7 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	
 
 func load_texture(path: String) -> bool:
-	var file_path: String = current_directory + "/" + path
+	var file_path: String = current_directory + path
 	var image = Image.new()
 	var err: int
 	err = image.load(file_path)
@@ -153,14 +152,8 @@ func get_template_has_tile(template_image: Image, x: int, y: int) -> bool:
 func create_tree_items():
 	tile_row = tree.create_item()
 	tile_row.set_text(0, tile_file_name)
-#	add_texture_item(_tile_data["texture"])
 	add_ruleset_item(_tile_data["ruleset"])
 	add_template_item(_tile_data["template"])
-
-
-#func add_texture_item(file_name: String):
-#	texture_row = tree.create_item(tile_row)
-#	texture_row.set_text(0, TEXTURE_PREFIX + file_name)
 
 
 func add_ruleset_item(file_name: String):
@@ -213,21 +206,21 @@ func _on_Tree_item_collapsed(item: TreeItem):
 
 
 func set_texture(abs_path: String):
-	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
+	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
 	load_texture(rel_path)
-	texture_row.set_text(0, TEXTURE_PREFIX + rel_path)
+#	texture_row.set_text(0, TEXTURE_PREFIX + rel_path)
 	_tile_data["texture"] = rel_path
 
 
 func set_ruleset(abs_path: String):
-	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
+	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
 	load_ruleset(rel_path)
 	ruleset_row.set_text(0, RULESET_PREFIX + rel_path)
 	_tile_data["ruleset"] = rel_path
 
 
 func set_template(abs_path: String):
-	var rel_path := abs_path.trim_prefix(Const.current_dir + "/")
+	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
 	load_template(rel_path)
 	template_row.set_text(0, TEMPLATE_PREFIX + rel_path)
 	_tile_data["template"] = rel_path
