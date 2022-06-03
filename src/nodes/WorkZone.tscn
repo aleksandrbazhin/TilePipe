@@ -44,11 +44,5 @@ margin_bottom = 712.0
 
 [connection signal="ruleset_view_called" from="VSplitContainer/Control/TileMainView" to="." method="_on_TileMainView_ruleset_view_called"]
 [connection signal="template_view_called" from="VSplitContainer/Control/TileMainView" to="." method="_on_TileMainView_template_view_called"]
-[connection signal="file_dialog_ended" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_file_dialog_ended"]
-[connection signal="file_dialog_started" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_file_dialog_started"]
-[connection signal="report_error" from="VSplitContainer/Control/TemplateView" to="." method="_on_error_reported"]
 [connection signal="tile_template_changed" from="VSplitContainer/Control/TemplateView" to="." method="_on_TemplateView_tile_template_changed"]
-[connection signal="file_dialog_ended" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_file_dialog_ended"]
-[connection signal="file_dialog_started" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_file_dialog_started"]
-[connection signal="report_error" from="VSplitContainer/Control/RulesetView" to="." method="_on_error_reported"]
 [connection signal="tile_ruleset_changed" from="VSplitContainer/Control/RulesetView" to="." method="_on_RulesetView_tile_ruleset_changed"]

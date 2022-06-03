@@ -2,9 +2,6 @@ extends VBoxContainer
 
 class_name TemplateView
 
-signal file_dialog_started()
-signal file_dialog_ended()
-signal report_error(text)
 signal tile_template_changed(path)
 
 var current_template_path := ""
@@ -83,16 +80,16 @@ func _on_TemplateDialogButton_pressed():
 
 
 func _on_AddTemplateFileDialog_about_to_show():
-	emit_signal("file_dialog_started")
+	State.popup_started($AddTemplateFileDialog)
 
 
 func _on_AddTemplateFileDialog_popup_hide():
-	emit_signal("file_dialog_ended")
+	State.popup_ended()
 
 
 func _on_AddTemplateFileDialog_file_selected(path: String):
 	if not Helpers.ensure_directory_exists(State.current_dir, Const.TEMPLATE_DIR):
-		emit_signal("report_error", "Error: Creating directory \"/%s/\" error" % Const.TEMPLATE_DIR)
+		State.report_error("Error: Creating directory \"/%s/\" error" % Const.TEMPLATE_DIR)
 		return
 	var new_template_path := State.current_dir + "/" + Const.TEMPLATE_DIR + "/" + path.get_file()
 	var dir := Directory.new()
@@ -102,5 +99,5 @@ func _on_AddTemplateFileDialog_file_selected(path: String):
 		populate_ruleset_options()
 		emit_signal("tile_template_changed", current_template_path)
 	else:
-		emit_signal("report_error", "Error: Copy file error number %d." % error)
+		State.report_error("Error: Copy file error number %d." % error)
 

@@ -2,17 +2,14 @@ extends Panel
 
 class_name ProjectTree
 
-signal file_dialog_started()
-signal file_dialog_ended()
-#signal tile_selected(tile_node, row_item)
 signal _snapshot_state_changed()
-signal report_error(text)
 
-var is_file_dialog_active := false
+#
+#var is_file_dialog_active := false
+
 
 onready var tile_container := $VBoxContainer/MarginContainer/TileScrollContainer/TileVBoxContainer
 onready var dir_edit := $VBoxContainer/HBoxContainer/DirLineEdit
-onready var open_project_dialog := $OpenFolderDialog
 onready var no_tiles_found := $NoTilesFound
 
 
@@ -42,7 +39,6 @@ func on_tile_row_selected(row: TreeItem, tile: TileInTree):
 			other_tile.set_selected(false)
 	tile.set_selected(true)
 	State.set_current_tile(tile, row)
-#	emit_signal("tile_selected", tile, row)
 	emit_signal("_snapshot_state_changed")
 
 
@@ -79,44 +75,34 @@ func load_project_directory(directory_path: String):
 			add_tile_to_tree(directory_path, tile_fname)
 
 
-func on_error_reported(text: String):
-	emit_signal("report_error", text)
-
-
 func add_tile_to_tree(directory: String, tile_file: String):
 	var tile: TileInTree = preload("res://src/nodes/TileInTree.tscn").instance()
-	tile.connect("report_error", self, "on_error_reported")
+#	tile.connect("report_error", self, "on_error_reported")
 	if tile.load_tile(directory, tile_file):
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
 	tile_container.add_child(tile)
-#	else:
-#		#TODO: emit signal
-#		on_error_reported("Tile loading error!")
-#		print()
 
 
 func _on_OpenFolderDialog_dir_selected(dir: String):
-	if dir + "/" != open_project_dialog.current_path:
-		open_project_dialog.current_path = dir + "/"
+	if dir + "/" != $OpenFolderDialog.current_path:
+		$OpenFolderDialog.current_path = dir + "/"
 	load_project_directory(dir)
 
 
 func _on_DirLoadButton_pressed():
-	open_project_dialog.popup_centered()
+	$OpenFolderDialog.popup_centered()
 
 
 func hide_file_dialog():
-	open_project_dialog.hide()
-
-
-func _on_OpenFolderDialog_popup_hide():
-	is_file_dialog_active = false
-	emit_signal("file_dialog_ended")
+	$OpenFolderDialog.hide()
 
 
 func _on_OpenFolderDialog_about_to_show():
-	is_file_dialog_active = true
-	emit_signal("file_dialog_started")
+	State.popup_started($OpenFolderDialog)
+
+
+func _on_OpenFolderDialog_popup_hide():
+	State.popup_ended()
 
 
 func _on_NewButton_pressed():

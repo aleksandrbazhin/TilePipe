@@ -78,10 +78,4 @@ popup_exclusive = true
 window_title = "Error occured"
 dialog_autowrap = true
 
-[connection signal="file_dialog_ended" from="VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree" to="." method="_on_ProjectTree_file_dialog_ended"]
-[connection signal="file_dialog_started" from="VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree" to="." method="_on_ProjectTree_file_dialog_started"]
-[connection signal="report_error" from="VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree" to="." method="add_error_report"]
-[connection signal="file_dialog_ended" from="VBoxContainer/HSplitContainer/WorkZone" to="." method="_on_WorkRect_file_dialog_ended"]
-[connection signal="file_dialog_started" from="VBoxContainer/HSplitContainer/WorkZone" to="." method="_on_WorkRect_file_dialog_started"]
-[connection signal="report_error" from="VBoxContainer/HSplitContainer/WorkZone" to="." method="add_error_report"]
 [connection signal="popup_hide" from="ErrorDialog" to="." method="_on_ErrorDialog_popup_hide"]

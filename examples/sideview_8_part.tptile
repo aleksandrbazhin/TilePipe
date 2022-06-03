@@ -14,6 +14,6 @@
 	"ruleset": "rulesets/sideview_8_part.json",
 	"smoothing": false,
 	"template": "templates/template_rpg_maker.png",
-	"texture": "sideview_pixelart_8_part.png",
+	"texture": "sideview_pixelart_with_random_8_part.png",
 	"use_random_seed": false
 }

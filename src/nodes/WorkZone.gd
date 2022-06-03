@@ -2,9 +2,9 @@ extends ColorRect
 
 class_name WorkZone
 
-signal file_dialog_started()
-signal file_dialog_ended()
-signal report_error(text)
+#signal file_dialog_started()
+#signal file_dialog_ended()
+#signal report_error(text)
 
 var loaded_tile_ref: WeakRef
 var last_visible_tab
@@ -43,40 +43,6 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 			template_view.show()
 			template_view.load_data(tile)
 			last_visible_tab = template_view
-	
-
-
-func _on_TileMainView_file_dialog_started():
-	emit_signal("file_dialog_started")
-
-
-func _on_TileMainView_file_dialog_ended():
-	emit_signal("file_dialog_ended")
-	
-
-func _on_RulesetView_file_dialog_started():
-	emit_signal("file_dialog_started")
-
-
-func _on_RulesetView_file_dialog_ended():
-	emit_signal("file_dialog_ended")
-
-
-
-func _on_TemplateView_file_dialog_started():
-	emit_signal("file_dialog_started")
-
-
-func _on_TemplateView_file_dialog_ended():
-	emit_signal("file_dialog_ended")
-
-#
-#func _on_InputTextureView_file_dialog_started():
-#	emit_signal("file_dialog_started")
-#
-#
-#func _on_InputTextureView_file_dialog_ended():
-#	emit_signal("file_dialog_ended")
 
 
 func _on_RulesetView_tile_ruleset_changed(path: String):
@@ -102,9 +68,6 @@ func _on_TemplateView_tile_template_changed(path: String):
 #	tile_main_view.input_texture.load_data(tile)
 #	render_subtiles()
 
-
-func _on_error_reported(text: String):
-	emit_signal("report_error", text)
 
 
 func render_subtiles():

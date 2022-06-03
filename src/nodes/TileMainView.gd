@@ -7,8 +7,7 @@ class_name TileMainView
 signal input_texture_view_called()
 signal ruleset_view_called()
 signal template_view_called()
-#signal file_dialog_started()
-#signal file_dialog_ended()
+
 
 #onready var title := $Label
 onready var input_texture := $InputTextureView

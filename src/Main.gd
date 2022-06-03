@@ -30,9 +30,11 @@ func _ready():
 
 
 func connect_signals():
-#	project_tree.connect("tile_selected", work_zone, "on_tile_selected")
 	State.connect("tile_selected", work_zone, "on_tile_selected")
 	State.connect("tile_updated", work_zone, "render_subtiles")
+	State.connect("popup_started", self, "start_modal_popup")
+	State.connect("popup_ended", self, "end_modal_popup")
+	State.connect("report_error", self, "add_error_report")
 	get_tree().get_root().connect("size_changed", self, "on_size_changed")
 
 
@@ -64,43 +66,24 @@ func on_size_changed():
 
 func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
-		if project_tree.is_file_dialog_active:
-			project_tree.hide_file_dialog()
-#			popup_dialog.hide()
-#		elif godot_export_dialog.visible:
-#			godot_export_dialog.cancel_action()
-#		elif texture_file_dialog.visible:
-#			texture_file_dialog.hide()
-#		elif template_file_dialog.visible:
-#			template_file_dialog.hide()
-#		elif save_texture_dialog.visible:
-#			save_texture_dialog.hide()
-#		else:
-#			exit()
+		if State.current_modal_popup != null:
+			State.current_modal_popup.hide()
 
 
-func _on_WorkRect_file_dialog_started():
+func start_modal_popup():
 	blocking_overlay.show()
 
 
-func _on_WorkRect_file_dialog_ended():
-	blocking_overlay.hide()
-
-
-func _on_ProjectTree_file_dialog_started():
-	blocking_overlay.show()
-
-
-func _on_ProjectTree_file_dialog_ended():
+func end_modal_popup():
 	blocking_overlay.hide()
 
 
 func add_error_report(text: String):
-	blocking_overlay.show()
+	start_modal_popup()
 	error_dialog.dialog_text += text + "\n"
 	error_dialog.popup_centered_clamped()
 
 
 func _on_ErrorDialog_popup_hide():
+	end_modal_popup()
 	error_dialog.dialog_text = ""
-	blocking_overlay.hide()

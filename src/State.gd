@@ -2,10 +2,14 @@ extends Node
 
 signal tile_selected(tile_node, row_item)
 signal tile_updated()
+signal popup_started()
+signal popup_ended()
+signal report_error(message)
 
 
 var current_dir := OS.get_executable_path().get_base_dir() + "/" + Const.EXAMPLES_DIR
 var current_tile_ref: WeakRef = null
+var current_modal_popup: Popup = null
 
 
 func set_current_tile(tile: TileInTree, row: TreeItem):
@@ -41,3 +45,18 @@ func update_tile_texture(path: String):
 	tile.set_texture(path)
 	tile.save()
 	emit_signal("tile_updated")
+
+
+func report_error(message: String):
+	emit_signal("report_error", message)	
+
+
+func popup_started(popup: Popup):
+	current_modal_popup = popup
+	emit_signal("popup_started")
+
+
+func popup_ended():
+	current_modal_popup = null
+	emit_signal("popup_ended")
+

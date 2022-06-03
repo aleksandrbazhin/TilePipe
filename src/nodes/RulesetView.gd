@@ -4,9 +4,6 @@ class_name RulesetView
 
 const TILE_UPDATE_CHUNK := 8
 
-signal file_dialog_started()
-signal file_dialog_ended()
-signal report_error(text)
 signal tile_ruleset_changed(path)
 
 var part_highlight_scene := preload("res://src/nodes/PartHighlight.tscn")
@@ -34,7 +31,7 @@ func load_data(tile: TileInTree):
 		add_ruleset_highlights(tile.loaded_ruleset)
 		add_tiles(tile.loaded_ruleset)
 		if tile.loaded_ruleset.last_error != -1:
-			emit_signal("report_error", tile.loaded_ruleset.last_error_message)
+			State.report_error(tile.loaded_ruleset.last_error_message)
 	
 
 func add_ruleset_highlights(ruleset: Ruleset):
@@ -71,10 +68,6 @@ func add_tiles(ruleset: Ruleset):
 			yield(get_tree(), "idle_frame")
 
 
-func _on_RulesetDialogButton_pressed():
-	$AddRulesetFileDialog.popup_centered()
-
-
 func populate_ruleset_options():
 	ruleset_options.clear()
 	var rulesets_found := get_rulesets_in_project()
@@ -107,32 +100,36 @@ func get_rulesets_in_project() -> PoolStringArray:
 	var rulesets_found := scan_for_rulesets_in_dir(State.current_dir)
 	rulesets_found += scan_for_rulesets_in_dir(State.current_dir + "/" + Const.RULESET_DIR)
 	return rulesets_found
-	
-	
-func _on_AddRulesetFileDialog_popup_hide():
-	emit_signal("file_dialog_ended")
+
+
+func _on_RulesetDialogButton_pressed():
+	$AddRulesetFileDialog.popup_centered()
 
 
 func _on_AddRulesetFileDialog_about_to_show():
-	emit_signal("file_dialog_started")
+	State.popup_started($AddRulesetFileDialog)
+
+
+func _on_AddRulesetFileDialog_popup_hide():
+	State.popup_ended()
 
 
 func _on_AddRulesetFileDialog_file_selected(path: String):
-	if is_file_a_ruleset(path):
-		if not Helpers.ensure_directory_exists(State.current_dir, Const.RULESET_DIR):
-			emit_signal("report_error", "Error: Creating directory \"/%s/\" error" % Const.RULESET_DIR)
-			return
-		var new_ruleset_path := State.current_dir + "/" + Const.RULESET_DIR + "/" + path.get_file()
-		var dir := Directory.new()
-		var error := dir.copy(path, new_ruleset_path)
-		if error == OK:
-			current_ruleset_path = new_ruleset_path
-			populate_ruleset_options()
-			emit_signal("tile_ruleset_changed", current_ruleset_path)
-		else:
-			emit_signal("report_error", "Error: Copy file error number %d." % error)
-	else:
-		emit_signal("report_error", "Error: Selected file is not a ruleset.")
+	if not is_file_a_ruleset(path):
+		State.report_error("Error: Selected file is not a ruleset.")
+		return
+	if not Helpers.ensure_directory_exists(State.current_dir, Const.RULESET_DIR):
+		State.report_error("Error: Creating directory \"/%s/\" error" % Const.RULESET_DIR)
+		return
+	var new_ruleset_path := State.current_dir + "/" + Const.RULESET_DIR + "/" + path.get_file()
+	var dir := Directory.new()
+	var error := dir.copy(path, new_ruleset_path)
+	if error != OK:
+		State.report_error("Error: Copy file error number %d." % error)
+		return
+	current_ruleset_path = new_ruleset_path
+	populate_ruleset_options()
+	emit_signal("tile_ruleset_changed", current_ruleset_path)
 
 
 func is_file_a_ruleset(path: String) -> String:

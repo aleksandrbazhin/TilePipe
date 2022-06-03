@@ -2,9 +2,6 @@ extends VBoxContainer
 
 class_name InputTextureView
 
-signal file_dialog_started()
-signal file_dialog_ended()
-signal report_error(text)
 #signal tile_texture_changed(path)
 #signal tile_size_changed(size)
 #signal merge_level_changed(level)
@@ -88,11 +85,11 @@ func _on_TextureDialogButton_pressed():
 
 
 func _on_AddTextureFileDialog_about_to_show():
-	emit_signal("file_dialog_started")
+	State.popup_started($AddTextureFileDialog)
 
 
 func _on_AddTextureFileDialog_popup_hide():
-	emit_signal("file_dialog_ended")
+	State.popup_ended()
 
 
 func _on_AddTextureFileDialog_file_selected(path: String):
@@ -106,7 +103,7 @@ func _on_AddTextureFileDialog_file_selected(path: String):
 		load_data(State.current_tile_ref.get_ref())
 #		emit_signal("tile_texture_changed", current_texture_path)
 	else:
-		emit_signal("report_error", "Error: Copy file error number %d." % error)
+		State.report_error("Error: Copy file error number %d." % error)
 
 
 func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
