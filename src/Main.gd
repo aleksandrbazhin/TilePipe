@@ -1,12 +1,13 @@
 extends Panel
 
+
+signal _snapshot_state_changed_continous()
+
 var VERSION: String = ProjectSettings.get_setting("application/config/version")
 var is_ui_blocked: bool = false
 var rng := RandomNumberGenerator.new()
 var last_dragged := 0
 var ui_snapshot: UISnapshot
-
-signal _snapshot_state_changed_continous()
 
 onready var project_tree: ProjectTree = $VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree
 onready var blocking_overlay := $BlockingOverlay

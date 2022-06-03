@@ -4,10 +4,6 @@ class_name ProjectTree
 
 signal _snapshot_state_changed()
 
-#
-#var is_file_dialog_active := false
-
-
 onready var tile_container := $VBoxContainer/MarginContainer/TileScrollContainer/TileVBoxContainer
 onready var dir_edit := $VBoxContainer/HBoxContainer/DirLineEdit
 onready var no_tiles_found := $NoTilesFound
@@ -77,7 +73,6 @@ func load_project_directory(directory_path: String):
 
 func add_tile_to_tree(directory: String, tile_file: String):
 	var tile: TileInTree = preload("res://src/nodes/TileInTree.tscn").instance()
-#	tile.connect("report_error", self, "on_error_reported")
 	if tile.load_tile(directory, tile_file):
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
 	tile_container.add_child(tile)

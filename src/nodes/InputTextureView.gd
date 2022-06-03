@@ -2,14 +2,9 @@ extends VBoxContainer
 
 class_name InputTextureView
 
-#signal tile_texture_changed(path)
-#signal tile_size_changed(size)
-#signal merge_level_changed(level)
-#signal overlap_level_changed(level)
 
 var current_texture_path := ""
 var current_input_tile_size := Const.DEFAULT_TILE_SIZE
-
 
 onready var texture_option := $HeaderContainer/TextureFileName
 onready var texture_container: ScalableTextureContainer = $HBox/ScalableTextureContainer
@@ -96,22 +91,18 @@ func _on_AddTextureFileDialog_file_selected(path: String):
 	var new_texture_path := State.current_dir + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_texture_path)
-	if error == OK:
-		current_texture_path = new_texture_path
-		populate_texture_options()
-		State.update_tile_texture(current_texture_path)
-		load_data(State.current_tile_ref.get_ref())
-#		emit_signal("tile_texture_changed", current_texture_path)
-	else:
+	if error != OK:
 		State.report_error("Error: Copy file error number %d." % error)
+	current_texture_path = new_texture_path
+	populate_texture_options()
+	State.update_tile_texture(current_texture_path)
+	load_data(State.current_tile_ref.get_ref())
 
 
 func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
-#	emit_signal("tile_size_changed", size)
 	State.update_tile_size(size)
 	current_input_tile_size = size
 	setup_sliders()
-	
 
 
 func _on_RateSlider_released(value: float):

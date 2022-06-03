@@ -3,17 +3,17 @@
 		"x": 16,
 		"y": 16
 	},
-	"merge_level": 0.3125,
+	"merge_level": 0.375,
 	"output_tile_offset": 0,
 	"output_tile_size": {
 		"x": 64,
 		"y": 64
 	},
-	"overlap_level": 0.25,
+	"overlap_level": 0.3125,
 	"random_seed_value": 0,
 	"ruleset": "rulesets/sideview_8_part.json",
 	"smoothing": false,
-	"template": "templates/template_rpg_maker.png",
+	"template": "templates/template_47_double.png",
 	"texture": "sideview_pixelart_with_random_8_part.png",
 	"use_random_seed": false
 }

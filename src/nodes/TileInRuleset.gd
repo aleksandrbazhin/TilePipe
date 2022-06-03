@@ -2,6 +2,7 @@ extends PanelContainer
 
 class_name TileInRuleset
 
+
 func setup(ruleset: Ruleset, tile_index: int):
 	var tile_data = ruleset.get_subtiles()[tile_index]
 	var masks_container := $BoxContainer/NeighborMasks/ScrollContainer/HBoxContainer

@@ -2,7 +2,6 @@ extends VBoxContainer
 
 class_name TemplateView
 
-signal tile_template_changed(path)
 
 var current_template_path := ""
 
@@ -14,7 +13,7 @@ onready var template_option: OptionButton = $HBoxContainer/TemplateFileName
 func load_data(tile: TileInTree):
 	tile_name.text = tile.tile_file_name
 	current_template_path = tile.template_path
-	populate_ruleset_options()
+	populate_template_options()
 	if tile.template_path != "":
 		template_texture_rect.texture = tile.loaded_template
 		label_bitmasks(tile)
@@ -42,7 +41,7 @@ func label_tile(generated_tile: GeneratedSubTile):
 	template_texture_rect.add_child(mask_text_label)
 
 
-func populate_ruleset_options():
+func populate_template_options():
 	template_option.clear()
 	var templates_found := scan_for_templates_in_dir(State.current_dir + "/" + Const.TEMPLATE_DIR)
 	var index := 0
@@ -70,11 +69,6 @@ func scan_for_templates_in_dir(path: String) -> PoolStringArray:
 	return files
 
 
-func _on_TemplateFileName_item_selected(index: int):
-	current_template_path = template_option.get_item_metadata(index)
-	emit_signal("tile_template_changed", current_template_path)
-
-
 func _on_TemplateDialogButton_pressed():
 	$AddTemplateFileDialog.popup_centered()
 
@@ -94,10 +88,16 @@ func _on_AddTemplateFileDialog_file_selected(path: String):
 	var new_template_path := State.current_dir + "/" + Const.TEMPLATE_DIR + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_template_path)
-	if error == OK:
-		current_template_path = new_template_path
-		populate_ruleset_options()
-		emit_signal("tile_template_changed", current_template_path)
-	else:
+	if error != OK:
 		State.report_error("Error: Copy file error number %d." % error)
+		return
+	current_template_path = new_template_path
+	populate_template_options()
+	State.update_tile_template(current_template_path)
+	load_data(State.current_tile_ref.get_ref())
 
+
+func _on_TemplateFileName_item_selected(index: int):
+	current_template_path = template_option.get_item_metadata(index)
+	State.update_tile_template(current_template_path)
+	load_data(State.current_tile_ref.get_ref())

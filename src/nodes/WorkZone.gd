@@ -2,9 +2,6 @@ extends ColorRect
 
 class_name WorkZone
 
-#signal file_dialog_started()
-#signal file_dialog_ended()
-#signal report_error(text)
 
 var loaded_tile_ref: WeakRef
 var last_visible_tab
@@ -45,33 +42,7 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 			last_visible_tab = template_view
 
 
-func _on_RulesetView_tile_ruleset_changed(path: String):
-	var tile: TileInTree = State.current_tile_ref.get_ref()
-	tile.set_ruleset(path)
-	tile.save()
-	ruleset_view.load_data(tile)
-	render_subtiles()
-
-
-func _on_TemplateView_tile_template_changed(path: String):
-	var tile: TileInTree = State.current_tile_ref.get_ref()
-	tile.set_template(path)
-	tile.save()
-	template_view.load_data(tile)
-	render_subtiles()
-
-#
-#func _on_InputTextureView_tile_texture_changed(path: String):
-#	var tile: TileInTree = State.current_tile_ref.get_ref()
-#	tile.set_texture(path)
-#	tile.save()
-#	tile_main_view.input_texture.load_data(tile)
-#	render_subtiles()
-
-
-
 func render_subtiles():
-#	var tile: TileInTree = loaded_tile_ref.get_ref()
 	var tile: TileInTree = State.current_tile_ref.get_ref()
 	var input_image: Image = tile.loaded_texture.get_data()
 #	var parts_in_ruleset := int(tile.loaded_ruleset.get_parts().size())
@@ -126,5 +97,3 @@ func _on_TileMainView_ruleset_view_called():
 func _on_TileMainView_template_view_called():
 	var tile: TileInTree = State.current_tile_ref.get_ref()
 	tile.select_row(tile.template_row)
-
-

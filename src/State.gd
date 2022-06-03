@@ -42,9 +42,23 @@ func update_tile_size(size: Vector2):
 
 func update_tile_texture(path: String):
 	var tile: TileInTree = current_tile_ref.get_ref()
-	tile.set_texture(path)
-	tile.save()
-	emit_signal("tile_updated")
+	if tile.set_texture(path):
+		tile.save()
+		emit_signal("tile_updated")
+
+
+func update_tile_ruleset(path: String):
+	var tile: TileInTree = current_tile_ref.get_ref()
+	if tile.set_ruleset(path):
+		tile.save()
+		emit_signal("tile_updated")
+
+
+func update_tile_template(path: String):
+	var tile: TileInTree = current_tile_ref.get_ref()
+	if tile.set_template(path):
+		tile.save()
+		emit_signal("tile_updated")
 
 
 func report_error(message: String):

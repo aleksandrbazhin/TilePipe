@@ -2,6 +2,7 @@ extends Control
 
 class_name ScalableTextureContainer
 
+
 signal tile_size_changed(size)
 
 var current_tile_size: Vector2
@@ -16,6 +17,7 @@ onready var texture_rect := $TextureRect
 onready var x_spinbox := $InputInfo/HBoxContainer/XSpinBox
 onready var y_spinbox := $InputInfo/HBoxContainer/YSpinBox
 onready var part_highlight := $PartHihglight
+
 
 func _ready():
 	is_ready = true

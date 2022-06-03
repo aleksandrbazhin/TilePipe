@@ -3,7 +3,7 @@ extends Control
 class_name TileInTree
 
 signal row_selected(row)
-signal report_error(text)
+#signal report_error(text)
 
 const HEIGHT_EXPANDED := 120
 const HEIGHT_COLLAPSED := 50
@@ -57,28 +57,24 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	file.close()
 	var parsed_data = parse_json(file_text)
 	if typeof(parsed_data) != TYPE_DICTIONARY:
-		fail_loading("Error loading tile: " + tile_file)
+		State.report_error("Error loading tile: " + tile_file)
+		block_failed_tile()
 		return false
 	_tile_data = parsed_data
 	is_loaded = true
 	input_tile_size = Vector2(_tile_data["input_tile_size"]["x"], _tile_data["input_tile_size"]["y"])
-	if not load_texture(_tile_data["texture"]):
-		fail_loading("Error loading texture at: \"" + _tile_data["texture"] + "\" for tile \"" + tile_file + "\"")
-		return false
-	if not load_ruleset(_tile_data["ruleset"]):
-		fail_loading("Error loading ruleset at: \"" + _tile_data["ruleset"] + "\" for tile \"" + tile_file + "\"")
-		return false
-	if not load_template(_tile_data["template"]):
-		fail_loading("Error loading template at: \"" + _tile_data["template"] + "\" for tile \"" + tile_file + "\"")
+	if not load_texture(_tile_data["texture"]) or \
+			not load_ruleset(_tile_data["ruleset"]) or \
+			not load_template(_tile_data["template"]):
+		block_failed_tile()
 		return false
 	merge_level = Vector2(_tile_data["merge_level"], _tile_data["merge_level"])
 	overlap_level = Vector2(_tile_data["overlap_level"], _tile_data["overlap_level"])
 	return true
 
 
-func fail_loading(message: String):
-	emit_signal("report_error", message)
-	$ErrorOverlay.set_tooltip(message)
+func block_failed_tile():
+	$ErrorOverlay.set_tooltip("Error loading file")
 	$ErrorOverlay.show()
 
 
@@ -88,6 +84,7 @@ func load_texture(path: String) -> bool:
 	var err: int
 	err = image.load(file_path)
 	if err != OK:
+		State.report_error("Error loading texture at: \"" + _tile_data["texture"] + "\" for tile \"" + tile_file_name + "\"")
 		return false
 	texture_path = file_path
 	loaded_texture = ImageTexture.new()
@@ -101,8 +98,8 @@ func load_ruleset(path: String) -> bool:
 	if loaded_ruleset.is_loaded:
 		ruleset_path = file_path
 	if loaded_ruleset.last_error != -1:
-		print("In ruleset %s :\n" % file_path + loaded_ruleset.last_error_message)
-#		emit_signal("report_error", loaded_ruleset.last_error_message)
+		State.report_error("Error loading ruleset at: \"" + _tile_data["ruleset"] + "\" for tile \"" + tile_file_name + "\"")
+		State.report_error("\nError in ruleset %s :\n" % file_path + loaded_ruleset.last_error_message)
 		return false
 	return true
 
@@ -113,9 +110,10 @@ func load_template(path: String) -> bool:
 	var err: int
 	err = image.load(file_path)
 	if err != OK:
+		State.report_error("Error loading template at: \"" + _tile_data["template"] + "\" for tile \"" + tile_file_name + "\"")
 		return false
 	if image.get_size().x < Const.TEMPLATE_TILE_SIZE or image.get_size().y < Const.TEMPLATE_TILE_SIZE:
-#		print("Template texture size should be at least 32x32px")
+		State.report_error("Error in template: template texture size should be at least 32x32px")
 		return false
 	template_path = file_path
 	loaded_template = ImageTexture.new()
@@ -217,25 +215,30 @@ func _on_Tree_item_collapsed(item: TreeItem):
 		rect_min_size.y = HEIGHT_EXPANDED
 
 
-func set_texture(abs_path: String):
+func set_texture(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
-	load_texture(rel_path)
-#	texture_row.set_text(0, TEXTURE_PREFIX + rel_path)
+	if not load_texture(rel_path):
+		return false
 	_tile_data["texture"] = rel_path
+	return true
 
 
-func set_ruleset(abs_path: String):
+func set_ruleset(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
-	load_ruleset(rel_path)
+	if not load_ruleset(rel_path):
+		return false
 	ruleset_row.set_text(0, RULESET_PREFIX + rel_path)
 	_tile_data["ruleset"] = rel_path
+	return true
 
 
-func set_template(abs_path: String):
+func set_template(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
-	load_template(rel_path)
+	if not load_template(rel_path):
+		return false
 	template_row.set_text(0, TEMPLATE_PREFIX + rel_path)
 	_tile_data["template"] = rel_path
+	return true
 
 
 func set_input_tile_size(new_size: Vector2):

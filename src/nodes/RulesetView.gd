@@ -2,9 +2,8 @@ extends ColorRect
 
 class_name RulesetView
 
-const TILE_UPDATE_CHUNK := 8
 
-signal tile_ruleset_changed(path)
+const TILE_UPDATE_CHUNK := 8
 
 var part_highlight_scene := preload("res://src/nodes/PartHighlight.tscn")
 var current_ruleset_path := ""
@@ -129,8 +128,8 @@ func _on_AddRulesetFileDialog_file_selected(path: String):
 		return
 	current_ruleset_path = new_ruleset_path
 	populate_ruleset_options()
-	emit_signal("tile_ruleset_changed", current_ruleset_path)
-
+	State.update_tile_ruleset(current_ruleset_path)
+	load_data(State.current_tile_ref.get_ref())
 
 func is_file_a_ruleset(path: String) -> String:
 	var file := File.new()
@@ -143,4 +142,5 @@ func is_file_a_ruleset(path: String) -> String:
 
 func _on_RulesetFileName_item_selected(index: int):
 	current_ruleset_path = ruleset_options.get_item_metadata(index)
-	emit_signal("tile_ruleset_changed", current_ruleset_path)
+	State.update_tile_ruleset(current_ruleset_path)
+	load_data(State.current_tile_ref.get_ref())
