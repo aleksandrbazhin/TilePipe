@@ -12,12 +12,11 @@ It is full rework of logic and UI. Main differences
 
 
 ## Screens
-Tile main view (overview)
+Tile main view
 ![Tile overview (unfinished)](docs/Screen1.png)
 Ruleset viewer
 ![Ruleset (unfinished)](docs/Screen2.png)
-Texture setup
-![Texture settings (unfinished)](docs/Screen3.png)
+
 
 ## Roadmap for 0.5 branch before the release
 0.5 is not ready to be released, there is not much work left, but I am not sure when and if it will be finished
