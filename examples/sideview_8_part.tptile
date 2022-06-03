@@ -13,7 +13,7 @@
 	"random_seed_value": 0,
 	"ruleset": "rulesets/sideview_8_part.json",
 	"smoothing": false,
-	"template": "templates/template_47_double.png",
-	"texture": "sideview_pixelart_with_random_8_part.png",
+	"template": "templates/template_2x2.png",
+	"texture": "sideview_pixelart_8_part.png",
 	"use_random_seed": false
 }

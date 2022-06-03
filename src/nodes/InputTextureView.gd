@@ -72,7 +72,7 @@ func setup_sliders():
 func _on_TextureFileName_item_selected(index: int):
 	current_texture_path = texture_option.get_item_metadata(index)
 	State.update_tile_texture(current_texture_path)
-	load_data(State.current_tile_ref.get_ref())
+	load_texture(State.current_tile_ref.get_ref().loaded_texture)
 
 
 func _on_TextureDialogButton_pressed():
@@ -96,7 +96,7 @@ func _on_AddTextureFileDialog_file_selected(path: String):
 	current_texture_path = new_texture_path
 	populate_texture_options()
 	State.update_tile_texture(current_texture_path)
-	load_data(State.current_tile_ref.get_ref())
+	load_texture(State.current_tile_ref.get_ref().loaded_texture)
 
 
 func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
