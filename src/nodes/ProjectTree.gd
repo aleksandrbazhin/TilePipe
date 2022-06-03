@@ -88,7 +88,7 @@ func add_tile_to_tree(directory: String, tile_file: String):
 	tile.connect("report_error", self, "on_error_reported")
 	if tile.load_tile(directory, tile_file):
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
-		tile_container.add_child(tile)
+	tile_container.add_child(tile)
 #	else:
 #		#TODO: emit signal
 #		on_error_reported("Tile loading error!")

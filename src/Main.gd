@@ -11,7 +11,7 @@ signal _snapshot_state_changed_continous()
 onready var project_tree: ProjectTree = $VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree
 onready var blocking_overlay := $BlockingOverlay
 onready var work_zone: WorkZone = $VBoxContainer/HSplitContainer/WorkZone
-onready var error_dialog := $ErrorDialog
+onready var error_dialog: AcceptDialog = $ErrorDialog
 
 
 func _ready():
@@ -98,7 +98,7 @@ func _on_ProjectTree_file_dialog_ended():
 func add_error_report(text: String):
 	blocking_overlay.show()
 	error_dialog.dialog_text += text + "\n"
-	error_dialog.popup_centered()
+	error_dialog.popup_centered_clamped()
 
 
 func _on_ErrorDialog_popup_hide():

@@ -5,7 +5,7 @@ class_name TileInTree
 signal row_selected(row)
 signal report_error(text)
 
-const HEIGHT_EXPANDED := 144
+const HEIGHT_EXPANDED := 120
 const HEIGHT_COLLAPSED := 50
 const RULESET_PREFIX := "Ruleset: "
 const TEXTURE_PREFIX := "Texture: "
@@ -56,31 +56,43 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	var file_text := file.get_as_text()
 	file.close()
 	var parsed_data = parse_json(file_text)
-	if typeof(parsed_data) == TYPE_DICTIONARY:
-		_tile_data = parsed_data
-		is_loaded = true
-		input_tile_size = Vector2(_tile_data["input_tile_size"]["x"], _tile_data["input_tile_size"]["y"])
-		load_texture(_tile_data["texture"])
-		load_ruleset(_tile_data["ruleset"])
-		load_template(_tile_data["template"])
-		merge_level = Vector2(_tile_data["merge_level"], _tile_data["merge_level"])
-		overlap_level = Vector2(_tile_data["overlap_level"], _tile_data["overlap_level"])
-		return true
-	emit_signal("report_error", "Error loading tile: " + tile_file)
-	return false
-	
+	if typeof(parsed_data) != TYPE_DICTIONARY:
+		fail_loading("Error loading tile: " + tile_file)
+		return false
+	_tile_data = parsed_data
+	is_loaded = true
+	input_tile_size = Vector2(_tile_data["input_tile_size"]["x"], _tile_data["input_tile_size"]["y"])
+	if not load_texture(_tile_data["texture"]):
+		fail_loading("Error loading texture at: \"" + _tile_data["texture"] + "\" for tile \"" + tile_file + "\"")
+		return false
+	if not load_ruleset(_tile_data["ruleset"]):
+		fail_loading("Error loading ruleset at: \"" + _tile_data["ruleset"] + "\" for tile \"" + tile_file + "\"")
+		return false
+	if not load_template(_tile_data["template"]):
+		fail_loading("Error loading template at: \"" + _tile_data["template"] + "\" for tile \"" + tile_file + "\"")
+		return false
+	merge_level = Vector2(_tile_data["merge_level"], _tile_data["merge_level"])
+	overlap_level = Vector2(_tile_data["overlap_level"], _tile_data["overlap_level"])
+	return true
+
+
+func fail_loading(message: String):
+	emit_signal("report_error", message)
+	$ErrorOverlay.set_tooltip(message)
+	$ErrorOverlay.show()
+
 
 func load_texture(path: String) -> bool:
 	var file_path: String = current_directory + path
 	var image = Image.new()
 	var err: int
 	err = image.load(file_path)
-	if err == OK:
-		texture_path = file_path
-		loaded_texture = ImageTexture.new()
-		loaded_texture.create_from_image(image, 0)
-		return true
-	return false
+	if err != OK:
+		return false
+	texture_path = file_path
+	loaded_texture = ImageTexture.new()
+	loaded_texture.create_from_image(image, 0)
+	return true
 
 
 func load_ruleset(path: String) -> bool:
@@ -100,16 +112,16 @@ func load_template(path: String) -> bool:
 	var image = Image.new()
 	var err: int
 	err = image.load(file_path)
-	if err == OK:
-		if image.get_size().x < Const.TEMPLATE_TILE_SIZE or image.get_size().y < Const.TEMPLATE_TILE_SIZE:
-#			print("Template texture size should be at least 32x32px")
-			return false
-		template_path = file_path
-		loaded_template = ImageTexture.new()
-		loaded_template.create_from_image(image, 0)
-		parse_template()
-		return true
-	return false
+	if err != OK:
+		return false
+	if image.get_size().x < Const.TEMPLATE_TILE_SIZE or image.get_size().y < Const.TEMPLATE_TILE_SIZE:
+#		print("Template texture size should be at least 32x32px")
+		return false
+	template_path = file_path
+	loaded_template = ImageTexture.new()
+	loaded_template.create_from_image(image, 0)
+	parse_template()
+	return true
 
 
 func parse_template():
