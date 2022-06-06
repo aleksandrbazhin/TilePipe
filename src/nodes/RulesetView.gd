@@ -9,7 +9,7 @@ var part_highlight_scene := preload("res://src/nodes/PartHighlight.tscn")
 var current_ruleset_path := ""
 
 onready var tile_name := $VBoxContainer/HBoxContainer/TileNameLabel
-onready var ruleset_options: OptionButton = $VBoxContainer/HBoxContainer/RulesetFileName
+onready var ruleset_option: OptionButton = $VBoxContainer/HBoxContainer/RulesetFileName
 onready var header_data := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/RawHeader
 onready var ruleset_name := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer/Name
 onready var description := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer/Description
@@ -21,7 +21,7 @@ onready var scroll_container := $VBoxContainer/ScrollContainer
 func load_data(tile: TileInTree):
 	tile_name.text = tile.tile_file_name
 	current_ruleset_path = tile.ruleset_path
-	populate_ruleset_options()
+	populate_ruleset_option()
 	if tile.ruleset_path != "":
 		header_data.text = tile.loaded_ruleset.get_raw_header()
 		ruleset_name.text = tile.loaded_ruleset.get_name()
@@ -55,7 +55,6 @@ func switched_to_another_ruleset(old_ruleset_path: String) -> bool:
 
 func add_tiles(ruleset: Ruleset):
 	clear_tiles()
-	
 	var working_ruleset_path := current_ruleset_path
 	for tile_index in ruleset.get_subtiles().size():
 		if switched_to_another_ruleset(working_ruleset_path):
@@ -65,40 +64,6 @@ func add_tiles(ruleset: Ruleset):
 		tiles_container.add_child(tile_view)
 		if tile_index % TILE_UPDATE_CHUNK == 0:
 			yield(get_tree(), "idle_frame")
-
-
-func populate_ruleset_options():
-	ruleset_options.clear()
-	var rulesets_found := get_rulesets_in_project()
-	var index := 0
-	for ruleset_path in rulesets_found:
-		if is_file_a_ruleset(ruleset_path):
-			ruleset_options.add_item(ruleset_path.get_file())
-			ruleset_options.set_item_metadata(index, ruleset_path)
-			if ruleset_path == current_ruleset_path:
-				ruleset_options.selected = index
-			index += 1
-
-
-func scan_for_rulesets_in_dir(path: String) -> PoolStringArray:
-	var files := PoolStringArray([])
-	var dir := Directory.new()
-	dir.open(path)
-	dir.list_dir_begin()
-	while true:
-		var file = dir.get_next()
-		if file == "":
-			break
-		elif not file.begins_with(".") and file.get_extension() == "json":
-			files.append(path + "/" + file)
-	dir.list_dir_end()
-	return files
-
-
-func get_rulesets_in_project() -> PoolStringArray:
-	var rulesets_found := scan_for_rulesets_in_dir(State.current_dir)
-	rulesets_found += scan_for_rulesets_in_dir(State.current_dir + "/" + Const.RULESET_DIR)
-	return rulesets_found
 
 
 func _on_RulesetDialogButton_pressed():
@@ -114,7 +79,7 @@ func _on_AddRulesetFileDialog_popup_hide():
 
 
 func _on_AddRulesetFileDialog_file_selected(path: String):
-	if not is_file_a_ruleset(path):
+	if not Helpers.is_file_a_ruleset(path):
 		State.report_error("Error: Selected file is not a ruleset.")
 		return
 	if not Helpers.ensure_directory_exists(State.current_dir, Const.RULESET_DIR):
@@ -127,20 +92,19 @@ func _on_AddRulesetFileDialog_file_selected(path: String):
 		State.report_error("Error: Copy file error number %d." % error)
 		return
 	current_ruleset_path = new_ruleset_path
-	populate_ruleset_options()
+	populate_ruleset_option()
 	State.update_tile_ruleset(current_ruleset_path)
 	load_data(State.current_tile_ref.get_ref())
 
-func is_file_a_ruleset(path: String) -> String:
-	var file := File.new()
-	file.open(path, File.READ)
-	var json_text := file.get_as_text()
-	file.close()
-	var parsed_data = parse_json(json_text)
-	return typeof(parsed_data) == TYPE_DICTIONARY and parsed_data.has("ruleset_name")
+
+func populate_ruleset_option():
+	var search_path: String = State.current_dir + "/" + Const.RULESET_DIR
+	var scan_func: FuncRef = funcref(Helpers, "scan_for_rulesets_in_dir")
+	Helpers.populate_project_file_option(ruleset_option, search_path, 
+		scan_func, current_ruleset_path)
 
 
 func _on_RulesetFileName_item_selected(index: int):
-	current_ruleset_path = ruleset_options.get_item_metadata(index)
+	current_ruleset_path = ruleset_option.get_item_metadata(index)
 	State.update_tile_ruleset(current_ruleset_path)
 	load_data(State.current_tile_ref.get_ref())

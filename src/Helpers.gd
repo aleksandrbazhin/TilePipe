@@ -131,3 +131,74 @@ func assume_godot_autotile_type(tiles_by_bitmask: Dictionary) -> int:
 					return Const.GODOT_AUTOTILE_TYPE.FULL_3x3
 	return type
 
+
+func is_file_a_ruleset(path: String) -> String:
+	var file := File.new()
+	file.open(path, File.READ)
+	var json_text := file.get_as_text()
+	file.close()
+	var parsed_data = parse_json(json_text)
+	return typeof(parsed_data) == TYPE_DICTIONARY and parsed_data.has("ruleset_name")
+
+
+func populate_project_file_option(option_button: OptionButton, search_dir: String, search_function: FuncRef, selected_path: String):
+	option_button.clear()
+	var options_found: PoolStringArray = search_function.call_func(search_dir)
+	var index := 0
+	for option_path in options_found:
+		option_button.add_item(option_path.get_file())
+		option_button.set_item_metadata(index, option_path)
+		if option_path == selected_path:
+			option_button.selected = index
+		index += 1
+
+
+func scan_for_rulesets_in_dir(path: String) -> PoolStringArray:
+	var files := PoolStringArray([])
+	var dir := Directory.new()
+	dir.open(path)
+	dir.list_dir_begin()
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with(".") and file.get_extension() == "json":
+			var file_path: String = path + "/" + file
+			if Helpers.is_file_a_ruleset(file_path):
+				files.append(file_path)
+	dir.list_dir_end()
+	return files
+
+
+func scan_for_templates_in_dir(path: String) -> PoolStringArray:
+	var files := PoolStringArray([])
+	var dir := Directory.new()
+	dir.open(path)
+	dir.list_dir_begin()
+	while true:
+		var file = dir.get_next()
+		if file == "":
+			break
+		elif not file.begins_with(".") and file.get_extension() == "png":
+			files.append(path + "/" + file)
+	dir.list_dir_end()
+	return files
+
+
+func scan_for_textures_in_dir(path: String) -> PoolStringArray:
+	var files := PoolStringArray([])
+	var dir := Directory.new()
+	dir.open(path)
+	dir.list_dir_begin()
+	while true:
+		var file := dir.get_next()
+		if file.begins_with("."):
+			continue
+		elif file == "":
+			break
+		elif dir.dir_exists(file) and file != Const.TEMPLATE_DIR and file != Const.RULESET_DIR:
+			files.append_array(scan_for_textures_in_dir(path + "/" + file))
+		elif file.get_extension() == "png":
+			files.append(path + "/" + file)
+	dir.list_dir_end()
+	return files

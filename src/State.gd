@@ -77,4 +77,3 @@ func popup_started(popup: Popup):
 func popup_ended():
 	current_modal_popup = null
 	emit_signal("popup_ended")
-

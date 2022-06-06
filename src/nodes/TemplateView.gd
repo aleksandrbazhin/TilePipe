@@ -13,7 +13,7 @@ onready var template_option: OptionButton = $HBoxContainer/TemplateFileName
 func load_data(tile: TileInTree):
 	tile_name.text = tile.tile_file_name
 	current_template_path = tile.template_path
-	populate_template_options()
+	populate_template_option()
 	if tile.template_path != "":
 		template_texture_rect.texture = tile.loaded_template
 		label_bitmasks(tile)
@@ -41,34 +41,6 @@ func label_tile(generated_tile: GeneratedSubTile):
 	template_texture_rect.add_child(mask_text_label)
 
 
-func populate_template_options():
-	template_option.clear()
-	var templates_found := scan_for_templates_in_dir(State.current_dir + "/" + Const.TEMPLATE_DIR)
-	var index := 0
-	for template_path in templates_found:
-#		if is_file_a_ruleset(ruleset_path):
-		template_option.add_item(template_path.get_file())
-		template_option.set_item_metadata(index, template_path)
-		if template_path == current_template_path:
-			template_option.selected = index
-		index += 1
-
-
-func scan_for_templates_in_dir(path: String) -> PoolStringArray:
-	var files := PoolStringArray([])
-	var dir := Directory.new()
-	dir.open(path)
-	dir.list_dir_begin()
-	while true:
-		var file = dir.get_next()
-		if file == "":
-			break
-		elif not file.begins_with(".") and file.get_extension() == "png":
-			files.append(path + "/" + file)
-	dir.list_dir_end()
-	return files
-
-
 func _on_TemplateDialogButton_pressed():
 	$AddTemplateFileDialog.popup_centered()
 
@@ -92,7 +64,7 @@ func _on_AddTemplateFileDialog_file_selected(path: String):
 		State.report_error("Error: Copy file error number %d." % error)
 		return
 	current_template_path = new_template_path
-	populate_template_options()
+	populate_template_option()
 	State.update_tile_template(current_template_path)
 	load_data(State.current_tile_ref.get_ref())
 
@@ -101,3 +73,11 @@ func _on_TemplateFileName_item_selected(index: int):
 	current_template_path = template_option.get_item_metadata(index)
 	State.update_tile_template(current_template_path)
 	load_data(State.current_tile_ref.get_ref())
+
+
+func populate_template_option():
+	var search_path: String = State.current_dir + "/" + Const.TEMPLATE_DIR
+	var scan_func: FuncRef = funcref(Helpers, "scan_for_templates_in_dir")
+	Helpers.populate_project_file_option(template_option, search_path, 
+		scan_func, current_template_path)
+
