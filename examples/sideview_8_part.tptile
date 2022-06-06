@@ -11,9 +11,9 @@
 	},
 	"overlap_level": 0.3125,
 	"random_seed_value": 0,
-	"ruleset": "rulesets/sideview_8_part.json",
+	"ruleset": "rulesets/no_symmetry_13_part.json",
 	"smoothing": false,
 	"template": "templates/template_47.png",
-	"texture": "sideview_pixelart_8_part.png",
+	"texture": "no_symmetry_pixelart_13_part.png",
 	"use_random_seed": false
 }

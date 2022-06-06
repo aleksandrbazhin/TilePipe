@@ -8,10 +8,9 @@ signal ruleset_view_called()
 signal template_view_called()
 
 onready var input_texture := $InputTextureView
-onready var ruleset_filename := $RulesetContainer/RulesetButton
-onready var ruleset_button := $RulesetContainer/RulesetButton
+onready var ruleset_option := $RulesetContainer/RulesetOptionButton
 onready var ruleset_texture := $RulesetContainer/ScrollContainer/TextureRect
-onready var template_title := $TemplateContainer/TemplateButton
+onready var template_option := $TemplateContainer/TemplateOptionButton
 onready var template_texture := $TemplateContainer/TextureRect
 
 
@@ -19,13 +18,20 @@ func load_data(tile: TileInTree):
 	if tile.texture_path != "":
 		input_texture.load_data(tile)
 	if tile.loaded_ruleset.is_loaded:
-		ruleset_filename.text = tile.ruleset_path.get_file()
-		ruleset_button.text = tile.loaded_ruleset.get_name()
+		ruleset_option.text = tile.loaded_ruleset.get_name()
 		ruleset_texture.texture = tile.loaded_ruleset.preview_texture
 		add_ruleset_highlights(tile.loaded_ruleset)
+		Helpers.populate_project_file_option(ruleset_option, 
+			State.current_dir + "/" + Const.RULESET_DIR, 
+			funcref(Helpers, "scan_for_rulesets_in_dir"),
+			tile.ruleset_path)
 	if tile.template_path != "":
-		template_title.text = tile.template_path.get_file()
+		template_option.text = tile.template_path.get_file()
 		template_texture.texture = tile.loaded_template
+		Helpers.populate_project_file_option(template_option, 
+			State.current_dir + "/" + Const.TEMPLATE_DIR, 
+			 funcref(Helpers, "scan_for_templates_in_dir"),
+			 tile.template_path)
 
 
 func add_ruleset_highlights(ruleset: Ruleset):
@@ -54,3 +60,13 @@ func _on_RulesetButton_pressed():
 
 func _on_TemplateButton_pressed():
 	emit_signal("template_view_called")
+
+
+func _on_RulesetOptionButton_item_selected(index):
+	State.update_tile_ruleset(ruleset_option.get_item_metadata(index))
+
+
+func _on_TemplateOptionButton_item_selected(index):
+	State.update_tile_template(template_option.get_item_metadata(index))
+
+
