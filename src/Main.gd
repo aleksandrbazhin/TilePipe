@@ -3,7 +3,7 @@ extends Panel
 
 signal _snapshot_state_changed_continous()
 
-var VERSION: String = ProjectSettings.get_setting("application/config/version")
+
 var is_ui_blocked: bool = false
 var rng := RandomNumberGenerator.new()
 var last_dragged := 0
@@ -23,8 +23,8 @@ func _ready():
 	ui_snapshot = UISnapshot.new(self, Const.SETTINGS_PATH)
 	ui_snapshot.init_snapshot(Const.DEFAULT_USER_SETTINGS)
 	var mode := "Debug" if OS.is_debug_build() else "Release"
-	print("TilePipe v%s running in %s mode" % [VERSION, mode])
-	OS.set_window_title("TilePipe v.%s" % VERSION)
+	print("TilePipe v%s running in %s mode" % [State.app_version, mode])
+	OS.set_window_title(State.current_window_title)
 	rng.randomize()
 	error_dialog.get_label().align = Label.ALIGN_CENTER
 

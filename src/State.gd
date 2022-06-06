@@ -6,7 +6,9 @@ signal popup_started()
 signal popup_ended()
 signal report_error(message)
 
-
+var app_version: String = ProjectSettings.get_setting("application/config/version")
+var window_title_base := "TilePipe v.%s" % app_version
+var current_window_title := window_title_base
 var current_dir := OS.get_executable_path().get_base_dir() + "/" + Const.EXAMPLES_DIR
 var current_tile_ref: WeakRef = null
 var current_modal_popup: Popup = null
@@ -15,6 +17,8 @@ var current_modal_popup: Popup = null
 func set_current_tile(tile: TileInTree, row: TreeItem):
 	if State.current_tile_ref == null or State.current_tile_ref.get_ref() != tile:
 		State.current_tile_ref = weakref(tile)
+	current_window_title = tile.tile_file_name + " - " + window_title_base
+	OS.set_window_title(current_window_title)
 	emit_signal("tile_selected", tile, row)
 
 
