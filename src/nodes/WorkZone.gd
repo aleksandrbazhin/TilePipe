@@ -13,6 +13,12 @@ onready var result_view: ResultView = $VSplitContainer/ResultView
 onready var renderer: TileRenderer = $TileRenderer
 
 
+func _ready():
+	State.connect("tile_selected", self, "on_tile_selected")
+	State.connect("tile_updated", self, "render_subtiles")
+	renderer.connect("tiles_ready", self, "on_tiles_rendered")
+
+
 func unhide_all():
 	if is_instance_valid(last_visible_tab):
 		last_visible_tab.show()
@@ -45,6 +51,7 @@ func on_tile_selected(tile: TileInTree, row: TreeItem):
 func render_subtiles():
 	var tile: TileInTree = State.current_tile_ref.get_ref()
 	var input_image: Image = tile.loaded_texture.get_data()
+	
 #	var parts_in_ruleset := int(tile.loaded_ruleset.get_parts().size())
 #	var min_input_tiles := Vector2(, 1)
 #	var old_style_input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
@@ -64,9 +71,13 @@ func render_subtiles():
 #	renderer.start_render(tile.loaded_ruleset, input_tile_size, output_tile_size,
 #		input_image, tile.result_subtiles_by_bitmask, tile.smoothing,
 #		tile.merge_level.x, tile.overlap_level.x)
+
+#
 	renderer.start_render(tile, input_image)
-	if not renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
-		renderer.connect("tiles_ready", self, "on_tiles_rendered")
+#	if not renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
+#		renderer.connect("tiles_ready", self, "on_tiles_rendered")
+		
+		
 #		renderer.connect("report_progress", self, "update_progress")
 #	update_progress(0)
 #	render_progress_overlay.show()
@@ -79,9 +90,9 @@ func render_subtiles():
 
 func on_tiles_rendered():
 #	update_progress(100)
-	if renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
-		renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
-#		renderer.disconnect("report_progress", self, "update_progress")
+#	if renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
+#		renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
+##		renderer.disconnect("report_progress", self, "update_progress")
 #	rendered_tiles = renderer.tiles
 #	var tile: TileInTree = loaded_tile_ref.get_ref()
 #	emit_signal("input_image_processed")

@@ -31,8 +31,6 @@ func _ready():
 
 
 func connect_signals():
-	State.connect("tile_selected", work_zone, "on_tile_selected")
-	State.connect("tile_updated", work_zone, "render_subtiles")
 	State.connect("popup_started", self, "start_modal_popup")
 	State.connect("popup_ended", self, "end_modal_popup")
 	State.connect("report_error", self, "add_error_report")

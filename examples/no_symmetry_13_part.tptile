@@ -3,7 +3,7 @@
 		"x": 16,
 		"y": 16
 	},
-	"merge_level": 0.25,
+	"merge_level": 0.1875,
 	"output_tile_offset": 0,
 	"output_tile_size": {
 		"x": 64,

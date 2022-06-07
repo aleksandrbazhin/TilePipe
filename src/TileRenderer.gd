@@ -2,11 +2,11 @@ extends Node
 
 class_name TileRenderer
 
+
 signal tiles_ready()
 signal report_progress(progress)
 
-const RENDER_POOL_SIZE = 4
-
+const RENDER_POOL_SIZE = 8
 
 var is_rendering = false
 var render_pool := []
@@ -21,7 +21,7 @@ var rng: RandomNumberGenerator
 var smoothing_enabled := false
 var ready = false
 var last_mask := -1
-# tiles[mask] = [random_variant1, random_variant2, ...]
+# subtiles[mask] = [random_variant1, random_variant2, ...]
 var subtiles := {} 
 
 

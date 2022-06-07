@@ -12,9 +12,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.156863, 0.176471, 0.2, 1 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="AddRulesetFileDialog" type="FileDialog" parent="."]
 margin_right = 800.0

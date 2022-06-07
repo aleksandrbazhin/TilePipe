@@ -22,6 +22,14 @@ func set_current_tile(tile: TileInTree, row: TreeItem):
 	emit_signal("tile_selected", tile, row)
 
 
+func update_tile_size(size: Vector2):
+	var tile: TileInTree = current_tile_ref.get_ref()
+	if tile.input_tile_size != size:
+		tile.set_input_tile_size(size)
+		tile.save()
+		emit_signal("tile_updated")
+
+
 func update_tile_overlap_level(level: Vector2):
 	var tile: TileInTree = current_tile_ref.get_ref()
 	tile.set_overlap_level(level)
@@ -36,12 +44,11 @@ func update_tile_merge_level(level: Vector2):
 	emit_signal("tile_updated")
 
 
-func update_tile_size(size: Vector2):
+func update_tile_smoothing(smoothing_enabled: bool):
 	var tile: TileInTree = current_tile_ref.get_ref()
-	if tile.input_tile_size != size:
-		tile.set_input_tile_size(size)
-		tile.save()
-		emit_signal("tile_updated")
+	tile.set_smoothing(smoothing_enabled)
+	tile.save()
+	emit_signal("tile_updated")
 
 
 func update_tile_texture(path: String):

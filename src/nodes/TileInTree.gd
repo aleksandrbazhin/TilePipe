@@ -70,6 +70,7 @@ func load_tile(directory: String, tile_file: String) -> bool:
 		return false
 	merge_level = Vector2(_tile_data["merge_level"], _tile_data["merge_level"])
 	overlap_level = Vector2(_tile_data["overlap_level"], _tile_data["overlap_level"])
+	smoothing = bool(_tile_data["smoothing"])
 	return true
 
 
@@ -259,6 +260,11 @@ func set_overlap_level(new_overlap_level: Vector2):
 	overlap_level = new_overlap_level
 	_tile_data["overlap_level"] = overlap_level.x
 
+
+func set_smoothing(new_smoothig: bool):
+	smoothing = new_smoothig
+	_tile_data["smoothing"] = smoothing
+	
 
 func save():
 #	print("tile %s saved" % tile_file_name)

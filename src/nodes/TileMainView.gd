@@ -3,7 +3,6 @@ extends VBoxContainer
 class_name TileMainView
 
 
-signal input_texture_view_called()
 signal ruleset_view_called()
 signal template_view_called()
 

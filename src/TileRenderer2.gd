@@ -1,4 +1,5 @@
 extends Node
+# old renderer
 
 class_name TileRenderer2
 

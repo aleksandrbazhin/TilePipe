@@ -90,3 +90,7 @@ func _on_OverlapSlider_released(value: float):
 
 func change_part_highlight(part_id: int, is_on: bool):
 	texture_container.set_part_highlight(part_id, is_on)
+
+
+func _on_Smoothing_toggled(button_pressed: bool):
+	State.update_tile_smoothing(button_pressed)
