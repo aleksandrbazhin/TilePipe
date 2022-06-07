@@ -51,6 +51,13 @@ func update_tile_smoothing(smoothing_enabled: bool):
 	emit_signal("tile_updated")
 
 
+func update_tile_output_size(output_tile_size_key: int):
+	var tile: TileInTree = current_tile_ref.get_ref()
+	tile.set_output_tile_size(output_tile_size_key)
+	tile.save()
+	emit_signal("tile_updated")
+
+
 func update_tile_texture(path: String):
 	var tile: TileInTree = current_tile_ref.get_ref()
 	if tile.set_texture(path):

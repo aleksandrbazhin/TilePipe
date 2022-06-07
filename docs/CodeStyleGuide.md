@@ -13,4 +13,10 @@ When you need to pass the signal to the upper level in the tree, use global clas
 - Consult general GDScript style suggested by the editor otherwise.
 
 
-## 3. Godot quirks (as of 3.4.4)
+## 3. Naming
+- Tile is a one type of terrain, that can be painted, it consists of subtiles. 
+- Subtile is one variant of tile, which is substituted when the neighbors on the tile map are known.
+- Tileset is a collection of tiles.
+
+
+## 4. Godot quirks (as of 3.4.4) and ways to overcome them

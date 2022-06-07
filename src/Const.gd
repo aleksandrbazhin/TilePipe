@@ -65,22 +65,8 @@ const PART_OVERLAP_VECTORS := {
 	"CORNER_OUT_TOP_LEFT": Vector2(1, 1)
 }
 
-
-
-
-
-
-
-
-
-const TILE_SETTINGS_DIR := "user://tile_settings"
-# version comparison works in godot due to str comparison (is_str_les() in ustring.h)
-const MIN_SETTINGS_COMPATIBLE_VERSION: String = "0.5"
-
-const FULL_HD := Vector2(1920, 1080)
-
 const NO_SCALING: int = 0
-const OUTPUT_SIZES: Dictionary = {
+const OUTPUT_TILE_SIZE_OPTIONS: Dictionary = {
 	NO_SCALING: "No scaling",
 	8: "8x8",
 	10: "10x10",
@@ -96,6 +82,20 @@ const OUTPUT_SIZES: Dictionary = {
 	100: "100x100",
 	128: "128x128"
 }
+
+
+
+
+
+
+
+const TILE_SETTINGS_DIR := "user://tile_settings"
+# version comparison works in godot due to str comparison (is_str_les() in ustring.h)
+const MIN_SETTINGS_COMPATIBLE_VERSION: String = "0.5"
+
+const FULL_HD := Vector2(1920, 1080)
+
+
 const TEMPLATE_TILE_SIZE: int = 32
 const DEFAULT_OUTPUT_SIZE: int = 64
 

@@ -12,6 +12,12 @@ onready var merge_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollConta
 onready var merge_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeYSliderContainer/RateSlider
 onready var overlay_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSlider
 onready var overlay_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer/OverlapSlider
+onready var output_tile_size_option: OptionButton = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/HBoxContainer/SizeOptionButton
+
+
+func _ready():
+	for size_option in Const.OUTPUT_TILE_SIZE_OPTIONS:
+		output_tile_size_option.add_item(Const.OUTPUT_TILE_SIZE_OPTIONS[size_option])
 
 
 func load_data(tile: TileInTree):
@@ -94,3 +100,7 @@ func change_part_highlight(part_id: int, is_on: bool):
 
 func _on_Smoothing_toggled(button_pressed: bool):
 	State.update_tile_smoothing(button_pressed)
+
+
+func _on_SizeOptionButton_item_selected(index: int):
+	State.update_tile_output_size(index)

@@ -67,5 +67,3 @@ func _on_RulesetOptionButton_item_selected(index):
 
 func _on_TemplateOptionButton_item_selected(index):
 	State.update_tile_template(template_option.get_item_metadata(index))
-
-
