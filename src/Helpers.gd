@@ -132,22 +132,26 @@ func assume_godot_autotile_type(tiles_by_bitmask: Dictionary) -> int:
 	return type
 
 
-func is_file_a_ruleset(path: String) -> String:
+func is_file_a_ruleset(path: String) -> bool:
 	var file := File.new()
-	file.open(path, File.READ)
-	var json_text := file.get_as_text()
-	file.close()
-	var parsed_data = parse_json(json_text)
-	return typeof(parsed_data) == TYPE_DICTIONARY and parsed_data.has("ruleset_name")
+	if file.open(path, File.READ) == OK:
+		var json_text := file.get_as_text()
+		file.close()
+		var parsed_data = parse_json(json_text)
+		return typeof(parsed_data) == TYPE_DICTIONARY and parsed_data.has("ruleset_name")
+	return false
 
 
-func populate_project_file_option(option_button: OptionButton, search_dir: String, search_function: FuncRef, selected_path: String):
+func populate_project_file_option(option_button: OptionButton, 
+		search_dir: String, search_function: FuncRef, selected_path: String):
+	print ("\nSELECTED: ", selected_path)
 	option_button.clear()
 	var options_found: PoolStringArray = search_function.call_func(search_dir)
 	var index := 0
 	for option_path in options_found:
 		option_button.add_item(option_path.get_file())
 		option_button.set_item_metadata(index, option_path)
+		print (option_path)
 		if option_path == selected_path:
 			option_button.selected = index
 		index += 1

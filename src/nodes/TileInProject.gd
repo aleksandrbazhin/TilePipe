@@ -96,7 +96,7 @@ func block_failed_tile():
 
 
 func load_texture(path: String) -> bool:
-	var file_path: String = current_directory + path
+	var file_path: String = current_directory + "/" + path
 	var image = Image.new()
 	var err: int
 	err = image.load(file_path)
@@ -230,8 +230,6 @@ func _on_Tree_item_collapsed(item: TreeItem):
 		rect_min_size.y = HEIGHT_COLLAPSED
 	else:
 		rect_min_size.y = HEIGHT_EXPANDED
-
-
 
 
 func set_texture(abs_path: String) -> bool:

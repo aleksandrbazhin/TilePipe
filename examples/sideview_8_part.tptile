@@ -1,7 +1,7 @@
 {
 	"texture": "sideview_pixelart_8_part.png",
 	"ruleset": "rulesets/sideview_8_part.json",
-	"template": "templates/template_47.png",
+	"template": "templates/template_47_double.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16
