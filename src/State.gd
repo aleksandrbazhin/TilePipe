@@ -22,59 +22,9 @@ func set_current_tile(tile: TileInTree, row: TreeItem):
 	emit_signal("tile_selected", tile, row)
 
 
-func update_tile_size(size: Vector2):
+func update_tile_param(param_key: int, value):
 	var tile: TileInTree = current_tile_ref.get_ref()
-	if tile.input_tile_size != size:
-		tile.set_input_tile_size(size)
-		tile.save()
-		emit_signal("tile_updated")
-
-
-func update_tile_overlap_level(level: Vector2):
-	var tile: TileInTree = current_tile_ref.get_ref()
-	tile.set_overlap_level(level)
-	tile.save()
-	emit_signal("tile_updated")
-
-
-func update_tile_merge_level(level: Vector2):
-	var tile: TileInTree = current_tile_ref.get_ref()
-	tile.set_merge_level(level)
-	tile.save()
-	emit_signal("tile_updated")
-
-
-func update_tile_smoothing(smoothing_enabled: bool):
-	var tile: TileInTree = current_tile_ref.get_ref()
-	tile.set_smoothing(smoothing_enabled)
-	tile.save()
-	emit_signal("tile_updated")
-
-
-func update_tile_output_size(output_tile_size_key: int):
-	var tile: TileInTree = current_tile_ref.get_ref()
-	tile.set_output_tile_size(output_tile_size_key)
-	tile.save()
-	emit_signal("tile_updated")
-
-
-func update_tile_texture(path: String):
-	var tile: TileInTree = current_tile_ref.get_ref()
-	if tile.set_texture(path):
-		tile.save()
-		emit_signal("tile_updated")
-
-
-func update_tile_ruleset(path: String):
-	var tile: TileInTree = current_tile_ref.get_ref()
-	if tile.set_ruleset(path):
-		tile.save()
-		emit_signal("tile_updated")
-
-
-func update_tile_template(path: String):
-	var tile: TileInTree = current_tile_ref.get_ref()
-	if tile.set_template(path):
+	if tile.set_param(param_key, value):
 		tile.save()
 		emit_signal("tile_updated")
 

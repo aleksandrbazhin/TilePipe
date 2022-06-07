@@ -5,6 +5,21 @@ class_name TileInTree
 signal row_selected(row)
 #signal report_error(text)
 
+enum {
+	PARAM_TEXTURE,
+	PARAM_RULESET,
+	PARAM_TEMPLATE,
+	PARAM_INPUT_SIZE,
+	PARAM_MERGE,
+	PARAM_OVERLAP,
+	PARAM_RANDOM_ENABLED,
+	PARAM_RANDOM_SEED,
+	PARAM_SMOOTHING,
+	PARAM_OUTPUT_SIZE,
+	PARAM_OUTPUT_OFFSET
+}
+
+
 const HEIGHT_EXPANDED := 120
 const HEIGHT_COLLAPSED := 50
 const RULESET_PREFIX := "Ruleset: "
@@ -217,6 +232,8 @@ func _on_Tree_item_collapsed(item: TreeItem):
 		rect_min_size.y = HEIGHT_EXPANDED
 
 
+
+
 func set_texture(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
 	if not load_texture(rel_path):
@@ -243,28 +260,32 @@ func set_template(abs_path: String) -> bool:
 	return true
 
 
-func set_input_tile_size(new_size: Vector2):
-	if input_tile_size.x > 0 and input_tile_size.y > 0:
+func set_input_tile_size(new_size: Vector2) -> bool:
+	if new_size != input_tile_size and (new_size.x > 0 and new_size.y > 0):
 		input_tile_size = new_size
 		_tile_data["input_tile_size"] = {
 			"x": input_tile_size.x,
 			"y": input_tile_size.y
 		}
+	return true
 
 
 func set_merge_level(new_merge_level: Vector2):
 	merge_level = new_merge_level
 	_tile_data["merge_level"] = merge_level.x
+	return true
 
 
 func set_overlap_level(new_overlap_level: Vector2):
 	overlap_level = new_overlap_level
 	_tile_data["overlap_level"] = overlap_level.x
+	return true
 
 
 func set_smoothing(new_smoothig: bool):
 	smoothing = new_smoothig
 	_tile_data["smoothing"] = smoothing
+	return true
 
 
 func set_output_tile_size(size_key: int):
@@ -275,6 +296,34 @@ func set_output_tile_size(size_key: int):
 		output_tile_size = Vector2(size_x, size_x)
 		_tile_data["output_tile_size"]["x"] = size_x
 		_tile_data["output_tile_size"]["y"] = size_x
+	return true
+
+
+func set_param(param_key: int, value) -> bool:
+	match param_key:
+		PARAM_TEXTURE:
+			return set_texture(value)
+		PARAM_RULESET:
+			return set_ruleset(value)
+		PARAM_TEXTURE:
+			return set_template(value)
+		PARAM_INPUT_SIZE:
+			return set_input_tile_size(value)
+		PARAM_MERGE:
+			return set_merge_level(value)
+		PARAM_OVERLAP:
+			return set_overlap_level(value)
+		PARAM_RANDOM_ENABLED:
+			return false
+		PARAM_RANDOM_SEED:
+			return false
+		PARAM_SMOOTHING:
+			return set_smoothing(value)
+		PARAM_OUTPUT_SIZE:
+			return set_output_tile_size(value)
+		PARAM_OUTPUT_OFFSET:
+			return false
+	return false
 
 
 func save():

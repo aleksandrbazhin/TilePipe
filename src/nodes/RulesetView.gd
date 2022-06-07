@@ -93,7 +93,7 @@ func _on_AddRulesetFileDialog_file_selected(path: String):
 		return
 	current_ruleset_path = new_ruleset_path
 	populate_ruleset_option()
-	State.update_tile_ruleset(current_ruleset_path)
+	State.update_tile_param(TileInTree.PARAM_RULESET, current_ruleset_path)
 	load_data(State.current_tile_ref.get_ref())
 
 
@@ -106,5 +106,5 @@ func populate_ruleset_option():
 
 func _on_RulesetFileName_item_selected(index: int):
 	current_ruleset_path = ruleset_option.get_item_metadata(index)
-	State.update_tile_ruleset(current_ruleset_path)
+	State.update_tile_param(TileInTree.PARAM_RULESET, current_ruleset_path)
 	load_data(State.current_tile_ref.get_ref())

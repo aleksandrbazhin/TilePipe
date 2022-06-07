@@ -62,8 +62,10 @@ func _on_TemplateButton_pressed():
 
 
 func _on_RulesetOptionButton_item_selected(index):
-	State.update_tile_ruleset(ruleset_option.get_item_metadata(index))
+	State.update_tile_param(TileInTree.PARAM_RULESET, 
+		ruleset_option.get_item_metadata(index))
 
 
 func _on_TemplateOptionButton_item_selected(index):
-	State.update_tile_template(template_option.get_item_metadata(index))
+	State.update_tile_param(TileInTree.PARAM_TEMPLATE, 
+		template_option.get_item_metadata(index))
