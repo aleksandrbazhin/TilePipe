@@ -17,7 +17,7 @@ onready var result_texture := $VBoxContainer/HSplitContainer/Result/TextureConta
 #		controls.hide()
 
 
-func render_from_tile(tile: TileInTree):
+func render_from_tile(tile: TileInProject):
 #	if tile.result_subtiles_by_bitmask.empty():
 #		return
 	var tiles_by_bitmasks := tile.result_subtiles_by_bitmask

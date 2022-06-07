@@ -22,13 +22,13 @@ func _take_snapshot() -> Dictionary:
 
 func _apply_snapshot(settings: Dictionary):
 	if tile_container.get_child_count() > 0:
-		var tile: TileInTree = tile_container.get_child(int(settings["selected_tile"]))
+		var tile: TileInProject = tile_container.get_child(int(settings["selected_tile"]))
 		if tile != null:
 			tile.set_selected(true)
 			tile.select_root()
 
 
-func on_tile_row_selected(row: TreeItem, tile: TileInTree):
+func on_tile_row_selected(row: TreeItem, tile: TileInProject):
 	for other_tile in tile_container.get_children():
 		other_tile.deselect_except(row)
 		if other_tile.is_selected:
@@ -72,7 +72,7 @@ func load_project_directory(directory_path: String):
 
 
 func add_tile_to_tree(directory: String, tile_file: String):
-	var tile: TileInTree = preload("res://src/nodes/TileInTree.tscn").instance()
+	var tile: TileInProject = preload("res://src/nodes/TileInProject.tscn").instance()
 	if tile.load_tile(directory, tile_file):
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
 	tile_container.add_child(tile)

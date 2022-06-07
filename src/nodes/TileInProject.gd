@@ -1,6 +1,6 @@
 extends Control
 
-class_name TileInTree
+class_name TileInProject
 
 signal row_selected(row)
 #signal report_error(text)

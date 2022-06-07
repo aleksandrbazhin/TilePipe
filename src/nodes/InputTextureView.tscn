@@ -101,7 +101,7 @@ scroll_horizontal_enabled = false
 
 [node name="VBox" type="VBoxContainer" parent="HBox/SettingsContainer/ScrollContainer"]
 margin_right = 604.0
-margin_bottom = 524.0
+margin_bottom = 540.0
 size_flags_horizontal = 3
 custom_constants/separation = 40
 
@@ -407,7 +407,7 @@ __meta__ = {
 [node name="OutputSize" type="VBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox" groups=["corners_settings", "overlay_settings"]]
 margin_top = 416.0
 margin_right = 604.0
-margin_bottom = 524.0
+margin_bottom = 540.0
 hint_tooltip = "If you have multiple rows in your input image, the result can and will be randomized. 
 (If aspect ratio of a texture is more than 1:4 for a 4-part preset)"
 custom_constants/separation = 8
@@ -429,49 +429,49 @@ valign = 1
 [node name="HBoxContainer" type="HBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize"]
 margin_top = 36.0
 margin_right = 604.0
-margin_bottom = 68.0
+margin_bottom = 76.0
 rect_min_size = Vector2( 0, 40 )
 
 [node name="Spacer" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/HBoxContainer"]
 margin_right = 18.0
-margin_bottom = 32.0
+margin_bottom = 40.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="Label" type="Label" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/HBoxContainer"]
 margin_left = 22.0
-margin_top = 9.0
+margin_top = 13.0
 margin_right = 150.0
-margin_bottom = 23.0
+margin_bottom = 27.0
 rect_min_size = Vector2( 128, 0 )
 text = "Tile size"
 
 [node name="SizeOptionButton" type="OptionButton" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/HBoxContainer" groups=["blockable"]]
 margin_left = 154.0
+margin_top = 4.0
 margin_right = 604.0
-margin_bottom = 32.0
+margin_bottom = 36.0
 rect_min_size = Vector2( 0, 32 )
 hint_tooltip = "Output tile are scaled up or down."
 size_flags_horizontal = 3
 size_flags_vertical = 4
 text = "64x64"
 align = 1
-selected = 3
 
 [node name="SubtileSpacing" type="HBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize"]
-margin_top = 76.0
+margin_top = 84.0
 margin_right = 604.0
-margin_bottom = 108.0
+margin_bottom = 124.0
 rect_min_size = Vector2( 0, 40 )
 
 [node name="Spacer" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing"]
 margin_right = 18.0
-margin_bottom = 32.0
+margin_bottom = 40.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="Label" type="Label" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing" groups=["blockable"]]
 margin_left = 22.0
 margin_right = 150.0
-margin_bottom = 32.0
+margin_bottom = 40.0
 rect_min_size = Vector2( 128, 0 )
 size_flags_vertical = 1
 text = "Subile spacing:"
@@ -482,8 +482,9 @@ __meta__ = {
 
 [node name="SpacingSpinBox" type="SpinBox" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing" groups=["blockable"]]
 margin_left = 154.0
+margin_top = 4.0
 margin_right = 520.0
-margin_bottom = 32.0
+margin_bottom = 36.0
 rect_min_size = Vector2( 64, 32 )
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -493,8 +494,9 @@ align = 1
 
 [node name="SpacingButton" type="Button" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing" groups=["blockable"]]
 margin_left = 524.0
+margin_top = 4.0
 margin_right = 604.0
-margin_bottom = 32.0
+margin_bottom = 36.0
 rect_min_size = Vector2( 80, 32 )
 size_flags_vertical = 4
 text = "Apply"

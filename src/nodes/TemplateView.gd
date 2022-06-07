@@ -10,7 +10,7 @@ onready var template_texture_rect := $ScrollContainer/MarginContainer/TextureRec
 onready var template_option: OptionButton = $HBoxContainer/TemplateFileName
 
 
-func load_data(tile: TileInTree):
+func load_data(tile: TileInProject):
 	tile_name.text = tile.tile_file_name
 	current_template_path = tile.template_path
 	populate_template_option()
@@ -19,7 +19,7 @@ func load_data(tile: TileInTree):
 		label_bitmasks(tile)
 
 
-func label_bitmasks(tile: TileInTree):
+func label_bitmasks(tile: TileInProject):
 	for label in template_texture_rect.get_children():
 		label.queue_free()
 	for mask in tile.result_subtiles_by_bitmask.keys():
@@ -65,13 +65,13 @@ func _on_AddTemplateFileDialog_file_selected(path: String):
 		return
 	current_template_path = new_template_path
 	populate_template_option()
-	State.update_tile_param(TileInTree.PARAM_TEMPLATE, current_template_path)
+	State.update_tile_param(TileInProject.PARAM_TEMPLATE, current_template_path)
 	load_data(State.current_tile_ref.get_ref())
 
 
 func _on_TemplateFileName_item_selected(index: int):
 	current_template_path = template_option.get_item_metadata(index)
-	State.update_tile_param(TileInTree.PARAM_TEMPLATE, current_template_path)
+	State.update_tile_param(TileInProject.PARAM_TEMPLATE, current_template_path)
 	load_data(State.current_tile_ref.get_ref())
 
 

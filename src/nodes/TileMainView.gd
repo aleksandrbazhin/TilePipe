@@ -13,7 +13,7 @@ onready var template_option := $TemplateContainer/TemplateOptionButton
 onready var template_texture := $TemplateContainer/TextureRect
 
 
-func load_data(tile: TileInTree):
+func load_data(tile: TileInProject):
 	if tile.texture_path != "":
 		input_texture.load_data(tile)
 	if tile.loaded_ruleset.is_loaded:
@@ -62,10 +62,10 @@ func _on_TemplateButton_pressed():
 
 
 func _on_RulesetOptionButton_item_selected(index):
-	State.update_tile_param(TileInTree.PARAM_RULESET, 
+	State.update_tile_param(TileInProject.PARAM_RULESET, 
 		ruleset_option.get_item_metadata(index))
 
 
 func _on_TemplateOptionButton_item_selected(index):
-	State.update_tile_param(TileInTree.PARAM_TEMPLATE, 
+	State.update_tile_param(TileInProject.PARAM_TEMPLATE, 
 		template_option.get_item_metadata(index))

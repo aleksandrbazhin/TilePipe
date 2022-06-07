@@ -49,7 +49,7 @@ func init_render_pool():
 		add_child(viewport)
 
 
-func start_render(tile: TileInTree, input_image: Image, active_rng: RandomNumberGenerator = RandomNumberGenerator.new()):
+func start_render(tile: TileInProject, input_image: Image, active_rng: RandomNumberGenerator = RandomNumberGenerator.new()):
 	subtiles = tile.result_subtiles_by_bitmask
 	ruleset = tile.loaded_ruleset
 	input_tile_size = tile.input_tile_size

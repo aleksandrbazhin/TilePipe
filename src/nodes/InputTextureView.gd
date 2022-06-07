@@ -20,7 +20,7 @@ func _ready():
 		output_tile_size_option.add_item(Const.OUTPUT_TILE_SIZE_OPTIONS[size_option])
 
 
-func load_data(tile: TileInTree):
+func load_data(tile: TileInProject):
 	current_texture_path = tile.texture_path
 	current_input_tile_size = tile.input_tile_size
 	populate_texture_option()
@@ -46,7 +46,7 @@ func setup_sliders():
 
 func _on_TextureFileName_item_selected(index: int):
 	current_texture_path = texture_option.get_item_metadata(index)
-	State.update_tile_param(TileInTree.PARAM_TEXTURE, current_texture_path)
+	State.update_tile_param(TileInProject.PARAM_TEXTURE, current_texture_path)
 	load_texture(State.current_tile_ref.get_ref().loaded_texture)
 
 
@@ -82,16 +82,16 @@ func populate_texture_option():
 
 func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
 	current_input_tile_size = size
-	State.update_tile_param(TileInTree.PARAM_INPUT_SIZE, current_input_tile_size)
+	State.update_tile_param(TileInProject.PARAM_INPUT_SIZE, current_input_tile_size)
 	setup_sliders()
 
 
 func _on_RateSlider_released(value: float):
-	State.update_tile_param(TileInTree.PARAM_MERGE, Vector2(value, value))
+	State.update_tile_param(TileInProject.PARAM_MERGE, Vector2(value, value))
 
 
 func _on_OverlapSlider_released(value: float):
-	State.update_tile_param(TileInTree.PARAM_OVERLAP, Vector2(value, value))
+	State.update_tile_param(TileInProject.PARAM_OVERLAP, Vector2(value, value))
 
 
 func change_part_highlight(part_id: int, is_on: bool):
@@ -99,8 +99,8 @@ func change_part_highlight(part_id: int, is_on: bool):
 
 
 func _on_Smoothing_toggled(button_pressed: bool):
-	State.update_tile_param(TileInTree.PARAM_SMOOTHING, button_pressed)
+	State.update_tile_param(TileInProject.PARAM_SMOOTHING, button_pressed)
 
 
 func _on_SizeOptionButton_item_selected(index: int):
-	State.update_tile_param(TileInTree.PARAM_OUTPUT_SIZE, index)
+	State.update_tile_param(TileInProject.PARAM_OUTPUT_SIZE, index)
