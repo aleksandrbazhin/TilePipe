@@ -64,8 +64,13 @@ func _on_TemplateButton_pressed():
 func _on_RulesetOptionButton_item_selected(index):
 	State.update_tile_param(TileInProject.PARAM_RULESET, 
 		ruleset_option.get_item_metadata(index))
+	var tile: TileInProject = State.current_tile_ref.get_ref()
+	ruleset_texture.texture = tile.loaded_ruleset.preview_texture
+	add_ruleset_highlights(tile.loaded_ruleset)
 
 
 func _on_TemplateOptionButton_item_selected(index):
 	State.update_tile_param(TileInProject.PARAM_TEMPLATE, 
 		template_option.get_item_metadata(index))
+	var tile: TileInProject = State.current_tile_ref.get_ref()
+	template_texture.texture = tile.loaded_template

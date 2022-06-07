@@ -311,7 +311,7 @@ func set_param(param_key: int, value) -> bool:
 			return set_texture(value)
 		PARAM_RULESET:
 			return set_ruleset(value)
-		PARAM_TEXTURE:
+		PARAM_TEMPLATE:
 			return set_template(value)
 		PARAM_INPUT_SIZE:
 			return set_input_tile_size(value)

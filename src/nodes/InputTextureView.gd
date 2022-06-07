@@ -33,7 +33,6 @@ func load_data(tile: TileInProject):
 	if current_texture_path != "":
 		load_texture(tile.loaded_texture)
 	output_tile_size_option.selected = Helpers.get_closest_output_size_key(tile.output_tile_size)
-	print(tile.subtile_offset)
 	subtile_offset.value = tile.subtile_offset
 
 
@@ -112,5 +111,4 @@ func _on_SizeOptionButton_item_selected(index: int):
 
 func _on_SetOffsetButton_pressed():
 	var offset := int(subtile_offset.value)
-	print(offset)
 	State.update_tile_param(TileInProject.PARAM_SUBTILE_OFFSET, offset)
