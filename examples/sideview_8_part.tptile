@@ -4,7 +4,7 @@
 		"y": 16
 	},
 	"merge_level": 0.25,
-	"output_tile_offset": 0,
+	"subtile_offset": 0,
 	"output_tile_size": {
 		"x": 64,
 		"y": 64

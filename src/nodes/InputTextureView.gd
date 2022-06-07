@@ -13,6 +13,7 @@ onready var merge_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollConta
 onready var overlay_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSlider
 onready var overlay_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer/OverlapSlider
 onready var output_tile_size_option: OptionButton = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/HBoxContainer/SizeOptionButton
+onready var subtile_offset: SpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileOffset/OffsetSpinBox
 
 
 func _ready():
@@ -31,6 +32,9 @@ func load_data(tile: TileInProject):
 	overlay_slider_y.value = tile.overlap_level.y
 	if current_texture_path != "":
 		load_texture(tile.loaded_texture)
+	output_tile_size_option.selected = Helpers.get_closest_output_size_key(tile.output_tile_size)
+	print(tile.subtile_offset)
+	subtile_offset.value = tile.subtile_offset
 
 
 func load_texture(texture: Texture):
@@ -104,3 +108,9 @@ func _on_Smoothing_toggled(button_pressed: bool):
 
 func _on_SizeOptionButton_item_selected(index: int):
 	State.update_tile_param(TileInProject.PARAM_OUTPUT_SIZE, index)
+
+
+func _on_SetOffsetButton_pressed():
+	var offset := int(subtile_offset.value)
+	print(offset)
+	State.update_tile_param(TileInProject.PARAM_SUBTILE_OFFSET, offset)

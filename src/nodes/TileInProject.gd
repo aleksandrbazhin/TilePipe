@@ -3,7 +3,6 @@ extends Control
 class_name TileInProject
 
 signal row_selected(row)
-#signal report_error(text)
 
 enum {
 	PARAM_TEXTURE,
@@ -16,9 +15,8 @@ enum {
 	PARAM_RANDOM_SEED,
 	PARAM_SMOOTHING,
 	PARAM_OUTPUT_SIZE,
-	PARAM_OUTPUT_OFFSET
+	PARAM_SUBTILE_OFFSET
 }
-
 
 const HEIGHT_EXPANDED := 120
 const HEIGHT_COLLAPSED := 50
@@ -44,6 +42,7 @@ var template_path: String
 var ruleset_path: String
 var input_tile_size: Vector2
 var output_tile_size: Vector2 = Vector2(64,64)
+var subtile_offset: int = 0
 var merge_level := Vector2(0.25, 0.25)
 var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
@@ -87,6 +86,7 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	overlap_level = Vector2(_tile_data["overlap_level"], _tile_data["overlap_level"])
 	smoothing = bool(_tile_data["smoothing"])
 	output_tile_size = Vector2(_tile_data["output_tile_size"]["x"], _tile_data["output_tile_size"]["y"])
+	subtile_offset = _tile_data["subtile_offset"]
 	return true
 
 
@@ -270,25 +270,25 @@ func set_input_tile_size(new_size: Vector2) -> bool:
 	return true
 
 
-func set_merge_level(new_merge_level: Vector2):
+func set_merge_level(new_merge_level: Vector2) -> bool:
 	merge_level = new_merge_level
 	_tile_data["merge_level"] = merge_level.x
 	return true
 
 
-func set_overlap_level(new_overlap_level: Vector2):
+func set_overlap_level(new_overlap_level: Vector2) -> bool:
 	overlap_level = new_overlap_level
 	_tile_data["overlap_level"] = overlap_level.x
 	return true
 
 
-func set_smoothing(new_smoothig: bool):
+func set_smoothing(new_smoothig: bool) -> bool:
 	smoothing = new_smoothig
 	_tile_data["smoothing"] = smoothing
 	return true
 
 
-func set_output_tile_size(size_key: int):
+func set_output_tile_size(size_key: int) -> bool:
 	if size_key == Const.NO_SCALING :
 		output_tile_size = input_tile_size
 	else:
@@ -296,6 +296,12 @@ func set_output_tile_size(size_key: int):
 		output_tile_size = Vector2(size_x, size_x)
 		_tile_data["output_tile_size"]["x"] = size_x
 		_tile_data["output_tile_size"]["y"] = size_x
+	return true
+
+
+func set_subtile_offset(new_offset: int) -> bool:
+	subtile_offset = new_offset
+	_tile_data["subtile_offset"] = subtile_offset
 	return true
 
 
@@ -321,8 +327,8 @@ func set_param(param_key: int, value) -> bool:
 			return set_smoothing(value)
 		PARAM_OUTPUT_SIZE:
 			return set_output_tile_size(value)
-		PARAM_OUTPUT_OFFSET:
-			return false
+		PARAM_SUBTILE_OFFSET:
+			return set_subtile_offset(value)
 	return false
 
 

@@ -202,3 +202,8 @@ func scan_for_textures_in_dir(path: String) -> PoolStringArray:
 			files.append(path + "/" + file)
 	dir.list_dir_end()
 	return files
+
+
+func get_closest_output_size_key(size: Vector2) -> int:
+	var size_key: int = Const.OUTPUT_TILE_SIZE_OPTIONS.keys().find(int(size.x))
+	return size_key if size_key != -1 else 0

@@ -4,7 +4,7 @@
 		"y": 16
 	},
 	"merge_level": 0.1875,
-	"output_tile_offset": 0,
+	"subtile_offset": 0,
 	"output_tile_size": {
 		"x": 64,
 		"y": 64
@@ -15,5 +15,6 @@
 	"smoothing": false,
 	"template": "templates/template_2x2.png",
 	"texture": "no_symmetry_pixelart_13_part.png",
-	"use_random_seed": false
+	"use_random_seed": false,
+	"output_tile_offset": 4
 }
