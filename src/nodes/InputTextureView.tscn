@@ -83,6 +83,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 632.0
 margin_bottom = 676.0
+rect_clip_content = true
 
 [node name="SettingsContainer" type="MarginContainer" parent="HBox"]
 margin_left = 648.0
