@@ -6,8 +6,8 @@
 		"x": 16,
 		"y": 16
 	},
-	"merge_level": 0.1875,
-	"overlap_level": 0.25,
+	"merge_level": 0.5,
+	"overlap_level": 0,
 	"random_enabled": false,
 	"random_seed_value": 0,
 	"smoothing": false,

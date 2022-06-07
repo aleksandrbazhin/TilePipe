@@ -1,12 +1,12 @@
 {
-	"texture": "sideview_pixelart_8_part.png",
+	"texture": "sideview_pixelart_with_random_8_part.png",
 	"ruleset": "rulesets/sideview_8_part.json",
-	"template": "templates/template_47.png",
+	"template": "templates/template_47_with_duplicates.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16
 	},
-	"merge_level": 0.1875,
+	"merge_level": 0.25,
 	"overlap_level": 0.25,
 	"random_enabled": false,
 	"random_seed_value": 0,
