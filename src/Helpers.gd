@@ -150,6 +150,7 @@ func populate_project_file_option(option_button: OptionButton,
 	for option_path in options_found:
 		option_button.add_item(option_path.get_file())
 		option_button.set_item_metadata(index, option_path)
+		print (option_path)
 		if option_path == selected_path:
 			option_button.selected = index
 		index += 1
