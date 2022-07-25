@@ -245,8 +245,9 @@ func capture_setting_values() -> Dictionary:
 func load_input_texture(path: String) -> String:
 	var loaded_texture: Texture = load_image_texture(path)
 	if loaded_texture == null:
-		path = generation_data.get_example_path()
-		loaded_texture = load_image_texture(path)
+		if generation_data != null:
+			path = generation_data.get_example_path()
+			loaded_texture = load_image_texture(path)
 	last_input_texture_path = path
 	texture_in.texture = loaded_texture
 	current_texture_basename = path.get_file().split(".")[0]
