@@ -42,9 +42,6 @@ rect_min_size = Vector2( 1366, 768 )
 mouse_filter = 2
 theme = ExtResource( 4 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TileRenderer" parent="." instance=ExtResource( 5 )]
 
