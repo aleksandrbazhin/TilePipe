@@ -5,8 +5,8 @@ import shutil
 from pathlib import Path
 import configparser
 
-GODOT = "Godot_v3.4.2-stable_win64.exe"
-GODOT_FOR_MAC = "Godot_v3.4.2-stable_win64.exe"
+GODOT = "Godot_v3.4.4-stable_win64.exe"
+GODOT_FOR_MAC = "Godot_v3.4.4-stable_win64.exe"
 EXPORT_PATH = "../godot_export/TilePipe"
 WIN_BUILD_PATH = '%s/win' % EXPORT_PATH
 LINUX_BUILD_PATH = '%s/linux' % EXPORT_PATH
