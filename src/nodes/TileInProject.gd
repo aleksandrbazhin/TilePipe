@@ -53,6 +53,8 @@ var tile_row: TreeItem
 var ruleset_row: TreeItem
 var template_row: TreeItem
 
+var output_texture: Texture
+
 onready var tree: Tree = $Tree
 onready var highlight_rect := $ColorRect
 

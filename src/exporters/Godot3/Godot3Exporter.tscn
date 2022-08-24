@@ -377,8 +377,6 @@ rect_min_size = Vector2( 700, 500 )
 popup_exclusive = true
 access = 2
 filters = PoolStringArray( "*.tres ; Godot resouces" )
-current_dir = "/Users/user/Documents/TilePipe"
-current_path = "/Users/user/Documents/TilePipe/"
 
 [node name="TextureFileDialog" type="FileDialog" parent="."]
 margin_right = 315.0
@@ -387,8 +385,6 @@ rect_min_size = Vector2( 700, 500 )
 popup_exclusive = true
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_dir = "/Users/user/Documents/TilePipe"
-current_path = "/Users/user/Documents/TilePipe/"
 
 [node name="ErrorDialog" type="AcceptDialog" parent="."]
 anchor_left = 0.5

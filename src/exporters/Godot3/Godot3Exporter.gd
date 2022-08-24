@@ -69,24 +69,27 @@ func _process(delta):
 	if scroll_deferred:
 		tiles_scroll_container.ensure_control_visible(temp_tile_row)
 		scroll_deferred = false
+#
+#func start_export_dialog(
+#		new_tile_size: Vector2, 
+#		tiles: Dictionary, 
+#		new_tile_base_name: String, 
+#		new_tile_spacing: int, 
+#		texture_image: Image,
+#		smoothing: bool = true):
 
-func start_export_dialog(
-		new_tile_size: Vector2, 
-		tiles: Dictionary, 
-		new_tile_base_name: String, 
-		new_tile_spacing: int, 
-		texture_image: Image,
-		smoothing: bool = true):
-	current_tile_size = new_tile_size
-	current_texture_size = texture_image.get_size()
-	current_tile_spacing = new_tile_spacing
-	current_tile_masks = tiles
-	current_texture_image.copy_from(texture_image)
-	current_smoothing = smoothing
-	autotile_type = Helpers.assume_godot_autotile_type(tiles)
+func start_export_dialog(tile: TileInProject):
+	current_tile_size = tile.output_tile_size
+	current_texture_size = tile.output_texture.get_size()
+	current_tile_spacing = tile.subtile_offset
+	current_tile_masks = tile.result_subtiles_by_bitmask
+	current_texture_image.copy_from(tile.output_texture.get_data())
+	current_smoothing = tile.smoothing
+	autotile_type = Helpers.assume_godot_autotile_type(current_tile_masks)
 	collisions_check.pressed = false
 	collision_dialog.collisions_accepted_by_user = false
-	var generated_tile_name: String = new_tile_base_name + Const.TILE_SAVE_SUFFIX
+	var generated_tile_name: String = \
+		tile.texture_path.get_basename().get_file() + Const.TILE_SAVE_SUFFIX
 	if last_generated_tile_name.empty() or (last_generated_tile_name != generated_tile_name and tile_name.is_valid_filename()):
 		tile_name = generated_tile_name
 		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
@@ -403,7 +406,7 @@ func make_autotile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 		for tile in tile_masks[mask]:
 			var tile_position: Vector2 = tile.position_in_template
 			mask_out_strings.append("Vector2 ( %d, %d )" % [tile_position.x, tile_position.y])
-			var godot_mask: int = Helpers.convert_bitmask_to_godot(tile.mask, new_autotile_type)
+			var godot_mask: int = Helpers.convert_bitmask_to_godot(tile.bitmask, new_autotile_type)
 			mask_out_strings.append(str(godot_mask))
 			if collision_dialog.collisions_accepted_by_user and collisions_check.pressed:
 				if tile_position in collision_shapes_to_id:

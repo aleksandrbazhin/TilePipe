@@ -60,8 +60,6 @@ mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_dir = "/home/alexander/GodotProjects/TilePIpe"
-current_path = "/home/alexander/GodotProjects/TilePIpe/"
 
 [node name="TemplateDialog" type="FileDialog" parent="."]
 margin_left = 7.0
@@ -76,8 +74,6 @@ mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_dir = "/home/alexander/GodotProjects/TilePIpe"
-current_path = "/home/alexander/GodotProjects/TilePIpe/"
 
 [node name="SaveTextureDialog" type="FileDialog" parent="."]
 margin_right = 600.0
@@ -87,8 +83,6 @@ popup_exclusive = true
 window_title = "Save an autotile texture"
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_dir = "/home/alexander/GodotProjects/TilePIpe"
-current_path = "/home/alexander/GodotProjects/TilePIpe/"
 
 [node name="Panel" type="PanelContainer" parent="."]
 anchor_right = 1.0

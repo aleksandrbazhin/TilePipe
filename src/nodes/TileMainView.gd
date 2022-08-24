@@ -74,3 +74,24 @@ func _on_TemplateOptionButton_item_selected(index):
 		template_option.get_item_metadata(index))
 	var tile: TileInProject = State.current_tile_ref.get_ref()
 	template_texture.texture = tile.loaded_template
+
+
+func _on_ExportButton_pressed():
+#	if out_texture.texture == null:
+#		report_error("Error: No generated texture")
+#		return
+#	if not check_template_texture():
+#		report_error("Error: Wrong template texture")
+#		return
+#	var tile_size := Vector2(get_output_tile_size(), get_output_tile_size())
+	var dialog: GodotExporter = preload("res://src/exporters/Godot3/Godot3Exporter.tscn").instance()
+	dialog.connect("popup_hide", dialog, "queue_free")
+	add_child(dialog)
+	dialog.start_export_dialog(State.current_tile_ref.get_ref())
+#	godot_export_dialog.start_export_dialog(
+#		tile_size,
+#		tiles_by_bitmasks,
+#		current_texture_basename,
+#		output_tile_offset,
+#		out_texture.texture.get_data(),
+#		smoothing_check.pressed)

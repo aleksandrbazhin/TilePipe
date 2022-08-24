@@ -188,7 +188,7 @@ rect_min_size = Vector2( 0, 32 )
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="Button" type="Button" parent="ExportContainer"]
+[node name="ExportButton" type="Button" parent="ExportContainer"]
 margin_left = 1082.0
 margin_top = 8.0
 margin_right = 1262.0
@@ -207,3 +207,4 @@ rect_min_size = Vector2( 10, 0 )
 [connection signal="pressed" from="RulesetContainer/RulesetButton" to="." method="_on_RulesetButton_pressed"]
 [connection signal="item_selected" from="TemplateContainer/TemplateOptionButton" to="." method="_on_TemplateOptionButton_item_selected"]
 [connection signal="pressed" from="TemplateContainer/TemplateButton" to="." method="_on_TemplateButton_pressed"]
+[connection signal="pressed" from="ExportContainer/ExportButton" to="." method="_on_ExportButton_pressed"]

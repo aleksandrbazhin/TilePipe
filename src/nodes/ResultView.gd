@@ -10,9 +10,9 @@ onready var result_texture := $VBoxContainer/HSplitContainer/Result/TextureConta
 
 
 func render_from_tile(tile: TileInProject):
-	var tiles_by_bitmasks := tile.result_subtiles_by_bitmask
+	var subtiles_by_bitmasks := tile.result_subtiles_by_bitmask
 	set_output_texture(null)
-	if tiles_by_bitmasks.empty():
+	if subtiles_by_bitmasks.empty():
 		return
 	var out_image := Image.new()
 	var out_image_size: Vector2 = tile.template_size * tile.output_tile_size
@@ -21,9 +21,9 @@ func render_from_tile(tile: TileInProject):
 	var tile_rect := Rect2(Vector2.ZERO, tile.output_tile_size)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image, 0)
-	for mask in tiles_by_bitmasks.keys():
-		for tile_variant_index in range(tiles_by_bitmasks[mask].size()):
-			var subtile: GeneratedSubTile = tiles_by_bitmasks[mask][tile_variant_index]
+	for mask in subtiles_by_bitmasks.keys():
+		for tile_variant_index in range(subtiles_by_bitmasks[mask].size()):
+			var subtile: GeneratedSubTile = subtiles_by_bitmasks[mask][tile_variant_index]
 			var tile_position: Vector2 = subtile.position_in_template * tile.output_tile_size
 			tile_position +=  subtile.position_in_template * tile.subtile_offset
 			if subtile.image == null:
@@ -31,6 +31,7 @@ func render_from_tile(tile: TileInProject):
 			out_image.blit_rect(subtile.image, tile_rect, tile_position)
 			itex.set_data(out_image)
 	set_output_texture(itex)
+	tile.output_texture = itex
 
 
 func set_output_texture(texture: Texture):
@@ -38,6 +39,7 @@ func set_output_texture(texture: Texture):
 	if texture != null:
 		var image_size: Vector2 = result_texture.texture.get_size()
 		result_texture.rect_size = image_size
+	
 #	render_progress_overlay.hide()
 
 
