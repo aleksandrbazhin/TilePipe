@@ -109,11 +109,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/TileRenderer.gd"
 }, {
-"base": "Node",
-"class": "TileRenderer2",
-"language": "GDScript",
-"path": "res://src/TileRenderer2.gd"
-}, {
 "base": "Reference",
 "class": "UISnapshot",
 "language": "GDScript",
@@ -145,7 +140,6 @@ _global_script_class_icons={
 "TileMainView": "",
 "TileMaskPreview": "",
 "TileRenderer": "",
-"TileRenderer2": "",
 "UISnapshot": "",
 "WorkZone": ""
 }
