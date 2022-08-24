@@ -20,8 +20,6 @@ mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.png; Texture PNG" )
-current_dir = "/home/alexander/GodotProjects/TilePIpe"
-current_path = "/home/alexander/GodotProjects/TilePIpe/"
 
 [node name="HeaderContainer" type="HBoxContainer" parent="."]
 margin_right = 1280.0
@@ -510,6 +508,9 @@ text = "Apply"
 [connection signal="tile_size_changed" from="HBox/ScalableTextureContainer" to="." method="_on_ScalableTextureContainer_tile_size_changed"]
 [connection signal="released" from="HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/RateSlider" to="." method="_on_RateSlider_released"]
 [connection signal="released" from="HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSlider" to="." method="_on_OverlapSlider_released"]
+[connection signal="toggled" from="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/RandomCheckButton" to="." method="_on_RandomCheckButton_toggled"]
+[connection signal="text_entered" from="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/SeedLineEdit" to="." method="_on_SeedLineEdit_text_entered"]
+[connection signal="pressed" from="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/SeedButton" to="." method="_on_SeedButton_pressed"]
 [connection signal="toggled" from="HBox/SettingsContainer/ScrollContainer/VBox/Effects/SmoothingContainer/Smoothing" to="." method="_on_Smoothing_toggled"]
 [connection signal="item_selected" from="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/HBoxContainer/SizeOptionButton" to="." method="_on_SizeOptionButton_item_selected"]
 [connection signal="pressed" from="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileOffset/SetOffsetButton" to="." method="_on_SetOffsetButton_pressed"]

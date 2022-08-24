@@ -11,8 +11,8 @@ enum {
 	PARAM_INPUT_SIZE,
 	PARAM_MERGE,
 	PARAM_OVERLAP,
-	PARAM_RANDOM_ENABLED,
-	PARAM_RANDOM_SEED,
+	PARAM_RANDOM_SEED_ENABLED,
+	PARAM_RANDOM_SEED_VALUE,
 	PARAM_SMOOTHING,
 	PARAM_OUTPUT_SIZE,
 	PARAM_SUBTILE_OFFSET
@@ -46,6 +46,8 @@ var subtile_offset: int = 0
 var merge_level := Vector2(0.25, 0.25)
 var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
+var random_seed_enabled := false
+var random_seed_value := 0
 
 var tile_row: TreeItem
 var ruleset_row: TreeItem
@@ -85,6 +87,8 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	merge_level = Vector2(_tile_data["merge_level"], _tile_data["merge_level"])
 	overlap_level = Vector2(_tile_data["overlap_level"], _tile_data["overlap_level"])
 	smoothing = bool(_tile_data["smoothing"])
+	random_seed_enabled = bool(_tile_data["random_seed_enabled"])
+	random_seed_value = int(_tile_data["random_seed_value"])
 	output_tile_size = Vector2(_tile_data["output_tile_size"]["x"], _tile_data["output_tile_size"]["y"])
 	subtile_offset = _tile_data["subtile_offset"]
 	return true
@@ -286,6 +290,18 @@ func set_smoothing(new_smoothig: bool) -> bool:
 	return true
 
 
+func set_random_seed_enabled(new_random_seed_enabled: bool) -> bool:
+	random_seed_enabled = new_random_seed_enabled
+	_tile_data["random_seed_enabled"] = random_seed_enabled
+	return true
+
+
+func set_random_seed_value(new_seed: int) -> bool:
+	random_seed_value = new_seed
+	_tile_data["random_seed_value"] = random_seed_value
+	return true
+
+
 func set_output_tile_size(size_key: int) -> bool:
 	if size_key == Const.NO_SCALING :
 		output_tile_size = input_tile_size
@@ -317,12 +333,12 @@ func set_param(param_key: int, value) -> bool:
 			return set_merge_level(value)
 		PARAM_OVERLAP:
 			return set_overlap_level(value)
-		PARAM_RANDOM_ENABLED:
-			return false
-		PARAM_RANDOM_SEED:
-			return false
 		PARAM_SMOOTHING:
 			return set_smoothing(value)
+		PARAM_RANDOM_SEED_ENABLED:
+			return set_random_seed_enabled(value)
+		PARAM_RANDOM_SEED_VALUE:
+			return set_random_seed_value(value)
 		PARAM_OUTPUT_SIZE:
 			return set_output_tile_size(value)
 		PARAM_SUBTILE_OFFSET:

@@ -8,7 +8,7 @@
 	},
 	"merge_level": 0.1875,
 	"overlap_level": 0.25,
-	"random_enabled": false,
+	"random_seed_enabled": false,
 	"random_seed_value": 0,
 	"smoothing": false,
 	"output_tile_size": {

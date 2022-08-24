@@ -51,34 +51,7 @@ func on_tile_selected(tile: TileInProject, row: TreeItem):
 func render_subtiles():
 	var tile: TileInProject = State.current_tile_ref.get_ref()
 	var input_image: Image = tile.loaded_texture.get_data()
-	
-#	var parts_in_ruleset := int(tile.loaded_ruleset.get_parts().size())
-#	var min_input_tiles := Vector2(, 1)
-#	var old_style_input_tile_size: int = int(input_image.get_size().x / min_input_tiles.x)
-#	var input_tile_size := Vector2(old_style_input_tile_size, old_style_input_tile_size)
-#	var old_style_ouput_tile_size := get_output_tile_size()
-#	var output_tile_size := Vector2(old_style_ouput_tile_size, old_style_ouput_tile_size)
-#	var input_tile_size := tile.input_tile_size
-#	var output_tile_size := Vector2(64, 64)
-#	var merge_rate: float = overlay_merge_rate_slider.value
-#	var overlap_rate: float = overlay_overlap_slider.value
-#
-#	if rand_seed_check.pressed:
-#		var random_seed_int: int = int(rand_seed_value.text)
-#		var random_seed = rand_seed(random_seed_int)
-#		rng.seed = random_seed[1]
-#
-#	renderer.start_render(tile.loaded_ruleset, input_tile_size, output_tile_size,
-#		input_image, tile.result_subtiles_by_bitmask, tile.smoothing,
-#		tile.merge_level.x, tile.overlap_level.x)
-
-#
 	renderer.start_render(tile, input_image)
-#	if not renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
-#		renderer.connect("tiles_ready", self, "on_tiles_rendered")
-		
-		
-#		renderer.connect("report_progress", self, "update_progress")
 #	update_progress(0)
 #	render_progress_overlay.show()
 

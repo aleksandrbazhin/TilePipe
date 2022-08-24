@@ -2,7 +2,6 @@ extends Node
 
 class_name TileRenderer
 
-
 signal tiles_ready()
 signal report_progress(progress)
 
@@ -17,11 +16,11 @@ var template
 var ruleset: Ruleset
 var input_tile_size := Vector2.ZERO
 var output_tile_size := Vector2.ZERO
-var rng: RandomNumberGenerator
+var rng := RandomNumberGenerator.new()
 var smoothing_enabled := false
 var ready = false
 var last_mask := -1
-# subtiles[mask] = [random_variant1, random_variant2, ...]
+# subtiles[mask] = [random_variant1: Image, random_variant2: Image, ...]
 var subtiles := {} 
 
 
@@ -49,14 +48,21 @@ func init_render_pool():
 		add_child(viewport)
 
 
-func start_render(tile: TileInProject, input_image: Image, active_rng: RandomNumberGenerator = RandomNumberGenerator.new()):
+func start_render(tile: TileInProject, input_image: Image):
 	subtiles = tile.result_subtiles_by_bitmask
 	ruleset = tile.loaded_ruleset
 	input_tile_size = tile.input_tile_size
 	output_tile_size = tile.output_tile_size
 	input_tile_parts = split_input_into_tile_parts(input_image)
 	smoothing_enabled = tile.smoothing
-	rng = active_rng
+	
+	if tile.random_seed_enabled:
+		rng.seed = tile.random_seed_value
+	else:
+		rng.randomize()
+	
+	
+
 	last_mask = subtiles.keys()[0]
 	for bitmask in subtiles:
 		for subtile in subtiles[bitmask]:
@@ -95,7 +101,7 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 	return parts
 
 
-func setup_tile_render(bitmask: int, viewport: Viewport):
+func setup_subtile_render(bitmask: int, viewport: Viewport):
 #	var part_types := ruleset.get_parts()
 #	var overlap_vectors: Array = ruleset.get_overlap_vectors()
 	
@@ -155,7 +161,7 @@ func render_next_batch():
 		if subtile != null:
 			last_mask = subtile.bitmask
 			subtile.is_rendering = true
-			setup_tile_render(subtile.bitmask, viewport)
+			setup_subtile_render(subtile.bitmask, viewport)
 			viewport.set_meta("subtile", subtile)
 		else:
 			viewport.remove_meta("subtile")
