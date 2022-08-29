@@ -37,7 +37,7 @@ func load_data(tile: TileInProject):
 	if current_texture_path != "":
 		load_texture(tile.loaded_texture)
 	output_tile_size_option.selected = Helpers.get_closest_output_size_key(tile.output_tile_size)
-	subtile_offset.value = tile.subtile_offset
+	subtile_offset.value = tile.subtile_offset.x
 	smoothing_enabled.pressed = tile.smoothing
 	random_ssed_enabled.pressed = tile.random_seed_enabled
 	random_seed_edit.text = str(tile.random_seed_value)
@@ -73,7 +73,7 @@ func _on_AddTextureFileDialog_popup_hide():
 
 
 func _on_AddTextureFileDialog_file_selected(path: String):
-	var new_texture_path := State.current_dir + "/" + path.get_file()
+	var new_texture_path: String = State.current_dir + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_texture_path)
 	if error != OK:
@@ -118,7 +118,8 @@ func _on_SizeOptionButton_item_selected(index: int):
 
 func _on_SetOffsetButton_pressed():
 	var offset := int(subtile_offset.value)
-	State.update_tile_param(TileInProject.PARAM_SUBTILE_OFFSET, offset)
+	var offset_vec := Vector2(offset, offset)
+	State.update_tile_param(TileInProject.PARAM_SUBTILE_OFFSET, offset_vec)
 
 
 func _on_RandomCheckButton_toggled(button_pressed: bool):

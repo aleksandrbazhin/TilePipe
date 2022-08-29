@@ -81,7 +81,7 @@ func _process(delta):
 func start_export_dialog(tile: TileInProject):
 	current_tile_size = tile.output_tile_size
 	current_texture_size = tile.output_texture.get_size()
-	current_tile_spacing = tile.subtile_offset
+	current_tile_spacing = int(tile.subtile_offset.x)
 	current_tile_masks = tile.result_subtiles_by_bitmask
 	current_texture_image.copy_from(tile.output_texture.get_data())
 	current_smoothing = tile.smoothing
@@ -571,7 +571,7 @@ func clear_file_path(path: String) -> String:
 		return Helpers.get_default_dir_path()
 
 
-func load_defaults_from_settings(data: Dictionary):
+func load_settings(data: Dictionary):
 	resource_path = Helpers.clear_path(data["godot_export_resource_path"])
 	texture_path = Helpers.clear_path(data["godot_export_texture_path"])
 	tile_name = data["godot_export_tile_name"]

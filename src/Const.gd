@@ -83,8 +83,11 @@ const OUTPUT_TILE_SIZE_OPTIONS: Dictionary = {
 	128: "128x128"
 }
 
-
-
+enum EXPORT_TYPES {TEXTURE, GODOT3}
+const EXPORT_TYPE_EXTENSIONS := {
+	"png": EXPORT_TYPES.TEXTURE,
+	"tres": EXPORT_TYPES.GODOT3
+}
 
 
 

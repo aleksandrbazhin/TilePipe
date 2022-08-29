@@ -6,8 +6,14 @@
 		"x": 16,
 		"y": 16
 	},
-	"merge_level": 0.1875,
-	"overlap_level": 0.25,
+	"merge_level": {
+		"x": 0.25,
+		"y": 0.25
+	},
+	"overlap_level": {
+		"x": 0.25,
+		"y": 0.25
+	},
 	"random_seed_enabled": false,
 	"random_seed_value": 0,
 	"smoothing": false,
@@ -15,5 +21,8 @@
 		"x": 64,
 		"y": 64
 	},
-	"subtile_offset": 0
+	"subtile_offset": {
+		"x": 0,
+		"y": 0
+	}
 }

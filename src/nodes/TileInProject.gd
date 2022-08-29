@@ -15,7 +15,8 @@ enum {
 	PARAM_RANDOM_SEED_VALUE,
 	PARAM_SMOOTHING,
 	PARAM_OUTPUT_SIZE,
-	PARAM_SUBTILE_OFFSET
+	PARAM_SUBTILE_OFFSET,
+	PARAM_EXPORT_PATH
 }
 
 const HEIGHT_EXPANDED := 120
@@ -42,12 +43,13 @@ var template_path: String
 var ruleset_path: String
 var input_tile_size: Vector2
 var output_tile_size: Vector2 = Vector2(64,64)
-var subtile_offset: int = 0
+var subtile_offset := Vector2.ZERO
 var merge_level := Vector2(0.25, 0.25)
 var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
+var export_path: String
 
 var tile_row: TreeItem
 var ruleset_row: TreeItem
@@ -63,6 +65,26 @@ func _ready():
 	if is_loaded:
 		create_tree_items()
 		rect_min_size.y = HEIGHT_EXPANDED
+
+# the purpose of this is to be able to add new parameters to .tptile in the future
+# this way the program will still work, and will update the .tptile with defaults
+func set_param(param_name: String, settings_param_name: String, default_value):
+	if settings_param_name in _tile_data:
+		match typeof(get(param_name)):
+			TYPE_VECTOR2:
+				set(param_name, Vector2(_tile_data[settings_param_name]["x"],
+										_tile_data[settings_param_name]["y"]))
+			TYPE_INT:
+				set(param_name, int(_tile_data[settings_param_name]))
+			TYPE_BOOL:
+				set(param_name, bool(_tile_data[settings_param_name]))
+			TYPE_STRING:
+				set(param_name, _tile_data[settings_param_name])
+	else:
+		if typeof(get(param_name)) == typeof(default_value):
+			set(param_name, default_value)
+		else:
+			print("Error: setting parameter with wrong default")
 
 
 func load_tile(directory: String, tile_file: String) -> bool:
@@ -80,19 +102,28 @@ func load_tile(directory: String, tile_file: String) -> bool:
 		return false
 	_tile_data = parsed_data
 	is_loaded = true
-	input_tile_size = Vector2(_tile_data["input_tile_size"]["x"], _tile_data["input_tile_size"]["y"])
+#	input_tile_size = Vector2(_tile_data["input_tile_size"]["x"], _tile_data["input_tile_size"]["y"])
 	if not load_texture(_tile_data["texture"]) or \
 			not load_ruleset(_tile_data["ruleset"]) or \
 			not load_template(_tile_data["template"]):
 		block_failed_tile()
 		return false
-	merge_level = Vector2(_tile_data["merge_level"], _tile_data["merge_level"])
-	overlap_level = Vector2(_tile_data["overlap_level"], _tile_data["overlap_level"])
-	smoothing = bool(_tile_data["smoothing"])
-	random_seed_enabled = bool(_tile_data["random_seed_enabled"])
-	random_seed_value = int(_tile_data["random_seed_value"])
-	output_tile_size = Vector2(_tile_data["output_tile_size"]["x"], _tile_data["output_tile_size"]["y"])
-	subtile_offset = _tile_data["subtile_offset"]
+	set_param("input_tile_size", "input_tile_size", Vector2(64, 64))		
+	set_param("merge_level", "merge_level", Vector2(0.25, 0.25))
+	set_param("overlap_level", "overlap_level", Vector2(0.25, 0.25))
+	set_param("smoothing", "smoothing", false)
+	set_param("random_seed_enabled", "random_seed_enabled", false)
+	set_param("output_tile_size", "output_tile_size", Vector2.ZERO)
+	set_param("subtile_offset", "subtile_offset", Vector2.ZERO)
+	set_param("export_path", "export_path", "")
+#	merge_level = Vector2(_tile_data["merge_level"]["x"], _tile_data["merge_level"]["y"])
+#	overlap_level = Vector2(_tile_data["overlap_level"]["x"], _tile_data["overlap_level"]["y"])
+#	smoothing = bool(_tile_data["smoothing"])
+#	random_seed_enabled = bool(_tile_data["random_seed_enabled"])
+#	random_seed_value = int(_tile_data["random_seed_value"])
+#	output_tile_size = Vector2(_tile_data["output_tile_size"]["x"], _tile_data["output_tile_size"]["y"])
+#	subtile_offset = _tile_data["subtile_offset"]
+#	export_path = _tile_data["export_path"]
 	return true
 
 
@@ -238,7 +269,7 @@ func _on_Tree_item_collapsed(item: TreeItem):
 		rect_min_size.y = HEIGHT_EXPANDED
 
 
-func set_texture(abs_path: String) -> bool:
+func update_texture(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
 	if not load_texture(rel_path):
 		return false
@@ -246,7 +277,7 @@ func set_texture(abs_path: String) -> bool:
 	return true
 
 
-func set_ruleset(abs_path: String) -> bool:
+func update_ruleset(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
 	if not load_ruleset(rel_path):
 		return false
@@ -255,7 +286,7 @@ func set_ruleset(abs_path: String) -> bool:
 	return true
 
 
-func set_template(abs_path: String) -> bool:
+func update_template(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
 	if not load_template(rel_path):
 		return false
@@ -264,7 +295,7 @@ func set_template(abs_path: String) -> bool:
 	return true
 
 
-func set_input_tile_size(new_size: Vector2) -> bool:
+func update_input_tile_size(new_size: Vector2) -> bool:
 	if new_size != input_tile_size and (new_size.x > 0 and new_size.y > 0):
 		input_tile_size = new_size
 		_tile_data["input_tile_size"] = {
@@ -274,37 +305,37 @@ func set_input_tile_size(new_size: Vector2) -> bool:
 	return true
 
 
-func set_merge_level(new_merge_level: Vector2) -> bool:
+func update_merge_level(new_merge_level: Vector2) -> bool:
 	merge_level = new_merge_level
 	_tile_data["merge_level"] = merge_level.x
 	return true
 
 
-func set_overlap_level(new_overlap_level: Vector2) -> bool:
+func update_overlap_level(new_overlap_level: Vector2) -> bool:
 	overlap_level = new_overlap_level
 	_tile_data["overlap_level"] = overlap_level.x
 	return true
 
 
-func set_smoothing(new_smoothig: bool) -> bool:
+func update_smoothing(new_smoothig: bool) -> bool:
 	smoothing = new_smoothig
 	_tile_data["smoothing"] = smoothing
 	return true
 
 
-func set_random_seed_enabled(new_random_seed_enabled: bool) -> bool:
+func update_random_seed_enabled(new_random_seed_enabled: bool) -> bool:
 	random_seed_enabled = new_random_seed_enabled
 	_tile_data["random_seed_enabled"] = random_seed_enabled
 	return true
 
 
-func set_random_seed_value(new_seed: int) -> bool:
+func update_random_seed_value(new_seed: int) -> bool:
 	random_seed_value = new_seed
 	_tile_data["random_seed_value"] = random_seed_value
 	return true
 
 
-func set_output_tile_size(size_key: int) -> bool:
+func update_output_tile_size(size_key: int) -> bool:
 	if size_key == Const.NO_SCALING :
 		output_tile_size = input_tile_size
 	else:
@@ -315,36 +346,48 @@ func set_output_tile_size(size_key: int) -> bool:
 	return true
 
 
-func set_subtile_offset(new_offset: int) -> bool:
+func update_subtile_offset(new_offset: Vector2) -> bool:
 	subtile_offset = new_offset
-	_tile_data["subtile_offset"] = subtile_offset
+	_tile_data["subtile_offset"] = {
+		"x": subtile_offset.x,
+		"y": subtile_offset.y
+	}
+#	_tile_data["subtile_offset"] = subtile_offset
 	return true
 
 
-func set_param(param_key: int, value) -> bool:
+func update_export_path(new_path: String) -> bool:
+	export_path = new_path
+	_tile_data["export_path"] = export_path
+	return true
+
+
+func update_param(param_key: int, value) -> bool:
 	match param_key:
 		PARAM_TEXTURE:
-			return set_texture(value)
+			return update_texture(value)
 		PARAM_RULESET:
-			return set_ruleset(value)
+			return update_ruleset(value)
 		PARAM_TEMPLATE:
-			return set_template(value)
+			return update_template(value)
 		PARAM_INPUT_SIZE:
-			return set_input_tile_size(value)
+			return update_input_tile_size(value)
 		PARAM_MERGE:
-			return set_merge_level(value)
+			return update_merge_level(value)
 		PARAM_OVERLAP:
-			return set_overlap_level(value)
+			return update_overlap_level(value)
 		PARAM_SMOOTHING:
-			return set_smoothing(value)
+			return update_smoothing(value)
 		PARAM_RANDOM_SEED_ENABLED:
-			return set_random_seed_enabled(value)
+			return update_random_seed_enabled(value)
 		PARAM_RANDOM_SEED_VALUE:
-			return set_random_seed_value(value)
+			return update_random_seed_value(value)
 		PARAM_OUTPUT_SIZE:
-			return set_output_tile_size(value)
+			return update_output_tile_size(value)
 		PARAM_SUBTILE_OFFSET:
-			return set_subtile_offset(value)
+			return update_subtile_offset(value)
+		PARAM_EXPORT_PATH:
+			return update_export_path(value)
 	return false
 
 
