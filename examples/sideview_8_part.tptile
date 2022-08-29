@@ -25,5 +25,8 @@
 		"x": 3,
 		"y": 3
 	},
-	"export_path": ""
+	"export_png_path": "",
+	"export_godot3_resource_path": "",
+	"export_godot3_autotile_type": "",
+	"export_godot3_tile_name": ""
 }

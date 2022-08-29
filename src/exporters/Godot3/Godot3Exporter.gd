@@ -69,14 +69,7 @@ func _process(delta):
 	if scroll_deferred:
 		tiles_scroll_container.ensure_control_visible(temp_tile_row)
 		scroll_deferred = false
-#
-#func start_export_dialog(
-#		new_tile_size: Vector2, 
-#		tiles: Dictionary, 
-#		new_tile_base_name: String, 
-#		new_tile_spacing: int, 
-#		texture_image: Image,
-#		smoothing: bool = true):
+
 
 func start_export_dialog(tile: TileInProject):
 	current_tile_size = tile.output_tile_size
@@ -85,7 +78,16 @@ func start_export_dialog(tile: TileInProject):
 	current_tile_masks = tile.result_subtiles_by_bitmask
 	current_texture_image.copy_from(tile.output_texture.get_data())
 	current_smoothing = tile.smoothing
-	autotile_type = Helpers.assume_godot_autotile_type(current_tile_masks)
+	
+	resource_path = Helpers.clear_path(tile.export_godot3_resource_path)
+	texture_path = Helpers.clear_path(tile.export_png_path)
+	tile_name = tile.export_godot3_tile_name
+	autotile_type = tile.export_godot3_autotile_type
+	if autotile_type == Const.GODOT3_UNKNOWN_AUTOTILE_TYPE:
+		autotile_type = Helpers.assume_godot_autotile_type(current_tile_masks)
+
+#	last_generated_tile_name = data["godot_export_last_generated_tile_name"]
+	
 	collisions_check.pressed = false
 	collision_dialog.collisions_accepted_by_user = false
 	var generated_tile_name: String = \
@@ -94,7 +96,9 @@ func start_export_dialog(tile: TileInProject):
 		tile_name = generated_tile_name
 		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
 		last_generated_tile_name = generated_tile_name
-		save_settings()
+		State.update_tile_param(TileInProject.PARAM_EXPORT_PNG_PATH, texture_path)
+		State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
+#		save_settings()
 	set_lineedit_text(tile_name_edit, tile_name)
 	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)
@@ -571,12 +575,12 @@ func clear_file_path(path: String) -> String:
 		return Helpers.get_default_dir_path()
 
 
-func load_settings(data: Dictionary):
-	resource_path = Helpers.clear_path(data["godot_export_resource_path"])
-	texture_path = Helpers.clear_path(data["godot_export_texture_path"])
-	tile_name = data["godot_export_tile_name"]
-	last_generated_tile_name = data["godot_export_last_generated_tile_name"]
-	autotile_type = data["godot_autotile_type"]
+#func load_settings(data: Dictionary):
+#	resource_path = Helpers.clear_path(data["godot_export_resource_path"])
+#	texture_path = Helpers.clear_path(data["godot_export_texture_path"])
+#	tile_name = data["godot_export_tile_name"]
+#	last_generated_tile_name = data["godot_export_last_generated_tile_name"]
+#	autotile_type = data["godot_autotile_type"]
 
 
 func cancel_action():
@@ -653,7 +657,8 @@ func _on_ResourceFileDialog_file_selected(path: String):
 #		else:
 #			set_texture_path(resource_path.get_base_dir(), texture_path)
 		load_tileset(resource_path)
-		save_settings()
+		State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_RESOURCE_PATH, resource_path)
+#		save_settings()
 	else:
 		report_error_inside_dialog("Error: Invalid tileset path. \n\nGodot tileset file path should be: \n 1. a valid path  \n 2. inside any Godot projects tree")
 
@@ -666,20 +671,23 @@ func _on_LineEditName_text_changed(new_text):
 	tile_name = new_text
 	temp_tile_row.set_tile_name(new_text)
 	check_existing_for_matches()
-	save_settings()
+	State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
+#	save_settings()
 
 
 func _on_OptionButton_item_selected(index):
 	autotile_type = index
 	temp_tile_row.set_tile_mode(TileSet.AUTO_TILE, autotile_type)
-	save_settings()
+	State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE, autotile_type)
+#	save_settings()
 
 
 func _on_TextureFileDialog_file_selected(path: String):
 	if is_a_valid_texture_path(path, resource_path):
 		set_texture_path(path.get_base_dir(), path.get_basename().get_file())
 		check_existing_for_matches()
-		save_settings()
+		State.update_tile_param(TileInProject.PARAM_EXPORT_PNG_PATH, path)
+#		save_settings()
 
 
 func _on_ButtonCancel_pressed():
@@ -689,7 +697,10 @@ func _on_ButtonCancel_pressed():
 func save_all_and_exit():
 	current_texture_image.save_png(texture_path)
 	if save_tileset_resource():
-		save_settings()
+		State.update_tile_param(TileInProject.PARAM_EXPORT_PNG_PATH, texture_path)
+		State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_RESOURCE_PATH, resource_path)
+		State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE, autotile_type)
+		State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
 		hide()
 
 

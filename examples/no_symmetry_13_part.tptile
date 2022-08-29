@@ -24,5 +24,9 @@
 	"subtile_offset": {
 		"x": 0,
 		"y": 0
-	}
+	},
+	"export_png_path": "/home/alexander/GodotProjects/3dtests/no_symmetry_pixelart_13_part_generated.png",
+	"export_godot3_tile_name": "no_symmetry_pixelart_13_part_generated",
+	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/test.tres",
+	"export_godot3_autotile_type": 0
 }

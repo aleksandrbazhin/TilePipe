@@ -16,14 +16,19 @@ enum {
 	PARAM_SMOOTHING,
 	PARAM_OUTPUT_SIZE,
 	PARAM_SUBTILE_OFFSET,
-	PARAM_EXPORT_PATH
+	PARAM_EXPORT_PNG_PATH,
+	PARAM_EXPORT_GODOT3_RESOURCE_PATH,
+	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE,
+	PARAM_EXPORT_GODOT3_TILE_NAME,
 }
+
 
 const HEIGHT_EXPANDED := 120
 const HEIGHT_COLLAPSED := 50
 const RULESET_PREFIX := "Ruleset: "
 const TEXTURE_PREFIX := "Texture: "
 const TEMPLATE_PREFIX := "Template: "
+
 
 var is_loaded := false
 var _tile_data: Dictionary
@@ -49,7 +54,12 @@ var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
-var export_path: String
+
+var export_png_path: String
+var export_godot3_resource_path: String
+var export_godot3_autotile_type: int
+var export_godot3_tile_name: String
+
 
 var tile_row: TreeItem
 var ruleset_row: TreeItem
@@ -69,6 +79,9 @@ func _ready():
 # the purpose of this is to be able to add new parameters to .tptile in the future
 # this way the program will still work, and will update the .tptile with defaults
 func set_param(param_name: String, settings_param_name: String, default_value):
+	if get(param_name) == null:
+		print("Error: unknown tile parameter: ", param_name)
+		return
 	if settings_param_name in _tile_data:
 		match typeof(get(param_name)):
 			TYPE_VECTOR2:
@@ -84,7 +97,7 @@ func set_param(param_name: String, settings_param_name: String, default_value):
 		if typeof(get(param_name)) == typeof(default_value):
 			set(param_name, default_value)
 		else:
-			print("Error: setting parameter with wrong default")
+			print("Error: setting parameter with default of wrong type")
 
 
 func load_tile(directory: String, tile_file: String) -> bool:
@@ -102,7 +115,6 @@ func load_tile(directory: String, tile_file: String) -> bool:
 		return false
 	_tile_data = parsed_data
 	is_loaded = true
-#	input_tile_size = Vector2(_tile_data["input_tile_size"]["x"], _tile_data["input_tile_size"]["y"])
 	if not load_texture(_tile_data["texture"]) or \
 			not load_ruleset(_tile_data["ruleset"]) or \
 			not load_template(_tile_data["template"]):
@@ -115,15 +127,11 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	set_param("random_seed_enabled", "random_seed_enabled", false)
 	set_param("output_tile_size", "output_tile_size", Vector2.ZERO)
 	set_param("subtile_offset", "subtile_offset", Vector2.ZERO)
-	set_param("export_path", "export_path", "")
-#	merge_level = Vector2(_tile_data["merge_level"]["x"], _tile_data["merge_level"]["y"])
-#	overlap_level = Vector2(_tile_data["overlap_level"]["x"], _tile_data["overlap_level"]["y"])
-#	smoothing = bool(_tile_data["smoothing"])
-#	random_seed_enabled = bool(_tile_data["random_seed_enabled"])
-#	random_seed_value = int(_tile_data["random_seed_value"])
-#	output_tile_size = Vector2(_tile_data["output_tile_size"]["x"], _tile_data["output_tile_size"]["y"])
-#	subtile_offset = _tile_data["subtile_offset"]
-#	export_path = _tile_data["export_path"]
+	
+	set_param("export_png_path", "export_png_path", "")
+	set_param("export_godot3_resource_path", "export_godot3_resource_path", "")
+	set_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
+	set_param("export_godot3_tile_name", "export_godot3_tile_name", "")
 	return true
 
 
@@ -356,9 +364,27 @@ func update_subtile_offset(new_offset: Vector2) -> bool:
 	return true
 
 
-func update_export_path(new_path: String) -> bool:
-	export_path = new_path
-	_tile_data["export_path"] = export_path
+func update_export_png_path(new_path: String) -> bool:
+	export_png_path = new_path
+	_tile_data["export_png_path"] = export_png_path
+	return true
+
+
+func update_export_godot3_resource_path(new_path: String) -> bool:
+	export_godot3_resource_path = new_path
+	_tile_data["export_godot3_resource_path"] = export_godot3_resource_path
+	return true
+
+
+func update_export_godot3_autotile_type(new_type: int) -> bool:
+	export_godot3_autotile_type = new_type
+	_tile_data["export_godot3_autotile_type"] = export_godot3_autotile_type
+	return true
+
+
+func update_export_godot3_tile_name(new_name: String) -> bool:
+	export_godot3_tile_name = new_name
+	_tile_data["export_godot3_tile_name"] = export_godot3_tile_name
 	return true
 
 
@@ -386,8 +412,14 @@ func update_param(param_key: int, value) -> bool:
 			return update_output_tile_size(value)
 		PARAM_SUBTILE_OFFSET:
 			return update_subtile_offset(value)
-		PARAM_EXPORT_PATH:
-			return update_export_path(value)
+		PARAM_EXPORT_PNG_PATH:
+			return update_export_png_path(value)
+		PARAM_EXPORT_GODOT3_RESOURCE_PATH:
+			return update_export_godot3_resource_path(value)
+		PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE:
+			return update_export_godot3_autotile_type(value)
+		PARAM_EXPORT_GODOT3_TILE_NAME:
+			return update_export_godot3_tile_name(value)
 	return false
 
 

@@ -9,6 +9,7 @@
 [ext_resource path="res://src/exporters/Godot3/GodotExistingTileRow.tscn" type="PackedScene" id=7]
 
 [node name="GodotExportDialog" type="PopupDialog"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -266.0
