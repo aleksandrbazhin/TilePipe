@@ -8,7 +8,7 @@
 [ext_resource path="res://src/exporters/CollisionGenerator.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/exporters/Godot3/GodotExistingTileRow.tscn" type="PackedScene" id=7]
 
-[node name="GodotExportDialog" type="PopupDialog"]
+[node name="Godot3ExportDialog" type="WindowDialog"]
 visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,10 +17,8 @@ margin_bottom = -168.0
 rect_min_size = Vector2( 0, 650 )
 theme = ExtResource( 1 )
 popup_exclusive = true
+window_title = "Godor resource exporter"
 script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBox" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -34,6 +32,7 @@ __meta__ = {
 }
 
 [node name="Header" type="Label" parent="VBox"]
+visible = false
 margin_right = 1032.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 0, 48 )
@@ -48,9 +47,8 @@ __meta__ = {
 }
 
 [node name="HBoxTileset" type="HBoxContainer" parent="VBox"]
-margin_top = 48.0
 margin_right = 1032.0
-margin_bottom = 92.0
+margin_bottom = 44.0
 custom_constants/separation = 8
 
 [node name="Control" type="Control" parent="VBox/HBoxTileset"]
@@ -78,6 +76,8 @@ size_flags_horizontal = 3
 align = 3
 editable = false
 placeholder_text = ".tres"
+caret_blink = true
+caret_blink_speed = 0.5
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -106,22 +106,22 @@ hint_tooltip = "Override the new 1-tile tileset over the existing one or add a t
 text = "Override completely"
 
 [node name="Spacer" type="Control" parent="VBox"]
-margin_top = 92.0
+margin_top = 44.0
 margin_right = 1032.0
-margin_bottom = 108.0
+margin_bottom = 60.0
 rect_min_size = Vector2( 0, 16 )
 
 [node name="TilesLabel" type="Label" parent="VBox"]
-margin_top = 108.0
+margin_top = 60.0
 margin_right = 1032.0
-margin_bottom = 128.0
+margin_bottom = 80.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_vertical = 1
 text = "Select tileset to edit tiles ↑"
 valign = 1
 
 [node name="TilesPanelContainer" type="PanelContainer" parent="VBox"]
-margin_top = 128.0
+margin_top = 80.0
 margin_right = 1032.0
 margin_bottom = 570.0
 rect_min_size = Vector2( 0, 48 )
@@ -129,7 +129,7 @@ size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="VBox/TilesPanelContainer"]
 margin_right = 1032.0
-margin_bottom = 442.0
+margin_bottom = 490.0
 custom_constants/separation = 8
 
 [node name="Control" type="Control" parent="VBox/TilesPanelContainer/VBox"]
@@ -151,6 +151,8 @@ margin_bottom = 44.0
 rect_min_size = Vector2( 180, 0 )
 hint_tooltip = "Tile name"
 placeholder_text = "Tile name"
+caret_blink = true
+caret_blink_speed = 0.5
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -170,14 +172,14 @@ text = "Mode:"
 
 [node name="OptionButton" type="OptionButton" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
 margin_left = 261.0
-margin_right = 381.0
+margin_right = 393.0
 margin_bottom = 44.0
-rect_min_size = Vector2( 120, 32 )
+rect_min_size = Vector2( 132, 32 )
 text = "3x3 minimal"
 
 [node name="Label" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 389.0
-margin_right = 521.0
+margin_left = 401.0
+margin_right = 533.0
 margin_bottom = 44.0
 rect_min_size = Vector2( 132, 40 )
 size_flags_vertical = 3
@@ -186,14 +188,15 @@ align = 2
 valign = 1
 
 [node name="LineEditTexture" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 529.0
+margin_left = 541.0
 margin_right = 728.0
 margin_bottom = 44.0
 hint_tooltip = "Texture file"
 size_flags_horizontal = 3
-align = 2
 editable = false
 placeholder_text = ".png"
+caret_blink = true
+caret_blink_speed = 0.5
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -242,9 +245,6 @@ color = Color( 0.45098, 0.45098, 0.454902, 1 )
 [node name="HBoxContainer" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox/TableHeaderRect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="VBox/TilesPanelContainer/VBox/TableHeaderRect/HBoxContainer"]
 margin_top = 2.0
@@ -299,6 +299,7 @@ margin_top = 116.0
 margin_right = 1032.0
 margin_bottom = 442.0
 rect_min_size = Vector2( 0, 326 )
+size_flags_horizontal = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxExistiingTiles" type="VBoxContainer" parent="VBox/TilesPanelContainer/VBox/ScrollContainer"]

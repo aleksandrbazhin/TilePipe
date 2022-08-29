@@ -1,8 +1,8 @@
-extends PopupDialog
+extends WindowDialog
 
 class_name GodotExporter
 
-signal settings_saved()
+#signal settings_saved()
 
 const DEFAULT_TILES_LABEL: String = "Select tileset to edit tiles ↑"
 
@@ -600,10 +600,10 @@ func cancel_action():
 func report_error_inside_dialog(text: String):
 	error_dialog.dialog_text = text
 	error_dialog.popup_centered()
-
-
-func save_settings():
-	emit_signal("settings_saved")
+#
+#
+#func save_settings():
+#	emit_signal("settings_saved")
 
 
 func _on_SelectResourceButton_pressed():

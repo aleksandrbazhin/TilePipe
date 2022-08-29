@@ -16,6 +16,7 @@ enum {
 	PARAM_SMOOTHING,
 	PARAM_OUTPUT_SIZE,
 	PARAM_SUBTILE_OFFSET,
+	PARAM_EXPORT_TYPE,
 	PARAM_EXPORT_PNG_PATH,
 	PARAM_EXPORT_GODOT3_RESOURCE_PATH,
 	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE,
@@ -54,10 +55,10 @@ var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
-
+var export_type: int = Const.EXPORT_TYPE_UKNOWN
 var export_png_path: String
 var export_godot3_resource_path: String
-var export_godot3_autotile_type: int
+var export_godot3_autotile_type: int = Const.GODOT3_UNKNOWN_AUTOTILE_TYPE
 var export_godot3_tile_name: String
 
 
@@ -127,7 +128,7 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	set_param("random_seed_enabled", "random_seed_enabled", false)
 	set_param("output_tile_size", "output_tile_size", Vector2.ZERO)
 	set_param("subtile_offset", "subtile_offset", Vector2.ZERO)
-	
+	set_param("export_type", "export_type", Const.EXPORT_TYPE_UKNOWN)
 	set_param("export_png_path", "export_png_path", "")
 	set_param("export_godot3_resource_path", "export_godot3_resource_path", "")
 	set_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
@@ -315,13 +316,19 @@ func update_input_tile_size(new_size: Vector2) -> bool:
 
 func update_merge_level(new_merge_level: Vector2) -> bool:
 	merge_level = new_merge_level
-	_tile_data["merge_level"] = merge_level.x
+	_tile_data["merge_level"] = {
+		"x": new_merge_level.x,
+		"y": new_merge_level.y
+	}
 	return true
 
 
 func update_overlap_level(new_overlap_level: Vector2) -> bool:
 	overlap_level = new_overlap_level
-	_tile_data["overlap_level"] = overlap_level.x
+	_tile_data["overlap_level"] = {
+		"x": overlap_level.x,
+		"y": overlap_level.y
+	}
 	return true
 
 
@@ -349,8 +356,10 @@ func update_output_tile_size(size_key: int) -> bool:
 	else:
 		var size_x: int = Const.OUTPUT_TILE_SIZE_OPTIONS.keys()[size_key]
 		output_tile_size = Vector2(size_x, size_x)
-		_tile_data["output_tile_size"]["x"] = size_x
-		_tile_data["output_tile_size"]["y"] = size_x
+		_tile_data["output_tile_size"] = {
+			"x": size_x,
+			"y": size_x,
+		}
 	return true
 
 
@@ -388,6 +397,12 @@ func update_export_godot3_tile_name(new_name: String) -> bool:
 	return true
 
 
+func update_export_type(new_type: int) -> bool:
+	export_type = new_type
+	_tile_data["export_type"] = export_type
+	return true
+
+
 func update_param(param_key: int, value) -> bool:
 	match param_key:
 		PARAM_TEXTURE:
@@ -412,6 +427,8 @@ func update_param(param_key: int, value) -> bool:
 			return update_output_tile_size(value)
 		PARAM_SUBTILE_OFFSET:
 			return update_subtile_offset(value)
+		PARAM_EXPORT_TYPE:
+			return update_export_type(value)
 		PARAM_EXPORT_PNG_PATH:
 			return update_export_png_path(value)
 		PARAM_EXPORT_GODOT3_RESOURCE_PATH:

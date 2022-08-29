@@ -7,8 +7,8 @@
 		"y": 16
 	},
 	"merge_level": {
-		"x": 0.25,
-		"y": 0.25
+		"x": 0.125,
+		"y": 0.125
 	},
 	"overlap_level": {
 		"x": 0.25,
@@ -25,8 +25,9 @@
 		"x": 0,
 		"y": 0
 	},
-	"export_png_path": "/home/alexander/GodotProjects/3dtests/no_symmetry_pixelart_13_part_generated.png",
-	"export_godot3_tile_name": "no_symmetry_pixelart_13_part_generated",
+	"export_type": 0,
+	"export_png_path": "/home/alexander/GodotProjects/3dtests/sideview_pixelart_with_random_8_part (copy)_generated.png",
+	"export_godot3_tile_name": "sideview_pixelart_with_random_8_part (copy)_generated",
 	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/test.tres",
 	"export_godot3_autotile_type": 0
 }

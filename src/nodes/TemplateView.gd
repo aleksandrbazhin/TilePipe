@@ -66,13 +66,13 @@ func _on_AddTemplateFileDialog_file_selected(path: String):
 	current_template_path = new_template_path
 	populate_template_option()
 	State.update_tile_param(TileInProject.PARAM_TEMPLATE, current_template_path)
-	load_data(State.current_tile_ref.get_ref())
+	load_data(State.get_current_tile())
 
 
 func _on_TemplateFileName_item_selected(index: int):
 	current_template_path = template_option.get_item_metadata(index)
 	State.update_tile_param(TileInProject.PARAM_TEMPLATE, current_template_path)
-	load_data(State.current_tile_ref.get_ref())
+	load_data(State.get_current_tile())
 
 
 func populate_template_option():

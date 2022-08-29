@@ -22,6 +22,11 @@ func set_current_tile(tile: TileInProject, row: TreeItem):
 	emit_signal("tile_selected", tile, row)
 
 
+func get_current_tile() -> TileInProject:
+	var tile: TileInProject = current_tile_ref.get_ref()
+	return tile
+
+
 func update_tile_param(param_key: int, value):
 	var tile: TileInProject = current_tile_ref.get_ref()
 	if tile.update_param(param_key, value):

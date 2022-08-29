@@ -9,12 +9,9 @@ margin_right = 850.0
 margin_bottom = 34.0
 rect_min_size = Vector2( 1032, 34 )
 mouse_default_cursor_shape = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 3
 color = Color( 0.894118, 0.898039, 0.886275, 0.0784314 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HBox" type="HBoxContainer" parent="."]
 anchor_right = 1.0

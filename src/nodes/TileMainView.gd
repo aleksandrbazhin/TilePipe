@@ -11,6 +11,8 @@ onready var ruleset_option := $RulesetContainer/RulesetOptionButton
 onready var ruleset_texture := $RulesetContainer/ScrollContainer/TextureRect
 onready var template_option := $TemplateContainer/TemplateOptionButton
 onready var template_texture := $TemplateContainer/TextureRect
+onready var export_type_option := $ExportContainer/ExportOptionButton
+onready var export_path_edit := $ExportContainer/ExportPathLineEdit
 
 
 func load_data(tile: TileInProject):
@@ -31,6 +33,9 @@ func load_data(tile: TileInProject):
 			State.current_dir + "/" + Const.TEMPLATE_DIR, 
 			 funcref(Helpers, "scan_for_templates_in_dir"),
 			 tile.template_path)
+	if tile.export_type != Const.EXPORT_TYPE_UKNOWN:
+		export_type_option.select(tile.export_type)
+	display_export_path(tile.export_type)
 
 
 func add_ruleset_highlights(ruleset: Ruleset):
@@ -64,7 +69,7 @@ func _on_TemplateButton_pressed():
 func _on_RulesetOptionButton_item_selected(index):
 	State.update_tile_param(TileInProject.PARAM_RULESET, 
 		ruleset_option.get_item_metadata(index))
-	var tile: TileInProject = State.current_tile_ref.get_ref()
+	var tile: TileInProject = State.get_current_tile()
 	ruleset_texture.texture = tile.loaded_ruleset.preview_texture
 	add_ruleset_highlights(tile.loaded_ruleset)
 
@@ -72,7 +77,7 @@ func _on_RulesetOptionButton_item_selected(index):
 func _on_TemplateOptionButton_item_selected(index):
 	State.update_tile_param(TileInProject.PARAM_TEMPLATE, 
 		template_option.get_item_metadata(index))
-	var tile: TileInProject = State.current_tile_ref.get_ref()
+	var tile: TileInProject = State.get_current_tile()
 	template_texture.texture = tile.loaded_template
 
 
@@ -83,15 +88,37 @@ func _on_ExportButton_pressed():
 #	if not check_template_texture():
 #		report_error("Error: Wrong template texture")
 #		return
-#	var tile_size := Vector2(get_output_tile_size(), get_output_tile_size())
-	var dialog: GodotExporter = preload("res://src/exporters/Godot3/Godot3Exporter.tscn").instance()
-	dialog.connect("popup_hide", dialog, "queue_free")
-	add_child(dialog)
-	dialog.start_export_dialog(State.current_tile_ref.get_ref())
-#	godot_export_dialog.start_export_dialog(
-#		tile_size,
-#		tiles_by_bitmasks,
-#		current_texture_basename,
-#		output_tile_offset,
-#		out_texture.texture.get_data(),
-#		smoothing_check.pressed)
+	match export_type_option.selected:
+		Const.EXPORT_TYPES.TEXTURE:
+			var dialog := $TextureFileDialog
+			dialog.current_path = State.get_current_tile().export_png_path
+			dialog.popup_centered()
+		Const.EXPORT_TYPES.GODOT3:
+			var dialog: GodotExporter = $Godot3ExportDialog
+			dialog.start_export_dialog(State.get_current_tile())
+
+
+func display_export_path(export_type: int):
+	match export_type:
+		Const.EXPORT_TYPES.TEXTURE:
+			export_path_edit.text = State.get_current_tile().export_png_path
+		Const.EXPORT_TYPES.GODOT3:
+			export_path_edit.text = State.get_current_tile().export_godot3_resource_path
+			export_path_edit.text += ": " + State.get_current_tile().export_godot3_tile_name
+		_:
+			export_path_edit.text = ""
+
+
+func _on_ExportOptionButton_item_selected(index):
+	display_export_path(index)
+	State.update_tile_param(TileInProject.PARAM_EXPORT_TYPE, index)
+
+
+func _on_TextureFileDialog_file_selected(path):
+	var current_texture_image := State.get_current_tile().output_texture
+	current_texture_image.get_data().save_png(path)
+	State.update_tile_param(TileInProject.PARAM_EXPORT_PNG_PATH, path)
+
+
+func _on_Godot3ExportDialog_popup_hide():
+	display_export_path(Const.EXPORT_TYPES.GODOT3)
