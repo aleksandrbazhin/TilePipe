@@ -362,14 +362,12 @@ __meta__ = {
 [node name="TileBlockColorRect" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 22.0
-margin_top = 125.0
+margin_left = 20.0
+margin_top = 144.0
 margin_right = -22.0
-margin_bottom = -76.0
+margin_bottom = -124.0
+size_flags_horizontal = 3
 color = Color( 0.0901961, 0.0980392, 0.101961, 0.780392 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ResourceFileDialog" type="FileDialog" parent="."]
 margin_right = 315.0

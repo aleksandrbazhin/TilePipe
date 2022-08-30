@@ -16,6 +16,8 @@ onready var export_path_edit := $ExportContainer/ExportPathLineEdit
 
 
 func load_data(tile: TileInProject):
+	if tile == null:
+		return
 	if tile.texture_path != "":
 		input_texture.load_data(tile)
 	if tile.loaded_ruleset.is_loaded:
@@ -70,6 +72,8 @@ func _on_RulesetOptionButton_item_selected(index):
 	State.update_tile_param(TileInProject.PARAM_RULESET, 
 		ruleset_option.get_item_metadata(index))
 	var tile: TileInProject = State.get_current_tile()
+	if tile == null:
+		return
 	ruleset_texture.texture = tile.loaded_ruleset.preview_texture
 	add_ruleset_highlights(tile.loaded_ruleset)
 
@@ -78,16 +82,18 @@ func _on_TemplateOptionButton_item_selected(index):
 	State.update_tile_param(TileInProject.PARAM_TEMPLATE, 
 		template_option.get_item_metadata(index))
 	var tile: TileInProject = State.get_current_tile()
+	if tile == null:
+		return
 	template_texture.texture = tile.loaded_template
 
 
 func _on_ExportButton_pressed():
-#	if out_texture.texture == null:
-#		report_error("Error: No generated texture")
-#		return
-#	if not check_template_texture():
-#		report_error("Error: Wrong template texture")
-#		return
+	var tile: TileInProject = State.get_current_tile()
+	if tile == null:
+		return
+	if tile.output_texture == null:
+		State.report_error("Error: No generated texture")
+		return
 	match export_type_option.selected:
 		Const.EXPORT_TYPES.TEXTURE:
 			var dialog := $TextureFileDialog
@@ -99,12 +105,15 @@ func _on_ExportButton_pressed():
 
 
 func display_export_path(export_type: int):
+	var tile: TileInProject = State.get_current_tile()
+	if tile == null:
+		return
 	match export_type:
 		Const.EXPORT_TYPES.TEXTURE:
-			export_path_edit.text = State.get_current_tile().export_png_path
+			export_path_edit.text = tile.export_png_path
 		Const.EXPORT_TYPES.GODOT3:
-			export_path_edit.text = State.get_current_tile().export_godot3_resource_path
-			export_path_edit.text += ": " + State.get_current_tile().export_godot3_tile_name
+			export_path_edit.text = tile.export_godot3_resource_path
+			export_path_edit.text += ": " + tile.export_godot3_tile_name
 		_:
 			export_path_edit.text = ""
 
@@ -115,7 +124,10 @@ func _on_ExportOptionButton_item_selected(index):
 
 
 func _on_TextureFileDialog_file_selected(path):
-	var current_texture_image := State.get_current_tile().output_texture
+	var tile: TileInProject = State.get_current_tile()
+	if tile == null:
+		return
+	var current_texture_image := tile.output_texture
 	current_texture_image.get_data().save_png(path)
 	State.update_tile_param(TileInProject.PARAM_EXPORT_PNG_PATH, path)
 

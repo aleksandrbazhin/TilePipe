@@ -23,6 +23,9 @@ func set_current_tile(tile: TileInProject, row: TreeItem):
 
 
 func get_current_tile() -> TileInProject:
+	if current_tile_ref == null:
+		report_error("Error: failed to load tile")
+		return null
 	var tile: TileInProject = current_tile_ref.get_ref()
 	return tile
 

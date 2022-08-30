@@ -26,6 +26,8 @@ func _ready():
 
 
 func load_data(tile: TileInProject):
+	if tile == null:
+		return
 	current_texture_path = tile.texture_path
 	current_input_tile_size = tile.input_tile_size
 	populate_texture_option()

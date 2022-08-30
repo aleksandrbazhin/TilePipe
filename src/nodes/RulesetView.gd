@@ -19,6 +19,8 @@ onready var scroll_container := $VBoxContainer/ScrollContainer
 
 
 func load_data(tile: TileInProject):
+	if tile == null:
+		return
 	tile_name.text = tile.tile_file_name
 	current_ruleset_path = tile.ruleset_path
 	populate_ruleset_option()

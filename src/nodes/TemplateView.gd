@@ -11,6 +11,8 @@ onready var template_option: OptionButton = $HBoxContainer/TemplateFileName
 
 
 func load_data(tile: TileInProject):
+	if tile == null:
+		return	
 	tile_name.text = tile.tile_file_name
 	current_template_path = tile.template_path
 	populate_template_option()
