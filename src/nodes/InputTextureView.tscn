@@ -158,7 +158,7 @@ rect_min_size = Vector2( 0, 26 )
 text = " Merge pixels"
 valign = 2
 
-[node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeXSliderContainer" groups=["blockable"]]
+[node name="MergeSliderX" type="HSlider" parent="HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeXSliderContainer" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 574.0
 margin_bottom = 46.0
@@ -190,7 +190,7 @@ rect_min_size = Vector2( 0, 26 )
 text = "Merge pixels Y"
 valign = 2
 
-[node name="RateSlider" type="HSlider" parent="HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeYSliderContainer" groups=["blockable"]]
+[node name="MergeSliderY" type="HSlider" parent="HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeYSliderContainer" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 290.0
 margin_bottom = 46.0
@@ -231,7 +231,7 @@ rect_min_size = Vector2( 0, 26 )
 text = " Overlap pixels"
 valign = 2
 
-[node name="OverlapSlider" type="HSlider" parent="HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer" groups=["blockable"]]
+[node name="OverlapSliderX" type="HSlider" parent="HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 574.0
 margin_bottom = 46.0
@@ -262,7 +262,7 @@ rect_min_size = Vector2( 0, 26 )
 text = " Overlap pixels Y"
 valign = 2
 
-[node name="OverlapSlider" type="HSlider" parent="HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer" groups=["blockable"]]
+[node name="OverlapSliderY" type="HSlider" parent="HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer" groups=["blockable"]]
 margin_top = 30.0
 margin_right = 290.0
 margin_bottom = 46.0
@@ -508,8 +508,8 @@ text = "Apply"
 [connection signal="item_selected" from="HeaderContainer/TextureOption" to="." method="_on_TextureFileName_item_selected"]
 [connection signal="pressed" from="HeaderContainer/TextureDialogButton" to="." method="_on_TextureDialogButton_pressed"]
 [connection signal="tile_size_changed" from="HBox/ScalableTextureContainer" to="." method="_on_ScalableTextureContainer_tile_size_changed"]
-[connection signal="released" from="HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/RateSlider" to="." method="_on_RateSlider_released"]
-[connection signal="released" from="HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSlider" to="." method="_on_OverlapSlider_released"]
+[connection signal="released" from="HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/MergeSliderX" to="." method="_on_RateSlider_released"]
+[connection signal="released" from="HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSliderX" to="." method="_on_OverlapSlider_released"]
 [connection signal="toggled" from="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/RandomCheckButton" to="." method="_on_RandomCheckButton_toggled"]
 [connection signal="text_entered" from="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/SeedLineEdit" to="." method="_on_SeedLineEdit_text_entered"]
 [connection signal="pressed" from="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/SeedButton" to="." method="_on_SeedButton_pressed"]

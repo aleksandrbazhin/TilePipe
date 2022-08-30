@@ -8,10 +8,10 @@ var current_input_tile_size := Const.DEFAULT_TILE_SIZE
 
 onready var texture_option := $HeaderContainer/TextureOption
 onready var texture_container: ScalableTextureContainer = $HBox/ScalableTextureContainer
-onready var merge_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/RateSlider
-onready var merge_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeYSliderContainer/RateSlider
-onready var overlay_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSlider
-onready var overlay_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer/OverlapSlider
+onready var merge_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/MergeSliderX
+onready var merge_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeYSliderContainer/MergeSliderY
+onready var overlap_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSliderX
+onready var overlap_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer/OverlapSliderY
 onready var output_tile_size_option: OptionButton = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/HBoxContainer/SizeOptionButton
 onready var subtile_offset: SpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileOffset/OffsetSpinBox
 onready var smoothing_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Effects/SmoothingContainer/Smoothing
@@ -32,10 +32,6 @@ func load_data(tile: TPTile):
 	current_input_tile_size = tile.input_tile_size
 	populate_texture_option()
 	setup_sliders()
-	merge_slider_x.value = tile.merge_level.x
-	merge_slider_y.value = tile.merge_level.y
-	overlay_slider_x.value = tile.overlap_level.x
-	overlay_slider_y.value = tile.overlap_level.y
 	if current_texture_path != "":
 		load_texture(tile.loaded_texture)
 	output_tile_size_option.selected = Helpers.get_closest_output_size_key(tile.output_tile_size)
@@ -52,8 +48,16 @@ func load_texture(texture: Texture):
 func setup_sliders():
 	merge_slider_x.quantize(int(current_input_tile_size.x / 2))
 	merge_slider_y.quantize(int(current_input_tile_size.y / 2))
-	overlay_slider_x.quantize(int(current_input_tile_size.x / 2))
-	overlay_slider_y.quantize(int(current_input_tile_size.y / 2))
+	overlap_slider_x.quantize(int(current_input_tile_size.x / 2))
+	overlap_slider_y.quantize(int(current_input_tile_size.y / 2))
+	
+	var tile: TPTile = State.get_current_tile()
+	if tile == null:
+		return
+	merge_slider_x.value = tile.merge_level.x
+	merge_slider_y.value = tile.merge_level.y
+	overlap_slider_x.value = tile.overlap_level.x
+	overlap_slider_y.value = tile.overlap_level.y
 
 
 func _on_TextureFileName_item_selected(index: int):

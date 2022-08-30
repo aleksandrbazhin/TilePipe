@@ -50,6 +50,8 @@ func on_tile_selected(tile: TPTile, row: TreeItem):
 
 func render_subtiles():
 	var tile: TPTile = State.get_current_tile()
+	if tile == null:
+		return
 	var input_image: Image = tile.loaded_texture.get_data()
 	renderer.start_render(tile, input_image)
 #	update_progress(0)
