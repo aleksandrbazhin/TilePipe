@@ -71,7 +71,7 @@ func _process(delta):
 		scroll_deferred = false
 
 
-func start_export_dialog(tile: TileInProject):
+func start_export_dialog(tile: TPTile):
 	current_tile_size = tile.output_tile_size
 	current_texture_size = tile.output_texture.get_size()
 	current_tile_spacing = int(tile.subtile_offset.x)
@@ -96,8 +96,8 @@ func start_export_dialog(tile: TileInProject):
 		tile_name = generated_tile_name
 		texture_path = texture_path_auto_name(texture_path.get_base_dir(), tile_name)
 		last_generated_tile_name = generated_tile_name
-		State.update_tile_param(TileInProject.PARAM_EXPORT_PNG_PATH, texture_path)
-		State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
+		State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, texture_path)
+		State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
 #		save_settings()
 	set_lineedit_text(tile_name_edit, tile_name)
 	texture_dialog.current_path = texture_path
@@ -657,7 +657,7 @@ func _on_ResourceFileDialog_file_selected(path: String):
 #		else:
 #			set_texture_path(resource_path.get_base_dir(), texture_path)
 		load_tileset(resource_path)
-		State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_RESOURCE_PATH, resource_path)
+		State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_RESOURCE_PATH, resource_path)
 #		save_settings()
 	else:
 		report_error_inside_dialog("Error: Invalid tileset path. \n\nGodot tileset file path should be: \n 1. a valid path  \n 2. inside any Godot projects tree")
@@ -671,14 +671,14 @@ func _on_LineEditName_text_changed(new_text):
 	tile_name = new_text
 	temp_tile_row.set_tile_name(new_text)
 	check_existing_for_matches()
-	State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
+	State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
 #	save_settings()
 
 
 func _on_OptionButton_item_selected(index):
 	autotile_type = index
 	temp_tile_row.set_tile_mode(TileSet.AUTO_TILE, autotile_type)
-	State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE, autotile_type)
+	State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE, autotile_type)
 #	save_settings()
 
 
@@ -686,7 +686,7 @@ func _on_TextureFileDialog_file_selected(path: String):
 	if is_a_valid_texture_path(path, resource_path):
 		set_texture_path(path.get_base_dir(), path.get_basename().get_file())
 		check_existing_for_matches()
-		State.update_tile_param(TileInProject.PARAM_EXPORT_PNG_PATH, path)
+		State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, path)
 #		save_settings()
 
 
@@ -697,10 +697,10 @@ func _on_ButtonCancel_pressed():
 func save_all_and_exit():
 	current_texture_image.save_png(texture_path)
 	if save_tileset_resource():
-		State.update_tile_param(TileInProject.PARAM_EXPORT_PNG_PATH, texture_path)
-		State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_RESOURCE_PATH, resource_path)
-		State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE, autotile_type)
-		State.update_tile_param(TileInProject.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
+		State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, texture_path)
+		State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_RESOURCE_PATH, resource_path)
+		State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE, autotile_type)
+		State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
 		hide()
 
 

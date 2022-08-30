@@ -9,7 +9,7 @@ onready var single_tile := $VBoxContainer/HSplitContainer/SingleTile
 onready var result_texture := $VBoxContainer/HSplitContainer/Result/TextureContainer/TextureRect
 
 
-func render_from_tile(tile: TileInProject):
+func render_from_tile(tile: TPTile):
 	var subtiles_by_bitmasks := tile.result_subtiles_by_bitmask
 	set_output_texture(null)
 	if subtiles_by_bitmasks.empty():

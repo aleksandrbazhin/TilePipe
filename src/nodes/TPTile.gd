@@ -1,6 +1,6 @@
 extends Control
 
-class_name TileInProject
+class_name TPTile
 
 signal row_selected(row)
 

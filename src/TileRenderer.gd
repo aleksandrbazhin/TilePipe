@@ -48,7 +48,7 @@ func init_render_pool():
 		add_child(viewport)
 
 
-func start_render(tile: TileInProject, input_image: Image):
+func start_render(tile: TPTile, input_image: Image):
 	subtiles = tile.result_subtiles_by_bitmask
 	ruleset = tile.loaded_ruleset
 	input_tile_size = tile.input_tile_size

@@ -217,7 +217,6 @@ current_dir = "/home/alexander/GodotProjects/TilePIpe"
 current_path = "/home/alexander/GodotProjects/TilePIpe/"
 
 [node name="Godot3ExportDialog" parent="." instance=ExtResource( 3 )]
-visible = false
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 210.0

@@ -30,7 +30,7 @@ func hide_all():
 	template_view.hide()
 
 
-func on_tile_selected(tile: TileInProject, row: TreeItem):
+func on_tile_selected(tile: TPTile, row: TreeItem):
 	hide_all()
 	render_subtiles()
 	match row:
@@ -49,7 +49,7 @@ func on_tile_selected(tile: TileInProject, row: TreeItem):
 
 
 func render_subtiles():
-	var tile: TileInProject = State.get_current_tile()
+	var tile: TPTile = State.get_current_tile()
 	var input_image: Image = tile.loaded_texture.get_data()
 	renderer.start_render(tile, input_image)
 #	update_progress(0)
@@ -67,17 +67,17 @@ func on_tiles_rendered():
 #		renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
 ##		renderer.disconnect("report_progress", self, "update_progress")
 #	rendered_tiles = renderer.tiles
-#	var tile: TileInProject = loaded_tile_ref.get_ref()
+#	var tile: TPTile = loaded_tile_ref.get_ref()
 #	emit_signal("input_image_processed")
-	var tile: TileInProject = State.get_current_tile()
+	var tile: TPTile = State.get_current_tile()
 	result_view.render_from_tile(tile)
 
 
 func _on_TileMainView_ruleset_view_called():
-	var tile: TileInProject = State.get_current_tile()
+	var tile: TPTile = State.get_current_tile()
 	tile.select_row(tile.ruleset_row)
 
 
 func _on_TileMainView_template_view_called():
-	var tile: TileInProject = State.get_current_tile()
+	var tile: TPTile = State.get_current_tile()
 	tile.select_row(tile.template_row)

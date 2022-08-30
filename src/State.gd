@@ -14,7 +14,7 @@ var current_tile_ref: WeakRef = null
 var current_modal_popup: Popup = null
 
 
-func set_current_tile(tile: TileInProject, row: TreeItem):
+func set_current_tile(tile: TPTile, row: TreeItem):
 	if State.current_tile_ref == null or State.current_tile_ref.get_ref() != tile:
 		State.current_tile_ref = weakref(tile)
 	current_window_title = tile.tile_file_name + " - " + window_title_base
@@ -22,16 +22,16 @@ func set_current_tile(tile: TileInProject, row: TreeItem):
 	emit_signal("tile_selected", tile, row)
 
 
-func get_current_tile() -> TileInProject:
+func get_current_tile() -> TPTile:
 	if current_tile_ref == null:
 		report_error("Error: failed to load tile")
 		return null
-	var tile: TileInProject = current_tile_ref.get_ref()
+	var tile: TPTile = current_tile_ref.get_ref()
 	return tile
 
 
 func update_tile_param(param_key: int, value):
-	var tile: TileInProject = current_tile_ref.get_ref()
+	var tile: TPTile = current_tile_ref.get_ref()
 	if tile.update_param(param_key, value):
 		tile.save()
 		emit_signal("tile_updated")

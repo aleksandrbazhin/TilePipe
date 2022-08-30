@@ -15,7 +15,7 @@ onready var export_type_option := $ExportContainer/ExportOptionButton
 onready var export_path_edit := $ExportContainer/ExportPathLineEdit
 
 
-func load_data(tile: TileInProject):
+func load_data(tile: TPTile):
 	if tile == null:
 		return
 	if tile.texture_path != "":
@@ -69,9 +69,9 @@ func _on_TemplateButton_pressed():
 
 
 func _on_RulesetOptionButton_item_selected(index):
-	State.update_tile_param(TileInProject.PARAM_RULESET, 
+	State.update_tile_param(TPTile.PARAM_RULESET, 
 		ruleset_option.get_item_metadata(index))
-	var tile: TileInProject = State.get_current_tile()
+	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
 	ruleset_texture.texture = tile.loaded_ruleset.preview_texture
@@ -79,16 +79,16 @@ func _on_RulesetOptionButton_item_selected(index):
 
 
 func _on_TemplateOptionButton_item_selected(index):
-	State.update_tile_param(TileInProject.PARAM_TEMPLATE, 
+	State.update_tile_param(TPTile.PARAM_TEMPLATE, 
 		template_option.get_item_metadata(index))
-	var tile: TileInProject = State.get_current_tile()
+	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
 	template_texture.texture = tile.loaded_template
 
 
 func _on_ExportButton_pressed():
-	var tile: TileInProject = State.get_current_tile()
+	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
 	if tile.output_texture == null:
@@ -105,7 +105,7 @@ func _on_ExportButton_pressed():
 
 
 func display_export_path(export_type: int):
-	var tile: TileInProject = State.get_current_tile()
+	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
 	match export_type:
@@ -120,16 +120,16 @@ func display_export_path(export_type: int):
 
 func _on_ExportOptionButton_item_selected(index):
 	display_export_path(index)
-	State.update_tile_param(TileInProject.PARAM_EXPORT_TYPE, index)
+	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, index)
 
 
 func _on_TextureFileDialog_file_selected(path):
-	var tile: TileInProject = State.get_current_tile()
+	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
 	var current_texture_image := tile.output_texture
 	current_texture_image.get_data().save_png(path)
-	State.update_tile_param(TileInProject.PARAM_EXPORT_PNG_PATH, path)
+	State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, path)
 
 
 func _on_Godot3ExportDialog_popup_hide():
