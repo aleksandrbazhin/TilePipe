@@ -6,7 +6,7 @@ class_name TileMainView
 signal ruleset_view_called()
 signal template_view_called()
 
-onready var input_texture := $InputTextureView
+onready var input_texture: InputTextureView = $InputTextureView
 onready var ruleset_option := $RulesetContainer/RulesetOptionButton
 onready var ruleset_texture := $RulesetContainer/ScrollContainer/TextureRect
 onready var template_option := $TemplateContainer/TemplateOptionButton
@@ -18,9 +18,8 @@ onready var export_path_edit := $ExportContainer/ExportPathLineEdit
 func load_data(tile: TPTile):
 	if tile == null:
 		return
-	if tile.texture_path != "":
-		input_texture.load_data(tile)
-	if tile.loaded_ruleset.is_loaded:
+	input_texture.load_data(tile)
+	if tile.loaded_ruleset != null and tile.loaded_ruleset.is_loaded:
 		ruleset_option.text = tile.loaded_ruleset.get_name()
 		ruleset_texture.texture = tile.loaded_ruleset.preview_texture
 		add_ruleset_highlights(tile.loaded_ruleset)
@@ -91,8 +90,8 @@ func _on_ExportButton_pressed():
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
-	if tile.output_texture == null:
-		State.report_error("Error: No generated texture")
+	if tile.output_texture == null or tile.output_texture.get_data() == null:
+		State.report_error("Error: No generated texture, tile not fully defined")
 		return
 	match export_type_option.selected:
 		Const.EXPORT_TYPES.TEXTURE:
@@ -120,7 +119,7 @@ func display_export_path(export_type: int):
 
 func _on_ExportOptionButton_item_selected(index):
 	display_export_path(index)
-	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, index)
+	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, index, false)
 
 
 func _on_TextureFileDialog_file_selected(path):
@@ -129,7 +128,9 @@ func _on_TextureFileDialog_file_selected(path):
 		return
 	var current_texture_image := tile.output_texture
 	current_texture_image.get_data().save_png(path)
-	State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, path)
+	State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, path, false)
+	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, Const.EXPORT_TYPES.TEXTURE, false)
+	display_export_path(Const.EXPORT_TYPES.TEXTURE)
 
 
 func _on_Godot3ExportDialog_popup_hide():

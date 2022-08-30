@@ -42,4 +42,5 @@ func set_output_texture(texture: Texture):
 	
 #	render_progress_overlay.hide()
 
-
+func clear():
+	result_texture.texture = null

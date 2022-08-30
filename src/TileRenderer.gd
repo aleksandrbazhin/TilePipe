@@ -60,8 +60,7 @@ func start_render(tile: TPTile, input_image: Image):
 		rng.seed = tile.random_seed_value
 	else:
 		rng.randomize()
-	
-	
+
 
 	last_mask = subtiles.keys()[0]
 	for bitmask in subtiles:

@@ -28,12 +28,15 @@ func _ready():
 func load_data(tile: TPTile):
 	if tile == null:
 		return
+#	if not tile.texture_path.empty()
 	current_texture_path = tile.texture_path
 	current_input_tile_size = tile.input_tile_size
 	populate_texture_option()
 	setup_sliders()
-	if current_texture_path != "":
+	if not current_texture_path.empty():
 		load_texture(tile.loaded_texture)
+	else:
+		clear()
 	output_tile_size_option.selected = Helpers.get_closest_output_size_key(tile.output_tile_size)
 	subtile_offset.value = tile.subtile_offset.x
 	smoothing_enabled.pressed = tile.smoothing
@@ -41,16 +44,20 @@ func load_data(tile: TPTile):
 	random_seed_edit.text = str(tile.random_seed_value)
 
 
+func clear():
+	texture_option.selected = texture_option.get_item_count() - 1
+	texture_container.set_texture(null)
+
+
 func load_texture(texture: Texture):
 	texture_container.set_texture(texture, current_input_tile_size)
-	
+
 
 func setup_sliders():
 	merge_slider_x.quantize(int(current_input_tile_size.x / 2))
 	merge_slider_y.quantize(int(current_input_tile_size.y / 2))
 	overlap_slider_x.quantize(int(current_input_tile_size.x / 2))
 	overlap_slider_y.quantize(int(current_input_tile_size.y / 2))
-	
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
@@ -63,7 +70,13 @@ func setup_sliders():
 func _on_TextureFileName_item_selected(index: int):
 	current_texture_path = texture_option.get_item_metadata(index)
 	State.update_tile_param(TPTile.PARAM_TEXTURE, current_texture_path)
-	load_texture(State.get_current_tile().loaded_texture)
+	if current_texture_path.empty():
+		clear()
+	else:
+		var tile: TPTile = State.get_current_tile()
+		if tile == null:
+			return
+		load_texture(tile.loaded_texture)
 
 
 func _on_TextureDialogButton_pressed():
@@ -86,7 +99,7 @@ func _on_AddTextureFileDialog_file_selected(path: String):
 		State.report_error("Error: Copy file error number %d." % error)
 	current_texture_path = new_texture_path
 	populate_texture_option()
-	State.update_tile_texture(current_texture_path)
+	State.update_tile_param(TPTile.PARAM_TEXTURE, current_texture_path)
 	load_texture(State.get_current_tile().loaded_texture)
 
 

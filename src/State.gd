@@ -1,7 +1,7 @@
 extends Node
 
 signal tile_selected(tile_node, row_item)
-signal tile_updated()
+signal tile_needs_render()
 signal popup_started()
 signal popup_ended()
 signal report_error(message)
@@ -30,11 +30,12 @@ func get_current_tile() -> TPTile:
 	return tile
 
 
-func update_tile_param(param_key: int, value):
+func update_tile_param(param_key: int, value, needs_render: bool = true):
 	var tile: TPTile = current_tile_ref.get_ref()
 	if tile.update_param(param_key, value):
 		tile.save()
-		emit_signal("tile_updated")
+		if needs_render:
+			emit_signal("tile_needs_render")
 
 
 func report_error(message: String):

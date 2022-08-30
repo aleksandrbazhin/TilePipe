@@ -119,14 +119,15 @@ func load_tile(directory: String, tile_file: String) -> bool:
 	if not load_texture(_tile_data["texture"]) or \
 			not load_ruleset(_tile_data["ruleset"]) or \
 			not load_template(_tile_data["template"]):
-		block_failed_tile()
-		return false
-	set_param("input_tile_size", "input_tile_size", Vector2(64, 64))		
+#		block_failed_tile()
+#		return false
+		pass
+	set_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
 	set_param("merge_level", "merge_level", Vector2(0.25, 0.25))
 	set_param("overlap_level", "overlap_level", Vector2(0.25, 0.25))
 	set_param("smoothing", "smoothing", false)
 	set_param("random_seed_enabled", "random_seed_enabled", false)
-	set_param("output_tile_size", "output_tile_size", Vector2.ZERO)
+	set_param("output_tile_size", "output_tile_size", Const.DEFAULT_TILE_SIZE)
 	set_param("subtile_offset", "subtile_offset", Vector2.ZERO)
 	set_param("export_type", "export_type", Const.EXPORT_TYPE_UKNOWN)
 	set_param("export_png_path", "export_png_path", "")
@@ -142,6 +143,10 @@ func block_failed_tile():
 
 
 func load_texture(path: String) -> bool:
+	if path.empty():
+		texture_path = path
+		loaded_texture = null
+		return false
 	var file_path: String = current_directory + "/" + path
 	var image = Image.new()
 	var err: int
@@ -156,6 +161,8 @@ func load_texture(path: String) -> bool:
 
 
 func load_ruleset(path: String) -> bool:
+	if path.empty():
+		return false	
 	var file_path: String = current_directory + "/" + path
 	loaded_ruleset = Ruleset.new(file_path)
 	if loaded_ruleset.is_loaded:
@@ -168,6 +175,8 @@ func load_ruleset(path: String) -> bool:
 
 
 func load_template(path: String) -> bool:
+	if path.empty():
+		return false	
 	var file_path: String = current_directory + "/" + path
 	var image = Image.new()
 	var err: int
@@ -280,8 +289,9 @@ func _on_Tree_item_collapsed(item: TreeItem):
 
 func update_texture(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
-	if not load_texture(rel_path):
-		return false
+#	if not load_texture(rel_path):
+#		return false
+	load_texture(rel_path)
 	_tile_data["texture"] = rel_path
 	return true
 

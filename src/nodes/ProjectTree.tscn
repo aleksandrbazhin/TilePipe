@@ -94,6 +94,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="FileDialog" type="FileDialog" parent="."]
+margin_right = 315.0
+margin_bottom = 130.0
+popup_exclusive = true
+window_title = "Create a new tile in folder"
+access = 2
+filters = PoolStringArray( "\"*.tptile\"" )
+current_dir = "/home/alexander/GodotProjects/TilePIpe"
+current_path = "/home/alexander/GodotProjects/TilePIpe/"
+
 [connection signal="about_to_show" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_about_to_show"]
 [connection signal="dir_selected" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_dir_selected"]
 [connection signal="popup_hide" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_popup_hide"]

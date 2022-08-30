@@ -15,7 +15,7 @@ onready var renderer: TileRenderer = $TileRenderer
 
 func _ready():
 	State.connect("tile_selected", self, "on_tile_selected")
-	State.connect("tile_updated", self, "render_subtiles")
+	State.connect("tile_needs_render", self, "render_subtiles")
 	renderer.connect("tiles_ready", self, "on_tiles_rendered")
 
 
@@ -50,7 +50,9 @@ func on_tile_selected(tile: TPTile, row: TreeItem):
 
 func render_subtiles():
 	var tile: TPTile = State.get_current_tile()
-	if tile == null:
+	if tile == null or tile.loaded_texture == null or tile.loaded_ruleset == null \
+			or tile.loaded_template == null:
+		result_view.clear()
 		return
 	var input_image: Image = tile.loaded_texture.get_data()
 	renderer.start_render(tile, input_image)

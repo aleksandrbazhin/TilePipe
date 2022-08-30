@@ -1,5 +1,5 @@
 {
-	"texture": "sideview_pixelart_with_random_8_part (copy).png",
+	"texture": "sideview_pixelart_with_random_8_part.png",
 	"ruleset": "rulesets/sideview_8_part.json",
 	"template": "templates/template_47.png",
 	"input_tile_size": {
