@@ -29,7 +29,7 @@ const HEIGHT_COLLAPSED := 50
 const RULESET_PREFIX := "Ruleset: "
 const TEXTURE_PREFIX := "Texture: "
 const TEMPLATE_PREFIX := "Template: "
-
+const EMPTY_TILE_CONTENT := {"texture": "", "ruleset": "", "template": ""}
 
 var is_loaded := false
 var _tile_data: Dictionary
@@ -101,14 +101,18 @@ func set_param(param_name: String, settings_param_name: String, default_value):
 			print("Error: setting parameter with default of wrong type")
 
 
-func load_tile(directory: String, tile_file: String) -> bool:
+func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bool:
 	current_directory = directory
 	tile_file_name = tile_file
-	var path := directory + "/" + tile_file
-	var file := File.new()
-	file.open(path, File.READ)
-	var file_text := file.get_as_text()
-	file.close()
+	var file_text := ""
+	if is_new:
+		file_text = JSON.print(EMPTY_TILE_CONTENT, "\t")
+	else:
+		var path := directory + "/" + tile_file
+		var file := File.new()
+		file.open(path, File.READ)
+		file_text = file.get_as_text()
+		file.close()
 	var parsed_data = parse_json(file_text)
 	if typeof(parsed_data) != TYPE_DICTIONARY:
 		State.report_error("Error loading tile: " + tile_file)

@@ -94,18 +94,32 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FileDialog" type="FileDialog" parent="."]
-margin_right = 315.0
-margin_bottom = 130.0
+[node name="NewTileDialog" type="ConfirmationDialog" parent="."]
+margin_right = 83.0
+margin_bottom = 58.0
+rect_min_size = Vector2( 340, 120 )
 popup_exclusive = true
-window_title = "Create a new tile in folder"
-access = 2
-filters = PoolStringArray( "\"*.tptile\"" )
-current_dir = "/home/alexander/GodotProjects/TilePIpe"
-current_path = "/home/alexander/GodotProjects/TilePIpe/"
+window_title = "Enter new tile name"
+
+[node name="CenterContainer" type="CenterContainer" parent="NewTileDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -36.0
+
+[node name="LineEdit" type="LineEdit" parent="NewTileDialog/CenterContainer"]
+margin_left = 12.0
+margin_top = 20.0
+margin_right = 312.0
+margin_bottom = 56.0
+rect_min_size = Vector2( 300, 36 )
+size_flags_vertical = 4
 
 [connection signal="about_to_show" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_about_to_show"]
 [connection signal="dir_selected" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_dir_selected"]
 [connection signal="popup_hide" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_popup_hide"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DirLoadButton" to="." method="_on_DirLoadButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/NewButton" to="." method="_on_NewButton_pressed"]
+[connection signal="confirmed" from="NewTileDialog" to="." method="_on_NewTileDialog_confirmed"]
