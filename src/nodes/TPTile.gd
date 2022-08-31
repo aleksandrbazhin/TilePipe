@@ -120,12 +120,9 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 		return false
 	_tile_data = parsed_data
 	is_loaded = true
-	if not load_texture(_tile_data["texture"]) or \
-			not load_ruleset(_tile_data["ruleset"]) or \
-			not load_template(_tile_data["template"]):
-#		block_failed_tile()
-#		return false
-		pass
+	var is_texture_loaded := load_texture(_tile_data["texture"])
+	var is_ruleset_loaded := load_ruleset(_tile_data["ruleset"])
+	var is_template_loaded := load_template(_tile_data["template"])
 	set_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
 	set_param("merge_level", "merge_level", Vector2(0.25, 0.25))
 	set_param("overlap_level", "overlap_level", Vector2(0.25, 0.25))

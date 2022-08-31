@@ -12,18 +12,30 @@ onready var template_option: OptionButton = $HBoxContainer/TemplateFileName
 
 func load_data(tile: TPTile):
 	if tile == null:
-		return	
+		return
 	tile_name.text = tile.tile_file_name
 	current_template_path = tile.template_path
 	populate_template_option()
-	if tile.template_path != "":
-		template_texture_rect.texture = tile.loaded_template
-		label_bitmasks(tile)
+	if current_template_path.empty():
+		clear()
+		return
+	template_texture_rect.texture = tile.loaded_template
+	label_bitmasks(tile)
+
+
+func clear():
+	clear_masks()
+	template_texture_rect.texture = null
+
+
+func clear_masks():
+	for label in template_texture_rect.get_children():
+		label.queue_free()
+
 
 
 func label_bitmasks(tile: TPTile):
-	for label in template_texture_rect.get_children():
-		label.queue_free()
+	clear_masks()
 	for mask in tile.result_subtiles_by_bitmask.keys():
 		for result_tile in tile.result_subtiles_by_bitmask[mask]:
 			label_tile(result_tile)
@@ -74,6 +86,9 @@ func _on_AddTemplateFileDialog_file_selected(path: String):
 func _on_TemplateFileName_item_selected(index: int):
 	current_template_path = template_option.get_item_metadata(index)
 	State.update_tile_param(TPTile.PARAM_TEMPLATE, current_template_path)
+	if current_template_path.empty():
+		clear()
+		return
 	load_data(State.get_current_tile())
 
 

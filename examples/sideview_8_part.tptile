@@ -1,7 +1,7 @@
 {
 	"texture": "sideview_pixelart_with_random_8_part.png",
-	"ruleset": "rulesets/sideview_8_part.json",
-	"template": "templates/template_47.png",
+	"ruleset": "rulesets/full_256_7_part.json",
+	"template": "templates/template_rpg_maker.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16

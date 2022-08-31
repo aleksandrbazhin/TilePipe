@@ -24,26 +24,40 @@ func load_data(tile: TPTile):
 	tile_name.text = tile.tile_file_name
 	current_ruleset_path = tile.ruleset_path
 	populate_ruleset_option()
-	if tile.ruleset_path != "":
-		header_data.text = tile.loaded_ruleset.get_raw_header()
-		ruleset_name.text = tile.loaded_ruleset.get_name()
-		description.text = tile.loaded_ruleset.get_description()
-		parts_texture.texture = tile.loaded_ruleset.preview_texture
-		add_ruleset_highlights(tile.loaded_ruleset)
-		add_tiles(tile.loaded_ruleset)
-		if tile.loaded_ruleset.last_error != -1:
-			State.report_error(tile.loaded_ruleset.last_error_message)
-	
+	if tile.ruleset_path.empty():
+		clear()
+		return
+	header_data.text = tile.loaded_ruleset.get_raw_header()
+	ruleset_name.text = tile.loaded_ruleset.get_name()
+	description.text = tile.loaded_ruleset.get_description()
+	parts_texture.texture = tile.loaded_ruleset.preview_texture
+	add_ruleset_highlights(tile.loaded_ruleset)
+	add_tiles(tile.loaded_ruleset)
+	if tile.loaded_ruleset.last_error != -1:
+		State.report_error(tile.loaded_ruleset.last_error_message)
+
 
 func add_ruleset_highlights(ruleset: Ruleset):
-#	var index := 0
-	for old_highlight in parts_texture.get_children():
-		old_highlight.queue_free()
+	clear_highlight()
 	for i in ruleset.get_parts().size():
 		var highlight: PartHighlight = part_highlight_scene.instance()
 		parts_texture.add_child(highlight)
 		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)
 		highlight.set_id(i + 1)
+
+
+func clear():
+	header_data.text = ""
+	ruleset_name.text = ""
+	description.text = ""
+	parts_texture.texture = null
+	clear_highlight()
+	clear_tiles()
+
+
+func clear_highlight():
+	for old_highlight in parts_texture.get_children():
+		old_highlight.queue_free()
 
 
 func clear_tiles():
@@ -109,4 +123,7 @@ func populate_ruleset_option():
 func _on_RulesetFileName_item_selected(index: int):
 	current_ruleset_path = ruleset_option.get_item_metadata(index)
 	State.update_tile_param(TPTile.PARAM_RULESET, current_ruleset_path)
+	if current_ruleset_path.empty():
+		clear()
+		return
 	load_data(State.current_tile_ref.get_ref())
