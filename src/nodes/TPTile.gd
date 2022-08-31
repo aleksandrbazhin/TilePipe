@@ -289,17 +289,22 @@ func _on_Tree_item_collapsed(item: TreeItem):
 
 func update_texture(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
-#	if not load_texture(rel_path):
-#		return false
-	load_texture(rel_path)
+	texture_path = abs_path
+	if not load_texture(rel_path):
+		loaded_texture = null
+		if not abs_path.empty():
+			State.report_error("Error: invalid texture path")
 	_tile_data["texture"] = rel_path
 	return true
 
 
 func update_ruleset(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
+	ruleset_path = abs_path
 	if not load_ruleset(rel_path):
-		return false
+		loaded_ruleset = null
+		if not abs_path.empty():
+			State.report_error("Error: invalid ruleset")
 	ruleset_row.set_text(0, RULESET_PREFIX + rel_path)
 	_tile_data["ruleset"] = rel_path
 	return true
@@ -307,8 +312,11 @@ func update_ruleset(abs_path: String) -> bool:
 
 func update_template(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
+	template_path = abs_path
 	if not load_template(rel_path):
-		return false
+		loaded_template = null
+		if not abs_path.empty():
+			State.report_error("Error: invalid template")
 	template_row.set_text(0, TEMPLATE_PREFIX + rel_path)
 	_tile_data["template"] = rel_path
 	return true

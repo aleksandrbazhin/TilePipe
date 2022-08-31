@@ -153,9 +153,11 @@ func populate_project_file_option(option_button: OptionButton,
 		if option_path == selected_path:
 			option_button.selected = index
 		index += 1
-
+	
 	option_button.add_item("No")
 	option_button.set_item_metadata(index, "")
+	if selected_path.empty():
+		option_button.selected = option_button.get_item_count() - 1
 	
 
 

@@ -1,7 +1,7 @@
 {
-	"texture": "sideview_pixelart_with_random_8_part (copy).png",
-	"ruleset": "rulesets/no_symmetry_13_part.json",
-	"template": "templates/template_2x2.png",
+	"texture": "sideview_pixelart_with_random_8_part.png",
+	"ruleset": "rulesets/sideview_8_part.json",
+	"template": "templates/template_rpg_maker.png",
 	"output_tile_size": {
 		"x": 64,
 		"y": 64

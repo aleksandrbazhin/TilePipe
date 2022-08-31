@@ -19,24 +19,37 @@ func load_data(tile: TPTile):
 	if tile == null:
 		return
 	input_texture.load_data(tile)
+	Helpers.populate_project_file_option(ruleset_option, 
+		State.current_dir + "/" + Const.RULESET_DIR, 
+		funcref(Helpers, "scan_for_rulesets_in_dir"),
+		tile.ruleset_path)	
 	if tile.loaded_ruleset != null and tile.loaded_ruleset.is_loaded:
-		ruleset_option.text = tile.loaded_ruleset.get_name()
 		ruleset_texture.texture = tile.loaded_ruleset.preview_texture
 		add_ruleset_highlights(tile.loaded_ruleset)
-		Helpers.populate_project_file_option(ruleset_option, 
-			State.current_dir + "/" + Const.RULESET_DIR, 
-			funcref(Helpers, "scan_for_rulesets_in_dir"),
-			tile.ruleset_path)
-	if tile.template_path != "":
-		template_option.text = tile.template_path.get_file()
+	else:
+		clear_ruleset()
+	Helpers.populate_project_file_option(template_option, 
+		State.current_dir + "/" + Const.TEMPLATE_DIR, 
+		 funcref(Helpers, "scan_for_templates_in_dir"),
+		 tile.template_path)
+	if not tile.template_path.empty():
 		template_texture.texture = tile.loaded_template
-		Helpers.populate_project_file_option(template_option, 
-			State.current_dir + "/" + Const.TEMPLATE_DIR, 
-			 funcref(Helpers, "scan_for_templates_in_dir"),
-			 tile.template_path)
+	else:
+		clear_template()
+	
 	if tile.export_type != Const.EXPORT_TYPE_UKNOWN:
 		export_type_option.select(tile.export_type)
 	display_export_path(tile.export_type)
+
+
+func clear_ruleset():
+	ruleset_texture.texture = null
+	for old_highlight in ruleset_texture.get_children():
+		old_highlight.queue_free()
+
+
+func clear_template():
+	template_texture.texture = null
 
 
 func add_ruleset_highlights(ruleset: Ruleset):
@@ -68,8 +81,11 @@ func _on_TemplateButton_pressed():
 
 
 func _on_RulesetOptionButton_item_selected(index):
-	State.update_tile_param(TPTile.PARAM_RULESET, 
-		ruleset_option.get_item_metadata(index))
+	var ruleset_path: String = ruleset_option.get_item_metadata(index)
+	State.update_tile_param(TPTile.PARAM_RULESET, ruleset_path)
+	if ruleset_path.empty():
+		clear_ruleset()
+		return
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
@@ -78,8 +94,11 @@ func _on_RulesetOptionButton_item_selected(index):
 
 
 func _on_TemplateOptionButton_item_selected(index):
-	State.update_tile_param(TPTile.PARAM_TEMPLATE, 
-		template_option.get_item_metadata(index))
+	var template_path: String = template_option.get_item_metadata(index)
+	State.update_tile_param(TPTile.PARAM_TEMPLATE, template_path)
+	if template_path.empty():
+		clear_template()
+		return
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return

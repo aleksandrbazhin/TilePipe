@@ -32,6 +32,8 @@ func get_current_tile() -> TPTile:
 
 func update_tile_param(param_key: int, value, needs_render: bool = true):
 	var tile: TPTile = current_tile_ref.get_ref()
+	if tile == null:
+		return
 	if tile.update_param(param_key, value):
 		tile.save()
 		if needs_render:

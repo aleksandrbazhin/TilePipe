@@ -1,7 +1,7 @@
 {
 	"texture": "no_symmetry_pixelart_13_part.png",
-	"ruleset": "rulesets/no_symmetry_13_part.json",
-	"template": "templates/template_47.png",
+	"ruleset": "rulesets/sideview_8_part.json",
+	"template": "templates/template_2x2.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16
