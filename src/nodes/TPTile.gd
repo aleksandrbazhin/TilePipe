@@ -41,6 +41,7 @@ var is_selected := false
 var loaded_texture: Texture
 var loaded_ruleset: Ruleset
 var loaded_template: Texture
+var parsed_template: Dictionary
 var result_subtiles_by_bitmask: Dictionary
 var template_size: Vector2
 
@@ -120,8 +121,11 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 		return false
 	_tile_data = parsed_data
 	is_loaded = true
+# warning-ignore:unused_variable
 	var is_texture_loaded := load_texture(_tile_data["texture"])
+# warning-ignore:unused_variable
 	var is_ruleset_loaded := load_ruleset(_tile_data["ruleset"])
+# warning-ignore:unused_variable
 	var is_template_loaded := load_template(_tile_data["template"])
 	set_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
 	set_param("merge_level", "merge_level", Vector2(0.25, 0.25))
@@ -196,18 +200,22 @@ func load_template(path: String) -> bool:
 
 
 func parse_template():
+	parsed_template = {}
 	result_subtiles_by_bitmask.clear()
 	if loaded_template == null:
 		return
 	template_size = loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
 	for x in range(template_size.x):
 		for y in range(template_size.y):
+			parsed_template[Vector2(x, y)] = null
 			var mask: int = get_template_mask_value(loaded_template.get_data(), x, y)
 			var has_tile: bool = get_template_has_tile(loaded_template.get_data(), x, y)
 			if has_tile:
 				if not result_subtiles_by_bitmask.has(mask):
 					result_subtiles_by_bitmask[mask] = []
-				result_subtiles_by_bitmask[mask].append(GeneratedSubTile.new(mask, Vector2(x, y)))
+				var subtile := GeneratedSubTile.new(mask, Vector2(x, y))
+				result_subtiles_by_bitmask[mask].append(subtile)
+				parsed_template[Vector2(x, y)] = weakref(subtile)
 
 
 func get_template_mask_value(template_image: Image, x: int, y: int) -> int:

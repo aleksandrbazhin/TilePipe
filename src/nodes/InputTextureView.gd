@@ -67,6 +67,16 @@ func setup_sliders():
 	overlap_slider_y.value = tile.overlap_level.y
 
 
+func change_part_highlight(part_id: int, is_on: bool):
+	texture_container.set_part_highlight(part_id, is_on)
+
+
+func populate_texture_option():
+	var scan_func: FuncRef = funcref(Helpers, "scan_for_textures_in_dir")
+	Helpers.populate_project_file_option(texture_option, State.current_dir, 
+		scan_func, current_texture_path)
+
+
 func _on_TextureFileName_item_selected(index: int):
 	current_texture_path = texture_option.get_item_metadata(index)
 	State.update_tile_param(TPTile.PARAM_TEXTURE, current_texture_path)
@@ -103,12 +113,6 @@ func _on_AddTextureFileDialog_file_selected(path: String):
 	load_texture(State.get_current_tile().loaded_texture)
 
 
-func populate_texture_option():
-	var scan_func: FuncRef = funcref(Helpers, "scan_for_textures_in_dir")
-	Helpers.populate_project_file_option(texture_option, State.current_dir, 
-		scan_func, current_texture_path)
-
-
 func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
 	current_input_tile_size = size
 	State.update_tile_param(TPTile.PARAM_INPUT_SIZE, current_input_tile_size)
@@ -121,10 +125,6 @@ func _on_RateSlider_released(value: float):
 
 func _on_OverlapSlider_released(value: float):
 	State.update_tile_param(TPTile.PARAM_OVERLAP, Vector2(value, value))
-
-
-func change_part_highlight(part_id: int, is_on: bool):
-	texture_container.set_part_highlight(part_id, is_on)
 
 
 func _on_Smoothing_toggled(button_pressed: bool):
