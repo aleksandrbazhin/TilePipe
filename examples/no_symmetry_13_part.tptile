@@ -1,14 +1,14 @@
 {
 	"texture": "no_symmetry_pixelart_13_part.png",
-	"ruleset": "rulesets/sideview_8_part.json",
+	"ruleset": "rulesets/no_symmetry_13_part.json",
 	"template": "templates/template_2x2.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16
 	},
 	"merge_level": {
-		"x": 0.375,
-		"y": 0.375
+		"x": 0.3125,
+		"y": 0.3125
 	},
 	"overlap_level": {
 		"x": 0.3125,
@@ -21,13 +21,14 @@
 		"x": 64,
 		"y": 64
 	},
-	"subtile_offset": {
-		"x": 0,
-		"y": 0
-	},
 	"export_type": 0,
 	"export_png_path": "/home/alexander/GodotProjects/3dtests/sideview_pixelart_with_random_8_part (copy)_generated.png",
 	"export_godot3_tile_name": "sideview_pixelart_with_random_8_part (copy)_generated",
 	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/test.tres",
-	"export_godot3_autotile_type": 0
+	"export_godot3_autotile_type": 0,
+	"output_resize": true,
+	"subtile_spacing": {
+		"x": 0,
+		"y": 0
+	}
 }

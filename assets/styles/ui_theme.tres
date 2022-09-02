@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=33 format=2]
+[gd_resource type="Theme" load_steps=39 format=2]
 
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://assets/images/tree_arrow2.png" type="Texture" id=2]
@@ -63,6 +63,18 @@ content_margin_right = 12.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
 bg_color = Color( 0.156863, 0.176471, 0.2, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=26]
+
+[sub_resource type="StyleBoxEmpty" id=27]
+
+[sub_resource type="StyleBoxEmpty" id=28]
+
+[sub_resource type="StyleBoxEmpty" id=29]
+
+[sub_resource type="StyleBoxEmpty" id=30]
+
+[sub_resource type="StyleBoxEmpty" id=31]
 
 [sub_resource type="StyleBoxLine" id=1]
 color = Color( 0.439216, 0.470588, 0.52549, 1 )
@@ -147,6 +159,12 @@ CheckBox/constants/check_vadjust = 2
 CheckBox/styles/hover = SubResource( 23 )
 CheckBox/styles/normal = SubResource( 21 )
 CheckBox/styles/pressed = SubResource( 22 )
+CheckButton/styles/disabled = SubResource( 26 )
+CheckButton/styles/focus = SubResource( 27 )
+CheckButton/styles/hover = SubResource( 28 )
+CheckButton/styles/hover_pressed = SubResource( 29 )
+CheckButton/styles/normal = SubResource( 30 )
+CheckButton/styles/pressed = SubResource( 31 )
 Dialogs/constants/margin = 12
 FileDialog/colors/files_disabled = Color( 0.380392, 0.372549, 0.372549, 1 )
 FileDialog/icons/folder = ExtResource( 4 )

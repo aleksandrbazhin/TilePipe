@@ -14,13 +14,14 @@ enum {
 	PARAM_RANDOM_SEED_ENABLED,
 	PARAM_RANDOM_SEED_VALUE,
 	PARAM_SMOOTHING,
+	PARAM_OUTPUT_RESIZE,
 	PARAM_OUTPUT_SIZE,
-	PARAM_SUBTILE_OFFSET,
+	PARAM_SUBTILE_SPACING,
 	PARAM_EXPORT_TYPE,
 	PARAM_EXPORT_PNG_PATH,
 	PARAM_EXPORT_GODOT3_RESOURCE_PATH,
 	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE,
-	PARAM_EXPORT_GODOT3_TILE_NAME,
+	PARAM_EXPORT_GODOT3_TILE_NAME
 }
 
 
@@ -49,8 +50,9 @@ var texture_path: String
 var template_path: String
 var ruleset_path: String
 var input_tile_size: Vector2
+var output_resize: bool
 var output_tile_size: Vector2 = Vector2(64,64)
-var subtile_offset := Vector2.ZERO
+var subtile_spacing := Vector2.ZERO
 var merge_level := Vector2(0.25, 0.25)
 var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
@@ -80,7 +82,7 @@ func _ready():
 
 # the purpose of this is to be able to add new parameters to .tptile in the future
 # this way the program will still work, and will update the .tptile with defaults
-func set_param(param_name: String, settings_param_name: String, default_value):
+func set_tile_param(param_name: String, settings_param_name: String, default_value):
 	if get(param_name) == null:
 		print("Error: unknown tile parameter: ", param_name)
 		return
@@ -127,18 +129,21 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	var is_ruleset_loaded := load_ruleset(_tile_data["ruleset"])
 # warning-ignore:unused_variable
 	var is_template_loaded := load_template(_tile_data["template"])
-	set_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
-	set_param("merge_level", "merge_level", Vector2(0.25, 0.25))
-	set_param("overlap_level", "overlap_level", Vector2(0.25, 0.25))
-	set_param("smoothing", "smoothing", false)
-	set_param("random_seed_enabled", "random_seed_enabled", false)
-	set_param("output_tile_size", "output_tile_size", Const.DEFAULT_TILE_SIZE)
-	set_param("subtile_offset", "subtile_offset", Vector2.ZERO)
-	set_param("export_type", "export_type", Const.EXPORT_TYPE_UKNOWN)
-	set_param("export_png_path", "export_png_path", "")
-	set_param("export_godot3_resource_path", "export_godot3_resource_path", "")
-	set_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
-	set_param("export_godot3_tile_name", "export_godot3_tile_name", "")
+	set_tile_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
+	set_tile_param("merge_level", "merge_level", Vector2(0.25, 0.25))
+	set_tile_param("overlap_level", "overlap_level", Vector2(0.25, 0.25))
+	set_tile_param("smoothing", "smoothing", false)
+	set_tile_param("random_seed_enabled", "random_seed_enabled", false)
+	set_tile_param("output_resize", "output_resize", false)
+#	var output_tile_default_size = input_tile_size if "output_tile_size" in _tile_data
+	set_tile_param("output_tile_size", "output_tile_size", input_tile_size)
+#	print(output_tile_size)
+	set_tile_param("subtile_spacing", "subtile_spacing", Vector2.ZERO)
+	set_tile_param("export_type", "export_type", Const.EXPORT_TYPE_UKNOWN)
+	set_tile_param("export_png_path", "export_png_path", "")
+	set_tile_param("export_godot3_resource_path", "export_godot3_resource_path", "")
+	set_tile_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
+	set_tile_param("export_godot3_tile_name", "export_godot3_tile_name", "")
 	return true
 
 
@@ -341,6 +346,22 @@ func update_input_tile_size(new_size: Vector2) -> bool:
 	return true
 
 
+func update_output_resize(value: bool) -> bool:
+	output_resize = value
+	_tile_data["output_resize"] = value
+	return true
+
+
+func update_output_tile_size(new_size: Vector2) -> bool:
+	if new_size != output_tile_size and (new_size.x > 0 and new_size.y > 0):
+		output_tile_size = new_size
+		_tile_data["output_tile_size"] = {
+			"x": new_size.x,
+			"y": new_size.y,
+		}
+	return true
+
+
 func update_merge_level(new_merge_level: Vector2) -> bool:
 	merge_level = new_merge_level
 	_tile_data["merge_level"] = {
@@ -377,24 +398,14 @@ func update_random_seed_value(new_seed: int) -> bool:
 	return true
 
 
-func update_output_tile_size(size_key: int) -> bool:
-	if size_key == Const.NO_SCALING :
-		output_tile_size = input_tile_size
-	else:
-		var size_x: int = Const.OUTPUT_TILE_SIZE_OPTIONS.keys()[size_key]
-		output_tile_size = Vector2(size_x, size_x)
-		_tile_data["output_tile_size"] = {
-			"x": size_x,
-			"y": size_x,
-		}
-	return true
 
 
-func update_subtile_offset(new_offset: Vector2) -> bool:
-	subtile_offset = new_offset
-	_tile_data["subtile_offset"] = {
-		"x": subtile_offset.x,
-		"y": subtile_offset.y
+
+func update_subtile_spacing(new_spacing: Vector2) -> bool:
+	subtile_spacing = new_spacing
+	_tile_data["subtile_spacing"] = {
+		"x": subtile_spacing.x,
+		"y": subtile_spacing.y
 	}
 #	_tile_data["subtile_offset"] = subtile_offset
 	return true
@@ -450,10 +461,12 @@ func update_param(param_key: int, value) -> bool:
 			return update_random_seed_enabled(value)
 		PARAM_RANDOM_SEED_VALUE:
 			return update_random_seed_value(value)
+		PARAM_OUTPUT_RESIZE:
+			return update_output_resize(value)
 		PARAM_OUTPUT_SIZE:
 			return update_output_tile_size(value)
-		PARAM_SUBTILE_OFFSET:
-			return update_subtile_offset(value)
+		PARAM_SUBTILE_SPACING:
+			return update_subtile_spacing(value)
 		PARAM_EXPORT_TYPE:
 			return update_export_type(value)
 		PARAM_EXPORT_PNG_PATH:

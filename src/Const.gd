@@ -6,7 +6,7 @@ const EXAMPLES_DIR := "examples"
 const TILE_EXTENXSION := "tptile"
 const MIN_WINDOW_SIZE := Vector2(800, 600)
 const DRAG_END_MSEC := 200
-const DEFAULT_TILE_SIZE := Vector2(16, 16)
+const DEFAULT_TILE_SIZE := Vector2(64, 64)
 
 var DEFAULT_USER_SETTINGS := {
 	".": {
@@ -63,24 +63,6 @@ const PART_OVERLAP_VECTORS := {
 	"CORNER_OUT_BOTTOM_RIGHT": Vector2(1, 1),
 	"CORNER_OUT_BOTTOM_LEFT": Vector2(1, 1),
 	"CORNER_OUT_TOP_LEFT": Vector2(1, 1)
-}
-
-const NO_SCALING: int = 0
-const OUTPUT_TILE_SIZE_OPTIONS: Dictionary = {
-	NO_SCALING: "No scaling",
-	8: "8x8",
-	10: "10x10",
-	16: "16x16",
-	20: "20x20",
-	24: "24x24",
-	32: "32x32",
-	40: "40x40",
-	48: "48x48",
-	64: "64x64",
-	80: "80x80",
-	96: "96x96",
-	100: "100x100",
-	128: "128x128"
 }
 
 const EXPORT_TYPE_UKNOWN := -1

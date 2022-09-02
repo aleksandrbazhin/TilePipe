@@ -52,7 +52,7 @@ func start_render(tile: TPTile, input_image: Image):
 	subtiles = tile.result_subtiles_by_bitmask
 	ruleset = tile.loaded_ruleset
 	input_tile_size = tile.input_tile_size
-	output_tile_size = tile.output_tile_size
+	output_tile_size = tile.output_tile_size if tile.output_resize else tile.input_tile_size
 	input_tile_parts = split_input_into_tile_parts(input_image)
 	smoothing_enabled = tile.smoothing
 	

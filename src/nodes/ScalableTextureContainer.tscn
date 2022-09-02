@@ -58,9 +58,8 @@ text = "Input tile size: "
 
 [node name="Label2" type="Label" parent="InputInfo/HBoxContainer"]
 visible = false
-margin_left = 101.0
 margin_top = 8.0
-margin_right = 109.0
+margin_right = 8.0
 margin_bottom = 22.0
 text = "X"
 
@@ -69,6 +68,7 @@ margin_left = 101.0
 margin_right = 276.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
+suffix = "px"
 
 [node name="Label3" type="Label" parent="InputInfo/HBoxContainer"]
 visible = false

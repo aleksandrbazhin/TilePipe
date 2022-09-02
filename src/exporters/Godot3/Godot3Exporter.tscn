@@ -353,10 +353,8 @@ icon = ExtResource( 3 )
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = -32.0
 color = Color( 0.117647, 0.235294, 0.313726, 0.352941 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TileBlockColorRect" type="ColorRect" parent="."]
 anchor_right = 1.0

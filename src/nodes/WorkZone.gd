@@ -68,13 +68,6 @@ func update_progress(progress: int):
 
 
 func on_tiles_rendered():
-	
-#	if renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
-#		renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
-##		renderer.disconnect("report_progress", self, "update_progress")
-#	rendered_tiles = renderer.tiles
-#	var tile: TPTile = loaded_tile_ref.get_ref()
-#	emit_signal("input_image_processed")
 	var tile: TPTile = State.get_current_tile()
 	result_view.render_from_tile(tile)
 	update_progress(100)

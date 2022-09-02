@@ -12,6 +12,3 @@ value = 1.0
 rounded = true
 align = 1
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}

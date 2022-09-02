@@ -7,6 +7,7 @@ export var controls_visible := true
 
 var last_selected_subtile_position := Vector2.ZERO
 var last_selected_subtile_index := Vector2.ZERO
+var current_output_tile_size: Vector2
 
 onready var selected_subtile_container := $VBoxContainer/HSplitContainer/SingleTile
 onready var selected_subtile_texture := $VBoxContainer/HSplitContainer/SingleTile/SubtileTexture
@@ -16,25 +17,23 @@ onready var subtile_selection := $VBoxContainer/HSplitContainer/Result/TextureCo
 
 
 func render_from_tile(tile: TPTile):
-	
-	print(tile.output_tile_size)
-	
+	current_output_tile_size = tile.output_tile_size if tile.output_resize else tile.input_tile_size
 	var subtiles_by_bitmasks := tile.result_subtiles_by_bitmask
 	set_output_texture(null)
 	if subtiles_by_bitmasks.empty():
 		return
 	var out_image := Image.new()
-	var out_image_size: Vector2 = tile.template_size * tile.output_tile_size
-	out_image_size += (tile.template_size - Vector2.ONE) * tile.subtile_offset
+	var out_image_size: Vector2 = tile.template_size * current_output_tile_size
+	out_image_size += (tile.template_size - Vector2.ONE) * tile.subtile_spacing
 	out_image.create(int(out_image_size.x), int(out_image_size.y), false, Image.FORMAT_RGBA8)
-	var tile_rect := Rect2(Vector2.ZERO, tile.output_tile_size)
+	var tile_rect := Rect2(Vector2.ZERO, current_output_tile_size)
 	var itex = ImageTexture.new()
 	itex.create_from_image(out_image, 0)
 	for mask in subtiles_by_bitmasks.keys():
 		for tile_variant_index in range(subtiles_by_bitmasks[mask].size()):
 			var subtile: GeneratedSubTile = subtiles_by_bitmasks[mask][tile_variant_index]
-			var tile_position: Vector2 = subtile.position_in_template * tile.output_tile_size
-			tile_position +=  subtile.position_in_template * tile.subtile_offset
+			var tile_position: Vector2 = subtile.position_in_template * current_output_tile_size
+			tile_position +=  subtile.position_in_template * tile.subtile_spacing
 			if subtile.image == null:
 				continue
 			out_image.blit_rect(subtile.image, tile_rect, tile_position)
@@ -42,9 +41,9 @@ func render_from_tile(tile: TPTile):
 	set_output_texture(itex)
 	tile.output_texture = itex
 	if result_texture.texture != null:
-		subtile_highlight.rect_size = tile.output_tile_size
+		subtile_highlight.rect_size = current_output_tile_size
 		subtile_highlight.show()
-		subtile_selection.rect_size = tile.output_tile_size
+		subtile_selection.rect_size = current_output_tile_size
 		subtile_selection.show()
 		highlight_subtile(Vector2.ZERO)
 #		resize_selection(tile.output_tile_size)
@@ -87,14 +86,14 @@ func select_subtile(subtile_position: Vector2, subtile_index: Vector2):
 		selected_subtile_texture.texture = null
 	else:
 		var resize_to := min(selected_subtile_container.rect_size.x, selected_subtile_container.rect_size.y)
-		var resize_from := min(tile.output_tile_size.x, tile.output_tile_size.y)
+		var resize_from := min(current_output_tile_size.x, current_output_tile_size.y)
 		if resize_from == 0:
 			return
 		var scale := resize_to / resize_from
 		var subtile: GeneratedSubTile = subtile_ref.get_ref()
 		var itex := ImageTexture.new()
 		itex.create_from_image(subtile.image, 0)
-		itex.set_size_override(tile.output_tile_size * scale)
+		itex.set_size_override(current_output_tile_size * scale)
 		selected_subtile_texture.texture = itex
 	last_selected_subtile_index = subtile_index
 	last_selected_subtile_position = subtile_position
@@ -113,8 +112,8 @@ func _on_TextureRect_gui_input(event: InputEvent):
 			event.position.y >= texture_size.y or \
 			event.position.x < 0 or event.position.y < 0:
 		return
-	var subtile_index: Vector2 = (event.position / (tile.output_tile_size + tile.subtile_offset)).floor()
-	var subtile_position: Vector2 = subtile_index * (tile.output_tile_size + tile.subtile_offset)
+	var subtile_index: Vector2 = (event.position / (current_output_tile_size + tile.subtile_spacing)).floor()
+	var subtile_position: Vector2 = subtile_index * (current_output_tile_size + tile.subtile_spacing)
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		select_subtile(subtile_position, subtile_index)
 	elif event is InputEventMouseMotion:

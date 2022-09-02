@@ -12,23 +12,22 @@ onready var merge_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollConta
 onready var merge_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeYSliderContainer/MergeSliderY
 onready var overlap_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSliderX
 onready var overlap_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer/OverlapSliderY
-onready var output_tile_size_option: OptionButton = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/HBoxContainer/SizeOptionButton
-onready var subtile_offset: SpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileOffset/OffsetSpinBox
+
+onready var output_resize: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize/OutpuResizeButton
+onready var output_tile_size_x: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize/ResizeSpinBoxX
+
+onready var subtile_spacing_x: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingXSpinBox
+#onready var subtile_spacing_y: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingYSpinBox
+
 onready var smoothing_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Effects/SmoothingContainer/Smoothing
 onready var random_ssed_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/RandomCheckButton
 onready var random_seed_edit: LineEdit = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/SeedLineEdit
 onready var random_seed_apply: Button = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/SeedButton
 
 
-func _ready():
-	for size_option in Const.OUTPUT_TILE_SIZE_OPTIONS:
-		output_tile_size_option.add_item(Const.OUTPUT_TILE_SIZE_OPTIONS[size_option])
-
-
 func load_data(tile: TPTile):
 	if tile == null:
 		return
-#	if not tile.texture_path.empty()
 	current_texture_path = tile.texture_path
 	current_input_tile_size = tile.input_tile_size
 	populate_texture_option()
@@ -37,11 +36,15 @@ func load_data(tile: TPTile):
 		load_texture(tile.loaded_texture)
 	else:
 		clear()
-	output_tile_size_option.selected = Helpers.get_closest_output_size_key(tile.output_tile_size)
-	subtile_offset.value = tile.subtile_offset.x
+	output_resize.pressed = tile.output_resize
+	output_tile_size_x.editable = tile.output_resize
+	output_tile_size_x.value = tile.output_tile_size.x
+	
+	subtile_spacing_x.value = tile.subtile_spacing.x
 	smoothing_enabled.pressed = tile.smoothing
 	random_ssed_enabled.pressed = tile.random_seed_enabled
 	random_seed_edit.text = str(tile.random_seed_value)
+	
 
 
 func clear():
@@ -131,16 +134,6 @@ func _on_Smoothing_toggled(button_pressed: bool):
 	State.update_tile_param(TPTile.PARAM_SMOOTHING, button_pressed)
 
 
-func _on_SizeOptionButton_item_selected(index: int):
-	State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, index)
-
-
-func _on_SetOffsetButton_pressed():
-	var offset := int(subtile_offset.value)
-	var offset_vec := Vector2(offset, offset)
-	State.update_tile_param(TPTile.PARAM_SUBTILE_OFFSET, offset_vec)
-
-
 func _on_RandomCheckButton_toggled(button_pressed: bool):
 	random_seed_edit.editable = button_pressed
 	random_seed_apply.disabled = not button_pressed
@@ -154,3 +147,16 @@ func _on_SeedButton_pressed():
 func _on_SeedLineEdit_text_entered(new_text: String):
 	var current_seed = int(new_text)
 	State.update_tile_param(TPTile.PARAM_RANDOM_SEED_VALUE, current_seed)
+
+
+func _on_OutpuResizeButton_toggled(button_pressed: bool):
+	State.update_tile_param(TPTile.PARAM_OUTPUT_RESIZE, button_pressed)
+	output_tile_size_x.editable = button_pressed
+
+
+func _on_ResizeSpinBoxX_value_changed(value: float):
+	State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, Vector2(value, value))
+
+
+func _on_SpacingXSpinBox_value_changed(value: float):
+	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(value, value))
