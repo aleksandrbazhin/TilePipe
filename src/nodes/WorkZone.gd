@@ -17,6 +17,7 @@ func _ready():
 	State.connect("tile_selected", self, "on_tile_selected")
 	State.connect("tile_needs_render", self, "render_subtiles")
 	renderer.connect("tiles_ready", self, "on_tiles_rendered")
+	renderer.connect("report_progress", self, "update_progress")
 
 
 func unhide_all():
@@ -56,17 +57,18 @@ func render_subtiles():
 		return
 	var input_image: Image = tile.loaded_texture.get_data()
 	renderer.start_render(tile, input_image)
-#	update_progress(0)
+#	State.emit_signal("block")
+	update_progress(0)
 #	render_progress_overlay.show()
 
 
 
-#func update_progress(progress: int):
-#	render_progressbar.value = progress
+func update_progress(progress: int):
+	State.emit_signal("render_progress", progress)
 
 
 func on_tiles_rendered():
-#	update_progress(100)
+	
 #	if renderer.is_connected("tiles_ready", self, "on_tiles_rendered"):
 #		renderer.disconnect("tiles_ready", self, "on_tiles_rendered")
 ##		renderer.disconnect("report_progress", self, "update_progress")
@@ -75,7 +77,7 @@ func on_tiles_rendered():
 #	emit_signal("input_image_processed")
 	var tile: TPTile = State.get_current_tile()
 	result_view.render_from_tile(tile)
-
+	update_progress(100)
 
 func _on_TileMainView_ruleset_view_called():
 	var tile: TPTile = State.get_current_tile()

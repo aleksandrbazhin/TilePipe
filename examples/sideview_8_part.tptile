@@ -1,18 +1,18 @@
 {
 	"texture": "sideview_pixelart_with_random_8_part.png",
-	"ruleset": "rulesets/full_256_7_part.json",
-	"template": "templates/template_rpg_maker.png",
+	"ruleset": "rulesets/no_symmetry_13_part.json",
+	"template": "templates/template_2x2.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16
 	},
 	"merge_level": {
-		"x": 0.25,
-		"y": 0.25
+		"x": 0.5,
+		"y": 0.5
 	},
 	"overlap_level": {
-		"x": 0.25,
-		"y": 0.25
+		"x": 0.375,
+		"y": 0.375
 	},
 	"random_seed_enabled": true,
 	"random_seed_value": 122,
@@ -25,9 +25,9 @@
 		"x": 0,
 		"y": 0
 	},
-	"export_png_path": "/home/alexander/GodotProjects/3dtests/sideview_pixelart_with_random_8_part (copy)_generated.png",
+	"export_png_path": "/home/alexander/GodotProjects/3dtests/sideview_pixelart_with_random_8_part_generated.png",
 	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/test.tres",
 	"export_godot3_autotile_type": 0,
-	"export_godot3_tile_name": "sideview_pixelart_with_random_8_part (copy)_generated",
+	"export_godot3_tile_name": "sideview_pixelart_with_random_8_part_generated",
 	"export_type": 1
 }

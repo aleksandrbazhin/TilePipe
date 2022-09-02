@@ -60,6 +60,10 @@ func set_output_texture(texture: Texture):
 
 func clear():
 	result_texture.texture = null
+	last_selected_subtile_position = Vector2.ZERO
+	last_selected_subtile_index = Vector2.ZERO
+	select_subtile(last_selected_subtile_position, last_selected_subtile_index)
+	highlight_subtile(Vector2.ZERO)
 
 
 func highlight_subtile(subtile_position: Vector2):

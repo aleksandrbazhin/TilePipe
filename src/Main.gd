@@ -13,6 +13,8 @@ onready var project_tree: ProjectTree = $VBoxContainer/HSplitContainer/ProjectCo
 onready var blocking_overlay := $BlockingOverlay
 onready var work_zone: WorkZone = $VBoxContainer/HSplitContainer/WorkZone
 onready var error_dialog: AcceptDialog = $ErrorDialog
+onready var render_progress: ProgressBar = $VBoxContainer/StatusBar/HBoxContainer/ProgressBar
+onready var status_label: Label = $VBoxContainer/StatusBar/HBoxContainer/StatusLabel
 
 
 func _ready():
@@ -34,6 +36,7 @@ func connect_signals():
 	State.connect("popup_started", self, "start_modal_popup")
 	State.connect("popup_ended", self, "end_modal_popup")
 	State.connect("report_error", self, "add_error_report")
+	State.connect("render_progress", self, "on_render_progress")
 	get_tree().get_root().connect("size_changed", self, "on_size_changed")
 
 
@@ -67,6 +70,16 @@ func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
 		if State.current_modal_popup != null:
 			State.current_modal_popup.hide()
+
+
+func on_render_progress(progress: int):
+	render_progress.value = progress
+	if progress != 100:
+		render_progress.show()
+		status_label.text = "Rendering:"
+	else:
+		render_progress.hide()
+		status_label.text = ""
 
 
 func start_modal_popup():

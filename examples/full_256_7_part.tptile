@@ -7,8 +7,8 @@
 		"y": 16
 	},
 	"merge_level": {
-		"x": 0.5,
-		"y": 0.5
+		"x": 0.4375,
+		"y": 0.4375
 	},
 	"overlap_level": {
 		"x": 0,
@@ -26,5 +26,8 @@
 		"y": 0
 	},
 	"export_path": "",
-	"export_type": 0
+	"export_type": 1,
+	"export_png_path": "//full_256_7_part_generated.png",
+	"export_godot3_tile_name": "full_256_7_part_generated",
+	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/test.tres"
 }

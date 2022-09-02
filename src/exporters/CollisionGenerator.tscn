@@ -8,6 +8,7 @@
 [ext_resource path="res://assets/images/NodeWarning.svg" type="Texture" id=6]
 
 [node name="CollisionGenerator" type="PopupDialog"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -386.0
@@ -27,7 +28,7 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="VBoxContainer"]
-margin_right = 980.0
+margin_right = 894.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 custom_fonts/font = ExtResource( 3 )
@@ -37,7 +38,7 @@ valign = 1
 
 [node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer"]
 margin_top = 44.0
-margin_right = 980.0
+margin_right = 894.0
 margin_bottom = 83.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
@@ -47,7 +48,7 @@ custom_constants/margin_bottom = 10
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer3"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 970.0
+margin_right = 884.0
 margin_bottom = 29.0
 custom_constants/separation = 12
 
@@ -60,7 +61,7 @@ text = "Grid resolution:"
 
 [node name="GridSlider" type="HSlider" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
 margin_left = 111.0
-margin_right = 922.0
+margin_right = 836.0
 margin_bottom = 16.0
 hint_tooltip = "Roughly corresponds to the amount of points in the contour"
 size_flags_horizontal = 3
@@ -69,16 +70,16 @@ ticks_on_borders = true
 script = ExtResource( 5 )
 
 [node name="GridValueLabel" type="Label" parent="VBoxContainer/MarginContainer3/HBoxContainer"]
-margin_left = 934.0
-margin_right = 960.0
+margin_left = 848.0
+margin_right = 874.0
 margin_bottom = 19.0
 rect_min_size = Vector2( 26, 0 )
 text = "10"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 margin_top = 87.0
-margin_right = 980.0
-margin_bottom = 500.0
+margin_right = 894.0
+margin_bottom = 452.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 20
@@ -103,17 +104,17 @@ script = ExtResource( 2 )
 [node name="VisibleTextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 960.0
-margin_bottom = 393.0
+margin_right = 874.0
+margin_bottom = 345.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 expand = true
 stretch_mode = 6
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
-margin_top = 504.0
-margin_right = 980.0
-margin_bottom = 560.0
+margin_top = 456.0
+margin_right = 894.0
+margin_bottom = 512.0
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
@@ -122,21 +123,21 @@ custom_constants/margin_bottom = 10
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2"]
 margin_left = 10.0
 margin_top = 10.0
-margin_right = 970.0
+margin_right = 884.0
 margin_bottom = 46.0
 rect_min_size = Vector2( 0, 36 )
 custom_constants/separation = 10
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_top = 8.0
-margin_right = 546.0
-margin_bottom = 27.0
+margin_top = 11.0
+margin_right = 460.0
+margin_bottom = 25.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
 [node name="StatusContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_left = 556.0
-margin_right = 712.0
+margin_left = 470.0
+margin_right = 626.0
 margin_bottom = 36.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -214,15 +215,15 @@ __meta__ = {
 }
 
 [node name="SaveButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_left = 722.0
-margin_right = 850.0
+margin_left = 636.0
+margin_right = 764.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 128, 0 )
 text = "Save collisions"
 
 [node name="CancelButton" type="Button" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
-margin_left = 860.0
-margin_right = 960.0
+margin_left = 774.0
+margin_right = 874.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 100, 0 )
 text = "Cancel"

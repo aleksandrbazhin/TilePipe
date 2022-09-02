@@ -131,7 +131,7 @@ func display_export_path(export_type: int):
 			export_path_edit.text = tile.export_png_path
 		Const.EXPORT_TYPES.GODOT3:
 			export_path_edit.text = tile.export_godot3_resource_path
-			export_path_edit.text += ": " + tile.export_godot3_tile_name
+#			export_path_edit.text += ": " + tile.export_godot3_tile_name
 		_:
 			export_path_edit.text = ""
 
