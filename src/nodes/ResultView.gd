@@ -16,6 +16,9 @@ onready var subtile_selection := $VBoxContainer/HSplitContainer/Result/TextureCo
 
 
 func render_from_tile(tile: TPTile):
+	
+	print(tile.output_tile_size)
+	
 	var subtiles_by_bitmasks := tile.result_subtiles_by_bitmask
 	set_output_texture(null)
 	if subtiles_by_bitmasks.empty():
@@ -110,10 +113,8 @@ func _on_TextureRect_gui_input(event: InputEvent):
 			event.position.y >= texture_size.y or \
 			event.position.x < 0 or event.position.y < 0:
 		return
-	var subtile_index: Vector2 = (event.position / tile.output_tile_size).floor()
-	var subtile_position: Vector2 = subtile_index * tile.output_tile_size
-#	var out_image_size: Vector2 = tile.template_size * tile.output_tile_size
-#	out_image_size += (tile.template_size - Vector2.ONE) * tile.subtile_offset
+	var subtile_index: Vector2 = (event.position / (tile.output_tile_size + tile.subtile_offset)).floor()
+	var subtile_position: Vector2 = subtile_index * (tile.output_tile_size + tile.subtile_offset)
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		select_subtile(subtile_position, subtile_index)
 	elif event is InputEventMouseMotion:
