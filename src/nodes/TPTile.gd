@@ -407,7 +407,6 @@ func update_subtile_spacing(new_spacing: Vector2) -> bool:
 		"x": subtile_spacing.x,
 		"y": subtile_spacing.y
 	}
-#	_tile_data["subtile_offset"] = subtile_offset
 	return true
 
 

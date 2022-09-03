@@ -127,9 +127,6 @@ margin_left = 8.0
 rect_min_size = Vector2( 0, 28 )
 text = "Composition"
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MergeContainer" type="HBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox/Composition"]
 margin_top = 36.0
@@ -434,15 +431,15 @@ __meta__ = {
 
 [node name="Spacer2" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing"]
 visible = false
-margin_left = 586.0
-margin_right = 604.0
+margin_left = 564.0
+margin_right = 582.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="Label3" type="Label" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing" groups=["blockable"]]
 visible = false
-margin_left = 392.0
-margin_right = 403.0
+margin_left = 571.0
+margin_right = 582.0
 margin_bottom = 40.0
 size_flags_vertical = 1
 text = "Y:"
@@ -453,14 +450,15 @@ __meta__ = {
 
 [node name="SpacingYSpinBox" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing" instance=ExtResource( 4 )]
 visible = false
-margin_left = 400.0
+margin_left = 396.0
 margin_top = 4.0
-margin_right = 604.0
+margin_right = 582.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 0, 32 )
 size_flags_vertical = 4
 min_value = 0.0
 value = 0.0
+suffix = "px"
 
 [node name="PxLabel2" type="Label" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing" groups=["blockable"]]
 visible = false

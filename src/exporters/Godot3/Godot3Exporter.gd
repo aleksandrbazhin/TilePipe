@@ -17,7 +17,7 @@ var current_texture_image := Image.new()
 var current_tile_size: Vector2
 var current_tile_masks: Dictionary
 var current_texture_size: Vector2
-var current_tile_spacing: int
+var current_tile_spacing: Vector2
 var current_smoothing: bool = false
 
 # {template_position (Vector2): id (int)}
@@ -74,7 +74,7 @@ func _process(delta):
 func start_export_dialog(tile: TPTile):
 	current_tile_size = tile.output_tile_size
 	current_texture_size = tile.output_texture.get_size()
-	current_tile_spacing = int(tile.subtile_offset.x)
+	current_tile_spacing = tile.subtile_spacing
 	current_tile_masks = tile.result_subtiles_by_bitmask
 	current_texture_image.copy_from(tile.output_texture.get_data())
 	current_smoothing = tile.smoothing
@@ -400,7 +400,7 @@ func make_texture_string(tile_texture_path: String, texture_id: int = 1) -> Stri
 
 func make_autotile_data_string(tile_size: Vector2, tile_masks: Dictionary, 
 		texture_size: Vector2, new_tile_name: String, 
-		tile_spacing: int, new_autotile_type: int, 
+		subtile_spacing: Vector2, new_autotile_type: int, 
 		tile_id: int, texture_id: int) -> String:
 	var out_string: String = ""
 	var mask_out_strings: PoolStringArray = []
@@ -431,7 +431,7 @@ func make_autotile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 	out_string += line_beginning + "autotile/bitmask_flags = [ %s ]\n" % mask_out_strings.join(", ")
 	out_string += line_beginning + "autotile/icon_coordinate = Vector2( 0, 0 )\n"
 	out_string += line_beginning + "autotile/tile_size = Vector2( %d, %d )\n" % [tile_size.x, tile_size.y]
-	out_string += line_beginning + "autotile/spacing = %d\n" % tile_spacing
+	out_string += line_beginning + "autotile/spacing = %d\n" % subtile_spacing.x
 	out_string += line_beginning + "autotile/occluder_map = [  ]\n"
 	out_string += line_beginning + "autotile/navpoly_map = [  ]\n"
 	out_string += line_beginning + "autotile/priority_map = [  ]\n"
@@ -793,7 +793,7 @@ func _on_OverrideCheckButton_toggled(button_pressed):
 func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	if button_pressed:
 		collision_dialog.start(current_texture_image, current_tile_size, 
-			current_tile_spacing, current_smoothing)
+			current_tile_spacing.x, current_smoothing)
 	else:
 		collision_dialog.collisions_accepted_by_user = false
 		collision_shapes_to_id = {}

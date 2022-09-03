@@ -5,7 +5,7 @@ class_name ResultView
 export var single_tile_visible := true
 export var controls_visible := true
 
-var last_selected_subtile_position := Vector2.ZERO
+#var last_selected_subtile_position := Vector2.ZERO
 var last_selected_subtile_index := Vector2.ZERO
 var current_output_tile_size: Vector2
 
@@ -48,9 +48,9 @@ func render_from_tile(tile: TPTile):
 		highlight_subtile(Vector2.ZERO)
 #		resize_selection(tile.output_tile_size)
 		if not last_selected_subtile_index in tile.parsed_template:
-			last_selected_subtile_position = Vector2.ZERO
+#			last_selected_subtile_position = Vector2.ZERO
 			last_selected_subtile_index = Vector2.ZERO
-		select_subtile(last_selected_subtile_position, last_selected_subtile_index)
+		select_subtile(last_selected_subtile_index)
 
 
 func set_output_texture(texture: Texture):
@@ -62,9 +62,9 @@ func set_output_texture(texture: Texture):
 
 func clear():
 	result_texture.texture = null
-	last_selected_subtile_position = Vector2.ZERO
+#	last_selected_subtile_position = Vector2.ZERO
 	last_selected_subtile_index = Vector2.ZERO
-	select_subtile(last_selected_subtile_position, last_selected_subtile_index)
+	select_subtile(last_selected_subtile_index)
 	highlight_subtile(Vector2.ZERO)
 
 
@@ -73,9 +73,12 @@ func highlight_subtile(subtile_position: Vector2):
 		subtile_highlight.rect_position = subtile_position
 
 
-func select_subtile(subtile_position: Vector2, subtile_index: Vector2):
-	if subtile_selection.rect_position != subtile_position:
-		subtile_selection.rect_position = subtile_position
+func calculate_subtile_position(index: Vector2, spacing: Vector2) -> Vector2:
+	return index * (current_output_tile_size + spacing)
+
+
+func select_subtile(subtile_index: Vector2):
+	var subtile_position := Vector2.ZERO
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
@@ -85,6 +88,9 @@ func select_subtile(subtile_position: Vector2, subtile_index: Vector2):
 	if subtile_ref == null:
 		selected_subtile_texture.texture = null
 	else:
+		subtile_position = calculate_subtile_position(subtile_index, tile.subtile_spacing)
+		if subtile_selection.rect_position != subtile_position:
+			subtile_selection.rect_position = subtile_position
 		var resize_to := min(selected_subtile_container.rect_size.x, selected_subtile_container.rect_size.y)
 		var resize_from := min(current_output_tile_size.x, current_output_tile_size.y)
 		if resize_from == 0:
@@ -96,7 +102,6 @@ func select_subtile(subtile_position: Vector2, subtile_index: Vector2):
 		itex.set_size_override(current_output_tile_size * scale)
 		selected_subtile_texture.texture = itex
 	last_selected_subtile_index = subtile_index
-	last_selected_subtile_position = subtile_position
 
 
 func _on_TextureRect_gui_input(event: InputEvent):
@@ -113,12 +118,11 @@ func _on_TextureRect_gui_input(event: InputEvent):
 			event.position.x < 0 or event.position.y < 0:
 		return
 	var subtile_index: Vector2 = (event.position / (current_output_tile_size + tile.subtile_spacing)).floor()
-	var subtile_position: Vector2 = subtile_index * (current_output_tile_size + tile.subtile_spacing)
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
-		select_subtile(subtile_position, subtile_index)
+		select_subtile(subtile_index)
 	elif event is InputEventMouseMotion:
-		highlight_subtile(subtile_position)
+		highlight_subtile(calculate_subtile_position(subtile_index, tile.subtile_spacing))
 
 
 func _on_SingleTile_resized():
-	select_subtile(last_selected_subtile_position, last_selected_subtile_index)
+	select_subtile(last_selected_subtile_index)

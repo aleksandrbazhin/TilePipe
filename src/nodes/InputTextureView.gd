@@ -17,7 +17,7 @@ onready var output_resize: CheckButton = $HBox/SettingsContainer/ScrollContainer
 onready var output_tile_size_x: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize/ResizeSpinBoxX
 
 onready var subtile_spacing_x: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingXSpinBox
-#onready var subtile_spacing_y: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingYSpinBox
+onready var subtile_spacing_y: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingYSpinBox
 
 onready var smoothing_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Effects/SmoothingContainer/Smoothing
 onready var random_ssed_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/RandomCheckButton
@@ -44,7 +44,6 @@ func load_data(tile: TPTile):
 	smoothing_enabled.pressed = tile.smoothing
 	random_ssed_enabled.pressed = tile.random_seed_enabled
 	random_seed_edit.text = str(tile.random_seed_value)
-	
 
 
 func clear():
@@ -159,4 +158,11 @@ func _on_ResizeSpinBoxX_value_changed(value: float):
 
 
 func _on_SpacingXSpinBox_value_changed(value: float):
-	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(value, value))
+#	var y_spacing := subtile_spacing_y.value
+	var y_spacing := value
+	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(value, y_spacing))
+
+
+func _on_SpacingYSpinBox_value_changed(value):
+	var x_spacing := subtile_spacing_x.value
+	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(x_spacing, value))

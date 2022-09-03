@@ -21,14 +21,14 @@
 		"x": 64,
 		"y": 64
 	},
-	"export_type": 0,
-	"export_png_path": "/home/alexander/GodotProjects/3dtests/sideview_pixelart_with_random_8_part (copy)_generated.png",
-	"export_godot3_tile_name": "sideview_pixelart_with_random_8_part (copy)_generated",
+	"export_type": 1,
+	"export_png_path": "/home/alexander/GodotProjects/3dtests/no_symmetry_pixelart_13_part_generated.png",
+	"export_godot3_tile_name": "no_symmetry_pixelart_13_part_generated",
 	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/test.tres",
 	"export_godot3_autotile_type": 0,
 	"output_resize": true,
 	"subtile_spacing": {
-		"x": 0,
-		"y": 0
+		"x": 4,
+		"y": 4
 	}
 }

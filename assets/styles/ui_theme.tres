@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=39 format=2]
+[gd_resource type="Theme" load_steps=40 format=2]
 
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://assets/images/tree_arrow2.png" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://assets/images/Close.png" type="Texture" id=7]
 [ext_resource path="res://assets/images/CloseHover.png" type="Texture" id=8]
 [ext_resource path="res://assets/styles/subscribe_font.tres" type="DynamicFont" id=9]
+[ext_resource path="res://assets/NotoSans-Medium.ttf" type="DynamicFontData" id=10]
 
 [sub_resource type="StyleBoxFlat" id=6]
 content_margin_left = 12.0
@@ -147,6 +148,7 @@ font_path = "res://assets/IBMPlexSans-Medium.ttf"
 [sub_resource type="DynamicFont" id=4]
 size = 14
 font_data = SubResource( 3 )
+fallback/0 = ExtResource( 10 )
 
 [resource]
 default_font = SubResource( 4 )
