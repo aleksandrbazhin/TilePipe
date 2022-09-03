@@ -120,5 +120,5 @@ func _on_TextureRect_gui_input(event: InputEvent):
 		highlight_subtile(subtile_position)
 
 
-func _on_HSplitContainer_dragged(_offset):
+func _on_SingleTile_resized():
 	select_subtile(last_selected_subtile_position, last_selected_subtile_index)

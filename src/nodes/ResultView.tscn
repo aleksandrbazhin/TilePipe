@@ -86,5 +86,5 @@ margin_bottom = 40.0
 mouse_filter = 2
 color = Color( 1, 1, 1, 0.54902 )
 
-[connection signal="dragged" from="VBoxContainer/HSplitContainer" to="." method="_on_HSplitContainer_dragged"]
+[connection signal="resized" from="VBoxContainer/HSplitContainer/SingleTile" to="." method="_on_SingleTile_resized"]
 [connection signal="gui_input" from="VBoxContainer/HSplitContainer/Result/TextureContainer/TextureRect" to="." method="_on_TextureRect_gui_input"]
