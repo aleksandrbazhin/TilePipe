@@ -1,6 +1,6 @@
 extends PanelContainer
 
-class_name TileInRuleset
+class_name RuleInRuleset
 
 
 func setup(ruleset: Ruleset, tile_index: int):
@@ -11,6 +11,7 @@ func setup(ruleset: Ruleset, tile_index: int):
 		masks_container.add_child_below_node(masks_container.get_child(0), mask_node)
 #		masks_container.add_child(mask_node)
 	$BoxContainer/Label.text = str(tile_index + 1)
+#	$BoxContainer/NeighborMasks/Label.text += " (%d)" % mask_value
 	$BoxContainer/Preview/Parts/CenterContainer/TileCompositionPreview.setup(tile_data["part_indexes"])
 	$BoxContainer/Preview/Rotations/CenterContainer/TileRotationsPreview.setup(tile_data["part_rotations"])
 	$BoxContainer/Preview/Flips/CenterContainer/TileFlipsPreview.setup(tile_data["part_flip_x"], tile_data["part_flip_y"])

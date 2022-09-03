@@ -75,7 +75,7 @@ func add_tiles(ruleset: Ruleset):
 	for tile_index in ruleset.get_subtiles().size():
 		if switched_to_another_ruleset(working_ruleset_path):
 			break
-		var tile_view: TileInRuleset = preload("res://src/nodes/TileInRuleset.tscn").instance()
+		var tile_view: RuleInRuleset = preload("res://src/nodes/RuleInRuleset.tscn").instance()
 		tile_view.setup(ruleset, tile_index)
 		tiles_container.add_child(tile_view)
 		if tile_index % TILE_UPDATE_CHUNK == 0:

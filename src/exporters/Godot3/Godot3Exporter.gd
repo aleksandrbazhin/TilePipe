@@ -793,7 +793,7 @@ func _on_OverrideCheckButton_toggled(button_pressed):
 func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	if button_pressed:
 		collision_dialog.start(current_texture_image, current_tile_size, 
-			current_tile_spacing.x, current_smoothing)
+			int(current_tile_spacing.x), current_smoothing)
 	else:
 		collision_dialog.collisions_accepted_by_user = false
 		collision_shapes_to_id = {}

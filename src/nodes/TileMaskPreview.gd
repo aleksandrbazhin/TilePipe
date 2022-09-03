@@ -22,7 +22,7 @@ const DRAW_NEIGHBOUR_OFFSETS: Dictionary = {
 }
 
 var mask_value: int 
-
+var font: Font = preload("res://assets/styles/subscribe_font.tres")
 
 func _init(new_mask_value: int):
 	mask_value = new_mask_value
@@ -39,3 +39,4 @@ func _draw():
 			var offset: Vector2 = DRAW_NEIGHBOUR_OFFSETS[neighbour_mask_name]
 			var neigbour_pos := offset + TILE_BORDER
 			draw_rect(Rect2(neigbour_pos, NEIGHBOUR_SIZE_VEC), FG_COLOR)
+	draw_string(font, Vector2(2, 11), str(mask_value), Color.black)
