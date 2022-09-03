@@ -29,11 +29,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/nodes/GeneratedSubTile.gd"
 }, {
-"base": "Resource",
-"class": "GenerationData",
-"language": "GDScript",
-"path": "res://generation_data/GenerationData.gd"
-}, {
 "base": "WindowDialog",
 "class": "GodotExporter",
 "language": "GDScript",
@@ -129,7 +124,6 @@ _global_script_class_icons={
 "AdvancedSpinBox": "",
 "CollisionGenerator": "",
 "GeneratedSubTile": "",
-"GenerationData": "",
 "GodotExporter": "",
 "GodotTileRow": "",
 "InputTextureView": "",

@@ -1,7 +1,7 @@
 [gd_resource type="DynamicFont" load_steps=3 format=2]
 
-[ext_resource path="res://assets/IBMPlexSans-Medium.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://assets/NotoSans-Medium.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/styles/IBMPlexSans-Medium.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/styles/NotoSans-Medium.ttf" type="DynamicFontData" id=2]
 
 [resource]
 size = 10

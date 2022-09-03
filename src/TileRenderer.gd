@@ -41,7 +41,7 @@ func init_render_pool():
 		viewport.render_target_v_flip = true
 		viewport.size_override_stretch = true
 		var texture_rect := TextureRect.new()
-		var material: ShaderMaterial = preload("res://src/tile_shader_material.tres")
+		var material: ShaderMaterial = preload("res://src/TileRenderMaterial.tres")
 		texture_rect.material = material.duplicate()
 		texture_rect.stretch_mode = TextureRect.STRETCH_KEEP
 		viewport.add_child(texture_rect, true)

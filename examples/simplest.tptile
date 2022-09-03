@@ -1,7 +1,7 @@
 {
 	"texture": "simplest.png",
 	"ruleset": "rulesets/simplest.json",
-	"template": "",
+	"template": "templates/template_2x2.png",
 	"output_tile_size": {
 		"x": 64,
 		"y": 64
@@ -20,7 +20,7 @@
 		"x": 16,
 		"y": 16
 	},
-	"output_resize": true,
+	"output_resize": false,
 	"subtile_spacing": {
 		"x": 0,
 		"y": 0

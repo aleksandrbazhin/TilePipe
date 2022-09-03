@@ -13,5 +13,6 @@
 	"overlap_level": {
 		"x": 0,
 		"y": 0
-	}
+	},
+	"output_resize": false
 }

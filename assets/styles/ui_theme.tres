@@ -9,7 +9,7 @@
 [ext_resource path="res://assets/images/Close.png" type="Texture" id=7]
 [ext_resource path="res://assets/images/CloseHover.png" type="Texture" id=8]
 [ext_resource path="res://assets/styles/subscribe_font.tres" type="DynamicFont" id=9]
-[ext_resource path="res://assets/NotoSans-Medium.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://assets/styles/NotoSans-Medium.ttf" type="DynamicFontData" id=10]
 
 [sub_resource type="StyleBoxFlat" id=6]
 content_margin_left = 12.0

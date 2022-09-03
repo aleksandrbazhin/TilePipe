@@ -1,7 +1,7 @@
 {
 	"texture": "no_symmetry_pixelart_13_part.png",
 	"ruleset": "rulesets/no_symmetry_13_part.json",
-	"template": "templates/template_2x2.png",
+	"template": "templates/template_47_with_duplicates.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16
@@ -28,7 +28,7 @@
 	"export_godot3_autotile_type": 0,
 	"output_resize": true,
 	"subtile_spacing": {
-		"x": 4,
-		"y": 4
+		"x": 0,
+		"y": 0
 	}
 }

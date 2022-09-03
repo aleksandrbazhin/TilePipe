@@ -146,14 +146,15 @@ func populate_project_file_option(option_button: OptionButton,
 		search_dir: String, search_function: FuncRef, selected_path: String):
 	option_button.clear()
 	var options_found: PoolStringArray = search_function.call_func(search_dir)
+	var sorted_options := Array(options_found)
+	sorted_options.sort()
 	var index := 0
-	for option_path in options_found:
+	for option_path in sorted_options:
 		option_button.add_item(option_path.get_file())
 		option_button.set_item_metadata(index, option_path)
 		if option_path == selected_path:
 			option_button.selected = index
 		index += 1
-	
 	option_button.add_item("No")
 	option_button.set_item_metadata(index, "")
 	if selected_path.empty():

@@ -1,5 +1,5 @@
 {
-	"texture": "sideview_pixelart_8_part.png",
+	"texture": "sideview_pixelart_with_random_8_part.png",
 	"ruleset": "rulesets/sideview_8_part.json",
 	"template": "templates/template_47.png",
 	"input_tile_size": {
@@ -7,15 +7,15 @@
 		"y": 16
 	},
 	"merge_level": {
-		"x": 0.3125,
-		"y": 0.3125
+		"x": 0.25,
+		"y": 0.25
 	},
 	"overlap_level": {
 		"x": 0.25,
 		"y": 0.25
 	},
-	"random_seed_enabled": true,
-	"random_seed_value": 122,
+	"random_seed_enabled": false,
+	"random_seed_value": 0,
 	"smoothing": false,
 	"output_resize": true,
 	"output_tile_size": {
