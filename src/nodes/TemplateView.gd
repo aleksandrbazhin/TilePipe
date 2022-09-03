@@ -33,7 +33,6 @@ func clear_masks():
 		label.queue_free()
 
 
-
 func label_bitmasks(tile: TPTile):
 	clear_masks()
 	for mask in tile.result_subtiles_by_bitmask.keys():

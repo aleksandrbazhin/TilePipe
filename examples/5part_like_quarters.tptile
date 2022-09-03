@@ -1,0 +1,17 @@
+{
+	"texture": "former_quarters_5.png",
+	"ruleset": "rulesets/formerly_corner_5_part.json",
+	"template": "templates/template_47.png",
+	"input_tile_size": {
+		"x": 128,
+		"y": 128
+	},
+	"merge_level": {
+		"x": 0.5,
+		"y": 0.5
+	},
+	"overlap_level": {
+		"x": 0,
+		"y": 0
+	}
+}

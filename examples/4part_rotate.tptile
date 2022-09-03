@@ -9,18 +9,18 @@
 	"random_seed_enabled": false,
 	"smoothing": false,
 	"merge_level": {
-		"x": 0.40625,
-		"y": 0.40625
+		"x": 0.375,
+		"y": 0.375
 	},
 	"overlap_level": {
-		"x": 0.21875,
-		"y": 0.21875
+		"x": 0.140625,
+		"y": 0.140625
 	},
 	"input_tile_size": {
 		"x": 64,
 		"y": 64
 	},
-	"output_resize": true,
+	"output_resize": false,
 	"subtile_spacing": {
 		"x": 0,
 		"y": 0

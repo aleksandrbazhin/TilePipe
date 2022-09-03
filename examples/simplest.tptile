@@ -1,7 +1,7 @@
 {
 	"texture": "simplest.png",
 	"ruleset": "rulesets/simplest.json",
-	"template": "templates/template_2x2.png",
+	"template": "",
 	"output_tile_size": {
 		"x": 64,
 		"y": 64
