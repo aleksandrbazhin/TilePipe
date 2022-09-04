@@ -427,3 +427,10 @@ func unblock_ui():
 
 func _on_GridSlider_value_changed(value):
 	grid_value_label.text = str(value)
+
+
+func _input(event: InputEvent):
+	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
+		if visible:
+			get_tree().set_input_as_handled()
+			hide()

@@ -798,3 +798,10 @@ func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 		collision_dialog.collisions_accepted_by_user = false
 		collision_shapes_to_id = {}
 	temp_tile_row.set_collisions(button_pressed)
+
+
+func _input(event: InputEvent):
+	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
+		if visible:
+			get_tree().set_input_as_handled()
+			hide()

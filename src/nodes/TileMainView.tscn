@@ -185,6 +185,7 @@ margin_top = 8.0
 margin_right = 1074.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 32 )
+focus_mode = 0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 editable = false

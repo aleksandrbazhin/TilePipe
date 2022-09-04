@@ -64,7 +64,6 @@ var export_godot3_resource_path: String
 var export_godot3_autotile_type: int = Const.GODOT3_UNKNOWN_AUTOTILE_TYPE
 var export_godot3_tile_name: String
 
-
 var tile_row: TreeItem
 var ruleset_row: TreeItem
 var template_row: TreeItem
@@ -135,9 +134,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("smoothing", "smoothing", false)
 	set_tile_param("random_seed_enabled", "random_seed_enabled", false)
 	set_tile_param("output_resize", "output_resize", false)
-#	var output_tile_default_size = input_tile_size if "output_tile_size" in _tile_data
 	set_tile_param("output_tile_size", "output_tile_size", input_tile_size)
-#	print(output_tile_size)
 	set_tile_param("subtile_spacing", "subtile_spacing", Vector2.ZERO)
 	set_tile_param("export_type", "export_type", Const.EXPORT_TYPE_UKNOWN)
 	set_tile_param("export_png_path", "export_png_path", "")
@@ -145,6 +142,11 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
 	set_tile_param("export_godot3_tile_name", "export_godot3_tile_name", "")
 	return true
+
+
+func reload():
+	load_tile(current_directory, tile_file_name)
+	State.emit_signal("tile_needs_render")
 
 
 func block_failed_tile():
@@ -396,9 +398,6 @@ func update_random_seed_value(new_seed: int) -> bool:
 	random_seed_value = new_seed
 	_tile_data["random_seed_value"] = random_seed_value
 	return true
-
-
-
 
 
 func update_subtile_spacing(new_spacing: Vector2) -> bool:

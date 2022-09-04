@@ -166,3 +166,21 @@ func _on_SpacingXSpinBox_value_changed(value: float):
 func _on_SpacingYSpinBox_value_changed(value):
 	var x_spacing := subtile_spacing_x.value
 	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(x_spacing, value))
+
+
+func reload_tile():
+	var tile: TPTile = State.get_current_tile()
+	if tile == null:
+		return
+	tile.reload()
+
+
+func _on_ReloadButton_pressed():
+	reload_tile()
+	
+
+func _input(event: InputEvent):
+	if event is InputEventKey and event.pressed and event.scancode == KEY_F5:
+		if visible:
+			get_tree().set_input_as_handled()
+			reload_tile()

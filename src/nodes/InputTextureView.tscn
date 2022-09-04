@@ -1,14 +1,24 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/nodes/ScalableTextureContainer.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/nodes/InputTextureView.gd" type="Script" id=2]
 [ext_resource path="res://assets/images/Load.svg" type="Texture" id=3]
 [ext_resource path="res://src/nodes/AdvancedSpinBox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/nodes/AdvancedSlider.gd" type="Script" id=5]
+[ext_resource path="res://assets/styles/ui_theme.tres" type="Theme" id=6]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.117647, 0.121569, 0.137255, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.439216, 0.415686, 0.415686, 1 )
 
 [node name="InputTextureView" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = ExtResource( 6 )
 script = ExtResource( 2 )
 
 [node name="AddTextureFileDialog" type="FileDialog" parent="."]
@@ -64,15 +74,37 @@ size_flags_vertical = 4
 text = "Add texture"
 icon = ExtResource( 3 )
 
-[node name="HSeparator" type="HSeparator" parent="."]
-visible = false
-margin_top = 36.0
+[node name="Spacer" type="Control" parent="HeaderContainer"]
+margin_left = 574.0
+margin_right = 1074.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="ReloadButton" type="Button" parent="HeaderContainer"]
+margin_left = 1082.0
+margin_top = 4.0
+margin_right = 1262.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 180, 32 )
+hint_tooltip = "Reload everything for this tile and render (F5)"
+size_flags_vertical = 4
+custom_styles/normal = SubResource( 1 )
+text = "↻ Reload Tile (F5)"
+
+[node name="Spacer2" type="Control" parent="HeaderContainer"]
+margin_left = 1270.0
 margin_right = 1280.0
-margin_bottom = 38.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="HSeparator" type="HSeparator" parent="."]
+margin_top = 44.0
+margin_right = 1280.0
+margin_bottom = 46.0
 custom_constants/separation = 2
 
 [node name="HBox" type="HBoxContainer" parent="."]
-margin_top = 44.0
+margin_top = 50.0
 margin_right = 1280.0
 margin_bottom = 720.0
 size_flags_vertical = 3
@@ -83,13 +115,13 @@ alignment = 1
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 632.0
-margin_bottom = 676.0
+margin_bottom = 670.0
 rect_clip_content = true
 
 [node name="SettingsContainer" type="MarginContainer" parent="HBox"]
 margin_left = 648.0
 margin_right = 1280.0
-margin_bottom = 676.0
+margin_bottom = 670.0
 size_flags_horizontal = 3
 custom_constants/margin_right = 20
 custom_constants/margin_top = 0
@@ -98,12 +130,12 @@ custom_constants/margin_left = 8
 [node name="ScrollContainer" type="ScrollContainer" parent="HBox/SettingsContainer"]
 margin_left = 8.0
 margin_right = 612.0
-margin_bottom = 676.0
+margin_bottom = 670.0
 scroll_horizontal_enabled = false
 
 [node name="VBox" type="VBoxContainer" parent="HBox/SettingsContainer/ScrollContainer"]
 margin_right = 604.0
-margin_bottom = 540.0
+margin_bottom = 524.0
 size_flags_horizontal = 3
 custom_constants/separation = 40
 
@@ -326,25 +358,25 @@ rect_min_size = Vector2( 18, 0 )
 
 [node name="Label" type="Label" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize"]
 margin_left = 22.0
-margin_top = 13.0
+margin_top = 10.0
 margin_right = 150.0
-margin_bottom = 27.0
+margin_bottom = 29.0
 rect_min_size = Vector2( 128, 0 )
 text = "Output resize"
 
 [node name="OutpuResizeButton" type="CheckButton" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize"]
 margin_left = 154.0
-margin_right = 230.0
+margin_right = 218.0
 margin_bottom = 40.0
 
 [node name="Spacer2" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize"]
-margin_left = 234.0
-margin_right = 252.0
+margin_left = 222.0
+margin_right = 240.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="ResizeSpinBoxX" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize" instance=ExtResource( 4 )]
-margin_left = 256.0
+margin_left = 244.0
 margin_top = 4.0
 margin_right = 582.0
 margin_bottom = 36.0
@@ -481,7 +513,7 @@ rect_min_size = Vector2( 18, 0 )
 [node name="Effects" type="VBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox" groups=["corners_settings", "overlay_settings"]]
 margin_top = 348.0
 margin_right = 604.0
-margin_bottom = 424.0
+margin_bottom = 416.0
 hint_tooltip = "If you have multiple rows in your input image, the result can and will be randomized. 
 (If aspect ratio of a texture is more than 1:4 for a 4-part preset)"
 custom_constants/separation = 8
@@ -503,18 +535,18 @@ valign = 1
 [node name="SmoothingContainer" type="HBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox/Effects"]
 margin_top = 36.0
 margin_right = 604.0
-margin_bottom = 76.0
+margin_bottom = 68.0
 size_flags_horizontal = 3
 
 [node name="Spacer" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/Effects/SmoothingContainer"]
 margin_right = 18.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="Smoothing" type="CheckButton" parent="HBox/SettingsContainer/ScrollContainer/VBox/Effects/SmoothingContainer" groups=["blockable"]]
 margin_left = 22.0
 margin_right = 582.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 hint_tooltip = "Disable for pixelart, enable for anitaliased."
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -527,13 +559,13 @@ __meta__ = {
 [node name="Spacer3" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/Effects/SmoothingContainer"]
 margin_left = 586.0
 margin_right = 604.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="Randomization" type="VBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox" groups=["corners_settings", "overlay_settings"]]
-margin_top = 464.0
+margin_top = 456.0
 margin_right = 604.0
-margin_bottom = 540.0
+margin_bottom = 524.0
 hint_tooltip = "If you have multiple rows in your input image, the result can and will be randomized. 
 (If aspect ratio of a texture is more than 1:4 for a 4-part preset)"
 custom_constants/separation = 8
@@ -555,35 +587,34 @@ valign = 1
 [node name="HBoxContainer" type="HBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization"]
 margin_top = 36.0
 margin_right = 604.0
-margin_bottom = 76.0
+margin_bottom = 68.0
 hint_tooltip = "Use some interger seed to have consistent randomization result"
 
 [node name="Spacer" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer"]
 margin_right = 18.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="Label" type="Label" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer"]
 margin_left = 22.0
-margin_top = 7.0
+margin_top = 3.0
 margin_right = 142.0
-margin_bottom = 33.0
+margin_bottom = 29.0
 rect_min_size = Vector2( 120, 26 )
 text = " Use random seed"
 valign = 1
 
 [node name="RandomCheckButton" type="CheckButton" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer" groups=["blockable"]]
 margin_left = 146.0
-margin_right = 222.0
-margin_bottom = 40.0
+margin_right = 210.0
+margin_bottom = 32.0
 hint_tooltip = "Use some interger seed to have consistent randomization result"
 shortcut_in_tooltip = false
 
 [node name="SeedLineEdit" type="LineEdit" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer" groups=["blockable"]]
-margin_left = 226.0
-margin_top = 4.0
+margin_left = 214.0
 margin_right = 498.0
-margin_bottom = 36.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 hint_tooltip = "Use some interger seed to have consistent randomization result"
 size_flags_horizontal = 3
@@ -597,9 +628,8 @@ caret_blink_speed = 0.5
 
 [node name="SeedButton" type="Button" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer" groups=["blockable"]]
 margin_left = 502.0
-margin_top = 4.0
 margin_right = 582.0
-margin_bottom = 36.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 80, 32 )
 size_flags_vertical = 4
 disabled = true
@@ -611,7 +641,7 @@ __meta__ = {
 [node name="Spacer3" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer"]
 margin_left = 586.0
 margin_right = 604.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 18, 0 )
 
 [connection signal="about_to_show" from="AddTextureFileDialog" to="." method="_on_AddTextureFileDialog_about_to_show"]
@@ -619,6 +649,7 @@ rect_min_size = Vector2( 18, 0 )
 [connection signal="popup_hide" from="AddTextureFileDialog" to="." method="_on_AddTextureFileDialog_popup_hide"]
 [connection signal="item_selected" from="HeaderContainer/TextureOption" to="." method="_on_TextureFileName_item_selected"]
 [connection signal="pressed" from="HeaderContainer/TextureDialogButton" to="." method="_on_TextureDialogButton_pressed"]
+[connection signal="pressed" from="HeaderContainer/ReloadButton" to="." method="_on_ReloadButton_pressed"]
 [connection signal="tile_size_changed" from="HBox/ScalableTextureContainer" to="." method="_on_ScalableTextureContainer_tile_size_changed"]
 [connection signal="released" from="HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/MergeSliderX" to="." method="_on_RateSlider_released"]
 [connection signal="released" from="HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSliderX" to="." method="_on_OverlapSlider_released"]
