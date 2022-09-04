@@ -1,12 +1,10 @@
 [gd_resource type="DynamicFont" load_steps=3 format=2]
 
-[ext_resource path="res://assets/styles/NotoSans-Medium.ttf" type="DynamicFontData" id=1]
-
-[sub_resource type="DynamicFontData" id=1]
-font_path = "res://assets/IBMPlexSans-Medium.ttf"
+[ext_resource path="res://assets/styles/IBMPlexSans-Medium.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/styles/NotoSans-Medium.ttf" type="DynamicFontData" id=2]
 
 [resource]
 extra_spacing_top = 2
 extra_spacing_bottom = 2
-font_data = SubResource( 1 )
-fallback/0 = ExtResource( 1 )
+font_data = ExtResource( 1 )
+fallback/0 = ExtResource( 2 )
