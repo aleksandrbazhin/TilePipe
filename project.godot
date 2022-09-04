@@ -173,8 +173,8 @@ gdscript/warnings/return_value_discarded=false
 
 [display]
 
-window/size/width=1280
-window/size/height=720
+window/size/width=1920
+window/size/height=1080
 window/vsync/use_vsync=false
 window/energy_saving/keep_screen_on=false
 window/stretch/aspect="expand"

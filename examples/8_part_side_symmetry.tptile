@@ -1,6 +1,6 @@
 {
-	"texture": "sideview_pixelart_with_random_8_part.png",
-	"ruleset": "rulesets/sideview_8_part.json",
+	"texture": "input_textures/8_part_side_symmetry_random.png",
+	"ruleset": "rulesets/8_part_side_symmetry.json",
 	"template": "templates/template_47.png",
 	"input_tile_size": {
 		"x": 16,
@@ -14,7 +14,7 @@
 		"x": 0.25,
 		"y": 0.25
 	},
-	"random_seed_enabled": false,
+	"random_seed_enabled": true,
 	"random_seed_value": 0,
 	"smoothing": false,
 	"output_resize": true,

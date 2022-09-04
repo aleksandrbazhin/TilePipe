@@ -1,7 +1,7 @@
 {
-	"texture": "full_256_diagonal_7_part.png",
-	"ruleset": "rulesets/full_256_7_part.json",
-	"template": "templates/template_256.png",
+	"texture": "input_textures/7_part_full_256.png",
+	"ruleset": "rulesets/7_part_full_256.json",
+	"template": "templates/template_256_32x8.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16
@@ -18,8 +18,8 @@
 	"random_seed_value": 0,
 	"smoothing": false,
 	"output_tile_size": {
-		"x": 32,
-		"y": 32
+		"x": 36,
+		"y": 36
 	},
 	"export_path": "",
 	"export_type": 1,

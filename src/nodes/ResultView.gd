@@ -80,8 +80,13 @@ func select_subtile(subtile_index: Vector2):
 	var subtile_position := Vector2.ZERO
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
+		selected_subtile_texture.texture = null
 		return
 	if not subtile_index in tile.parsed_template:
+		selected_subtile_texture.texture = null
+		return
+	if result_texture.texture == null:
+		selected_subtile_texture.texture = null
 		return
 	var subtile_ref: WeakRef = tile.parsed_template[subtile_index]
 	if subtile_ref == null:

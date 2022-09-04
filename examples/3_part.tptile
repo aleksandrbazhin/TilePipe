@@ -1,7 +1,7 @@
 {
-	"texture": "overlay_4.png",
-	"ruleset": "rulesets/rotate_4_part.json",
-	"template": "templates/template_47.png",
+	"texture": "input_textures/3_part.png",
+	"ruleset": "rulesets/3_part.json",
+	"template": "templates/template_2x2.png",
 	"output_tile_size": {
 		"x": 64,
 		"y": 64
@@ -9,16 +9,16 @@
 	"random_seed_enabled": false,
 	"smoothing": false,
 	"merge_level": {
+		"x": 0.4375,
+		"y": 0.4375
+	},
+	"overlap_level": {
 		"x": 0.375,
 		"y": 0.375
 	},
-	"overlap_level": {
-		"x": 0.15625,
-		"y": 0.15625
-	},
 	"input_tile_size": {
-		"x": 64,
-		"y": 64
+		"x": 16,
+		"y": 16
 	},
 	"output_resize": false,
 	"subtile_spacing": {
