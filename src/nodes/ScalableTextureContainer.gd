@@ -23,7 +23,7 @@ func _ready():
 	is_ready = true
 
 
-func set_texture(texture: Texture, tile_size: Vector2 = Const.DEFAULT_TILE_SIZE):
+func set_main_texture(texture: Texture, tile_size: Vector2 = Const.DEFAULT_TILE_SIZE):
 	texture_rect.texture = texture
 	current_tile_size = tile_size
 	set_input_tile_size(tile_size)
@@ -45,7 +45,7 @@ func set_input_tile_size(tile_size: Vector2):
 	current_scale = Vector2(scale_factor, scale_factor)
 	texture_rect.rect_scale = current_scale
 	texture_rect.rect_size /= current_scale
-	var bg_scale :=  scale_factor * tile_size / Const.DEFAULT_TILE_SIZE
+	var bg_scale := scale_factor * tile_size / Const.DEFAULT_TILE_SIZE
 	bg_rect.rect_size = rect_size / bg_scale
 	bg_rect.rect_scale = bg_scale
 

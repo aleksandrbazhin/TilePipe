@@ -106,7 +106,6 @@ __meta__ = {
 }
 
 [node name="ErrorDialog" type="AcceptDialog" parent="."]
-visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -115,7 +114,7 @@ margin_left = -360.0
 margin_top = -240.0
 margin_right = 360.0
 margin_bottom = -105.0
-rect_min_size = Vector2( 720, 320 )
+rect_min_size = Vector2( 720, 240 )
 popup_exclusive = true
 window_title = "Error occured"
 dialog_autowrap = true

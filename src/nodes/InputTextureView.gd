@@ -32,14 +32,10 @@ func load_data(tile: TPTile):
 	current_input_tile_size = tile.input_tile_size
 	populate_texture_option()
 	setup_sliders()
-	if not current_texture_path.empty():
-		load_texture(tile.loaded_texture)
-	else:
-		clear()
+	load_texture(tile.loaded_texture)
 	output_resize.pressed = tile.output_resize
 	output_tile_size_x.editable = tile.output_resize
 	output_tile_size_x.value = tile.output_tile_size.x
-	
 	subtile_spacing_x.value = tile.subtile_spacing.x
 	smoothing_enabled.pressed = tile.smoothing
 	random_ssed_enabled.pressed = tile.random_seed_enabled
@@ -48,11 +44,11 @@ func load_data(tile: TPTile):
 
 func clear():
 	texture_option.selected = texture_option.get_item_count() - 1
-	texture_container.set_texture(null)
+	texture_container.set_main_texture(null)
 
 
 func load_texture(texture: Texture):
-	texture_container.set_texture(texture, current_input_tile_size)
+	texture_container.set_main_texture(texture, current_input_tile_size)
 
 
 func setup_sliders():

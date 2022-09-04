@@ -1,10 +1,10 @@
 {
-	"texture": "former_quarters_5.png",
-	"ruleset": "rulesets/formerly_corner_5_part.json",
+	"texture": "input_textures/5_part_quarters.png",
+	"ruleset": "rulesets/5_part_quarters.json",
 	"template": "templates/template_47.png",
 	"input_tile_size": {
-		"x": 64,
-		"y": 64
+		"x": 128,
+		"y": 128
 	},
 	"merge_level": {
 		"x": 0.5,
@@ -14,5 +14,10 @@
 		"x": 0,
 		"y": 0
 	},
-	"output_resize": false
+	"output_resize": false,
+	"output_tile_size": {
+		"x": 64,
+		"y": 64
+	},
+	"smoothing": true
 }

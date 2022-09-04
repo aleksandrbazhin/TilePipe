@@ -92,7 +92,6 @@ func end_modal_popup():
 
 func add_error_report(text: String):
 	start_modal_popup()
-#	error_dialog.get_label().text += text + "\n"
 	error_dialog.dialog_text += text + "\n"
 	if not error_dialog.visible:
 		error_dialog.popup_centered_clamped()
@@ -101,4 +100,3 @@ func add_error_report(text: String):
 func _on_ErrorDialog_popup_hide():
 	end_modal_popup()
 	error_dialog.dialog_text = ""
-#	error_dialog.get_label().text = ""
