@@ -50,7 +50,7 @@
             "part_indexes": [0, 0, 0, 1, 1, 1, 0, 0],
             "part_rotations": [2, 2, 2, 2, 2, 2, 2, 2],
             "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]            
+            "part_flip_y": [false, false, false, false, false, false, false, false]
         },
         {
             "mask_variants": [31],

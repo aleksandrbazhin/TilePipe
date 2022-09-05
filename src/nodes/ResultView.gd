@@ -108,6 +108,7 @@ func select_subtile(subtile_index: Vector2):
 		itex.set_size_override(current_output_tile_size * scale)
 		selected_subtile_texture.texture = itex
 		bitmask_label.text = str(subtile.bitmask)
+		State.emit_signal("subtile_selected", subtile.bitmask)
 	last_selected_subtile_index = subtile_index
 
 

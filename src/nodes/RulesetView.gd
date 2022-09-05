@@ -13,8 +13,21 @@ onready var header_data := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/R
 onready var ruleset_name := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer/Name
 onready var description := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer/Description
 onready var parts_texture := $VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer/ScrollContainer/TextureRect
-onready var tiles_container := $VBoxContainer/ScrollContainer/VBoxContainer
-onready var scroll_container := $VBoxContainer/ScrollContainer
+onready var tiles_container: VBoxContainer = $VBoxContainer/ScrollContainer/VBoxContainer
+onready var scroll_container: ScrollContainer = $VBoxContainer/ScrollContainer
+
+
+func _ready():
+	State.connect("subtile_selected", self, "on_subtile_selected")
+
+
+func on_subtile_selected(bitmask: int):
+	if not visible:
+		return
+	for rule in tiles_container.get_children():
+		if bitmask in rule.bitmask_variants:
+			scroll_container.scroll_vertical = rule.rect_position.y
+			return
 
 
 func load_data(tile: TPTile):

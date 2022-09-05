@@ -30,7 +30,7 @@
             "part_rotations": [0, 0, 1, 1, 3, 3, 3, 3],
             "part_flip_x": [false, false, false, false, false, false, false, false],
             "part_flip_y": [false, false, false, false, false, false, false, false]
-        },                      
+        },
         {
             "mask_variants": [68],
             "part_indexes": [2, 2, 0, 2, 2, 2, 0, 2],
@@ -44,7 +44,7 @@
             "part_rotations": [1, 1, 1, 1, 1, 3, 3, 3],
             "part_flip_x": [false, false, false, false, false, false, false, false],
             "part_flip_y": [false, false, false, false, false, false, false, false]
-        },     
+        },
         {
             "mask_variants": [0],
             "part_indexes": [3, 4, 3, 4, 3, 4, 3, 4],
@@ -79,7 +79,7 @@
             "part_rotations": [0, 0, 3, 1, 3, 3, 3, 3],
             "part_flip_x": [false, false, false, false, false, false, false, false],
             "part_flip_y": [false, false, false, false, false, false, false, false]
-        },        
+        },
         {
             "mask_variants": [84],
             "part_indexes": [2, 2, 0, 1, 0, 1, 0, 2],
@@ -107,7 +107,7 @@
             "part_rotations": [3, 0, 3, 1, 3, 3, 3, 3],
             "part_flip_x": [false, false, false, false, false, false, false, false],
             "part_flip_y": [false, false, false, false, false, false, false, false]
-        },                
+        },
         {
             "mask_variants": [85],
             "part_indexes": [0, 1, 0, 1, 0, 1, 0, 1],
@@ -142,7 +142,7 @@
             "part_rotations": [3, 0, 3, 1, 3, 3, 3, 3],
             "part_flip_x": [false, false, false, false, false, false, false, false],
             "part_flip_y": [false, false, false, false, false, false, false, false]
-        },        
+        },
         {
             "mask_variants": [92],
             "part_indexes": [2, 2, 0, 0, 0, 1, 0, 2],
@@ -198,7 +198,7 @@
             "part_rotations": [3, 0, 3, 3, 3, 3, 3, 3],
             "part_flip_x": [false, false, false, false, false, false, false, false],
             "part_flip_y": [false, false, false, false, false, false, false, false]
-        },        
+        },
         {
             "mask_variants": [253],
             "part_indexes": [0, 1, 0, 0, 0, 0, 0, 0],
@@ -274,7 +274,7 @@
             "part_indexes": [0, 0, 0, 2, 2, 2, 0, 0],
             "part_rotations": [2, 2, 2, 2, 2, 2, 2, 2],
             "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]            
+            "part_flip_y": [false, false, false, false, false, false, false, false]
         },
         {
             "mask_variants": [31],

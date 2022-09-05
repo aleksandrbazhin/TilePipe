@@ -17,26 +17,26 @@ script = ExtResource( 4 )
 [node name="BoxContainer" type="HBoxContainer" parent="."]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 1273.0
-margin_bottom = 93.0
+margin_right = 1017.0
+margin_bottom = 57.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
 [node name="Label" type="Label" parent="BoxContainer"]
+visible = false
 margin_right = 25.0
-margin_bottom = 86.0
+margin_bottom = 50.0
 size_flags_vertical = 7
 text = "Part"
 valign = 1
 
 [node name="NeighborMasks" type="VBoxContainer" parent="BoxContainer"]
-margin_left = 25.0
-margin_right = 438.0
-margin_bottom = 86.0
+margin_right = 336.0
+margin_bottom = 50.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="BoxContainer/NeighborMasks"]
-margin_right = 413.0
+margin_right = 336.0
 margin_bottom = 14.0
 text = "Neighbor masks:"
 align = 1
@@ -44,118 +44,118 @@ valign = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="BoxContainer/NeighborMasks"]
 margin_top = 18.0
-margin_right = 413.0
-margin_bottom = 86.0
+margin_right = 336.0
+margin_bottom = 50.0
 rect_min_size = Vector2( 0, 32 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_vertical_enabled = false
 
 [node name="HBoxContainer" type="HBoxContainer" parent="BoxContainer/NeighborMasks/ScrollContainer"]
-margin_right = 413.0
+margin_right = 336.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 alignment = 1
 
 [node name="Spacer1" type="Control" parent="BoxContainer/NeighborMasks/ScrollContainer/HBoxContainer"]
-margin_right = 202.0
+margin_right = 164.0
 size_flags_horizontal = 3
 
 [node name="Spacer2" type="Control" parent="BoxContainer/NeighborMasks/ScrollContainer/HBoxContainer"]
-margin_left = 210.0
-margin_right = 413.0
+margin_left = 172.0
+margin_right = 336.0
 size_flags_horizontal = 3
 
 [node name="Preview" type="HBoxContainer" parent="BoxContainer"]
-margin_left = 438.0
-margin_right = 852.0
-margin_bottom = 86.0
+margin_left = 336.0
+margin_right = 673.0
+margin_bottom = 50.0
 size_flags_horizontal = 3
 
 [node name="Parts" type="VBoxContainer" parent="BoxContainer/Preview"]
-margin_right = 135.0
-margin_bottom = 86.0
+margin_right = 109.0
+margin_bottom = 50.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="BoxContainer/Preview/Parts"]
-margin_right = 135.0
+margin_right = 109.0
 margin_bottom = 14.0
 text = "Parts:"
 align = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="BoxContainer/Preview/Parts"]
 margin_top = 18.0
-margin_right = 135.0
+margin_right = 109.0
 margin_bottom = 18.0
 
 [node name="TileCompositionPreview" type="Control" parent="BoxContainer/Preview/Parts/CenterContainer"]
-margin_left = 67.0
-margin_right = 67.0
+margin_left = 54.0
+margin_right = 54.0
 size_flags_horizontal = 3
 script = ExtResource( 3 )
 
 [node name="Spacer" type="Control" parent="BoxContainer/Preview/Parts"]
 margin_top = 22.0
-margin_right = 135.0
+margin_right = 109.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 0, 5 )
 
 [node name="Rotations" type="VBoxContainer" parent="BoxContainer/Preview"]
-margin_left = 139.0
-margin_right = 274.0
-margin_bottom = 86.0
+margin_left = 113.0
+margin_right = 223.0
+margin_bottom = 50.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="BoxContainer/Preview/Rotations"]
-margin_right = 135.0
+margin_right = 110.0
 margin_bottom = 14.0
 text = "Rotations: "
 align = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="BoxContainer/Preview/Rotations"]
 margin_top = 18.0
-margin_right = 135.0
+margin_right = 110.0
 margin_bottom = 18.0
 
 [node name="TileRotationsPreview" type="Control" parent="BoxContainer/Preview/Rotations/CenterContainer"]
-margin_left = 67.0
-margin_right = 67.0
+margin_left = 55.0
+margin_right = 55.0
 size_flags_horizontal = 3
 script = ExtResource( 2 )
 
 [node name="Spacer" type="Control" parent="BoxContainer/Preview/Rotations"]
 margin_top = 22.0
-margin_right = 135.0
+margin_right = 110.0
 margin_bottom = 27.0
 rect_min_size = Vector2( 0, 5 )
 
 [node name="Flips" type="VBoxContainer" parent="BoxContainer/Preview"]
-margin_left = 278.0
-margin_right = 414.0
-margin_bottom = 86.0
+margin_left = 227.0
+margin_right = 337.0
+margin_bottom = 50.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="BoxContainer/Preview/Flips"]
-margin_right = 136.0
+margin_right = 110.0
 margin_bottom = 14.0
 text = "Flips: "
 align = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="BoxContainer/Preview/Flips"]
 margin_top = 18.0
-margin_right = 136.0
+margin_right = 110.0
 margin_bottom = 18.0
 
 [node name="TileFlipsPreview" type="Control" parent="BoxContainer/Preview/Flips/CenterContainer"]
-margin_left = 68.0
-margin_right = 68.0
+margin_left = 55.0
+margin_right = 55.0
 size_flags_horizontal = 3
 script = ExtResource( 1 )
 
 [node name="RawData" type="TextEdit" parent="BoxContainer"]
-margin_left = 852.0
-margin_right = 1266.0
-margin_bottom = 86.0
+margin_left = 673.0
+margin_right = 1010.0
+margin_bottom = 50.0
 size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 5 )
 readonly = true
