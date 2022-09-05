@@ -120,3 +120,4 @@ size_flags_vertical = 4
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DirLoadButton" to="." method="_on_DirLoadButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/NewButton" to="." method="_on_NewButton_pressed"]
 [connection signal="confirmed" from="NewTileDialog" to="." method="_on_NewTileDialog_confirmed"]
+[connection signal="text_entered" from="NewTileDialog/CenterContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]

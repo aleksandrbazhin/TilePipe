@@ -7,7 +7,7 @@ signal _snapshot_state_changed()
 onready var tile_container := $VBoxContainer/MarginContainer/TileScrollContainer/TileVBoxContainer
 onready var dir_edit := $VBoxContainer/HBoxContainer/DirLineEdit
 onready var no_tiles_found := $NoTilesFound
-
+onready var new_tile_dialog := $NewTileDialog
 
 func _take_snapshot() -> Dictionary:
 	var settings := {"selected_tile": 0}
@@ -110,7 +110,7 @@ func _on_OpenFolderDialog_popup_hide():
 
 func _on_NewButton_pressed():
 	$NewTileDialog/CenterContainer/LineEdit.clear()
-	$NewTileDialog.popup_centered()
+	new_tile_dialog.popup_centered()
 
 
 func _on_NewTileDialog_confirmed():
@@ -129,10 +129,18 @@ func _on_NewTileDialog_confirmed():
 	new_tile.save()
 
 
-#func _unhandled_input(event: InputEvent):
-#	if event is InputEventKey and event.pressed:
+func _unhandled_input(event: InputEvent):
+	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
+		if new_tile_dialog.visible:
+			get_tree().set_input_as_handled()
+			new_tile_dialog.hide()
 #		match event.scancode:
 #			KEY_UP:
 #				get_tree().set_input_as_handled()
 #			KEY_DOWN:
 #				get_tree().set_input_as_handled()
+
+
+func _on_LineEdit_text_entered(_new_text):
+	new_tile_dialog.hide()
+	new_tile_dialog.emit_signal("confirmed")

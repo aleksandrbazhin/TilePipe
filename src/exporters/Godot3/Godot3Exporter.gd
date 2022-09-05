@@ -794,7 +794,7 @@ func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	temp_tile_row.set_collisions(button_pressed)
 
 
-func _input(event: InputEvent):
+func _unhandled_input(event: InputEvent):
 	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
 		if visible:
 			get_tree().set_input_as_handled()
