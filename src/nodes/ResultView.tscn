@@ -51,16 +51,23 @@ color = Color( 0.380392, 0.388235, 0.411765, 0.47451 )
 margin_right = 300.0
 margin_bottom = 232.0
 
+[node name="Label" type="Label" parent="VBoxContainer/HSplitContainer/SingleTile"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -88.0
+margin_top = -22.0
+text = "Bitmask:"
+
 [node name="BitmaskLabel" type="Label" parent="VBoxContainer/HSplitContainer/SingleTile"]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -42.0
+margin_left = -30.0
 margin_top = -22.0
 margin_right = -2.0
-rect_min_size = Vector2( 39, 22 )
-align = 2
 
 [node name="Result" type="Control" parent="VBoxContainer/HSplitContainer"]
 margin_left = 306.0

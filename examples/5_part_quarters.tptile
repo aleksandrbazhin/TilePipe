@@ -16,8 +16,8 @@
 	},
 	"output_resize": false,
 	"output_tile_size": {
-		"x": 64,
-		"y": 64
+		"x": 1,
+		"y": 1
 	},
 	"smoothing": true,
 	"random_seed_enabled": false,
