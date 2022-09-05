@@ -6,9 +6,9 @@ class_name WorkZone
 var loaded_tile_ref: WeakRef
 var last_visible_tab
 
-onready var tile_main_view: TileMainView = $VSplitContainer/Control/TileMainView
-onready var ruleset_view: RulesetView = $VSplitContainer/Control/RulesetView
-onready var template_view: TemplateView = $VSplitContainer/Control/TemplateView
+onready var tile_main_view: TileMainView = $VSplitContainer/TopContainer/TileMainView
+onready var ruleset_view: RulesetView = $VSplitContainer/TopContainer/RulesetView
+onready var template_view: TemplateView = $VSplitContainer/TopContainer/TemplateView
 onready var result_view: ResultView = $VSplitContainer/ResultView
 onready var renderer: TileRenderer = $TileRenderer
 
@@ -57,10 +57,7 @@ func render_subtiles():
 		return
 	var input_image: Image = tile.loaded_texture.get_data()
 	renderer.start_render(tile, input_image)
-#	State.emit_signal("block")
 	update_progress(0)
-#	render_progress_overlay.show()
-
 
 
 func update_progress(progress: int):
