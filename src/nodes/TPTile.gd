@@ -352,7 +352,7 @@ func update_output_resize(value: bool) -> bool:
 
 
 func update_output_tile_size(new_size: Vector2) -> bool:
-	if new_size != output_tile_size and (new_size.x > 0 and new_size.y > 0):
+	if new_size.x > 0 and new_size.y > 0:
 		output_tile_size = new_size
 		_tile_data["output_tile_size"] = {
 			"x": new_size.x,

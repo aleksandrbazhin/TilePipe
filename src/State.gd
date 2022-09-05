@@ -2,6 +2,7 @@ extends Node
 
 
 signal tile_selected(tile_node, row_item)
+signal tile_cleared()
 signal tile_needs_render()
 signal popup_started()
 signal popup_ended()
@@ -17,24 +18,33 @@ var current_tile_ref: WeakRef = null
 var current_modal_popup: Popup = null
 
 
-func set_current_tile(tile: TPTile, row: TreeItem):
-	if State.current_tile_ref == null or State.current_tile_ref.get_ref() != tile:
-		State.current_tile_ref = weakref(tile)
+func set_current_tile(tile: TPTile, row: TreeItem = null):
+	if current_tile_ref == null or current_tile_ref.get_ref() != tile:
+		current_tile_ref = weakref(tile)
 	current_window_title = tile.tile_file_name + " - " + window_title_base
 	OS.set_window_title(current_window_title)
-	emit_signal("tile_selected", tile, row)
+	if row != null:
+		emit_signal("tile_selected", tile, row)
+	else:
+		emit_signal("tile_cleared")
+		tile.select_root()
 
 
 func get_current_tile() -> TPTile:
 	if current_tile_ref == null:
-		report_error("Error: failed to load tile")
+#		report_error("Error: failed to load tile")
 		return null
 	var tile: TPTile = current_tile_ref.get_ref()
 	return tile
 
 
+func clear_current_tile():
+	emit_signal("tile_cleared")
+	current_tile_ref = null
+
+
 func update_tile_param(param_key: int, value, needs_render: bool = true):
-	var tile: TPTile = current_tile_ref.get_ref()
+	var tile: TPTile = get_current_tile()
 	if tile == null:
 		return
 	if tile.update_param(param_key, value):

@@ -13,6 +13,7 @@ onready var renderer: TileRenderer = $TileRenderer
 
 
 func _ready():
+	State.connect("tile_cleared", self, "on_tile_cleared")
 	State.connect("tile_selected", self, "on_tile_selected")
 	State.connect("tile_needs_render", self, "render_subtiles")
 	renderer.connect("tiles_ready", self, "on_tiles_rendered")
@@ -48,6 +49,12 @@ func on_tile_selected(tile: TPTile, row: TreeItem):
 			last_visible_tab = template_view
 
 
+func on_tile_cleared():
+	tile_main_view.show()
+	tile_main_view.clear()
+	result_view.clear()
+
+
 func render_subtiles():
 	var tile: TPTile = State.get_current_tile()
 	if tile == null or tile.loaded_texture == null or tile.loaded_ruleset == null \
@@ -67,6 +74,7 @@ func on_tiles_rendered():
 	var tile: TPTile = State.get_current_tile()
 	result_view.render_from_tile(tile)
 	update_progress(100)
+
 
 func _on_TileMainView_ruleset_view_called():
 	var tile: TPTile = State.get_current_tile()

@@ -51,6 +51,12 @@ func clear_template():
 	template_texture.texture = null
 
 
+func clear():
+	clear_template()
+	clear_ruleset()
+	input_texture.clear()
+
+
 func add_ruleset_highlights(ruleset: Ruleset):
 	for old_highlight in ruleset_texture.get_children():
 		old_highlight.queue_free()

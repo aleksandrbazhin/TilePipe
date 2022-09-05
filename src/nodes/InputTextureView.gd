@@ -143,6 +143,9 @@ func _on_SeedLineEdit_text_entered(new_text: String):
 func _on_OutpuResizeButton_toggled(button_pressed: bool):
 	State.update_tile_param(TPTile.PARAM_OUTPUT_RESIZE, button_pressed)
 	output_tile_size_x.editable = button_pressed
+	# the following writes output size along with resize toggle value
+	var x_size := output_tile_size_x.value
+	State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, Vector2(x_size, x_size), false)
 
 
 func _on_ResizeSpinBoxX_value_changed(value: float):

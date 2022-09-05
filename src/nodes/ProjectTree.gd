@@ -62,21 +62,28 @@ func load_project_directory(directory_path: String):
 	dir_edit.text = directory_path
 	State.current_dir = directory_path
 	clear_tree()
+	
 	var tiles_found := scan_directory(directory_path)
 	if tiles_found.empty():
 		no_tiles_found.show()
+		State.clear_current_tile()
 	else:
 		no_tiles_found.hide()
 		tiles_found.sort()
+		var first_tile: TPTile = null
 		for tile_fname in tiles_found:
-			add_tile_to_tree(directory_path, tile_fname)
+			var tile := add_tile_to_tree(directory_path, tile_fname)
+			if first_tile == null:
+				first_tile = tile
+		State.set_current_tile(first_tile)
 
 
-func add_tile_to_tree(directory: String, tile_file: String, is_new: bool = false):
+func add_tile_to_tree(directory: String, tile_file: String, is_new: bool = false) -> TPTile:
 	var tile: TPTile = preload("res://src/nodes/TPTile.tscn").instance()
 	if tile.load_tile(directory, tile_file, is_new):
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
 	tile_container.add_child(tile)
+	return tile
 
 
 func _on_OpenFolderDialog_dir_selected(dir: String):
@@ -116,7 +123,10 @@ func _on_NewTileDialog_confirmed():
 	if new_name in tiles_found:
 		State.report_error("Error: tile \"%s\" already exists" % new_name)
 		return
-	add_tile_to_tree(State.current_dir, new_name, true)
+	no_tiles_found.hide()
+	var new_tile := add_tile_to_tree(State.current_dir, new_name, true)
+	State.set_current_tile(new_tile)
+	new_tile.save()
 
 
 #func _unhandled_input(event: InputEvent):
