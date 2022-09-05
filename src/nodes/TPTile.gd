@@ -27,9 +27,8 @@ enum {
 
 const HEIGHT_EXPANDED := 120
 const HEIGHT_COLLAPSED := 50
-const RULESET_PREFIX := "Ruleset: "
-const TEXTURE_PREFIX := "Texture: "
-const TEMPLATE_PREFIX := "Template: "
+const RULESET_PREFIX :=  "[Ruleset]     "
+const TEMPLATE_PREFIX := "[Template] "
 const EMPTY_TILE_CONTENT := {"texture": "", "ruleset": "", "template": ""}
 
 var is_loaded := false

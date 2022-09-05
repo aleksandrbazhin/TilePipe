@@ -21,11 +21,6 @@
 		"x": 36,
 		"y": 36
 	},
-	"export_path": "",
-	"export_type": 1,
-	"export_png_path": "//full_256_7_part_generated.png",
-	"export_godot3_tile_name": "full_256_7_part_generated",
-	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/test.tres",
 	"output_resize": true,
 	"subtile_spacing": {
 		"x": 0,

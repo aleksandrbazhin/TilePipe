@@ -19,5 +19,6 @@
 		"x": 64,
 		"y": 64
 	},
-	"smoothing": true
+	"smoothing": true,
+	"random_seed_enabled": false
 }

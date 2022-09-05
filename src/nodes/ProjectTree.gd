@@ -67,6 +67,7 @@ func load_project_directory(directory_path: String):
 		no_tiles_found.show()
 	else:
 		no_tiles_found.hide()
+		tiles_found.sort()
 		for tile_fname in tiles_found:
 			add_tile_to_tree(directory_path, tile_fname)
 
