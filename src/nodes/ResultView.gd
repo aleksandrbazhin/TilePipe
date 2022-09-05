@@ -90,13 +90,13 @@ func select_subtile(subtile_index: Vector2):
 		selected_subtile_texture.texture = null
 		return
 	var subtile_ref: WeakRef = tile.parsed_template[subtile_index]
+	subtile_position = calculate_subtile_position(subtile_index, tile.subtile_spacing)
+	if subtile_selection.rect_position != subtile_position:
+		subtile_selection.rect_position = subtile_position
 	if subtile_ref == null:
 		selected_subtile_texture.texture = null
 		bitmask_label.text = ""
 	else:
-		subtile_position = calculate_subtile_position(subtile_index, tile.subtile_spacing)
-		if subtile_selection.rect_position != subtile_position:
-			subtile_selection.rect_position = subtile_position
 		var resize_to := min(selected_subtile_container.rect_size.x, selected_subtile_container.rect_size.y)
 		var resize_from := min(current_output_tile_size.x, current_output_tile_size.y)
 		if resize_from == 0:
