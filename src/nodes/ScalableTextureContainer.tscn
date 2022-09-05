@@ -23,6 +23,7 @@ stretch_mode = 2
 [node name="TextureRect" type="TextureRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 stretch_mode = 3
 __meta__ = {
 "_edit_use_anchors_": false

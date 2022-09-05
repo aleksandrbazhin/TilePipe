@@ -20,19 +20,19 @@ script = ExtResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Control" type="Control" parent="VSplitContainer"]
+[node name="TopContainer" type="Control" parent="VSplitContainer"]
 margin_right = 988.0
 margin_bottom = 468.0
 rect_min_size = Vector2( 0, 300 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TileMainView" parent="VSplitContainer/Control" instance=ExtResource( 3 )]
+[node name="TileMainView" parent="VSplitContainer/TopContainer" instance=ExtResource( 3 )]
 
-[node name="TemplateView" parent="VSplitContainer/Control" instance=ExtResource( 5 )]
+[node name="TemplateView" parent="VSplitContainer/TopContainer" instance=ExtResource( 5 )]
 visible = false
 
-[node name="RulesetView" parent="VSplitContainer/Control" instance=ExtResource( 2 )]
+[node name="RulesetView" parent="VSplitContainer/TopContainer" instance=ExtResource( 2 )]
 visible = false
 
 [node name="ResultView" parent="VSplitContainer" instance=ExtResource( 6 )]
@@ -42,5 +42,5 @@ margin_bottom = 712.0
 
 [node name="TileRenderer" parent="." instance=ExtResource( 7 )]
 
-[connection signal="ruleset_view_called" from="VSplitContainer/Control/TileMainView" to="." method="_on_TileMainView_ruleset_view_called"]
-[connection signal="template_view_called" from="VSplitContainer/Control/TileMainView" to="." method="_on_TileMainView_template_view_called"]
+[connection signal="ruleset_view_called" from="VSplitContainer/TopContainer/TileMainView" to="." method="_on_TileMainView_ruleset_view_called"]
+[connection signal="template_view_called" from="VSplitContainer/TopContainer/TileMainView" to="." method="_on_TileMainView_template_view_called"]
