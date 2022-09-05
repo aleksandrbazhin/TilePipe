@@ -1,8 +1,6 @@
+class_name GodotExporter
 extends WindowDialog
 
-class_name GodotExporter
-
-#signal settings_saved()
 
 const DEFAULT_TILES_LABEL: String = "Select tileset to edit tiles ↑"
 
@@ -85,9 +83,6 @@ func start_export_dialog(tile: TPTile):
 	autotile_type = tile.export_godot3_autotile_type
 	if autotile_type == Const.GODOT3_UNKNOWN_AUTOTILE_TYPE:
 		autotile_type = Helpers.assume_godot_autotile_type(current_tile_masks)
-
-#	last_generated_tile_name = data["godot_export_last_generated_tile_name"]
-	
 	collisions_check.pressed = false
 	collision_dialog.collisions_accepted_by_user = false
 	var generated_tile_name: String = \
@@ -98,7 +93,6 @@ func start_export_dialog(tile: TPTile):
 		last_generated_tile_name = generated_tile_name
 		State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, texture_path)
 		State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
-#		save_settings()
 	set_lineedit_text(tile_name_edit, tile_name)
 	texture_dialog.current_path = texture_path
 	set_lineedit_text(tile_texture_edit, texture_path)

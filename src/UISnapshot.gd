@@ -1,6 +1,6 @@
+class_name UISnapshot
 extends Reference
 
-class_name UISnapshot
 
 const NODE_GROUP_NAME := "snapshottable"
 const MIN_SAVE_DELAY_MSEC := 100

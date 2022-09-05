@@ -1,6 +1,5 @@
-extends ColorRect
-
 class_name RulesetView
+extends ColorRect
 
 
 const TILE_UPDATE_CHUNK := 8

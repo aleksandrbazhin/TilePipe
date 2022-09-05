@@ -1,7 +1,7 @@
-# the class to hold the data from a generated tile
-extends Resource
-
 class_name GeneratedSubTile
+extends Resource
+# the class to hold the data from a generated tile
+
 
 var bitmask: int
 var position_in_template: Vector2
@@ -28,6 +28,7 @@ func capture_texture(texture: Texture, output_tile_size: Vector2, smoothing: boo
 		var interpolation: int = Image.INTERPOLATE_NEAREST if not smoothing else Image.INTERPOLATE_TRILINEAR
 		image.resize(int(output_tile_size.x), int(output_tile_size.y), interpolation)
 	is_rendering = false
+
 
 func reset():
 	image = null

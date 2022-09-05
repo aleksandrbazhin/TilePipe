@@ -3,7 +3,6 @@ extends Panel
 
 signal _snapshot_state_changed_continous()
 
-
 var is_ui_blocked: bool = false
 var rng := RandomNumberGenerator.new()
 var last_dragged := 0

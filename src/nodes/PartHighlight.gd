@@ -1,11 +1,12 @@
+class_name PartHighlight
 extends Control
 
-class_name PartHighlight
 
 signal focused()
 signal unfocused()
 
 var id: int = -1
+
 
 func set_id(new_id: int):
 	var color_index := (new_id - 1) % Const.HIGHLIGHT_COLORS.size()

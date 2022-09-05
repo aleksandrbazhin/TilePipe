@@ -1,6 +1,5 @@
 extends Control
 
-var rotations: Array
 
 const SIZE := Vector2(68, 68)
 const NEIGHBOUR_SIZE := 22
@@ -17,6 +16,8 @@ const DRAW_NEIGHBOUR_OFFSETS: Dictionary = {
 	"TOP_LEFT": Vector2(0, 0),
 }
 const font := preload("res://assets/styles/subscribe_font.tres")
+
+var rotations: Array
 
 
 func setup(new_rotations: Array):

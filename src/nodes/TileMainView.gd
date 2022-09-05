@@ -1,6 +1,5 @@
-extends VBoxContainer
-
 class_name TileMainView
+extends VBoxContainer
 
 
 signal ruleset_view_called()

@@ -2,7 +2,6 @@ extends Node
 
 
 func get_default_dir_path() -> String:
-#	report_error(OS.get_name()+"  "+OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS))
 	if OS.get_name() == "OSX":
 		return OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
 	else:

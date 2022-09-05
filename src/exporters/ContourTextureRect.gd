@@ -1,9 +1,11 @@
 extends TextureRect
 
+
 signal drawn()
 
 var contours := []
 var draw_scale := 1.0
+
 
 func translate_contour(contour: PoolVector2Array, offset: Vector2 = Vector2.ZERO) -> PoolVector2Array:
 	var texture_size := texture.get_size()

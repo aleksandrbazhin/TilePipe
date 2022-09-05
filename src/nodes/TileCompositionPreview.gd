@@ -1,6 +1,5 @@
 extends Control
 
-var parts: Array
 
 const SIZE := Vector2(68, 68)
 const NEIGHBOUR_SIZE := 22
@@ -18,8 +17,12 @@ const DRAW_NEIGHBOUR_OFFSETS: Dictionary = {
 }
 const font := preload("res://assets/styles/subscribe_font.tres")
 
+var parts: Array
+
+
 func setup(new_parts: Array):
 	parts = new_parts
+
 
 func _draw():
 	draw_rect(Rect2(SELF_OFFSET, NEIGHBOUR_SIZE_VEC), Const.HIGHLIGHT_COLORS[0])

@@ -1,6 +1,6 @@
+class_name TileRenderer
 extends Node
 
-class_name TileRenderer
 
 signal tiles_ready()
 signal report_progress(progress)
@@ -9,7 +9,6 @@ const RENDER_POOL_SIZE = 8
 
 var is_rendering = false
 var render_pool := []
-
 var render_progress := 0 # from 0 to 100
 var input_tile_parts := {}
 var template
@@ -101,10 +100,6 @@ func split_input_into_tile_parts(input_image: Image) -> Dictionary:
 
 
 func setup_subtile_render(bitmask: int, viewport: Viewport):
-#	var part_types := ruleset.get_parts()
-#	var overlap_vectors: Array = ruleset.get_overlap_vectors()
-	
-#	var overlap_vector_rotations: Array = ruleset.get_overlap_vector_rotations()
 	var random_center_index: int = rng.randi_range(0, input_tile_parts[0].size() - 1)
 	var center_image: Image = input_tile_parts[0][random_center_index]
 	var tile_rules_data: Dictionary = ruleset.get_mask_data(bitmask)

@@ -1,6 +1,5 @@
-extends VBoxContainer
-
 class_name TemplateView
+extends VBoxContainer
 
 
 var current_template_path := ""

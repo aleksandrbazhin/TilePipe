@@ -1,11 +1,10 @@
+class_name ResultView
 extends ColorRect
 
-class_name ResultView
 
 export var single_tile_visible := true
 export var controls_visible := true
 
-#var last_selected_subtile_position := Vector2.ZERO
 var last_selected_subtile_index := Vector2.ZERO
 var current_output_tile_size: Vector2
 

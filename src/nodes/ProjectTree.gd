@@ -1,6 +1,6 @@
+class_name ProjectTree
 extends Panel
 
-class_name ProjectTree
 
 signal _snapshot_state_changed()
 

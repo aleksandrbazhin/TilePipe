@@ -1,6 +1,6 @@
+class_name TPTile
 extends Control
 
-class_name TPTile
 
 signal row_selected(row)
 
@@ -21,9 +21,8 @@ enum {
 	PARAM_EXPORT_PNG_PATH,
 	PARAM_EXPORT_GODOT3_RESOURCE_PATH,
 	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE,
-	PARAM_EXPORT_GODOT3_TILE_NAME
+	PARAM_EXPORT_GODOT3_TILE_NAME,
 }
-
 
 const HEIGHT_EXPANDED := 120
 const HEIGHT_COLLAPSED := 50
@@ -33,18 +32,15 @@ const EMPTY_TILE_CONTENT := {"texture": "", "ruleset": "", "template": ""}
 
 var is_loaded := false
 var _tile_data: Dictionary
-
 var current_directory: String
 var tile_file_name: String
 var is_selected := false
-
 var loaded_texture: Texture
 var loaded_ruleset: Ruleset
 var loaded_template: Texture
 var parsed_template: Dictionary
 var result_subtiles_by_bitmask: Dictionary
 var template_size: Vector2
-
 var texture_path: String
 var template_path: String
 var ruleset_path: String
@@ -62,11 +58,9 @@ var export_png_path: String
 var export_godot3_resource_path: String
 var export_godot3_autotile_type: int = Const.GODOT3_UNKNOWN_AUTOTILE_TYPE
 var export_godot3_tile_name: String
-
 var tile_row: TreeItem
 var ruleset_row: TreeItem
 var template_row: TreeItem
-
 var output_texture: Texture
 
 onready var tree: Tree = $Tree
@@ -77,6 +71,7 @@ func _ready():
 	if is_loaded:
 		create_tree_items()
 		rect_min_size.y = HEIGHT_EXPANDED
+
 
 # the purpose of this is to be able to add new parameters to .tptile in the future
 # this way the program will still work, and will update the .tptile with defaults

@@ -1,6 +1,5 @@
-extends Control
-
 class_name ScalableTextureContainer
+extends Control
 
 
 signal tile_size_changed(size)

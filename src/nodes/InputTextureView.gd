@@ -1,6 +1,5 @@
-extends VBoxContainer
-
 class_name InputTextureView
+extends VBoxContainer
 
 
 var current_texture_path := ""
@@ -12,13 +11,10 @@ onready var merge_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollConta
 onready var merge_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeYSliderContainer/MergeSliderY
 onready var overlap_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSliderX
 onready var overlap_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer/OverlapSliderY
-
 onready var output_resize: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize/OutpuResizeButton
 onready var output_tile_size_x: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize/ResizeSpinBoxX
-
 onready var subtile_spacing_x: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingXSpinBox
 onready var subtile_spacing_y: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingYSpinBox
-
 onready var smoothing_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Effects/SmoothingContainer/Smoothing
 onready var random_ssed_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/RandomCheckButton
 onready var random_seed_edit: LineEdit = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/SeedLineEdit

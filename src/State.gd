@@ -1,5 +1,6 @@
 extends Node
 
+
 signal tile_selected(tile_node, row_item)
 signal tile_needs_render()
 signal popup_started()
@@ -7,7 +8,6 @@ signal popup_ended()
 signal report_error(message)
 # warning-ignore:unused_signal
 signal render_progress(progress)
-
 
 var app_version: String = ProjectSettings.get_setting("application/config/version")
 var window_title_base := "TilePipe v.%s" % app_version

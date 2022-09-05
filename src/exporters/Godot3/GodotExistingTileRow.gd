@@ -1,11 +1,10 @@
+class_name GodotTileRow
 extends ColorRect
 
-class_name GodotTileRow
 
 signal clicked()
 
 const COLOR_WARNING := Color("#a73f00")
-#const COLOR_SELECT := Color("#a78000")
 const COLOR_SELECT := Color.lightslategray
 const MODE_NAMES := {
 	TileSet.SINGLE_TILE: "Single",
@@ -24,7 +23,6 @@ var texture_path: String
 var bitmask_mode: int
 var is_temp := true
 var nodes_located := false
-
 var name_rect: ColorRect
 var name_label: Label
 var icon: TextureRect

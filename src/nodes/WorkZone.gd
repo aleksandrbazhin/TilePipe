@@ -1,6 +1,5 @@
-extends ColorRect
-
 class_name WorkZone
+extends ColorRect
 
 
 var loaded_tile_ref: WeakRef

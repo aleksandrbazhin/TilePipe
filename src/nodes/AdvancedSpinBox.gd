@@ -1,6 +1,6 @@
+class_name AdvancedSpinBox
 extends SpinBox
 
-class_name AdvancedSpinBox
 
 func _input(event: InputEvent):
 	if event is InputEventKey and event.is_pressed() and \

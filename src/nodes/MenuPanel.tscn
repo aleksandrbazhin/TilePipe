@@ -8,9 +8,6 @@ margin_bottom = 20.0
 rect_min_size = Vector2( 0, 30 )
 custom_constants/separation = 0
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Button" type="Button" parent="."]
 margin_right = 120.0

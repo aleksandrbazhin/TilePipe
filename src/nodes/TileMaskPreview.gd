@@ -1,6 +1,6 @@
+class_name TileMaskPreview
 extends ColorRect
 
-class_name TileMaskPreview
 
 const SIZE := Vector2(68, 68)
 const BG_TILE_COLOR := Color("edf5ff")
@@ -23,6 +23,7 @@ const DRAW_NEIGHBOUR_OFFSETS: Dictionary = {
 
 var mask_value: int 
 var font: Font = preload("res://assets/styles/subscribe_font.tres")
+
 
 func _init(new_mask_value: int):
 	mask_value = new_mask_value

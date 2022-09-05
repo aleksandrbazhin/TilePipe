@@ -1,13 +1,13 @@
+class_name CollisionGenerator
 extends PopupDialog
 
-class_name CollisionGenerator
 
 enum {DIRECTION_FORWARD, DIRECTION_BACK}
 const NOT_FOUND: Vector2 = Vector2(-1.0, -1.0)
 const NO_WAY := -1.0
 const LINE_ANGLE_DELTA := 0.1
-var CLOSE_POINT_DELTA_SQ := 4
 
+var CLOSE_POINT_DELTA_SQ := 4
 var grid_cells := 15
 var is_ui_blocked := true
 var full_image: Image = null

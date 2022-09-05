@@ -1,6 +1,6 @@
+class_name Ruleset
 extends Resource
 
-class_name Ruleset
 
 const SCHEMA_PATH := "res://rulesets/ruleset_schema.json"
 const PREVIEW_SIZE_PX := 48
@@ -27,7 +27,7 @@ var part_textures := {
 	"CORNER_OUT_TOP_RIGHT": preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_right.png"),
 	"CORNER_OUT_BOTTOM_RIGHT": preload("res://assets/images/ruleset_icons/ruleset_tile_out_bottom_right.png"), 
 	"CORNER_OUT_BOTTOM_LEFT": preload("res://assets/images/ruleset_icons/ruleset_tile_out_bottom_left.png"), 
-	"CORNER_OUT_TOP_LEFT": preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_left.png")
+	"CORNER_OUT_TOP_LEFT": preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_left.png"),
 }
 var preview_texture: Texture
 

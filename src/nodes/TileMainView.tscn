@@ -14,20 +14,20 @@ script = ExtResource( 1 )
 [node name="InputTextureView" parent="." instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 1280.0
-margin_bottom = 552.0
+margin_right = 1024.0
+margin_bottom = 432.0
 size_flags_vertical = 3
 
 [node name="HSeparator" type="HSeparator" parent="."]
-margin_top = 556.0
-margin_right = 1280.0
-margin_bottom = 558.0
+margin_top = 436.0
+margin_right = 1024.0
+margin_bottom = 438.0
 custom_constants/separation = 2
 
 [node name="RulesetContainer" type="HBoxContainer" parent="."]
-margin_top = 562.0
-margin_right = 1280.0
-margin_bottom = 610.0
+margin_top = 442.0
+margin_right = 1024.0
+margin_bottom = 490.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
@@ -54,7 +54,7 @@ clip_text = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="RulesetContainer"]
 margin_left = 316.0
-margin_right = 1074.0
+margin_right = 818.0
 margin_bottom = 48.0
 size_flags_horizontal = 3
 scroll_vertical_enabled = false
@@ -63,7 +63,7 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="RulesetContainer/ScrollContainer"]
-margin_right = 758.0
+margin_right = 502.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 160, 48 )
 size_flags_horizontal = 3
@@ -73,9 +73,9 @@ __meta__ = {
 }
 
 [node name="RulesetButton" type="Button" parent="RulesetContainer"]
-margin_left = 1082.0
+margin_left = 826.0
 margin_top = 8.0
-margin_right = 1262.0
+margin_right = 1006.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 180, 32 )
 focus_mode = 0
@@ -84,15 +84,15 @@ text = "Manage rulesets"
 clip_text = true
 
 [node name="Spacer" type="Control" parent="RulesetContainer"]
-margin_left = 1270.0
-margin_right = 1280.0
+margin_left = 1014.0
+margin_right = 1024.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="TemplateContainer" type="HBoxContainer" parent="."]
-margin_top = 614.0
-margin_right = 1280.0
-margin_bottom = 662.0
+margin_top = 494.0
+margin_right = 1024.0
+margin_bottom = 542.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
@@ -119,7 +119,7 @@ clip_text = true
 
 [node name="TextureRect" type="TextureRect" parent="TemplateContainer"]
 margin_left = 316.0
-margin_right = 1074.0
+margin_right = 818.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 180, 48 )
 size_flags_horizontal = 3
@@ -127,9 +127,9 @@ expand = true
 stretch_mode = 5
 
 [node name="TemplateButton" type="Button" parent="TemplateContainer"]
-margin_left = 1082.0
+margin_left = 826.0
 margin_top = 8.0
-margin_right = 1262.0
+margin_right = 1006.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 180, 32 )
 focus_mode = 0
@@ -138,21 +138,21 @@ text = "Manage templates"
 clip_text = true
 
 [node name="Spacer" type="Control" parent="TemplateContainer"]
-margin_left = 1270.0
-margin_right = 1280.0
+margin_left = 1014.0
+margin_right = 1024.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 10, 0 )
 
 [node name="HSeparator2" type="HSeparator" parent="."]
-margin_top = 666.0
-margin_right = 1280.0
-margin_bottom = 668.0
+margin_top = 546.0
+margin_right = 1024.0
+margin_bottom = 548.0
 custom_constants/separation = 2
 
 [node name="ExportContainer" type="HBoxContainer" parent="."]
-margin_top = 672.0
-margin_right = 1280.0
-margin_bottom = 720.0
+margin_top = 552.0
+margin_right = 1024.0
+margin_bottom = 600.0
 rect_min_size = Vector2( 0, 48 )
 size_flags_vertical = 0
 custom_constants/separation = 8
@@ -182,7 +182,7 @@ selected = 0
 [node name="ExportPathLineEdit" type="LineEdit" parent="ExportContainer"]
 margin_left = 316.0
 margin_top = 8.0
-margin_right = 1074.0
+margin_right = 818.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 32 )
 focus_mode = 0
@@ -191,17 +191,17 @@ size_flags_vertical = 4
 editable = false
 
 [node name="ExportButton" type="Button" parent="ExportContainer"]
-margin_left = 1082.0
+margin_left = 826.0
 margin_top = 8.0
-margin_right = 1262.0
+margin_right = 1006.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 180, 32 )
 size_flags_vertical = 4
 text = "Export"
 
 [node name="Control" type="Control" parent="ExportContainer"]
-margin_left = 1270.0
-margin_right = 1280.0
+margin_left = 1014.0
+margin_right = 1024.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 10, 0 )
 
