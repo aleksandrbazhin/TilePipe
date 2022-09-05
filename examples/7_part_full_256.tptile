@@ -7,8 +7,8 @@
 		"y": 16
 	},
 	"merge_level": {
-		"x": 0.4375,
-		"y": 0.4375
+		"x": 0.5,
+		"y": 0.5
 	},
 	"overlap_level": {
 		"x": 0,
@@ -18,8 +18,8 @@
 	"random_seed_value": 0,
 	"smoothing": false,
 	"output_tile_size": {
-		"x": 36,
-		"y": 36
+		"x": 32,
+		"y": 32
 	},
 	"export_path": "",
 	"export_type": 1,

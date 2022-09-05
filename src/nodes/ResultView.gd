@@ -13,6 +13,7 @@ onready var selected_subtile_texture := $VBoxContainer/HSplitContainer/SingleTil
 onready var result_texture: TextureRect = $VBoxContainer/HSplitContainer/Result/TextureContainer/TextureRect
 onready var subtile_highlight := $VBoxContainer/HSplitContainer/Result/TextureContainer/TextureRect/SubtileHighlight
 onready var subtile_selection := $VBoxContainer/HSplitContainer/Result/TextureContainer/TextureRect/SubtileSelection
+onready var bitmask_label := $VBoxContainer/HSplitContainer/SingleTile/BitmaskLabel
 
 
 func render_from_tile(tile: TPTile):
@@ -60,6 +61,7 @@ func set_output_texture(texture: Texture):
 
 
 func clear():
+	bitmask_label.text = ""
 	result_texture.texture = null
 	last_selected_subtile_index = Vector2.ZERO
 	select_subtile(last_selected_subtile_index)
@@ -90,6 +92,7 @@ func select_subtile(subtile_index: Vector2):
 	var subtile_ref: WeakRef = tile.parsed_template[subtile_index]
 	if subtile_ref == null:
 		selected_subtile_texture.texture = null
+		bitmask_label.text = ""
 	else:
 		subtile_position = calculate_subtile_position(subtile_index, tile.subtile_spacing)
 		if subtile_selection.rect_position != subtile_position:
@@ -104,6 +107,7 @@ func select_subtile(subtile_index: Vector2):
 		itex.create_from_image(subtile.image, 0)
 		itex.set_size_override(current_output_tile_size * scale)
 		selected_subtile_texture.texture = itex
+		bitmask_label.text = str(subtile.bitmask)
 	last_selected_subtile_index = subtile_index
 
 

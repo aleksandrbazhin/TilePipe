@@ -26,7 +26,7 @@ enum {
 
 const HEIGHT_EXPANDED := 120
 const HEIGHT_COLLAPSED := 50
-const RULESET_PREFIX :=  "[Ruleset]     "
+const RULESET_PREFIX :=  "[  Ruleset  ] "
 const TEMPLATE_PREFIX := "[Template] "
 const EMPTY_TILE_CONTENT := {"texture": "", "ruleset": "", "template": ""}
 
@@ -40,6 +40,7 @@ var loaded_ruleset: Ruleset
 var loaded_template: Texture
 var parsed_template: Dictionary
 var result_subtiles_by_bitmask: Dictionary
+
 var template_size: Vector2
 var texture_path: String
 var template_path: String
@@ -53,11 +54,13 @@ var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
+
 var export_type: int = Const.EXPORT_TYPE_UKNOWN
 var export_png_path: String
 var export_godot3_resource_path: String
 var export_godot3_autotile_type: int = Const.GODOT3_UNKNOWN_AUTOTILE_TYPE
 var export_godot3_tile_name: String
+
 var tile_row: TreeItem
 var ruleset_row: TreeItem
 var template_row: TreeItem

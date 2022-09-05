@@ -110,7 +110,10 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 		return
 	var parts_rules: Array = tile_rules_data["part_indexes"]
 	var parts_rotations: Array = tile_rules_data["part_rotations"]
-	assert (parts_rules.size() == 8 && parts_rotations.size() == 8)
+	var parts_flips_x: Array = tile_rules_data["part_flip_x"]
+	var parts_flips_y: Array = tile_rules_data["part_flip_y"]
+	assert (parts_rules.size() == 8 and parts_rotations.size() == 8 and \
+			parts_flips_x.size() == 8 and parts_flips_y.size() == 8)
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image, 0)
 	texture_rect.texture = itex
@@ -133,15 +136,21 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
 		var overlay_image := Image.new()
 		overlay_image.copy_from(tile_variants[random_tile_index])
-		if bool(tile_rules_data["part_flip_x"][mask_index]):
-			overlay_image.flip_x()
-		if bool(tile_rules_data["part_flip_y"][mask_index]):
-			overlay_image.flip_y()
+#		if bool(tile_rules_data["part_flip_x"][mask_index]):
+#			overlay_image.flip_x()
+#		if bool(tile_rules_data["part_flip_y"][mask_index]):
+#			overlay_image.flip_y()
 		var piece_itex = ImageTexture.new()
 		piece_itex.create_from_image(overlay_image, 0)
 		var mask_key: int = Const.TILE_MASK[mask_name]
 		texture_rect.material.set_shader_param("overlay_texture_%s" % mask_key, piece_itex)
 		texture_rect.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
+		
+		var flip_x: bool = bool(parts_flips_x[mask_index])
+		var flip_y: bool = bool(parts_flips_y[mask_index])
+		
+		texture_rect.material.set_shader_param("flip_x_%s" % mask_key, flip_x)
+		texture_rect.material.set_shader_param("flip_y_%s" % mask_key, flip_y)
 		var overlap_vec: Vector2 = Const.PART_OVERLAP_VECTORS[ruleset.get_parts()[piece_index]]
 		if overlap_vec.length() == 1.0 and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
 			overlap_vec = overlap_vec.rotated(-PI / 2.0)
