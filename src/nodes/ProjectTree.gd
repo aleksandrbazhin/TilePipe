@@ -8,24 +8,27 @@ onready var tile_container := $VBoxContainer/MarginContainer/TileScrollContainer
 onready var dir_edit := $VBoxContainer/HBoxContainer/DirLineEdit
 onready var no_tiles_found := $NoTilesFound
 onready var new_tile_dialog := $NewTileDialog
+onready var new_tile_lineedit := $NewTileDialog/CenterContainer/LineEdit
+onready var open_dialog := $OpenFolderDialog
+
 
 func _take_snapshot() -> Dictionary:
 	var settings := {"selected_tile": 0}
-	var index := 0
 	for tile in tile_container.get_children():
 		if tile.is_selected:
-			settings["selected_tile"] = index
+			settings["selected_tile"] = tile.tile_file_name
 			break
-		index += 1
 	return settings
 
 
 func _apply_snapshot(settings: Dictionary):
 	if tile_container.get_child_count() > 0:
-		var tile: TPTile = tile_container.get_child(int(settings["selected_tile"]))
-		if tile != null:
-			tile.set_selected(true)
-			tile.select_root()
+		for index in tile_container.get_child_count():
+			var tile: TPTile = tile_container.get_child(index)
+			if tile.tile_file_name == settings["selected_tile"]:
+				tile.set_selected(true)
+				tile.select_root()
+				break
 
 
 func on_tile_row_selected(row: TreeItem, tile: TPTile):
@@ -62,7 +65,6 @@ func load_project_directory(directory_path: String):
 	dir_edit.text = directory_path
 	State.current_dir = directory_path
 	clear_tree()
-	
 	var tiles_found := scan_directory(directory_path)
 	if tiles_found.empty():
 		no_tiles_found.show()
@@ -83,25 +85,37 @@ func add_tile_to_tree(directory: String, tile_file: String, is_new: bool = false
 	if tile.load_tile(directory, tile_file, is_new):
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
 	tile_container.add_child(tile)
+	
+## This is the correct way (to have tile sorted), but there seems to be 
+## difference in add_child() and add_child_below_node() (possibly, a bug)
+#	if not is_new or tile_container.get_child_count() == 0:
+#		tile_container.add_child(tile)
+#	else:
+#		var insert_below_tile: TPTile = tile_container.get_child(0)
+#		for t in tile_container.get_children():
+#			if tile_file < t.tile_file_name:
+#				insert_below_tile = t
+#		tile.owner = tile_container
+#		tile_container.add_child_below_node(tile, insert_below_tile)
 	return tile
 
 
 func _on_OpenFolderDialog_dir_selected(dir: String):
-	if dir + "/" != $OpenFolderDialog.current_path:
-		$OpenFolderDialog.current_path = dir + "/"
+	if dir + "/" != open_dialog.current_path:
+		open_dialog.current_path = dir + "/"
 	load_project_directory(dir)
 
 
 func _on_DirLoadButton_pressed():
-	$OpenFolderDialog.popup_centered()
+	open_dialog.popup_centered()
 
 
 func hide_file_dialog():
-	$OpenFolderDialog.hide()
+	open_dialog.hide()
 
 
 func _on_OpenFolderDialog_about_to_show():
-	State.popup_started($OpenFolderDialog)
+	State.popup_started(open_dialog)
 
 
 func _on_OpenFolderDialog_popup_hide():
@@ -109,12 +123,13 @@ func _on_OpenFolderDialog_popup_hide():
 
 
 func _on_NewButton_pressed():
-	$NewTileDialog/CenterContainer/LineEdit.clear()
+	new_tile_lineedit.clear()
 	new_tile_dialog.popup_centered()
+	new_tile_lineedit.grab_focus()
 
 
 func _on_NewTileDialog_confirmed():
-	var new_name: String = $NewTileDialog/CenterContainer/LineEdit.text
+	var new_name: String = new_tile_lineedit.text
 	if new_name.empty():
 		State.report_error("Error: empty tile name")
 		return
