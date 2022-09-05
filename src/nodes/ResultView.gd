@@ -133,3 +133,30 @@ func _on_TextureRect_gui_input(event: InputEvent):
 
 func _on_SingleTile_resized():
 	select_subtile(last_selected_subtile_index)
+
+
+func move_selection(delta:Vector2):
+	var tile: TPTile = State.get_current_tile()
+	if tile == null:
+		return
+	var new_index := last_selected_subtile_index + delta
+	if new_index in tile.parsed_template:
+		select_subtile(new_index)
+
+
+#
+#func _unhandled_input(event: InputEvent):
+#	if event is InputEventKey and event.pressed:
+#		match event.scancode:
+#			KEY_UP:
+#				move_selection(Vector2.UP)
+#				get_tree().set_input_as_handled()
+#			KEY_DOWN:
+#				move_selection(Vector2.DOWN)
+#				get_tree().set_input_as_handled()
+#			KEY_LEFT:
+#				move_selection(Vector2.LEFT)
+#				get_tree().set_input_as_handled()
+#			KEY_RIGHT:
+#				move_selection(Vector2.RIGHT)
+#				get_tree().set_input_as_handled()

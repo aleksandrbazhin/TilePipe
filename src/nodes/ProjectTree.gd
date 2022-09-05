@@ -117,3 +117,12 @@ func _on_NewTileDialog_confirmed():
 		State.report_error("Error: tile \"%s\" already exists" % new_name)
 		return
 	add_tile_to_tree(State.current_dir, new_name, true)
+
+
+#func _unhandled_input(event: InputEvent):
+#	if event is InputEventKey and event.pressed:
+#		match event.scancode:
+#			KEY_UP:
+#				get_tree().set_input_as_handled()
+#			KEY_DOWN:
+#				get_tree().set_input_as_handled()

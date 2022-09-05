@@ -30,12 +30,12 @@ anchor_bottom = 1.0
 custom_constants/separation = 12
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 1920.0
+margin_right = 1024.0
 margin_bottom = 34.0
 size_flags_horizontal = 3
 
 [node name="DirLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
-margin_right = 1884.0
+margin_right = 988.0
 margin_bottom = 34.0
 rect_min_size = Vector2( 0, 34 )
 focus_mode = 0
@@ -45,36 +45,36 @@ placeholder_text = "Select project folder "
 placeholder_alpha = 0.7
 
 [node name="DirLoadButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 1888.0
-margin_right = 1920.0
+margin_left = 992.0
+margin_right = 1024.0
 margin_bottom = 34.0
 rect_min_size = Vector2( 32, 32 )
 icon = ExtResource( 2 )
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 margin_top = 46.0
-margin_right = 1920.0
-margin_bottom = 1048.0
+margin_right = 1024.0
+margin_bottom = 568.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_left = 2
 
 [node name="TileScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer"]
 margin_left = 2.0
-margin_right = 1920.0
-margin_bottom = 1002.0
+margin_right = 1024.0
+margin_bottom = 522.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="TileVBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/TileScrollContainer"]
-margin_right = 1918.0
+margin_right = 1022.0
 size_flags_horizontal = 3
 
 [node name="NewButton" type="Button" parent="VBoxContainer"]
-margin_top = 1060.0
-margin_right = 1920.0
-margin_bottom = 1080.0
+margin_top = 580.0
+margin_right = 1024.0
+margin_bottom = 600.0
 text = "New Tile"
 
 [node name="NoTilesFound" type="Label" parent="."]

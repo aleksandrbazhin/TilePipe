@@ -17,8 +17,6 @@ onready var status_label: Label = $VBoxContainer/StatusBar/HBoxContainer/StatusL
 
 
 func _ready():
-#	OS.window_fullscreen = false
-#	OS.window_borderless = false
 	connect_signals()
 	OS.min_window_size = Const.MIN_WINDOW_SIZE
 	ui_snapshot = UISnapshot.new(self, Const.SETTINGS_PATH)
