@@ -158,7 +158,7 @@ boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 0 )
 config/icon="res://assets/images/icon.png"
 config/macos_native_icon="res://icon.icns"
 config/windows_native_icon="res://icon.ico"
-config/version="0.5"
+config/version="2.0.alpha"
 
 [autoload]
 
