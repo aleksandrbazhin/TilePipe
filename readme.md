@@ -7,18 +7,25 @@ The project is meant to be a part of an artist's pipeline when creating 2D autot
 
 The name TilePipe comes from “tileset pipeline”. This is the second iteration of the project, here's the original TilePipe project page on itch.io https://aleksandrbazhin.itch.io/tilepipe. It's source can be found in the respectable git branch.
 
+The (draft) binaries for version 2 can be found [on itch.io here](
+https://aleksandrbazhin.itch.io/tilepipe2?secret=lck9oPIULY7ORYXYxfJkonKZtI)
+
 ## How it works
 
 It takes an input textures 
+
 ![Input texture](docs/Input.png)
 
 Applies some rules to combine them
+
 ![Rule](docs/Rule.png)
 
 And places the result in a grid as defined by the template
+
 ![Template](docs/Template.png)
 
 To get the result ready for autotiling
+
 ![Template](docs/Result.png)
 
 
