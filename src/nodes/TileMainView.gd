@@ -60,7 +60,7 @@ func clear():
 func add_ruleset_highlights(ruleset: Ruleset):
 	for old_highlight in ruleset_texture.get_children():
 		old_highlight.queue_free()
-	for i in ruleset.get_parts().size():
+	for i in ruleset.parts.size():
 		var highlight := preload("res://src/nodes/PartHighlight.tscn").instance()
 		ruleset_texture.add_child(highlight)
 		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)

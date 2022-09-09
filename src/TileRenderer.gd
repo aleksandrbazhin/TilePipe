@@ -47,19 +47,18 @@ func init_render_pool():
 		add_child(viewport)
 
 
-func start_render(tile: TPTile, input_image: Image):
+func start_render(tile: TPTile, input_image: Image = null):
 	subtiles = tile.result_subtiles_by_bitmask
 	ruleset = tile.loaded_ruleset
 	input_tile_size = tile.input_tile_size
 	output_tile_size = tile.output_tile_size if tile.output_resize else tile.input_tile_size
-	input_tile_parts = split_input_into_tile_parts(input_image)
+	input_tile_parts = tile.input_parts
 	smoothing_enabled = tile.smoothing
 	
 	if tile.random_seed_enabled:
 		rng.seed = tile.random_seed_value
 	else:
 		rng.randomize()
-
 
 	last_mask = subtiles.keys()[0]
 	for bitmask in subtiles:
@@ -74,29 +73,6 @@ func start_render(tile: TPTile, input_image: Image):
 		texture_node.material.set_shader_param("overlap", tile.overlap_level.x)
 	render_next_batch()
 	is_rendering = true
-
-
-func split_input_into_tile_parts(input_image: Image) -> Dictionary:
-	var parts := {}
-	var min_input_tiles := ruleset.get_parts().size()
-	for part_index in range(min_input_tiles):
-		parts[part_index] = []
-		var part_is_empty := false
-		var variant_index := 0
-		while not part_is_empty:
-			var part := Image.new()
-			part.create(int(input_tile_size.x), int(input_tile_size.y), false, Image.FORMAT_RGBA8)
-			if input_tile_size.y + variant_index * input_tile_size.y > input_image.get_size().y and parts[part_index].size() > 0:
-				break
-			var copy_rect := Rect2(part_index * input_tile_size.x, variant_index * input_tile_size.y, 
-				input_tile_size.x, input_tile_size.y)
-			part.blit_rect(input_image, copy_rect, Vector2.ZERO)
-			if part.is_invisible() and parts[part_index].size() > 0:
-				part_is_empty = true
-			else:
-				parts[part_index].append(part)
-				variant_index += 1
-	return parts
 
 
 func setup_subtile_render(bitmask: int, viewport: Viewport):
@@ -151,7 +127,7 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 		
 		texture_rect.material.set_shader_param("flip_x_%s" % mask_key, flip_x)
 		texture_rect.material.set_shader_param("flip_y_%s" % mask_key, flip_y)
-		var overlap_vec: Vector2 = Const.PART_OVERLAP_VECTORS[ruleset.get_parts()[piece_index]]
+		var overlap_vec: Vector2 = Const.RULESET_PART_OVERLAP_VECTORS[ruleset.parts[piece_index]]
 		if overlap_vec.length() == 1.0 and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
 			overlap_vec = overlap_vec.rotated(-PI / 2.0)
 		texture_rect.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_vec)

@@ -104,7 +104,8 @@ func select_subtile(subtile_index: Vector2):
 		var scale := resize_to / resize_from
 		var subtile: GeneratedSubTile = subtile_ref.get_ref()
 		var itex := ImageTexture.new()
-		itex.create_from_image(subtile.image, 0)
+		if subtile.image != null:
+			itex.create_from_image(subtile.image, 0)
 		itex.set_size_override(current_output_tile_size * scale)
 		selected_subtile_texture.texture = itex
 		bitmask_label.text = str(subtile.bitmask)

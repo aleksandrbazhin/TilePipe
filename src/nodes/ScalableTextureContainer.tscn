@@ -69,6 +69,8 @@ margin_left = 101.0
 margin_right = 276.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 0, 30 )
+min_value = 2.0
+value = 2.0
 suffix = "px"
 
 [node name="Label3" type="Label" parent="InputInfo/HBoxContainer"]
@@ -84,6 +86,8 @@ visible = false
 margin_left = 190.0
 margin_right = 276.0
 margin_bottom = 30.0
+min_value = 2.0
+value = 2.0
 
 [node name="PartHihglight" type="ColorRect" parent="."]
 visible = false

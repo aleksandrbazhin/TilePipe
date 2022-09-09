@@ -1,7 +1,7 @@
 {
 	"texture": "input_textures/8_part_side_symmetry_random.png",
 	"ruleset": "rulesets/8_part_side_symmetry.json",
-	"template": "templates/template_47.png",
+	"template": "templates/template_47_double.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16
@@ -15,17 +15,17 @@
 		"y": 0.25
 	},
 	"random_seed_enabled": true,
-	"random_seed_value": 0,
+	"random_seed_value": 2,
 	"smoothing": false,
 	"output_resize": true,
 	"output_tile_size": {
 		"x": 64,
 		"y": 64
 	},
-	"export_png_path": "/home/alexander/GodotProjects/3dtests/no_symmetry_pixelart_13_part_generated.png",
+	"export_png_path": "/home/alexander/GodotProjects/3dtests/8_part_side_symmetry_random_tp.png",
 	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/test.tres",
 	"export_godot3_autotile_type": 0,
-	"export_godot3_tile_name": "no_symmetry_pixelart_13_part_generated",
+	"export_godot3_tile_name": "8_part_side_symmetry_random_tp",
 	"export_type": 1,
 	"subtile_spacing": {
 		"x": 0,

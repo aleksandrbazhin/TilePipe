@@ -1,12 +1,25 @@
 class_name Ruleset
 extends Resource
 
-
+enum {ERROR_WRONG_FILE, ERROR_INVALID_JSON, ERROR_SCHEMA_MISMATCH}
 const SCHEMA_PATH := "res://rulesets/ruleset_schema.json"
 const PREVIEW_SIZE_PX := 48
 const PREVIEW_SPACE_PX := 6
-
-enum {ERROR_WRONG_FILE, ERROR_INVALID_JSON, ERROR_SCHEMA_MISMATCH}
+const RULESET_TILE_PARSE_DATA := {
+	"FULL": Const.RULESET_TILE_PARTS.FULL, 
+	"SIDE_TOP": Const.RULESET_TILE_PARTS.SIDE_TOP,
+	"SIDE_RIGHT": Const.RULESET_TILE_PARTS.SIDE_RIGHT,
+	"SIDE_BOTTOM": Const.RULESET_TILE_PARTS.SIDE_BOTTOM,
+	"SIDE_LEFT": Const.RULESET_TILE_PARTS.SIDE_LEFT,
+	"CORNER_IN_TOP_RIGHT": Const.RULESET_TILE_PARTS.CORNER_IN_TOP_RIGHT,
+	"CORNER_IN_BOTTOM_RIGHT": Const.RULESET_TILE_PARTS.CORNER_IN_BOTTOM_RIGHT,
+	"CORNER_IN_BOTTOM_LEFT": Const.RULESET_TILE_PARTS.CORNER_IN_BOTTOM_LEFT,
+	"CORNER_IN_TOP_LEFT": Const.RULESET_TILE_PARTS.CORNER_IN_TOP_LEFT,
+	"CORNER_OUT_TOP_RIGHT": Const.RULESET_TILE_PARTS.CORNER_OUT_TOP_RIGHT,
+	"CORNER_OUT_BOTTOM_RIGHT": Const.RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_RIGHT,
+	"CORNER_OUT_BOTTOM_LEFT": Const.RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_LEFT,
+	"CORNER_OUT_TOP_LEFT": Const.RULESET_TILE_PARTS.CORNER_OUT_TOP_LEFT
+}
 
 var _data := {}
 var _raw_json: String
@@ -14,22 +27,9 @@ var _raw_tile_data: PoolStringArray
 var is_loaded := false
 var last_error := -1
 var last_error_message := ""
-var part_textures := {
-	"FULL": preload("res://assets/images/ruleset_icons/ruleset_tile_full.png"), 
-	"SIDE_TOP": preload("res://assets/images/ruleset_icons/ruleset_tile_top.png"),
-	"SIDE_RIGHT": preload("res://assets/images/ruleset_icons/ruleset_tile_right.png"),
-	"SIDE_BOTTOM": preload("res://assets/images/ruleset_icons/ruleset_tile_bottom.png"),
-	"SIDE_LEFT": preload("res://assets/images/ruleset_icons/ruleset_tile_left.png"),
-	"CORNER_IN_TOP_RIGHT": preload("res://assets/images/ruleset_icons/ruleset_tile_in_top_right.png"),
-	"CORNER_IN_BOTTOM_RIGHT": preload("res://assets/images/ruleset_icons/ruleset_tile_in_bottom_right.png"),
-	"CORNER_IN_BOTTOM_LEFT": preload("res://assets/images/ruleset_icons/ruleset_tile_in_bottom_left.png"),
-	"CORNER_IN_TOP_LEFT": preload("res://assets/images/ruleset_icons/ruleset_tile_in_top_left.png"),
-	"CORNER_OUT_TOP_RIGHT": preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_right.png"),
-	"CORNER_OUT_BOTTOM_RIGHT": preload("res://assets/images/ruleset_icons/ruleset_tile_out_bottom_right.png"), 
-	"CORNER_OUT_BOTTOM_LEFT": preload("res://assets/images/ruleset_icons/ruleset_tile_out_bottom_left.png"), 
-	"CORNER_OUT_TOP_LEFT": preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_left.png"),
-}
+
 var preview_texture: Texture
+var parts := []
 
 
 func _init(data_path: String):
@@ -83,15 +83,30 @@ func load_data_from_json(data_path: String):
 		last_error_message += "Invalid path: " + data_path + "\n"
 		print(last_error_message)
 
-
-func get_parts() -> Array:
 	if _data.has("tile_parts"):
-		return _data["tile_parts"]
+		parts = parse_parts(_data["tile_parts"])
 	else:
 		last_error = ERROR_SCHEMA_MISMATCH
 		last_error_message = "Error: wrong ruleset format."
-		return []
+		print(last_error_message)
 
+
+func parse_parts(raw_data: Array) -> Array:
+	var parsed_parts = []
+	for part in raw_data:
+		if part in RULESET_TILE_PARSE_DATA:
+			parsed_parts.append(RULESET_TILE_PARSE_DATA[part])
+	return parsed_parts
+
+#
+#func get_parts() -> Array:
+#	if _data.has("tile_parts"):
+#		return _data["tile_parts"]
+#	else:
+#		last_error = ERROR_SCHEMA_MISMATCH
+#		last_error_message = "Error: wrong ruleset format."
+#		return []
+#
 
 func get_subtiles() -> Array:
 	if _data.has("tiles"):
@@ -131,15 +146,15 @@ func get_mask_data(mask: int) -> Dictionary:
 
 
 func generate_preview() -> Texture:
-	var parts := get_parts()
+#	var parts := get_parts()
 	if not parts.empty():
-		var format: int = part_textures[parts[0]].get_data().get_format()
+		var format: int = Const.RULESET_PART_TEXTURES[parts[0]].get_data().get_format()
 		var image := Image.new()
 		image.create(PREVIEW_SIZE_PX * parts.size() + PREVIEW_SPACE_PX * parts.size() - 1, PREVIEW_SIZE_PX, false, format)
 		var part_copy_rect := Rect2(Vector2.ZERO, Vector2(PREVIEW_SIZE_PX, PREVIEW_SIZE_PX))
 		var part_index := 0
 		for part in parts:
-			var part_image: Image = part_textures[part].get_data() 
+			var part_image: Image = Const.RULESET_PART_TEXTURES[part].get_data() 
 			image.blit_rect(part_image, part_copy_rect, Vector2(part_index * (PREVIEW_SIZE_PX + PREVIEW_SPACE_PX), 0))
 			part_index += 1
 		var itex := ImageTexture.new()
