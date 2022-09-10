@@ -46,6 +46,8 @@ func populate_frame_control():
 		return
 	for part in parts_container.get_children():
 		part.queue_free()
+	if tile.loaded_ruleset == null:
+		return
 	var ruleset_parts := tile.loaded_ruleset.parts
 	for part_index in tile.input_parts:
 		if part_index >= ruleset_parts.size():

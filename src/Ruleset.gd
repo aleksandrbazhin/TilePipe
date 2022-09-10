@@ -96,6 +96,8 @@ func parse_parts(raw_data: Array) -> Array:
 	for part in raw_data:
 		if part in RULESET_TILE_PARSE_DATA:
 			parsed_parts.append(RULESET_TILE_PARSE_DATA[part])
+		else:
+			print(parts)
 	return parsed_parts
 
 #

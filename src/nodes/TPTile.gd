@@ -146,7 +146,8 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 
 
 func split_input_into_tile_parts() -> bool:
-#	var parts := {}
+	if loaded_ruleset == null or loaded_texture == null:
+		return false
 	input_parts = {}
 	var input_image: Image = loaded_texture.get_data()
 	var min_input_tiles := loaded_ruleset.parts.size()
@@ -339,6 +340,7 @@ func update_texture(abs_path: String) -> bool:
 		if not abs_path.empty():
 			State.report_error("Error: invalid texture path")
 	_tile_data["texture"] = rel_path
+	split_input_into_tile_parts()
 	return true
 
 
@@ -351,6 +353,7 @@ func update_ruleset(abs_path: String) -> bool:
 			State.report_error("Error: invalid ruleset")
 	ruleset_row.set_text(0, RULESET_PREFIX + rel_path)
 	_tile_data["ruleset"] = rel_path
+	split_input_into_tile_parts()
 	return true
 
 
@@ -363,6 +366,7 @@ func update_template(abs_path: String) -> bool:
 			State.report_error("Error: invalid template")
 	template_row.set_text(0, TEMPLATE_PREFIX + rel_path)
 	_tile_data["template"] = rel_path
+	split_input_into_tile_parts()
 	return true
 
 
