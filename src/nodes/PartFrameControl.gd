@@ -6,7 +6,7 @@ const RANDOM_ICON_POSITION := Vector2(4, 6)
 const FRAME_ICON_POSITION := Vector2(4, 26)
 const BG_COLOR := Color(0.05, 0.12, 0.18, 0.75)
 
-var part_type: int = Const.RULESET_TILE_PARTS.FULL
+var part_type: int = Ruleset.RULESET_TILE_PARTS.FULL
 var random_variant: int = 0
 var random_frequency: int = 1 
 var animation_frame: int = 1
@@ -20,7 +20,7 @@ func setup(new_part_type: int = Const.RULESET_TILE_PARTS.FULL, new_random_varian
 	random_frequency = new_random_frequency
 	animation_frame = new_animation_frame
 	max_frames = new_max_frames
-	texture = Const.RULESET_PART_TEXTURES[part_type]
+	texture = Ruleset.RULESET_PART_TEXTURES[part_type]
 
 
 func _ready():

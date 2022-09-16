@@ -127,7 +127,7 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 		
 		texture_rect.material.set_shader_param("flip_x_%s" % mask_key, flip_x)
 		texture_rect.material.set_shader_param("flip_y_%s" % mask_key, flip_y)
-		var overlap_vec: Vector2 = Const.RULESET_PART_OVERLAP_VECTORS[ruleset.parts[piece_index]]
+		var overlap_vec: Vector2 = Ruleset.RULESET_PART_OVERLAP_VECTORS[ruleset.parts[piece_index]]
 		if overlap_vec.length() == 1.0 and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
 			overlap_vec = overlap_vec.rotated(-PI / 2.0)
 		texture_rect.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_vec)

@@ -1,24 +1,69 @@
 class_name Ruleset
 extends Resource
 
+enum RULESET_TILE_PARTS {
+	FULL, 
+	SIDE_TOP, 
+	SIDE_RIGHT,
+	SIDE_BOTTOM,
+	SIDE_LEFT,
+	CORNER_IN_TOP_RIGHT,
+	CORNER_IN_BOTTOM_RIGHT,
+	CORNER_IN_BOTTOM_LEFT,
+	CORNER_IN_TOP_LEFT,
+	CORNER_OUT_TOP_RIGHT,
+	CORNER_OUT_BOTTOM_RIGHT,
+	CORNER_OUT_BOTTOM_LEFT,
+	CORNER_OUT_TOP_LEFT,
+}
+const RULESET_PART_OVERLAP_VECTORS := {
+	RULESET_TILE_PARTS.FULL: Vector2.ZERO,
+	RULESET_TILE_PARTS.SIDE_TOP: Vector2(0, 1),
+	RULESET_TILE_PARTS.SIDE_RIGHT: Vector2(1, 0),
+	RULESET_TILE_PARTS.SIDE_BOTTOM: Vector2(0, 1),
+	RULESET_TILE_PARTS.SIDE_LEFT: Vector2(1, 0),
+	RULESET_TILE_PARTS.CORNER_IN_TOP_RIGHT: Vector2(-1, -1),
+	RULESET_TILE_PARTS.CORNER_IN_BOTTOM_RIGHT: Vector2(-1, -1),
+	RULESET_TILE_PARTS.CORNER_IN_BOTTOM_LEFT: Vector2(-1, -1),
+	RULESET_TILE_PARTS.CORNER_IN_TOP_LEFT: Vector2(-1, -1),
+	RULESET_TILE_PARTS.CORNER_OUT_TOP_RIGHT: Vector2(1, 1),
+	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_RIGHT: Vector2(1, 1),
+	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_LEFT: Vector2(1, 1),
+	RULESET_TILE_PARTS.CORNER_OUT_TOP_LEFT: Vector2(1, 1),
+}
+const RULESET_PART_TEXTURES := {
+	RULESET_TILE_PARTS.FULL: preload("res://assets/images/ruleset_icons/ruleset_tile_full.png"), 
+	RULESET_TILE_PARTS.SIDE_TOP: preload("res://assets/images/ruleset_icons/ruleset_tile_top.png"),
+	RULESET_TILE_PARTS.SIDE_RIGHT: preload("res://assets/images/ruleset_icons/ruleset_tile_right.png"),
+	RULESET_TILE_PARTS.SIDE_BOTTOM: preload("res://assets/images/ruleset_icons/ruleset_tile_bottom.png"),
+	RULESET_TILE_PARTS.SIDE_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_left.png"),
+	RULESET_TILE_PARTS.CORNER_IN_TOP_RIGHT: preload("res://assets/images/ruleset_icons/ruleset_tile_in_top_right.png"),
+	RULESET_TILE_PARTS.CORNER_IN_BOTTOM_RIGHT: preload("res://assets/images/ruleset_icons/ruleset_tile_in_bottom_right.png"),
+	RULESET_TILE_PARTS.CORNER_IN_BOTTOM_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_in_bottom_left.png"),
+	RULESET_TILE_PARTS.CORNER_IN_TOP_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_in_top_left.png"),
+	RULESET_TILE_PARTS.CORNER_OUT_TOP_RIGHT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_right.png"),
+	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_RIGHT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_bottom_right.png"), 
+	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_bottom_left.png"), 
+	RULESET_TILE_PARTS.CORNER_OUT_TOP_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_left.png"),
+}
 enum {ERROR_WRONG_FILE, ERROR_INVALID_JSON, ERROR_SCHEMA_MISMATCH}
 const SCHEMA_PATH := "res://rulesets/ruleset_schema.json"
 const PREVIEW_SIZE_PX := 48
 const PREVIEW_SPACE_PX := 6
 const RULESET_TILE_PARSE_DATA := {
-	"FULL": Const.RULESET_TILE_PARTS.FULL, 
-	"SIDE_TOP": Const.RULESET_TILE_PARTS.SIDE_TOP,
-	"SIDE_RIGHT": Const.RULESET_TILE_PARTS.SIDE_RIGHT,
-	"SIDE_BOTTOM": Const.RULESET_TILE_PARTS.SIDE_BOTTOM,
-	"SIDE_LEFT": Const.RULESET_TILE_PARTS.SIDE_LEFT,
-	"CORNER_IN_TOP_RIGHT": Const.RULESET_TILE_PARTS.CORNER_IN_TOP_RIGHT,
-	"CORNER_IN_BOTTOM_RIGHT": Const.RULESET_TILE_PARTS.CORNER_IN_BOTTOM_RIGHT,
-	"CORNER_IN_BOTTOM_LEFT": Const.RULESET_TILE_PARTS.CORNER_IN_BOTTOM_LEFT,
-	"CORNER_IN_TOP_LEFT": Const.RULESET_TILE_PARTS.CORNER_IN_TOP_LEFT,
-	"CORNER_OUT_TOP_RIGHT": Const.RULESET_TILE_PARTS.CORNER_OUT_TOP_RIGHT,
-	"CORNER_OUT_BOTTOM_RIGHT": Const.RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_RIGHT,
-	"CORNER_OUT_BOTTOM_LEFT": Const.RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_LEFT,
-	"CORNER_OUT_TOP_LEFT": Const.RULESET_TILE_PARTS.CORNER_OUT_TOP_LEFT
+	"FULL": RULESET_TILE_PARTS.FULL, 
+	"SIDE_TOP": RULESET_TILE_PARTS.SIDE_TOP,
+	"SIDE_RIGHT": RULESET_TILE_PARTS.SIDE_RIGHT,
+	"SIDE_BOTTOM": RULESET_TILE_PARTS.SIDE_BOTTOM,
+	"SIDE_LEFT": RULESET_TILE_PARTS.SIDE_LEFT,
+	"CORNER_IN_TOP_RIGHT": RULESET_TILE_PARTS.CORNER_IN_TOP_RIGHT,
+	"CORNER_IN_BOTTOM_RIGHT": RULESET_TILE_PARTS.CORNER_IN_BOTTOM_RIGHT,
+	"CORNER_IN_BOTTOM_LEFT": RULESET_TILE_PARTS.CORNER_IN_BOTTOM_LEFT,
+	"CORNER_IN_TOP_LEFT": RULESET_TILE_PARTS.CORNER_IN_TOP_LEFT,
+	"CORNER_OUT_TOP_RIGHT": RULESET_TILE_PARTS.CORNER_OUT_TOP_RIGHT,
+	"CORNER_OUT_BOTTOM_RIGHT": RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_RIGHT,
+	"CORNER_OUT_BOTTOM_LEFT": RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_LEFT,
+	"CORNER_OUT_TOP_LEFT": RULESET_TILE_PARTS.CORNER_OUT_TOP_LEFT,
 }
 
 var _data := {}
@@ -150,13 +195,13 @@ func get_mask_data(mask: int) -> Dictionary:
 func generate_preview() -> Texture:
 #	var parts := get_parts()
 	if not parts.empty():
-		var format: int = Const.RULESET_PART_TEXTURES[parts[0]].get_data().get_format()
+		var format: int = RULESET_PART_TEXTURES[parts[0]].get_data().get_format()
 		var image := Image.new()
 		image.create(PREVIEW_SIZE_PX * parts.size() + PREVIEW_SPACE_PX * parts.size() - 1, PREVIEW_SIZE_PX, false, format)
 		var part_copy_rect := Rect2(Vector2.ZERO, Vector2(PREVIEW_SIZE_PX, PREVIEW_SIZE_PX))
 		var part_index := 0
 		for part in parts:
-			var part_image: Image = Const.RULESET_PART_TEXTURES[part].get_data() 
+			var part_image: Image = RULESET_PART_TEXTURES[part].get_data() 
 			image.blit_rect(part_image, part_copy_rect, Vector2(part_index * (PREVIEW_SIZE_PX + PREVIEW_SPACE_PX), 0))
 			part_index += 1
 		var itex := ImageTexture.new()

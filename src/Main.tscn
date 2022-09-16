@@ -21,6 +21,8 @@ expand_margin_top = 1.0
 [node name="Main" type="Panel" groups=["snapshottable"]]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource( 4 )
 script = ExtResource( 3 )
 

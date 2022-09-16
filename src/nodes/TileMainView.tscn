@@ -63,7 +63,7 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="RulesetContainer/ScrollContainer"]
-margin_right = 502.0
+margin_right = 160.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 160, 48 )
 size_flags_horizontal = 3
@@ -214,8 +214,6 @@ theme = ExtResource( 4 )
 popup_exclusive = true
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_dir = "/home/alexander/GodotProjects/TilePipe"
-current_path = "/home/alexander/GodotProjects/TilePipe/"
 
 [node name="Godot3ExportDialog" parent="." instance=ExtResource( 3 )]
 anchor_right = 0.0

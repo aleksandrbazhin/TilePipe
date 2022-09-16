@@ -36,52 +36,6 @@ const HIGHLIGHT_COLORS := [
 	Color("e0c01c")
 ]
 
-enum RULESET_TILE_PARTS {
-	FULL, 
-	SIDE_TOP, 
-	SIDE_RIGHT,
-	SIDE_BOTTOM,
-	SIDE_LEFT,
-	CORNER_IN_TOP_RIGHT,
-	CORNER_IN_BOTTOM_RIGHT,
-	CORNER_IN_BOTTOM_LEFT,
-	CORNER_IN_TOP_LEFT,
-	CORNER_OUT_TOP_RIGHT,
-	CORNER_OUT_BOTTOM_RIGHT,
-	CORNER_OUT_BOTTOM_LEFT,
-	CORNER_OUT_TOP_LEFT
-}
-
-const RULESET_PART_OVERLAP_VECTORS := {
-	RULESET_TILE_PARTS.FULL: Vector2.ZERO,
-	RULESET_TILE_PARTS.SIDE_TOP: Vector2(0, 1),
-	RULESET_TILE_PARTS.SIDE_RIGHT: Vector2(1, 0),
-	RULESET_TILE_PARTS.SIDE_BOTTOM: Vector2(0, 1),
-	RULESET_TILE_PARTS.SIDE_LEFT: Vector2(1, 0),
-	RULESET_TILE_PARTS.CORNER_IN_TOP_RIGHT: Vector2(-1, -1),
-	RULESET_TILE_PARTS.CORNER_IN_BOTTOM_RIGHT: Vector2(-1, -1),
-	RULESET_TILE_PARTS.CORNER_IN_BOTTOM_LEFT: Vector2(-1, -1),
-	RULESET_TILE_PARTS.CORNER_IN_TOP_LEFT: Vector2(-1, -1),
-	RULESET_TILE_PARTS.CORNER_OUT_TOP_RIGHT: Vector2(1, 1),
-	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_RIGHT: Vector2(1, 1),
-	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_LEFT: Vector2(1, 1),
-	RULESET_TILE_PARTS.CORNER_OUT_TOP_LEFT: Vector2(1, 1)
-}
-const RULESET_PART_TEXTURES := {
-	RULESET_TILE_PARTS.FULL: preload("res://assets/images/ruleset_icons/ruleset_tile_full.png"), 
-	RULESET_TILE_PARTS.SIDE_TOP: preload("res://assets/images/ruleset_icons/ruleset_tile_top.png"),
-	RULESET_TILE_PARTS.SIDE_RIGHT: preload("res://assets/images/ruleset_icons/ruleset_tile_right.png"),
-	RULESET_TILE_PARTS.SIDE_BOTTOM: preload("res://assets/images/ruleset_icons/ruleset_tile_bottom.png"),
-	RULESET_TILE_PARTS.SIDE_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_left.png"),
-	RULESET_TILE_PARTS.CORNER_IN_TOP_RIGHT: preload("res://assets/images/ruleset_icons/ruleset_tile_in_top_right.png"),
-	RULESET_TILE_PARTS.CORNER_IN_BOTTOM_RIGHT: preload("res://assets/images/ruleset_icons/ruleset_tile_in_bottom_right.png"),
-	RULESET_TILE_PARTS.CORNER_IN_BOTTOM_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_in_bottom_left.png"),
-	RULESET_TILE_PARTS.CORNER_IN_TOP_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_in_top_left.png"),
-	RULESET_TILE_PARTS.CORNER_OUT_TOP_RIGHT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_right.png"),
-	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_RIGHT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_bottom_right.png"), 
-	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_bottom_left.png"), 
-	RULESET_TILE_PARTS.CORNER_OUT_TOP_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_left.png"),
-}
 
 
 const EXPORT_TYPE_UKNOWN := -1

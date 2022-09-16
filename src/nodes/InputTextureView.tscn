@@ -32,8 +32,6 @@ mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.png; Texture PNG" )
-current_dir = "/home/alexander/GodotProjects/TilePipe"
-current_path = "/home/alexander/GodotProjects/TilePipe/"
 
 [node name="HeaderContainer" type="HBoxContainer" parent="."]
 margin_right = 1024.0
@@ -136,7 +134,7 @@ scroll_horizontal_enabled = false
 
 [node name="VBox" type="VBoxContainer" parent="HBox/SettingsContainer/ScrollContainer"]
 margin_right = 479.0
-margin_bottom = 544.0
+margin_bottom = 556.0
 size_flags_horizontal = 3
 custom_constants/separation = 40
 
@@ -745,7 +743,6 @@ size_flags_horizontal = 3
 scroll_vertical_enabled = false
 
 [node name="PartsContainer" type="HBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/PartSetupContainer/ScrollContainer"]
-margin_right = 435.0
 hint_tooltip = "Setup tehe usage each detected part variant.
 For randomization it is the variant frequency.
 For animation it is the number of frames. "
