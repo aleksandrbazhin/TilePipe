@@ -159,18 +159,18 @@ _global_script_class_icons={
 [application]
 
 config/name="TilePipe"
-config/description="Tool to compose tilesets"
+config/description="Tool to build tilesets"
 run/main_scene="res://src/Main.tscn"
 config/use_custom_user_dir=true
-config/custom_user_dir_name="TilePipe"
+config/custom_user_dir_name="TilePipe2"
 run/low_processor_mode=true
 boot_splash/image="res://assets/images/boot_splash.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 0 )
 config/icon="res://assets/images/icon.png"
-config/macos_native_icon="res://icon.icns"
-config/windows_native_icon="res://icon.ico"
-config/version="2.0.alpha"
+config/macos_native_icon="res://assets/icon.icns"
+config/windows_native_icon="res://assets/icon.ico"
+config/version="2.0.alpha.2"
 
 [autoload]
 

@@ -8,14 +8,6 @@ const MIN_WINDOW_SIZE := Vector2(800, 600)
 const DRAG_END_MSEC := 200
 const DEFAULT_TILE_SIZE := Vector2(64, 64)
 
-var DEFAULT_USER_SETTINGS := {
-	".": {
-		"window_maximized": true,
-		"window_position": var2str(Vector2.ZERO),
-		"window_size": var2str(Vector2(1280, 720))
-	},
-	"VBoxContainer/HSplitContainer/MarginContainer/ProjectTree/OpenFolderDialog": EXAMPLES_DIR,
-}
 
 const RULESET_DIR := "rulesets"
 const TEMPLATE_DIR := "templates"

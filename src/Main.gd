@@ -20,7 +20,7 @@ func _ready():
 	connect_signals()
 	OS.min_window_size = Const.MIN_WINDOW_SIZE
 	ui_snapshot = UISnapshot.new(self, Const.SETTINGS_PATH)
-	ui_snapshot.init_snapshot(Const.DEFAULT_USER_SETTINGS)
+	ui_snapshot.init_snapshot(State.DEFAULT_USER_SETTINGS)
 	var mode := "Debug" if OS.is_debug_build() else "Release"
 	print("TilePipe v%s running in %s mode" % [State.app_version, mode])
 	OS.set_window_title(State.current_window_title)

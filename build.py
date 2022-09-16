@@ -72,13 +72,13 @@ def _upload_other(params):
 if __name__ == "__main__":
         print("\n____________________TilePipe______________________\nBuilding\n")
         update_godot_export_templates()
-        build(WIN_PARAMS)
+        # build(WIN_PARAMS)
         build(LINUX_PARAMS)
-        build(MAC_PARAMS)
+        # build(MAC_PARAMS)
 
         # print("\n____________________TilePipe______________________\nUploading build to itch.io")
-        upload_itch(WIN_PARAMS)
-        upload_itch(LINUX_PARAMS)
-        upload_itch(MAC_PARAMS)
+        # upload_itch(WIN_PARAMS)
+        # upload_itch(LINUX_PARAMS)
+        # upload_itch(MAC_PARAMS)
         
 
