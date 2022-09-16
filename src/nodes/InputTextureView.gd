@@ -15,10 +15,11 @@ onready var output_resize: CheckButton = $HBox/SettingsContainer/ScrollContainer
 onready var output_tile_size_x: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize/ResizeSpinBoxX
 onready var subtile_spacing_x: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingXSpinBox
 onready var subtile_spacing_y: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingYSpinBox
-onready var smoothing_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Effects/SmoothingContainer/Smoothing
-onready var random_ssed_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/RandomCheckButton
-onready var random_seed_edit: LineEdit = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/SeedLineEdit
-onready var random_seed_apply: Button = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/HBoxContainer/SeedButton
+onready var smoothing_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SmoothingContainer/Smoothing
+onready var random_seed_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/SeedContainer/RandomCheckButton
+onready var random_seed_edit: LineEdit = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/SeedContainer/SeedLineEdit
+onready var random_seed_apply: Button = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/SeedContainer/SeedButton
+onready var parts_container := $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/PartSetupContainer/ScrollContainer/PartsContainer
 
 
 func load_data(tile: TPTile):
@@ -34,13 +35,42 @@ func load_data(tile: TPTile):
 	output_tile_size_x.value = tile.output_tile_size.x
 	subtile_spacing_x.value = tile.subtile_spacing.x
 	smoothing_enabled.pressed = tile.smoothing
-	random_ssed_enabled.pressed = tile.random_seed_enabled
+	random_seed_enabled.pressed = tile.random_seed_enabled
 	random_seed_edit.text = str(tile.random_seed_value)
+	populate_frame_control()
+
+
+func populate_frame_control():
+	return
+	var tile: TPTile = State.get_current_tile()
+	if tile == null:
+		return
+	for part in parts_container.get_children():
+		part.queue_free()
+	if tile.loaded_ruleset == null:
+		return
+	var ruleset_parts := tile.loaded_ruleset.parts
+	for part_index in tile.input_parts:
+		if part_index >= ruleset_parts.size():
+			break
+		var frames_container := VBoxContainer.new()
+		for part in tile.input_parts[part_index]:
+			var frame_control: PartFrameControl = preload("res://src/nodes/PartFrameControl.tscn").instance()
+			frame_control.setup(ruleset_parts[part.part_index], part.variant_index)
+			frames_container.add_child(frame_control)
+			frame_control.connect("part_frequency_click", self, "on_part_frequency_edit_start")
+		parts_container.add_child(frames_container)
+
+
+func on_part_frequency_edit_start(part: PartFrameControl):
+	pass
 
 
 func clear():
 	texture_option.selected = texture_option.get_item_count() - 1
 	texture_container.set_main_texture(null)
+	for part in parts_container.get_children():
+		part.queue_free()
 
 
 func load_texture(texture: Texture):
@@ -111,6 +141,7 @@ func _on_ScalableTextureContainer_tile_size_changed(size: Vector2):
 	current_input_tile_size = size
 	State.update_tile_param(TPTile.PARAM_INPUT_SIZE, current_input_tile_size)
 	setup_sliders()
+	populate_frame_control()
 
 
 func _on_RateSlider_released(value: float):

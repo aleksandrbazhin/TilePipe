@@ -5,3 +5,6 @@ default_env.tres
 generated.*
 addons/*
 *.kra
+build/win/*
+build/linux/*
+build/mac/*

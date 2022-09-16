@@ -214,8 +214,6 @@ theme = ExtResource( 4 )
 popup_exclusive = true
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_dir = "/home/alexander/GodotProjects/TilePIpe"
-current_path = "/home/alexander/GodotProjects/TilePIpe/"
 
 [node name="Godot3ExportDialog" parent="." instance=ExtResource( 3 )]
 anchor_right = 0.0

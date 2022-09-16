@@ -51,7 +51,7 @@ func load_data(tile: TPTile):
 
 func add_ruleset_highlights(ruleset: Ruleset):
 	clear_highlight()
-	for i in ruleset.get_parts().size():
+	for i in ruleset.parts.size():
 		var highlight: PartHighlight = part_highlight_scene.instance()
 		parts_texture.add_child(highlight)
 		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)

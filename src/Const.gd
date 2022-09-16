@@ -8,14 +8,6 @@ const MIN_WINDOW_SIZE := Vector2(800, 600)
 const DRAG_END_MSEC := 200
 const DEFAULT_TILE_SIZE := Vector2(64, 64)
 
-var DEFAULT_USER_SETTINGS := {
-	".": {
-		"window_maximized": true,
-		"window_position": var2str(Vector2.ZERO),
-		"window_size": var2str(Vector2(1280, 720))
-	},
-	"VBoxContainer/HSplitContainer/MarginContainer/ProjectTree/OpenFolderDialog": EXAMPLES_DIR,
-}
 
 const RULESET_DIR := "rulesets"
 const TEMPLATE_DIR := "templates"
@@ -36,22 +28,7 @@ const HIGHLIGHT_COLORS := [
 	Color("e0c01c")
 ]
 
-#"part_overlap_vectors": [[0, 0], [-1, -1], [0, 1], [1, 1], [1, 0], [-1, -1], [0, 1], [1, 1], [1, 1], [-1, -1], [1, 0], [1, 1], [-1, -1]],
-const PART_OVERLAP_VECTORS := {
-	"FULL": Vector2.ZERO,
-	"SIDE_TOP": Vector2(0, 1),
-	"SIDE_RIGHT": Vector2(1, 0),
-	"SIDE_BOTTOM": Vector2(0, 1),
-	"SIDE_LEFT": Vector2(1, 0),
-	"CORNER_IN_TOP_RIGHT": Vector2(-1, -1),
-	"CORNER_IN_BOTTOM_RIGHT": Vector2(-1, -1),
-	"CORNER_IN_BOTTOM_LEFT": Vector2(-1, -1),
-	"CORNER_IN_TOP_LEFT": Vector2(-1, -1),
-	"CORNER_OUT_TOP_RIGHT": Vector2(1, 1),
-	"CORNER_OUT_BOTTOM_RIGHT": Vector2(1, 1),
-	"CORNER_OUT_BOTTOM_LEFT": Vector2(1, 1),
-	"CORNER_OUT_TOP_LEFT": Vector2(1, 1)
-}
+
 
 const EXPORT_TYPE_UKNOWN := -1
 enum EXPORT_TYPES {TEXTURE, GODOT3}

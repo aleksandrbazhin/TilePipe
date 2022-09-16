@@ -46,6 +46,7 @@ var texture_path: String
 var template_path: String
 var ruleset_path: String
 var input_tile_size: Vector2
+var input_parts: Dictionary
 var output_resize: bool
 var output_tile_size: Vector2 = Vector2(64,64)
 var subtile_spacing := Vector2.ZERO
@@ -124,6 +125,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 # warning-ignore:unused_variable
 	var is_ruleset_loaded := load_ruleset(_tile_data["ruleset"])
 # warning-ignore:unused_variable
+
 	var is_template_loaded := load_template(_tile_data["template"])
 	set_tile_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
 	set_tile_param("merge_level", "merge_level", Vector2(0.25, 0.25))
@@ -138,6 +140,36 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("export_godot3_resource_path", "export_godot3_resource_path", "")
 	set_tile_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
 	set_tile_param("export_godot3_tile_name", "export_godot3_tile_name", "")
+	if is_texture_loaded and is_ruleset_loaded:
+		split_input_into_tile_parts()
+	return true
+
+
+func split_input_into_tile_parts() -> bool:
+	if loaded_ruleset == null or loaded_texture == null:
+		return false
+	input_parts = {}
+	var input_image: Image = loaded_texture.get_data()
+	var min_input_tiles := loaded_ruleset.parts.size()
+	for part_index in range(min_input_tiles):
+		input_parts[part_index] = []
+		var part_is_empty := false
+		var variant_index := 0
+		while not part_is_empty:
+			var part := TilePart.new()
+			part.create(int(input_tile_size.x), int(input_tile_size.y), false, Image.FORMAT_RGBA8)
+			if input_tile_size.y + variant_index * input_tile_size.y > input_image.get_size().y and input_parts[part_index].size() > 0:
+				break
+			var copy_rect := Rect2(part_index * input_tile_size.x, variant_index * input_tile_size.y, 
+				input_tile_size.x, input_tile_size.y)
+			part.blit_rect(input_image, copy_rect, Vector2.ZERO)
+			if part.is_invisible() and input_parts[part_index].size() > 0:
+				part_is_empty = true
+			else:
+				input_parts[part_index].append(part)
+				part.part_index = part_index
+				part.variant_index = variant_index
+				variant_index += 1
 	return true
 
 
@@ -308,6 +340,7 @@ func update_texture(abs_path: String) -> bool:
 		if not abs_path.empty():
 			State.report_error("Error: invalid texture path")
 	_tile_data["texture"] = rel_path
+	split_input_into_tile_parts()
 	return true
 
 
@@ -320,6 +353,7 @@ func update_ruleset(abs_path: String) -> bool:
 			State.report_error("Error: invalid ruleset")
 	ruleset_row.set_text(0, RULESET_PREFIX + rel_path)
 	_tile_data["ruleset"] = rel_path
+	split_input_into_tile_parts()
 	return true
 
 
@@ -332,6 +366,7 @@ func update_template(abs_path: String) -> bool:
 			State.report_error("Error: invalid template")
 	template_row.set_text(0, TEMPLATE_PREFIX + rel_path)
 	_tile_data["template"] = rel_path
+	split_input_into_tile_parts()
 	return true
 
 
@@ -342,6 +377,7 @@ func update_input_tile_size(new_size: Vector2) -> bool:
 			"x": input_tile_size.x,
 			"y": input_tile_size.y
 		}
+		split_input_into_tile_parts()
 	return true
 
 

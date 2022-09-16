@@ -20,7 +20,7 @@
 		"x": 16,
 		"y": 16
 	},
-	"output_resize": false,
+	"output_resize": true,
 	"subtile_spacing": {
 		"x": 0,
 		"y": 0

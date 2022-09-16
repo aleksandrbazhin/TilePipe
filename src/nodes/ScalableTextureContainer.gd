@@ -85,13 +85,17 @@ func _draw():
 
 
 func _on_XSpinBox_value_changed(value: float):
-	var is_square := current_tile_size.x == current_tile_size.y
+	current_tile_size.y = value
 	current_tile_size.x = value
-	if is_square:
-		y_spinbox.value = x_spinbox.value
-	else:
-		emit_signal("tile_size_changed", current_tile_size)
-		update()
+	emit_signal("tile_size_changed", current_tile_size)
+	update()
+#	var is_square := current_tile_size.x == current_tile_size.y
+#	current_tile_size.x = value
+#	if is_square:
+#		y_spinbox.value = x_spinbox.value
+#	else:
+#		emit_signal("tile_size_changed", current_tile_size)
+#		update()
 
 
 func _on_YSpinBox_value_changed(value: float):

@@ -90,7 +90,7 @@ func highlight_path(is_on: bool, is_warning: bool = false):
 		path_warning.hide()
 
 
-func _on_Existing_gui_input(event):
+func _on_Existing_gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT and not is_temp:
 		emit_signal("clicked", self)
 

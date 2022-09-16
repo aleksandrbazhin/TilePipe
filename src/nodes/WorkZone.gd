@@ -61,8 +61,8 @@ func render_subtiles():
 			or not tile.loaded_ruleset.is_loaded or tile.loaded_template == null:
 		result_view.clear()
 		return
-	var input_image: Image = tile.loaded_texture.get_data()
-	renderer.start_render(tile, input_image)
+#	var input_image: Image = tile.loaded_texture.get_data()
+	renderer.start_render(tile)
 	update_progress(0)
 
 

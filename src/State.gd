@@ -18,6 +18,15 @@ var current_window_title := window_title_base
 var current_dir := OS.get_executable_path().get_base_dir() + "/" + Const.EXAMPLES_DIR
 var current_tile_ref: WeakRef = null
 var current_modal_popup: Popup = null
+var DEFAULT_USER_SETTINGS := {
+	".": {
+		"window_maximized": true,
+		"window_position": var2str(Vector2.ZERO),
+		"window_size": var2str(Vector2(1280, 720))
+	},
+	"VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree/OpenFolderDialog": current_dir,
+}
+
 
 
 func set_current_tile(tile: TPTile, row: TreeItem = null):
