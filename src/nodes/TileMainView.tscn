@@ -63,7 +63,7 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="RulesetContainer/ScrollContainer"]
-margin_right = 160.0
+margin_right = 502.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 160, 48 )
 size_flags_horizontal = 3

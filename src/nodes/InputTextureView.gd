@@ -41,6 +41,7 @@ func load_data(tile: TPTile):
 
 
 func populate_frame_control():
+	return
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
@@ -57,7 +58,12 @@ func populate_frame_control():
 			var frame_control: PartFrameControl = preload("res://src/nodes/PartFrameControl.tscn").instance()
 			frame_control.setup(ruleset_parts[part.part_index], part.variant_index)
 			frames_container.add_child(frame_control)
+			frame_control.connect("part_frequency_click", self, "on_part_frequency_edit_start")
 		parts_container.add_child(frames_container)
+
+
+func on_part_frequency_edit_start(part: PartFrameControl):
+	pass
 
 
 func clear():

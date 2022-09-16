@@ -38,10 +38,10 @@ margin_top = 32.0
 margin_right = 1280.0
 margin_bottom = 280.0
 size_flags_vertical = 3
-split_offset = 100
+split_offset = 140
 
 [node name="SingleTile" type="ColorRect" parent="VBoxContainer/HSplitContainer"]
-margin_right = 300.0
+margin_right = 340.0
 margin_bottom = 248.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_vertical = 3
@@ -70,7 +70,7 @@ margin_top = -22.0
 margin_right = -2.0
 
 [node name="Result" type="Control" parent="VBoxContainer/HSplitContainer"]
-margin_left = 306.0
+margin_left = 346.0
 margin_right = 1280.0
 margin_bottom = 248.0
 rect_min_size = Vector2( 320, 180 )
@@ -81,7 +81,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HSplitContainer/Result/TextureContainer"]
-margin_right = 974.0
+margin_right = 934.0
 margin_bottom = 248.0
 size_flags_horizontal = 3
 size_flags_vertical = 3

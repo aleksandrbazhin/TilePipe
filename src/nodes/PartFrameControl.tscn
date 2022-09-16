@@ -23,6 +23,7 @@ custom_fonts/font = ExtResource( 2 )
 valign = 1
 
 [node name="AnimationLabel" type="Label" parent="."]
+visible = false
 margin_left = 20.0
 margin_top = 25.0
 margin_right = 26.0
@@ -30,3 +31,5 @@ margin_bottom = 39.0
 rect_min_size = Vector2( 27, 14 )
 custom_fonts/font = ExtResource( 2 )
 valign = 1
+
+[connection signal="gui_input" from="." to="." method="_on_PartFrameControl_gui_input"]
