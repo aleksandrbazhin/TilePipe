@@ -134,7 +134,7 @@ scroll_horizontal_enabled = false
 
 [node name="VBox" type="VBoxContainer" parent="HBox/SettingsContainer/ScrollContainer"]
 margin_right = 476.0
-margin_bottom = 504.0
+margin_bottom = 488.0
 size_flags_horizontal = 3
 custom_constants/separation = 40
 
@@ -325,7 +325,7 @@ margin_bottom = 144.0
 [node name="OutputSize" type="VBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox" groups=["corners_settings", "overlay_settings"]]
 margin_top = 184.0
 margin_right = 476.0
-margin_bottom = 348.0
+margin_bottom = 332.0
 hint_tooltip = "If you have multiple rows in your input image, the result can and will be randomized. 
 (If aspect ratio of a texture is more than 1:4 for a 4-part preset)"
 custom_constants/separation = 8
@@ -347,18 +347,17 @@ valign = 1
 [node name="SubtileSpacing" type="HBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize"]
 margin_top = 36.0
 margin_right = 476.0
-margin_bottom = 76.0
-rect_min_size = Vector2( 0, 40 )
+margin_bottom = 68.0
 
 [node name="Spacer" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing"]
 margin_right = 18.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="Label" type="Label" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing" groups=["blockable"]]
 margin_left = 22.0
 margin_right = 150.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 128, 0 )
 size_flags_vertical = 1
 text = "Subtile spacing"
@@ -381,9 +380,8 @@ __meta__ = {
 
 [node name="SpacingXSpinBox" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing" instance=ExtResource( 4 )]
 margin_left = 154.0
-margin_top = 4.0
 margin_right = 454.0
-margin_bottom = 36.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 size_flags_vertical = 4
 min_value = 0.0
@@ -448,44 +446,42 @@ __meta__ = {
 [node name="Spacer3" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing"]
 margin_left = 458.0
 margin_right = 476.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="OutputResize" type="HBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize"]
-margin_top = 84.0
+margin_top = 76.0
 margin_right = 476.0
-margin_bottom = 124.0
-rect_min_size = Vector2( 0, 40 )
+margin_bottom = 108.0
 
 [node name="Spacer" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize"]
 margin_right = 18.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="Label" type="Label" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize"]
 margin_left = 22.0
-margin_top = 10.0
+margin_top = 6.0
 margin_right = 150.0
-margin_bottom = 29.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 128, 0 )
 text = "Output resize"
 
 [node name="OutpuResizeButton" type="CheckButton" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize"]
 margin_left = 154.0
 margin_right = 218.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 
 [node name="Spacer2" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize"]
 margin_left = 222.0
 margin_right = 240.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="ResizeSpinBoxX" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize" instance=ExtResource( 4 )]
 margin_left = 244.0
-margin_top = 4.0
 margin_right = 454.0
-margin_bottom = 36.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 size_flags_vertical = 4
 prefix = "Resize to "
@@ -506,13 +502,13 @@ __meta__ = {
 [node name="Spacer3" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize"]
 margin_left = 458.0
 margin_right = 476.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="SmoothingContainer" type="HBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize"]
-margin_top = 132.0
+margin_top = 116.0
 margin_right = 476.0
-margin_bottom = 164.0
+margin_bottom = 148.0
 size_flags_horizontal = 3
 
 [node name="Spacer" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SmoothingContainer"]
@@ -569,9 +565,9 @@ text = "Effects"
 valign = 1
 
 [node name="Randomization" type="VBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox" groups=["corners_settings", "overlay_settings"]]
-margin_top = 388.0
+margin_top = 372.0
 margin_right = 476.0
-margin_bottom = 464.0
+margin_bottom = 448.0
 hint_tooltip = "If you have multiple rows in your input image, the alternatives can be used as either random variants or for animation."
 custom_constants/separation = 8
 
@@ -755,9 +751,9 @@ margin_right = 476.0
 rect_min_size = Vector2( 18, 0 )
 
 [node name="VSpacer" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox"]
-margin_top = 504.0
+margin_top = 488.0
 margin_right = 476.0
-margin_bottom = 504.0
+margin_bottom = 488.0
 
 [connection signal="about_to_show" from="AddTextureFileDialog" to="." method="_on_AddTextureFileDialog_about_to_show"]
 [connection signal="file_selected" from="AddTextureFileDialog" to="." method="_on_AddTextureFileDialog_file_selected"]

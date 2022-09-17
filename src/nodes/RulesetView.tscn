@@ -152,7 +152,7 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/HeaderContainer/MarginContainer/Hbox/VBoxContainer/ScrollContainer"]
-margin_right = 160.0
+margin_right = 494.0
 margin_bottom = 74.0
 rect_min_size = Vector2( 160, 74 )
 size_flags_horizontal = 3
@@ -181,6 +181,7 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+margin_right = 1024.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 

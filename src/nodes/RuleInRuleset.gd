@@ -1,6 +1,9 @@
 class_name RuleInRuleset
-extends PanelContainer
+extends ColorRect
 
+
+const DEFAULT_COLoR := Color(0.0, 0.0, 0.0, 0.2)
+const SELECT_COLoR := Color(0.9, 0.9, 0.9, 0.2)
 
 var bitmask_variants: Array
 
@@ -17,3 +20,12 @@ func setup(ruleset: Ruleset, tile_index: int):
 	$BoxContainer/Preview/Rotations/CenterContainer/TileRotationsPreview.setup(tile_data["part_rotations"])
 	$BoxContainer/Preview/Flips/CenterContainer/TileFlipsPreview.setup(tile_data["part_flip_x"], tile_data["part_flip_y"])
 	$BoxContainer/RawData.text = ruleset.get_raw_tile_data(tile_index)
+	color = DEFAULT_COLoR
+
+
+func select():
+	color = SELECT_COLoR
+
+
+func deselect():
+	color = DEFAULT_COLoR
