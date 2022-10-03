@@ -1,0 +1,19 @@
+{
+	"texture": "input_textures/25_part_no_symmetry.png",
+	"ruleset": "rulesets/25_part_256_no_symmetry.json",
+	"template": "templates/template_256_32x8.png",
+	"output_resize": true,
+	"random_seed_enabled": false,
+	"input_tile_size": {
+		"x": 32,
+		"y": 32
+	},
+	"merge_level": {
+		"x": 0.34375,
+		"y": 0.34375
+	},
+	"output_tile_size": {
+		"x": 64,
+		"y": 64
+	}
+}
