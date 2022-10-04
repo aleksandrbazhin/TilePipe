@@ -1663,7 +1663,7 @@
         },
         {
             "mask_variants": [215],
-            "part_indexes": [0, 0, 0, 5, 0, 5, 0, 0],
+            "part_indexes": [0, 0, 0, 5, 0, 9, 0, 0],
             "part_rotations": [0, 0, 0, 0, 0, 0, 0, 0],
             "part_flip_x": [false, false, false, false, false, false, false, false],
             "part_flip_y": [false, false, false, false, false, false, false, false]
