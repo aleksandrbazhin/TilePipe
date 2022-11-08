@@ -1,5 +1,5 @@
 {
-	"texture": "input_textures/8_part_side_symmetry_random.png",
+	"texture": "textures/8_part_side_symmetry_random.png",
 	"ruleset": "rulesets/8_part_side_symmetry.json",
 	"template": "templates/template_47_double.png",
 	"input_tile_size": {

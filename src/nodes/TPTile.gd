@@ -340,6 +340,7 @@ func update_texture(abs_path: String) -> bool:
 		if not abs_path.empty():
 			State.report_error("Error: invalid texture path")
 	_tile_data["texture"] = rel_path
+	assure_tile_size()
 	split_input_into_tile_parts()
 	return true
 
@@ -368,6 +369,20 @@ func update_template(abs_path: String) -> bool:
 	_tile_data["template"] = rel_path
 	split_input_into_tile_parts()
 	return true
+
+
+func has_loaded_tile_size() -> bool:
+	return _tile_data.has("input_tile_size")
+
+
+func assure_tile_size():
+	if !has_loaded_tile_size():
+		if loaded_texture == null:
+			input_tile_size = Const.DEFAULT_TILE_SIZE
+		else:
+			var size = Vector2(loaded_texture.get_size().y, loaded_texture.get_size().y)
+			update_input_tile_size(size)
+			output_tile_size = size
 
 
 func update_input_tile_size(new_size: Vector2) -> bool:

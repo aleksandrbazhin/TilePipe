@@ -218,9 +218,9 @@ filters = PoolStringArray( "*.png ; PNG Images" )
 [node name="Godot3ExportDialog" parent="." instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 210.0
-margin_right = 1280.0
-margin_bottom = 860.0
+margin_top = 222.0
+margin_right = 1100.0
+margin_bottom = 872.0
 
 [connection signal="item_selected" from="RulesetContainer/RulesetOptionButton" to="." method="_on_RulesetOptionButton_item_selected"]
 [connection signal="pressed" from="RulesetContainer/RulesetButton" to="." method="_on_RulesetButton_pressed"]
@@ -228,5 +228,7 @@ margin_bottom = 860.0
 [connection signal="pressed" from="TemplateContainer/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="item_selected" from="ExportContainer/ExportOptionButton" to="." method="_on_ExportOptionButton_item_selected"]
 [connection signal="pressed" from="ExportContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
+[connection signal="about_to_show" from="TextureFileDialog" to="." method="_on_TextureFileDialog_about_to_show"]
 [connection signal="file_selected" from="TextureFileDialog" to="." method="_on_TextureFileDialog_file_selected"]
+[connection signal="popup_hide" from="TextureFileDialog" to="." method="_on_TextureFileDialog_popup_hide"]
 [connection signal="popup_hide" from="Godot3ExportDialog" to="." method="_on_Godot3ExportDialog_popup_hide"]

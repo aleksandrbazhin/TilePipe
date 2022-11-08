@@ -25,9 +25,11 @@ func on_subtile_selected(bitmask: int):
 	if not visible:
 		return
 	for rule in tiles_container.get_children():
+		rule.deselect()
 		if bitmask in rule.bitmask_variants:
 			scroll_container.scroll_vertical = rule.rect_position.y
-			return
+			rule.select()
+#			return
 
 
 func load_data(tile: TPTile):

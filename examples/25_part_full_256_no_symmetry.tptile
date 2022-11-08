@@ -1,0 +1,23 @@
+{
+	"texture": "textures/25_part_full_256_no_symmetry_grass.png",
+	"ruleset": "rulesets/25_part_256_no_symmetry.json",
+	"template": "templates/template_256_32x8.png",
+	"output_resize": true,
+	"random_seed_enabled": false,
+	"input_tile_size": {
+		"x": 48,
+		"y": 48
+	},
+	"merge_level": {
+		"x": 0.5,
+		"y": 0.5
+	},
+	"output_tile_size": {
+		"x": 64,
+		"y": 64
+	},
+	"overlap_level": {
+		"x": 0,
+		"y": 0
+	}
+}

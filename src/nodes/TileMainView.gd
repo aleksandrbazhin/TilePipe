@@ -64,7 +64,7 @@ func add_ruleset_highlights(ruleset: Ruleset):
 		var highlight := preload("res://src/nodes/PartHighlight.tscn").instance()
 		ruleset_texture.add_child(highlight)
 		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)
-		highlight.set_id(i + 1)
+		highlight.set_id(i + 1, true)
 		highlight.connect("focused", self, "on_part_highlight_focused")
 		highlight.connect("unfocused", self, "on_part_highlight_unfocused")
 
@@ -157,5 +157,14 @@ func _on_TextureFileDialog_file_selected(path):
 	display_export_path(Const.EXPORT_TYPES.TEXTURE)
 
 
+func _on_TextureFileDialog_about_to_show():
+	State.popup_started($TextureFileDialog)
+
+
+func _on_TextureFileDialog_popup_hide():
+	State.popup_ended()
+
+
 func _on_Godot3ExportDialog_popup_hide():
 	display_export_path(Const.EXPORT_TYPES.GODOT3)
+	State.popup_ended()

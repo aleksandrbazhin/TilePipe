@@ -7,15 +7,19 @@ signal unfocused()
 
 var id: int = -1
 
+onready var panel := $Panel
+onready var label := $Panel/Label
 
-func set_id(new_id: int):
+func set_id(new_id: int, inside: bool = false):
 	var color_index := (new_id - 1) % Const.HIGHLIGHT_COLORS.size()
+	if inside:
+		panel.rect_position.y = 33
 	if id == -1:
 		id = new_id
-		$Panel/Label.text = str(id)
-		$Panel/Label.text = str(new_id)
+		label.text = str(id)
+		label.text = str(new_id)
 		set_border_hew(color_index)
-		set_label_hew(color_index, $Panel)
+		set_label_hew(color_index, panel)
 	else:
 		var last_label_panel = get_child(get_child_count() - 1)
 		var new_label: Panel = last_label_panel.duplicate(DUPLICATE_USE_INSTANCING)
