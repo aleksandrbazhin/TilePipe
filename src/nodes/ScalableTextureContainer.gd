@@ -22,10 +22,26 @@ func _ready():
 	is_ready = true
 
 
-func set_main_texture(texture: Texture, tile_size: Vector2 = Const.DEFAULT_TILE_SIZE):
+func clear():
+	texture_rect.texture = null
+	current_tile_size = Vector2.ZERO
+
+func set_main_texture(texture: Texture):
+	var tile: TPTile = State.get_current_tile()
+	if tile == null:
+		return
+#	if (not tile.has_loaded_tile_size()):
+#		State.update_tile_param(TPTile.PARAM_INPUT_SIZE,  tile.deduce_tile_size)
+#		current_tile_size = tile.input_tile_size
+#	if tile_size == Vector2.ZERO:
+#		if texture == null:
+#			current_tile_size = Const.DEFAULT_TILE_SIZE
+#		else:
+#			current_tile_size = Vector2(texture.get_height(), texture.get_height())
+#	else:
+	current_tile_size = tile.input_tile_size
 	texture_rect.texture = texture
-	current_tile_size = tile_size
-	set_input_tile_size(tile_size)
+	set_input_tile_size(current_tile_size)
 
 
 # we need to resize input texture precisely, so find the lower 

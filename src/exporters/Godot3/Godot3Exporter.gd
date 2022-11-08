@@ -3,6 +3,7 @@ extends WindowDialog
 
 
 const DEFAULT_TILES_LABEL: String = "Select tileset to edit tiles ↑"
+const DEFAULT_GODOT_RESOURCE_PATH := "GeneratedTileset.tres"
 
 var resource_path: String = ""
 var texture_path: String = "" # os path for current texture to save, not relative like res://
@@ -103,7 +104,7 @@ func start_export_dialog(tile: TPTile):
 		resource_dialog.current_path = resource_path
 		load_tileset(resource_path)
 	else:
-		if resource_path != Helpers.clear_path(Const.DEFAULT_GODOT_RESOURCE_PATH):
+		if resource_path != Helpers.clear_path(DEFAULT_GODOT_RESOURCE_PATH):
 			report_error_inside_dialog("Error: Godot tileset resource path is invalid,\npossibly loading a tilest not belonging to any Godot project")
 		set_lineedit_text(resource_name_edit, ".tres")
 		resource_dialog.current_path = resource_path

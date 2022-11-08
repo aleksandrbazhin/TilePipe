@@ -3,7 +3,7 @@ extends VBoxContainer
 
 
 var current_texture_path := ""
-var current_input_tile_size := Const.DEFAULT_TILE_SIZE
+var current_input_tile_size := Vector2.ZERO
 
 onready var texture_option := $HeaderContainer/TextureOption
 onready var texture_container: ScalableTextureContainer = $HBox/ScalableTextureContainer
@@ -68,13 +68,14 @@ func on_part_frequency_edit_start(part: PartFrameControl):
 
 func clear():
 	texture_option.selected = texture_option.get_item_count() - 1
-	texture_container.set_main_texture(null)
+#	texture_container.set_main_texture(null)
+	texture_container.clear()
 	for part in parts_container.get_children():
 		part.queue_free()
 
 
 func load_texture(texture: Texture):
-	texture_container.set_main_texture(texture, current_input_tile_size)
+	texture_container.set_main_texture(texture)
 
 
 func setup_sliders():
