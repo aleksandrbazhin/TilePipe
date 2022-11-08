@@ -3,7 +3,7 @@ extends WindowDialog
 
 
 const DEFAULT_TILES_LABEL: String = "Select tileset to edit tiles ↑"
-const DEFAULT_GODOT_RESOURCE_PATH := "GeneratedTileset.tres"
+#const DEFAULT_GODOT_RESOURCE_PATH := "GeneratedTileset.tres"
 
 var resource_path: String = ""
 var texture_path: String = "" # os path for current texture to save, not relative like res://
@@ -100,8 +100,10 @@ func start_export_dialog(tile: TPTile):
 		resource_dialog.current_path = resource_path
 		load_tileset(resource_path)
 	else:
-		if resource_path != Helpers.clear_path(DEFAULT_GODOT_RESOURCE_PATH):
-			State.report_error("Error: Godot tileset resource path is invalid,\npossibly loading a tilest not belonging to any Godot project")
+		# if tile.has_export_path()
+		
+#		if resource_path != Helpers.clear_path(DEFAULT_GODOT_RESOURCE_PATH):
+#			State.report_error("Error: Godot tileset resource path is invalid,\npossibly loading a tilest not belonging to any Godot project")
 		set_lineedit_text(resource_name_edit, ".tres")
 		resource_dialog.current_path = resource_path
 		overwrite_tileset_select.pressed = true
@@ -537,7 +539,7 @@ func populate_new_from_exisiting_tile(row: GodotTileRow):
 
 func is_a_valid_resource_path(test_resource_path: String):
 	if test_resource_path.get_basename().get_file().empty() or not test_resource_path.get_file().is_valid_filename():
-		State.report_error("Error: \"%s\" is not a valid filename" % test_resource_path.get_file())
+#		State.report_error("Error: \"%s\" is not a valid filename" % test_resource_path.get_file())
 		return false
 	var resource_project_path := get_godot_project_path(test_resource_path)	
 	if resource_project_path.empty():
@@ -566,15 +568,7 @@ func clear_file_path(path: String) -> String:
 		return Helpers.get_default_dir_path()
 
 
-func cancel_action():
-	if resource_dialog.visible:
-		resource_dialog.hide()
-	elif texture_dialog.visible:
-		texture_dialog.hide()
-	elif collision_dialog.visible:
-		collision_dialog.hide()
-	else:
-		hide()
+#func cancel_action():
 
 
 func _on_SelectResourceButton_pressed():
@@ -760,6 +754,14 @@ func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
-		if visible:
+		if resource_dialog.visible:
+			get_tree().set_input_as_handled()
+			resource_dialog.hide()
+		elif texture_dialog.visible:
+			get_tree().set_input_as_handled()
+			texture_dialog.hide()
+	#	elif collision_dialog.visible:
+	#		collision_dialog.hide()
+		elif visible:
 			get_tree().set_input_as_handled()
 			hide()
