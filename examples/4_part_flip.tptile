@@ -1,5 +1,5 @@
 {
-	"texture": "input_textures/4_part_no_rotate.png",
+	"texture": "textures/4_part_no_rotate.png",
 	"ruleset": "rulesets/4_part_flip.json",
 	"template": "templates/template_47.png",
 	"output_tile_size": {

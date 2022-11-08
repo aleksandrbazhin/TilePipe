@@ -1,5 +1,5 @@
 {
-	"texture": "input_textures/7_part_full_256.png",
+	"texture": "textures/7_part_full_256.png",
 	"ruleset": "rulesets/7_part_full_256.json",
 	"template": "templates/template_256_32x8.png",
 	"input_tile_size": {

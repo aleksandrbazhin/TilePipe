@@ -1,5 +1,5 @@
 {
-	"texture": "input_textures/5_part_quarters.png",
+	"texture": "textures/5_part_quarters.png",
 	"ruleset": "rulesets/5_part_quarters.json",
 	"template": "templates/template_47.png",
 	"input_tile_size": {

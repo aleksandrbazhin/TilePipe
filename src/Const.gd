@@ -10,6 +10,7 @@ const DEFAULT_TILE_SIZE := Vector2(64, 64)
 
 const RULESET_DIR := "rulesets"
 const TEMPLATE_DIR := "templates"
+const TEXTURE_DIR := "textures"
 
 const HIGHLIGHT_COLORS := [
 	Color("98c0ef"), 

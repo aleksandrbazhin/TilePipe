@@ -127,7 +127,10 @@ func _on_AddTextureFileDialog_popup_hide():
 
 
 func _on_AddTextureFileDialog_file_selected(path: String):
-	var new_texture_path: String = State.current_dir + "/" + path.get_file()
+	if not Helpers.ensure_directory_exists(State.current_dir, Const.TEXTURE_DIR):
+		State.report_error("Error: Creating directory \"/%s/\" error" % Const.TEXTURE_DIR)
+		return
+	var new_texture_path: String = State.current_dir + "/" + Const.TEXTURE_DIR + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_texture_path)
 	if error != OK:

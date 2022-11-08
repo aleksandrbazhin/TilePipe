@@ -1,5 +1,5 @@
 {
-	"texture": "input_textures/4_part_semiopaque.png",
+	"texture": "textures/4_part_semiopaque.png",
 	"ruleset": "rulesets/4_part_rotate.json",
 	"template": "templates/template_47.png",
 	"output_tile_size": {

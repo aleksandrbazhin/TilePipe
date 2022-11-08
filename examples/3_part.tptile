@@ -1,5 +1,5 @@
 {
-	"texture": "input_textures/3_part.png",
+	"texture": "textures/3_part.png",
 	"ruleset": "rulesets/3_part.json",
 	"template": "templates/template_2x2.png",
 	"output_tile_size": {
