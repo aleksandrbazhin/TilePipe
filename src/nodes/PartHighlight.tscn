@@ -43,9 +43,6 @@ margin_bottom = -14.0
 rect_min_size = Vector2( 15, 12 )
 mouse_filter = 1
 custom_styles/panel = SubResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="Panel"]
 anchor_top = 1.0
