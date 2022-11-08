@@ -357,8 +357,6 @@ rect_min_size = Vector2( 700, 500 )
 popup_exclusive = true
 access = 2
 filters = PoolStringArray( "*.tres ; Godot resouces" )
-current_dir = "/home/alexander/GodotProjects/TilePIpe"
-current_path = "/home/alexander/GodotProjects/TilePIpe/"
 
 [node name="TextureFileDialog" type="FileDialog" parent="."]
 margin_right = 315.0
@@ -367,20 +365,6 @@ rect_min_size = Vector2( 700, 500 )
 popup_exclusive = true
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
-current_dir = "/home/alexander/GodotProjects/TilePIpe"
-current_path = "/home/alexander/GodotProjects/TilePIpe/"
-
-[node name="ErrorDialog" type="AcceptDialog" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -41.5
-margin_top = -34.0
-margin_right = 98.5
-margin_bottom = 34.0
-popup_exclusive = true
-window_title = "Errors occured"
 
 [node name="SaveConfirmationDialog" type="ConfirmationDialog" parent="."]
 margin_left = 800.0
@@ -400,4 +384,3 @@ margin_bottom = 538.0
 [connection signal="pressed" from="VBox/HBoxContainer/ButtonOk" to="." method="_on_ButtonOk_pressed"]
 [connection signal="file_selected" from="ResourceFileDialog" to="." method="_on_ResourceFileDialog_file_selected"]
 [connection signal="file_selected" from="TextureFileDialog" to="." method="_on_TextureFileDialog_file_selected"]
-[connection signal="confirmed" from="ErrorDialog" to="." method="_on_ErrorDialog_confirmed"]

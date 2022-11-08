@@ -228,5 +228,7 @@ margin_bottom = 860.0
 [connection signal="pressed" from="TemplateContainer/TemplateButton" to="." method="_on_TemplateButton_pressed"]
 [connection signal="item_selected" from="ExportContainer/ExportOptionButton" to="." method="_on_ExportOptionButton_item_selected"]
 [connection signal="pressed" from="ExportContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
+[connection signal="about_to_show" from="TextureFileDialog" to="." method="_on_TextureFileDialog_about_to_show"]
 [connection signal="file_selected" from="TextureFileDialog" to="." method="_on_TextureFileDialog_file_selected"]
+[connection signal="popup_hide" from="TextureFileDialog" to="." method="_on_TextureFileDialog_popup_hide"]
 [connection signal="popup_hide" from="Godot3ExportDialog" to="." method="_on_Godot3ExportDialog_popup_hide"]

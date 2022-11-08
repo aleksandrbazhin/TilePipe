@@ -65,7 +65,7 @@ func on_size_changed():
 
 func _process(_delta: float):
 	if Input.is_action_just_pressed("ui_cancel"):
-		if State.current_modal_popup != null:
+		if State.current_modal_popup != null and not error_dialog.visible:
 			State.current_modal_popup.hide()
 
 
@@ -97,3 +97,10 @@ func add_error_report(text: String):
 func _on_ErrorDialog_popup_hide():
 	end_modal_popup()
 	error_dialog.dialog_text = ""
+
+
+func _input(event):
+	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
+		if error_dialog.visible:
+			get_tree().set_input_as_handled()
+			error_dialog.hide()

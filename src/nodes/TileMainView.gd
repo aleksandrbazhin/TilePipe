@@ -157,5 +157,18 @@ func _on_TextureFileDialog_file_selected(path):
 	display_export_path(Const.EXPORT_TYPES.TEXTURE)
 
 
+func _on_TextureFileDialog_about_to_show():
+	State.popup_started($TextureFileDialog)
+
+
+func _on_TextureFileDialog_popup_hide():
+	State.popup_ended()
+
+
 func _on_Godot3ExportDialog_popup_hide():
 	display_export_path(Const.EXPORT_TYPES.GODOT3)
+	State.popup_ended()
+
+#
+#func _on_Godot3ExportDialog_about_to_show():
+#	State.popup_started($Godot3ExportDialog)
