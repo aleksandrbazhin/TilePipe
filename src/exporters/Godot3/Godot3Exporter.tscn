@@ -11,9 +11,9 @@
 [node name="Godot3ExportDialog" type="WindowDialog"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -266.0
-margin_bottom = -168.0
-rect_min_size = Vector2( 0, 650 )
+margin_right = -798.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 1100, 650 )
 theme = ExtResource( 1 )
 popup_exclusive = true
 window_title = "Godor resource exporter"
@@ -26,12 +26,9 @@ margin_left = 20.0
 margin_right = -20.0
 margin_bottom = -20.0
 custom_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HBoxTileset" type="HBoxContainer" parent="VBox"]
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 32.0
 custom_constants/separation = 8
 
@@ -54,7 +51,7 @@ __meta__ = {
 
 [node name="ResourceNameEdit" type="LineEdit" parent="VBox/HBoxTileset"]
 margin_left = 120.0
-margin_right = 695.0
+margin_right = 723.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 align = 3
@@ -67,8 +64,8 @@ __meta__ = {
 }
 
 [node name="SelectResourceButton" type="Button" parent="VBox/HBoxTileset"]
-margin_left = 703.0
-margin_right = 819.0
+margin_left = 731.0
+margin_right = 847.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 116, 32 )
 text = "Select file"
@@ -78,26 +75,26 @@ __meta__ = {
 }
 
 [node name="Control2" type="Control" parent="VBox/HBoxTileset"]
-margin_left = 827.0
-margin_right = 827.0
+margin_left = 855.0
+margin_right = 855.0
 margin_bottom = 32.0
 
 [node name="OverrideCheckButton" type="CheckButton" parent="VBox/HBoxTileset"]
-margin_left = 835.0
-margin_right = 1032.0
+margin_left = 863.0
+margin_right = 1060.0
 margin_bottom = 32.0
 hint_tooltip = "Override the new 1-tile tileset over the existing one or add a tile to it"
 text = "Override completely"
 
 [node name="Spacer" type="Control" parent="VBox"]
 margin_top = 32.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 0, 16 )
 
 [node name="TilesLabel" type="Label" parent="VBox"]
 margin_top = 48.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_vertical = 1
@@ -106,22 +103,22 @@ valign = 1
 
 [node name="TilesPanelContainer" type="PanelContainer" parent="VBox"]
 margin_top = 68.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 570.0
 rect_min_size = Vector2( 0, 48 )
 size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="VBox/TilesPanelContainer"]
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 502.0
 custom_constants/separation = 8
 
 [node name="Control" type="Control" parent="VBox/TilesPanelContainer/VBox"]
-margin_right = 1032.0
+margin_right = 1060.0
 
 [node name="HBoxNewTile" type="HBoxContainer" parent="VBox/TilesPanelContainer/VBox"]
 margin_top = 8.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 48.0
 custom_constants/separation = 8
 
@@ -173,7 +170,7 @@ valign = 1
 
 [node name="LineEditTexture" type="LineEdit" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
 margin_left = 541.0
-margin_right = 752.0
+margin_right = 780.0
 margin_bottom = 40.0
 hint_tooltip = "Texture file"
 size_flags_horizontal = 3
@@ -186,21 +183,21 @@ __meta__ = {
 }
 
 [node name="SelectTextureButton" type="Button" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 760.0
-margin_right = 860.0
+margin_left = 788.0
+margin_right = 888.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 100, 32 )
 text = "Select"
 icon = ExtResource( 4 )
 
 [node name="Spacer2" type="Control" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 868.0
-margin_right = 868.0
+margin_left = 896.0
+margin_right = 896.0
 margin_bottom = 40.0
 
 [node name="CollsionsLabel" type="Label" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 876.0
-margin_right = 960.0
+margin_left = 904.0
+margin_right = 988.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 84, 40 )
 text = "Collisions:"
@@ -208,18 +205,18 @@ align = 2
 valign = 1
 
 [node name="CollisionsCheckButton" type="CheckButton" parent="VBox/TilesPanelContainer/VBox/HBoxNewTile"]
-margin_left = 968.0
-margin_right = 1032.0
+margin_left = 996.0
+margin_right = 1060.0
 margin_bottom = 40.0
 
 [node name="HSeparator" type="HSeparator" parent="VBox/TilesPanelContainer/VBox"]
 margin_top = 56.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 68.0
 
 [node name="TableHeaderRect" type="ColorRect" parent="VBox/TilesPanelContainer/VBox"]
 margin_top = 76.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 104.0
 rect_min_size = Vector2( 0, 28 )
 size_flags_horizontal = 3
@@ -255,7 +252,7 @@ __meta__ = {
 [node name="Label3" type="Label" parent="VBox/TilesPanelContainer/VBox/TableHeaderRect/HBoxContainer"]
 margin_left = 452.0
 margin_top = 2.0
-margin_right = 930.0
+margin_right = 958.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 0, 24 )
 size_flags_horizontal = 3
@@ -266,9 +263,9 @@ __meta__ = {
 }
 
 [node name="Label4" type="Label" parent="VBox/TilesPanelContainer/VBox/TableHeaderRect/HBoxContainer"]
-margin_left = 934.0
+margin_left = 962.0
 margin_top = 2.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 98, 24 )
 text = "Collisions:"
@@ -279,52 +276,52 @@ __meta__ = {
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBox/TilesPanelContainer/VBox"]
 margin_top = 112.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 438.0
 rect_min_size = Vector2( 0, 326 )
 size_flags_horizontal = 3
 scroll_horizontal_enabled = false
 
 [node name="VBoxExistiingTiles" type="VBoxContainer" parent="VBox/TilesPanelContainer/VBox/ScrollContainer"]
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 36.0
 size_flags_horizontal = 3
 custom_constants/separation = 10
 
 [node name="Existing" parent="VBox/TilesPanelContainer/VBox/ScrollContainer/VBoxExistiingTiles" instance=ExtResource( 7 )]
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 1032, 36 )
 
 [node name="Control" type="Control" parent="VBox"]
 margin_top = 570.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 572.0
 rect_min_size = Vector2( 0, 2 )
 
 [node name="HSeparator" type="HSeparator" parent="VBox"]
 margin_top = 572.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 592.0
 custom_constants/separation = 20
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBox"]
 margin_top = 592.0
-margin_right = 1032.0
+margin_right = 1060.0
 margin_bottom = 630.0
 custom_constants/separation = 16
 alignment = 2
 
 [node name="ButtonCancel" type="Button" parent="VBox/HBoxContainer"]
-margin_left = 816.0
-margin_right = 916.0
+margin_left = 844.0
+margin_right = 944.0
 margin_bottom = 38.0
 rect_min_size = Vector2( 100, 36 )
 text = "Cancel"
 
 [node name="ButtonOk" type="Button" parent="VBox/HBoxContainer"]
-margin_left = 932.0
-margin_right = 1032.0
+margin_left = 960.0
+margin_right = 1060.0
 margin_bottom = 38.0
 rect_min_size = Vector2( 100, 36 )
 hint_tooltip = "Saves changes  both to selected tileset and texture files"
@@ -339,16 +336,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -32.0
 color = Color( 0.117647, 0.235294, 0.313726, 0.352941 )
-
-[node name="TileBlockColorRect" type="ColorRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 20.0
-margin_top = 144.0
-margin_right = -22.0
-margin_bottom = -124.0
-size_flags_horizontal = 3
-color = Color( 0.0901961, 0.0980392, 0.101961, 0.780392 )
 
 [node name="ResourceFileDialog" type="FileDialog" parent="."]
 margin_right = 315.0

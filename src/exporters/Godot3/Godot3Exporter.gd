@@ -34,7 +34,6 @@ onready var tiles_header: Label = $VBox/TilesLabel
 onready var resource_dialog: FileDialog = $ResourceFileDialog
 onready var texture_dialog: FileDialog = $TextureFileDialog
 onready var blocking_rect: ColorRect = $ColorRect
-onready var blocking_rect_tiles: ColorRect = $TileBlockColorRect
 onready var existing_tiles_container: VBoxContainer = $VBox/TilesPanelContainer/VBox/ScrollContainer/VBoxExistiingTiles
 onready var save_confirm_dialog: ConfirmationDialog = $SaveConfirmationDialog
 onready var overwrite_tileset_select: CheckButton = $VBox/HBoxTileset/OverrideCheckButton
@@ -102,7 +101,6 @@ func start_export_dialog(tile: TPTile):
 		load_tileset(resource_path)
 	else:
 		if resource_path != Helpers.clear_path(DEFAULT_GODOT_RESOURCE_PATH):
-#			State.report_error("Error: Godot tileset resource path is invalid,\npossibly loading a tilest not belonging to any Godot project")
 			State.report_error("Error: Godot tileset resource path is invalid,\npossibly loading a tilest not belonging to any Godot project")
 		set_lineedit_text(resource_name_edit, ".tres")
 		resource_dialog.current_path = resource_path
@@ -539,7 +537,7 @@ func populate_new_from_exisiting_tile(row: GodotTileRow):
 
 func is_a_valid_resource_path(test_resource_path: String):
 	if test_resource_path.get_basename().get_file().empty() or not test_resource_path.get_file().is_valid_filename():
-		State.report_error("Error: %s is not a valid filename" % test_resource_path.get_file())
+		State.report_error("Error: \"%s\" is not a valid filename" % test_resource_path.get_file())
 		return false
 	var resource_project_path := get_godot_project_path(test_resource_path)	
 	if resource_project_path.empty():
@@ -566,14 +564,6 @@ func clear_file_path(path: String) -> String:
 		return path
 	else:
 		return Helpers.get_default_dir_path()
-
-
-#func load_settings(data: Dictionary):
-#	resource_path = Helpers.clear_path(data["godot_export_resource_path"])
-#	texture_path = Helpers.clear_path(data["godot_export_texture_path"])
-#	tile_name = data["godot_export_tile_name"]
-#	last_generated_tile_name = data["godot_export_last_generated_tile_name"]
-#	autotile_type = data["godot_autotile_type"]
 
 
 func cancel_action():
@@ -619,12 +609,10 @@ func set_texture_path(basedir: String, texture_file_name: String):
 
 func enable_tiles_editing(tileset_name: String, project_name: String):
 	new_tile_container.show()
-	blocking_rect_tiles.hide()
 	tiles_header.text = "Tileset:  \"%s\",   in project:  \"%s\"" % [tileset_name, project_name]
 
 
 func block_tiles_editing():
-	blocking_rect_tiles.show()
 	new_tile_container.hide()
 	tiles_header.text = DEFAULT_TILES_LABEL
 
@@ -633,16 +621,11 @@ func _on_ResourceFileDialog_file_selected(path: String):
 	if is_a_valid_resource_path(path):
 		resource_path = path
 		set_lineedit_text(resource_name_edit, resource_path)
-#		if texture_path == "":
 		set_texture_path(resource_path.get_base_dir(), tile_name)
-#		else:
-#			set_texture_path(resource_path.get_base_dir(), texture_path)
 		load_tileset(resource_path)
 		State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_RESOURCE_PATH, resource_path)
-#		save_settings()
 	else:
 		State.report_error("Error: Invalid tileset path. \n\nGodot tileset file path should be: \n 1. a valid path  \n 2. inside any Godot projects tree")
-#		State.report("Error: Invalid tileset path. \n\nGodot tileset file path should be: \n 1. a valid path  \n 2. inside any Godot projects tree")
 
 
 func _on_LineEditName_text_changed(new_text):
@@ -650,14 +633,12 @@ func _on_LineEditName_text_changed(new_text):
 	temp_tile_row.set_tile_name(new_text)
 	check_existing_for_matches()
 	State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_TILE_NAME, tile_name)
-#	save_settings()
 
 
 func _on_OptionButton_item_selected(index):
 	autotile_type = index
 	temp_tile_row.set_tile_mode(TileSet.AUTO_TILE, autotile_type)
 	State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE, autotile_type)
-#	save_settings()
 
 
 func _on_TextureFileDialog_file_selected(path: String):
@@ -665,7 +646,6 @@ func _on_TextureFileDialog_file_selected(path: String):
 		set_texture_path(path.get_base_dir(), path.get_basename().get_file())
 		check_existing_for_matches()
 		State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, path)
-#		save_settings()
 
 
 func _on_ButtonCancel_pressed():
