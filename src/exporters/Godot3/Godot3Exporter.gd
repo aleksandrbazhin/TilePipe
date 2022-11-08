@@ -100,6 +100,7 @@ func start_export_dialog(tile: TPTile):
 		resource_dialog.current_path = resource_path
 		load_tileset(resource_path)
 	else:
+		block_tiles_editing()
 		# if tile.has_export_path()
 		
 #		if resource_path != Helpers.clear_path(DEFAULT_GODOT_RESOURCE_PATH):
@@ -483,24 +484,26 @@ func load_tileset(tileset_path: String):
 							tile["shape_ids"].size() > 0)
 						existing_tiles_container.add_child(existing_tile)
 						existing_tile.connect("clicked", self, "populate_new_from_exisiting_tile")
-					else:
+					else: # if tileset_data["textures"].has(tile["texture_id"]):
 						overwrite_tileset_select.disabled = true
 						overwrite_tileset_select.pressed = true
 						State.report_error("Error parsing tileset file, can only overwrite")
 				existing_tiles_container.add_child(temp_tile_row)
-			else:
+				enable_tiles_editing(tileset_name, project_name)
+			else: # if tileset_data["error"] == false:
 				overwrite_tileset_select.disabled = true
 				overwrite_tileset_select.pressed = true
 				State.report_error("Error parsing tileset file, can only overwrite")
-			enable_tiles_editing(tileset_name, project_name)
+				block_tiles_editing()
 			yield(get_tree(), "idle_frame")
 			check_existing_for_matches()
-		else:
+		else: # if Helpers.file_exists(tileset_path):
 			overwrite_tileset_select.disabled = true
 			overwrite_tileset_select.pressed = true
 			enable_tiles_editing(tileset_name, project_name)
 			free_loaded_tile_rows_ui()
-	else:
+	else: # is_a_valid_resource_path(tileset_path)
+		block_tiles_editing()
 		State.report_error("Error: Invalid tileset path")
 
 
@@ -619,6 +622,7 @@ func _on_ResourceFileDialog_file_selected(path: String):
 		load_tileset(resource_path)
 		State.update_tile_param(TPTile.PARAM_EXPORT_GODOT3_RESOURCE_PATH, resource_path)
 	else:
+		block_tiles_editing()
 		State.report_error("Error: Invalid tileset path. \n\nGodot tileset file path should be: \n 1. a valid path  \n 2. inside any Godot projects tree")
 
 
@@ -760,8 +764,6 @@ func _unhandled_input(event: InputEvent):
 		elif texture_dialog.visible:
 			get_tree().set_input_as_handled()
 			texture_dialog.hide()
-	#	elif collision_dialog.visible:
-	#		collision_dialog.hide()
 		elif visible:
 			get_tree().set_input_as_handled()
 			hide()
