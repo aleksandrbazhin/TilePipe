@@ -8,6 +8,7 @@
 margin_right = 48.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 48 )
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 0
 texture = ExtResource( 1 )
 script = ExtResource( 5 )
@@ -22,8 +23,7 @@ size_flags_vertical = 0
 custom_fonts/font = ExtResource( 2 )
 valign = 1
 
-[node name="AnimationLabel" type="Label" parent="."]
-visible = false
+[node name="FrameLabel" type="Label" parent="."]
 margin_left = 20.0
 margin_top = 25.0
 margin_right = 26.0

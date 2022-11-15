@@ -7,20 +7,24 @@ var current_input_tile_size := Vector2.ZERO
 
 onready var texture_option := $HeaderContainer/TextureOption
 onready var texture_container: ScalableTextureContainer = $HBox/ScalableTextureContainer
-onready var merge_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeXSliderContainer/MergeSliderX
-onready var merge_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/MergeContainer/MergeYSliderContainer/MergeSliderY
-onready var overlap_slider_x: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapXSliderContainer/OverlapSliderX
-onready var overlap_slider_y: AdvancedSlider = $HBox/SettingsContainer/ScrollContainer/VBox/Composition/OverlapContainer/OverlapYSliderContainer/OverlapSliderY
-onready var output_resize: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize/OutpuResizeButton
-onready var output_tile_size_x: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/OutputResize/ResizeSpinBoxX
-onready var subtile_spacing_x: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingXSpinBox
-onready var subtile_spacing_y: AdvancedSpinBox = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SubtileSpacing/SpacingYSpinBox
-onready var smoothing_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/OutputSize/SmoothingContainer/Smoothing
-onready var random_seed_enabled: CheckButton = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/SeedContainer/RandomCheckButton
-onready var random_seed_edit: LineEdit = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/SeedContainer/SeedLineEdit
-onready var random_seed_apply: Button = $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/SeedContainer/SeedButton
-onready var parts_container := $HBox/SettingsContainer/ScrollContainer/VBox/Randomization/PartSetupContainer/ScrollContainer/PartsContainer
-
+onready var settings_container := $HBox/SettingsContainer
+onready var settings_scroll := $HBox/SettingsContainer/ScrollContainer
+onready var settings_vbox := settings_scroll.get_node("VBox")
+onready var merge_slider_x: AdvancedSlider = settings_vbox.get_node("Composition/MergeContainer/MergeXSliderContainer/MergeSliderX")
+onready var merge_slider_y: AdvancedSlider = settings_vbox.get_node("Composition/MergeContainer/MergeYSliderContainer/MergeSliderY")
+onready var overlap_slider_x: AdvancedSlider = settings_vbox.get_node("Composition/OverlapContainer/OverlapXSliderContainer/OverlapSliderX")
+onready var overlap_slider_y: AdvancedSlider = settings_vbox.get_node("Composition/OverlapContainer/OverlapYSliderContainer/OverlapSliderY")
+onready var output_resize: CheckButton = settings_vbox.get_node("OutputSize/OutputResize/OutpuResizeButton")
+onready var output_tile_size_x: AdvancedSpinBox = settings_vbox.get_node("OutputSize/OutputResize/ResizeSpinBoxX")
+onready var subtile_spacing_x: AdvancedSpinBox = settings_vbox.get_node("OutputSize/SubtileSpacing/SpacingXSpinBox")
+onready var subtile_spacing_y: AdvancedSpinBox = settings_vbox.get_node("OutputSize/SubtileSpacing/SpacingYSpinBox")
+onready var smoothing_enabled: CheckButton = settings_vbox.get_node("OutputSize/SmoothingContainer/Smoothing")
+onready var random_seed_enabled: CheckButton = settings_vbox.get_node("Randomization/SeedContainer/RandomCheckButton")
+onready var random_seed_edit: LineEdit = settings_vbox.get_node("Randomization/SeedContainer/SeedLineEdit")
+onready var random_seed_apply: Button = settings_vbox.get_node("Randomization/SeedContainer/SeedButton")
+onready var parts_container := settings_vbox.get_node("Randomization/PartSetupContainer/ScrollContainer/PartsContainer")
+onready var frames_slider := settings_vbox.get_node("Randomization/RepeatFramesContainer/SliderContainer/FramesSlider")
+onready var frames_slider_container := settings_vbox.get_node("Randomization/RepeatFramesContainer/SliderContainer")
 
 func load_data(tile: TPTile):
 	if tile == null:
@@ -37,11 +41,10 @@ func load_data(tile: TPTile):
 	smoothing_enabled.pressed = tile.smoothing
 	random_seed_enabled.pressed = tile.random_seed_enabled
 	random_seed_edit.text = str(tile.random_seed_value)
-	populate_frame_control()
+	populate_frame_control() # TODO: fix, called many times 
 
 
 func populate_frame_control():
-	return
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
@@ -49,21 +52,43 @@ func populate_frame_control():
 		part.queue_free()
 	if tile.loaded_ruleset == null:
 		return
+	var is_scroll_bottom: bool = settings_scroll.scroll_vertical == \
+			(settings_scroll.get_node("VBox").rect_size.y - settings_container.rect_size.y)
+#	print(settings_scroll.scroll_vertical, " ",
+#			settings_scroll.rect_size.y, " ", settings_container.rect_size.y)
 	var ruleset_parts := tile.loaded_ruleset.parts
+	var max_frames = 0
 	for part_index in tile.input_parts:
 		if part_index >= ruleset_parts.size():
 			break
 		var frames_container := VBoxContainer.new()
 		for part in tile.input_parts[part_index]:
 			var frame_control: PartFrameControl = preload("res://src/nodes/PartFrameControl.tscn").instance()
-			frame_control.setup(ruleset_parts[part.part_index], part.variant_index)
+			frame_control.setup(ruleset_parts[part.part_index], part)
 			frames_container.add_child(frame_control)
 			frame_control.connect("part_frequency_click", self, "on_part_frequency_edit_start")
+			max_frames = max(max_frames, part.variant_index)
 		parts_container.add_child(frames_container)
+	max_frames += 1
+	if max_frames > 1:
+		frames_slider.editable = true
+		frames_slider.quantize(max_frames - 1)
+		
+		frames_slider.max_value = max_frames
+		frames_slider.min_value = 1
+		frames_slider.step = 1
+		frames_slider.tick_count = max_frames
+		frames_slider.value = max_frames
+		frames_slider_container.show()
+		if is_scroll_bottom:
+			yield(VisualServer,"frame_post_draw")
+			settings_scroll.scroll_vertical = settings_scroll.get_node("VBox").rect_size.y
+	else:
+		frames_slider_container.hide()
 
 
 func on_part_frequency_edit_start(part: PartFrameControl):
-	pass
+	print("EDIT frequency")
 
 
 func clear():
@@ -215,3 +240,10 @@ func _input(event: InputEvent):
 		if visible:
 			get_tree().set_input_as_handled()
 			reload_tile()
+
+
+func _on_FramesSlider_released(value):
+	for part_container in parts_container.get_children():
+		for part_control in part_container.get_children():
+			part_control.set_part_frame(part_control.get_part_variant_index() - int(value) + 1)
+			part_control.update_info()
