@@ -22,6 +22,7 @@ enum {
 	PARAM_EXPORT_GODOT3_RESOURCE_PATH,
 	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE,
 	PARAM_EXPORT_GODOT3_TILE_NAME,
+	PARAM_FRAMES,
 }
 
 const HEIGHT_EXPANDED := 120
@@ -55,7 +56,7 @@ var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
-var max_frames := 1
+var frames := 1
 
 var export_type: int = Const.EXPORT_TYPE_UKNOWN
 var export_png_path: String
@@ -141,6 +142,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("export_godot3_resource_path", "export_godot3_resource_path", "")
 	set_tile_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
 	set_tile_param("export_godot3_tile_name", "export_godot3_tile_name", "")
+	set_tile_param("frames", "frames", 1)
 	if is_texture_loaded and is_ruleset_loaded:
 		split_input_into_tile_parts()
 	return true
@@ -152,7 +154,6 @@ func split_input_into_tile_parts() -> bool:
 	input_parts = {}
 	var input_image: Image = loaded_texture.get_data()
 	var min_input_tiles := loaded_ruleset.parts.size()
-	max_frames = 1
 	for part_index in range(min_input_tiles):
 		input_parts[part_index] = []
 		var part_is_empty := false
@@ -172,8 +173,6 @@ func split_input_into_tile_parts() -> bool:
 				part.part_index = part_index
 				part.variant_index = variant_index
 				variant_index += 1
-		if max_frames < variant_index :
-			max_frames = variant_index
 	return true
 
 
@@ -491,6 +490,12 @@ func update_export_type(new_type: int) -> bool:
 	return true
 
 
+func update_frames(new_frames: int) -> bool:
+	frames = new_frames
+	_tile_data["frames"] = frames
+	return true
+
+
 func update_param(param_key: int, value) -> bool:
 	match param_key:
 		PARAM_TEXTURE:
@@ -527,6 +532,8 @@ func update_param(param_key: int, value) -> bool:
 			return update_export_godot3_autotile_type(value)
 		PARAM_EXPORT_GODOT3_TILE_NAME:
 			return update_export_godot3_tile_name(value)
+		PARAM_FRAMES:
+			return update_frames(value)
 	return false
 
 

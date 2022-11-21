@@ -13,7 +13,6 @@ func compute_parts_total_priority() -> int:
 
 func set_parts_total_priority(total: int):
 	for part in get_children():
-#		part.total_random_priority = total
 		part.set_total_random_priority(total)
 
 

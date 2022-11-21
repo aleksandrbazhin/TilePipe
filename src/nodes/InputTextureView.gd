@@ -40,7 +40,7 @@ func load_data(tile: TPTile):
 	smoothing_enabled.pressed = tile.smoothing
 	random_seed_enabled.pressed = tile.random_seed_enabled
 	random_seed_edit.text = str(tile.random_seed_value)
-	frames_spinbox.set_value_quietly(tile.max_frames)
+	frames_spinbox.set_value_quietly(tile.frames)
 	populate_frame_control() # TODO: fix, called 3 times instead of 1
 
 
@@ -55,7 +55,7 @@ func populate_frame_control():
 	var is_scroll_bottom: bool = settings_scroll.scroll_vertical == \
 			(settings_scroll.get_node("VBox").rect_size.y - settings_container.rect_size.y)
 	first_frame.populate_from_tile(tile)
-	for _i in range(1, frames_spinbox.value):
+	for _i in range(1, tile.frames):
 #		print("variant ", i)
 		var new_frame_container: FramePartsContainer = preload("res://src/nodes/FramePartsContainer.tscn").instance()
 		new_frame_container.populate_from_tile(tile)
@@ -229,10 +229,9 @@ func _input(event: InputEvent):
 
 
 func _on_FramesSpinBox_value_changed_no_silence(value):
-	print(value)
+	State.update_tile_param(TPTile.PARAM_FRAMES, int(value))
 	populate_frame_control()
-	pass # Replace with function body.
-#
-#
+
+
 #func _on_FramesSpinBox_value_changed(value):
 #	print("fvekgl")

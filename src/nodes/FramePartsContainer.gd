@@ -15,20 +15,23 @@ func populate_from_tile(tile: TPTile):
 			break
 		var frames_container := FrameColumnVariants.new()
 		frames_container.add_constant_override("separation", 2)
+		var total_priority := 0
 		for part in tile.input_parts[part_index]:
 			var frame_control: PartFrameControl = preload("res://src/nodes/PartFrameControl.tscn").instance()
 			frame_control.setup(ruleset_parts[part.part_index], part, 1, tile.input_parts[part_index].size())
+			total_priority += frame_control.random_priority
 			frames_container.add_child(frame_control)
 			frame_control.connect("random_priority_changed", frames_container, "recalculate_parts_total_priority")
-		frames_container.recalculate_parts_total_priority()
+			frame_control.connect("random_edit_started", self, "hide_all_random_controls")
+		frames_container.set_parts_total_priority(total_priority)
 		$ScrollContainer/PartsContainer.add_child(frames_container)
 
 
-func hide_all_random_controls():
+func hide_all_random_controls(except: PartFrameControl = null):
 	for container in $ScrollContainer/PartsContainer.get_children():
 		for part_control in container.get_children():
-#			print(part_control)
-			part_control.hide_random_controls()
+			if part_control is PartFrameControl and part_control != except:
+				part_control.hide_random_controls()
 
 #
 #func _unhandled_input(event):

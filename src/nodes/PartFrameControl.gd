@@ -3,6 +3,7 @@ extends TextureRect
 
 
 signal random_priority_changed()
+signal random_edit_started(except_self)
 
 
 #const RANDOM_ICON_POSITION := Vector2(4, 6)
@@ -69,10 +70,6 @@ func _draw():
 	draw_rect(Rect2(Vector2(1, 25), Vector2(46, 22)), BG_COLOR2)
 
 
-func _on_PartFrameControl_gui_input(event: InputEvent):
-	pass
-
-
 func _on_RandomLabel_gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 #		get_tree().set_input_as_handled()		
@@ -81,6 +78,7 @@ func _on_RandomLabel_gui_input(event: InputEvent):
 		el.show()
 		el.value = random_priority
 		el.suffix = "/" + str(total_random_priority)
+		emit_signal("random_edit_started", self)
 #		el.focus_mode = Control.FOCUS_ALL
 #		el.grab_focus()
 

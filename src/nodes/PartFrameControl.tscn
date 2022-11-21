@@ -37,7 +37,6 @@ rect_scale = Vector2( 0.8, 0.8 )
 max_value = 100.0
 suffix = "/ 20"
 
-[connection signal="gui_input" from="." to="." method="_on_PartFrameControl_gui_input"]
 [connection signal="mouse_exited" from="." to="." method="_on_PartFrameControl_mouse_exited"]
 [connection signal="gui_input" from="RandomLabel" to="." method="_on_RandomLabel_gui_input"]
 [connection signal="value_changed_no_silence" from="RandomSpinBox" to="." method="_on_RandomSpinBox_value_changed_no_silence"]
