@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/exporters/CollisionGenerator.gd"
 }, {
+"base": "VBoxContainer",
+"class": "FrameColumnVariants",
+"language": "GDScript",
+"path": "res://src/nodes/FrameColumnVariants.gd"
+}, {
 "base": "PanelContainer",
 "class": "FramePartsContainer",
 "language": "GDScript",
@@ -138,6 +143,7 @@ _global_script_class_icons={
 "AdvancedSlider": "",
 "AdvancedSpinBox": "",
 "CollisionGenerator": "",
+"FrameColumnVariants": "",
 "FramePartsContainer": "",
 "GeneratedSubTile": "",
 "GodotExporter": "",
@@ -204,10 +210,11 @@ import/open_asset_import/use_fbx=false
 
 vsync=false
 hidpi=false
+delay=false
 
 [gui]
 
-timers/tooltip_delay_sec=0.15
+timers/tooltip_delay_sec=0.3
 
 [importer_defaults]
 

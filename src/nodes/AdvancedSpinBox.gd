@@ -28,3 +28,19 @@ func _on_AdvancedSpinBox_value_changed(value):
 #	print(self, " is silenced ", is_silenced)
 	if not is_silenced:
 		emit_signal("value_changed_no_silence", value)
+
+
+func remove(_param1 = null, _param2 = null):
+	queue_free()
+
+#
+#func _on_AdvancedSpinBox_focus_entered():
+#	print("focused")
+#
+#
+#func set_small_font():
+#	var fnt: DynamicFont = load("res://assets/styles/subscribe_font.tres")
+##	fnt.size = 20
+#	add_font_override("font", fnt)
+#	add_color_override("font_color", Color.red)
+#

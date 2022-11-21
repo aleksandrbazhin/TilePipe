@@ -753,8 +753,14 @@ rect_min_size = Vector2( 18, 0 )
 
 [node name="FramesSpinBox" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/FramesSetupContainer" instance=ExtResource( 4 )]
 margin_left = 176.0
+margin_right = 454.0
+margin_bottom = 29.0
+
+[node name="Spacer4" type="Control" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization/FramesSetupContainer"]
+margin_left = 458.0
 margin_right = 476.0
 margin_bottom = 29.0
+rect_min_size = Vector2( 18, 0 )
 
 [node name="PartSetupContainer" type="HBoxContainer" parent="HBox/SettingsContainer/ScrollContainer/VBox/Randomization"]
 margin_top = 113.0
