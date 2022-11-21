@@ -55,6 +55,7 @@ var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
+var max_frames := 1
 
 var export_type: int = Const.EXPORT_TYPE_UKNOWN
 var export_png_path: String
@@ -151,6 +152,7 @@ func split_input_into_tile_parts() -> bool:
 	input_parts = {}
 	var input_image: Image = loaded_texture.get_data()
 	var min_input_tiles := loaded_ruleset.parts.size()
+	max_frames = 1
 	for part_index in range(min_input_tiles):
 		input_parts[part_index] = []
 		var part_is_empty := false
@@ -170,6 +172,8 @@ func split_input_into_tile_parts() -> bool:
 				part.part_index = part_index
 				part.variant_index = variant_index
 				variant_index += 1
+		if max_frames < variant_index :
+			max_frames = variant_index
 	return true
 
 

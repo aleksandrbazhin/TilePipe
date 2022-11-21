@@ -58,12 +58,8 @@ func set_input_tile_size(tile_size: Vector2):
 
 
 func setup_size_display(tile_size: Vector2):
-	x_spinbox.set_silenced(true)
-	x_spinbox.value = tile_size.x
-	x_spinbox.set_silenced(false)
-	y_spinbox.set_silenced(true)
-	y_spinbox.value = tile_size.y
-	y_spinbox.set_silenced(false)
+	x_spinbox.set_value_quietly(tile_size.x)
+	y_spinbox.set_value_quietly(tile_size.y)
 
 
 func set_part_highlight(part_id: int, is_on: bool):
@@ -101,6 +97,7 @@ func _on_XSpinBox_value_changed_no_silence(value):
 	current_tile_size.x = value
 	emit_signal("tile_size_changed", current_tile_size)
 	update()
+
 
 func _on_YSpinBox_value_changed_no_silence(value):
 	current_tile_size.y = value

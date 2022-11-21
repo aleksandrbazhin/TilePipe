@@ -17,14 +17,13 @@ onready var overlap_slider_y: AdvancedSlider = settings_vbox.get_node("Compositi
 onready var output_resize: CheckButton = settings_vbox.get_node("OutputSize/OutputResize/OutpuResizeButton")
 onready var output_tile_size_x: AdvancedSpinBox = settings_vbox.get_node("OutputSize/OutputResize/ResizeSpinBoxX")
 onready var subtile_spacing_x: AdvancedSpinBox = settings_vbox.get_node("OutputSize/SubtileSpacing/SpacingXSpinBox")
-onready var subtile_spacing_y: AdvancedSpinBox = settings_vbox.get_node("OutputSize/SubtileSpacing/SpacingYSpinBox")
+#onready var subtile_spacing_y: AdvancedSpinBox = settings_vbox.get_node("OutputSize/SubtileSpacing/SpacingYSpinBox")
 onready var smoothing_enabled: CheckButton = settings_vbox.get_node("OutputSize/SmoothingContainer/Smoothing")
 onready var random_seed_enabled: CheckButton = settings_vbox.get_node("Randomization/SeedContainer/RandomCheckButton")
 onready var random_seed_edit: LineEdit = settings_vbox.get_node("Randomization/SeedContainer/SeedLineEdit")
 onready var random_seed_apply: Button = settings_vbox.get_node("Randomization/SeedContainer/SeedButton")
-onready var parts_container := settings_vbox.get_node("Randomization/PartSetupContainer/ScrollContainer/PartsContainer")
-onready var frames_slider := settings_vbox.get_node("Randomization/RepeatFramesContainer/SliderContainer/FramesSlider")
-onready var frames_slider_container := settings_vbox.get_node("Randomization/RepeatFramesContainer/SliderContainer")
+onready var frames_container := settings_vbox.get_node("Randomization/PartSetupContainer/FramesContainer")
+onready var frames_spinbox: AdvancedSpinBox = settings_vbox.get_node("Randomization/FramesSetupContainer/FramesSpinBox")
 
 func load_data(tile: TPTile):
 	if tile == null:
@@ -36,67 +35,54 @@ func load_data(tile: TPTile):
 	load_texture(tile.loaded_texture)
 	output_resize.pressed = tile.output_resize
 	output_tile_size_x.editable = tile.output_resize
-	output_tile_size_x.value = tile.output_tile_size.x
-	subtile_spacing_x.value = tile.subtile_spacing.x
+	output_tile_size_x.set_value_quietly(tile.output_tile_size.x)
+	subtile_spacing_x.set_value_quietly(tile.subtile_spacing.x)	
 	smoothing_enabled.pressed = tile.smoothing
 	random_seed_enabled.pressed = tile.random_seed_enabled
 	random_seed_edit.text = str(tile.random_seed_value)
-	populate_frame_control() # TODO: fix, called many times 
+	frames_spinbox.set_value_quietly(tile.max_frames)
+	populate_frame_control() # TODO: fix, called 3 times instead of 1
 
 
 func populate_frame_control():
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
-	for part in parts_container.get_children():
-		part.queue_free()
+	clear_frames()
+	var first_frame: FramePartsContainer = frames_container.get_child(0)
 	if tile.loaded_ruleset == null:
 		return
 	var is_scroll_bottom: bool = settings_scroll.scroll_vertical == \
 			(settings_scroll.get_node("VBox").rect_size.y - settings_container.rect_size.y)
-#	print(settings_scroll.scroll_vertical, " ",
-#			settings_scroll.rect_size.y, " ", settings_container.rect_size.y)
-	var ruleset_parts := tile.loaded_ruleset.parts
-	var max_frames = 0
-	for part_index in tile.input_parts:
-		if part_index >= ruleset_parts.size():
-			break
-		var frames_container := VBoxContainer.new()
-		for part in tile.input_parts[part_index]:
-			var frame_control: PartFrameControl = preload("res://src/nodes/PartFrameControl.tscn").instance()
-			frame_control.setup(ruleset_parts[part.part_index], part)
-			frames_container.add_child(frame_control)
-			frame_control.connect("part_frequency_click", self, "on_part_frequency_edit_start")
-			max_frames = max(max_frames, part.variant_index)
-		parts_container.add_child(frames_container)
-	max_frames += 1
-	if max_frames > 1:
-		frames_slider.editable = true
-		frames_slider.quantize(max_frames - 1)
-		
-		frames_slider.max_value = max_frames
-		frames_slider.min_value = 1
-		frames_slider.step = 1
-		frames_slider.tick_count = max_frames
-		frames_slider.value = max_frames
-		frames_slider_container.show()
-		if is_scroll_bottom:
-			yield(VisualServer,"frame_post_draw")
-			settings_scroll.scroll_vertical = settings_scroll.get_node("VBox").rect_size.y
-	else:
-		frames_slider_container.hide()
+	first_frame.populate_from_tile(tile)
+	for _i in range(1, frames_spinbox.value):
+#		print("variant ", i)
+		var new_frame_container: FramePartsContainer = preload("res://src/nodes/FramePartsContainer.tscn").instance()
+		new_frame_container.populate_from_tile(tile)
+		frames_container.add_child(new_frame_container)
+
+	if is_scroll_bottom:
+		yield(VisualServer, "frame_post_draw")
+		settings_scroll.scroll_vertical = settings_scroll.get_node("VBox").rect_size.y
 
 
 func on_part_frequency_edit_start(part: PartFrameControl):
 	print("EDIT frequency")
 
 
+func clear_frames():
+	var first_frame: FramePartsContainer = frames_container.get_child(0)
+	for parts_container in frames_container.get_children():
+		parts_container.clear()
+		if parts_container != first_frame:
+			parts_container.queue_free()
+
+
 func clear():
 	texture_option.selected = texture_option.get_item_count() - 1
 #	texture_container.set_main_texture(null)
 	texture_container.clear()
-	for part in parts_container.get_children():
-		part.queue_free()
+	clear_frames()
 
 
 func load_texture(texture: Texture):
@@ -242,8 +228,11 @@ func _input(event: InputEvent):
 			reload_tile()
 
 
-func _on_FramesSlider_released(value):
-	for part_container in parts_container.get_children():
-		for part_control in part_container.get_children():
-			part_control.set_part_frame(part_control.get_part_variant_index() - int(value) + 1)
-			part_control.update_info()
+func _on_FramesSpinBox_value_changed_no_silence(value):
+	print(value)
+	populate_frame_control()
+	pass # Replace with function body.
+#
+#
+#func _on_FramesSpinBox_value_changed(value):
+#	print("fvekgl")

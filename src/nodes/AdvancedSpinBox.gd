@@ -18,13 +18,13 @@ func _input(event: InputEvent):
 			get_tree().set_input_as_handled()
 
 
-func set_silenced(quiet: bool ):
-	if quiet:
-		is_silenced = true
-	else:
-		is_silenced = false
+func set_value_quietly(new_value: float):
+	is_silenced = true
+	value = new_value
+	is_silenced = false
 
 
 func _on_AdvancedSpinBox_value_changed(value):
+#	print(self, " is silenced ", is_silenced)
 	if not is_silenced:
 		emit_signal("value_changed_no_silence", value)
