@@ -55,10 +55,10 @@ func populate_frame_control():
 	var is_scroll_bottom: bool = settings_scroll.scroll_vertical == \
 			(settings_scroll.get_node("VBox").rect_size.y - settings_container.rect_size.y)
 	first_frame.populate_from_tile(tile)
-	for _i in range(1, tile.frames):
+	for i in range(1, tile.frames):
 #		print("variant ", i)
 		var new_frame_container: FramePartsContainer = preload("res://src/nodes/FramePartsContainer.tscn").instance()
-		new_frame_container.populate_from_tile(tile)
+		new_frame_container.populate_from_tile(tile, i + 1)
 		frames_container.add_child(new_frame_container)
 
 	if is_scroll_bottom:

@@ -4,11 +4,11 @@ class_name FramePartsContainer
 
 
 func clear():
-	for part in $ScrollContainer/PartsContainer.get_children():
+	for part in $HBoxContainer/ScrollContainer/PartsContainer.get_children():
 		part.queue_free()
 
 
-func populate_from_tile(tile: TPTile):
+func populate_from_tile(tile: TPTile, frame_index: int = 1):
 	var ruleset_parts := tile.loaded_ruleset.parts
 	for part_index in tile.input_parts:
 		if part_index >= ruleset_parts.size():
@@ -24,11 +24,13 @@ func populate_from_tile(tile: TPTile):
 			frame_control.connect("random_priority_changed", frames_container, "recalculate_parts_total_priority")
 			frame_control.connect("random_edit_started", self, "hide_all_random_controls")
 		frames_container.set_parts_total_priority(total_priority)
-		$ScrollContainer/PartsContainer.add_child(frames_container)
+		$HBoxContainer/ScrollContainer/PartsContainer.add_child(frames_container)
+		$HBoxContainer/Control/Label.text = "Frame " + str(frame_index)
+#		$HBoxContainer/Label.rect_rotation = 270
 
 
 func hide_all_random_controls(except: PartFrameControl = null):
-	for container in $ScrollContainer/PartsContainer.get_children():
+	for container in $HBoxContainer/ScrollContainer/PartsContainer.get_children():
 		for part_control in container.get_children():
 			if part_control is PartFrameControl and part_control != except:
 				part_control.hide_random_controls()
