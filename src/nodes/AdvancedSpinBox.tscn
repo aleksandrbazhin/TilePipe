@@ -12,3 +12,5 @@ value = 1.0
 rounded = true
 align = 1
 script = ExtResource( 1 )
+
+[connection signal="value_changed" from="." to="." method="_on_AdvancedSpinBox_value_changed"]

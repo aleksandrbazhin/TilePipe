@@ -13,8 +13,8 @@ var highlight_part_id := 0
 
 onready var bg_rect := $BGTextureRect
 onready var texture_rect := $TextureRect
-onready var x_spinbox := $InputInfo/HBoxContainer/XSpinBox
-onready var y_spinbox := $InputInfo/HBoxContainer/YSpinBox
+onready var x_spinbox: AdvancedSpinBox = $InputInfo/HBoxContainer/XSpinBox
+onready var y_spinbox: AdvancedSpinBox = $InputInfo/HBoxContainer/YSpinBox
 onready var part_highlight := $PartHihglight
 
 
@@ -26,30 +26,22 @@ func clear():
 	texture_rect.texture = null
 	current_tile_size = Vector2.ZERO
 
+
 func set_main_texture(texture: Texture):
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
-#	if (not tile.has_loaded_tile_size()):
-#		State.update_tile_param(TPTile.PARAM_INPUT_SIZE,  tile.deduce_tile_size)
-#		current_tile_size = tile.input_tile_size
-#	if tile_size == Vector2.ZERO:
-#		if texture == null:
-#			current_tile_size = Const.DEFAULT_TILE_SIZE
-#		else:
-#			current_tile_size = Vector2(texture.get_height(), texture.get_height())
-#	else:
-	current_tile_size = tile.input_tile_size
 	texture_rect.texture = texture
-	set_input_tile_size(current_tile_size)
+	set_input_tile_size(tile.input_tile_size)
+	setup_size_display(tile.input_tile_size)
 
 
 # we need to resize input texture precisely, so find the lower 
 # power of 2 that fits into the display zone
 # first we find what fits, then scale both texture and background
 func set_input_tile_size(tile_size: Vector2):
+	current_tile_size = tile_size
 	yield(get_tree(), "idle_frame")
-	setup_size_display(tile_size)
 	if texture_rect.texture == null:
 		return
 	var input_size: Vector2 = texture_rect.texture.get_size()
@@ -66,8 +58,12 @@ func set_input_tile_size(tile_size: Vector2):
 
 
 func setup_size_display(tile_size: Vector2):
+	x_spinbox.set_silenced(true)
 	x_spinbox.value = tile_size.x
+	x_spinbox.set_silenced(false)
+	y_spinbox.set_silenced(true)
 	y_spinbox.value = tile_size.y
+	y_spinbox.set_silenced(false)
 
 
 func set_part_highlight(part_id: int, is_on: bool):
@@ -100,21 +96,13 @@ func _draw():
 		draw_part_highlight()
 
 
-func _on_XSpinBox_value_changed(value: float):
+func _on_XSpinBox_value_changed_no_silence(value):
 	current_tile_size.y = value
 	current_tile_size.x = value
 	emit_signal("tile_size_changed", current_tile_size)
 	update()
-#	var is_square := current_tile_size.x == current_tile_size.y
-#	current_tile_size.x = value
-#	if is_square:
-#		y_spinbox.value = x_spinbox.value
-#	else:
-#		emit_signal("tile_size_changed", current_tile_size)
-#		update()
 
-
-func _on_YSpinBox_value_changed(value: float):
+func _on_YSpinBox_value_changed_no_silence(value):
 	current_tile_size.y = value
 	emit_signal("tile_size_changed", current_tile_size)
 	update()
