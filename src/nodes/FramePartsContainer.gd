@@ -4,12 +4,15 @@ class_name FramePartsContainer
 
 
 func clear():
-	for part in $HBoxContainer/ScrollContainer/PartsContainer.get_children():
-		part.queue_free()
+	for column in $HBoxContainer/ScrollContainer/PartsContainer.get_children():
+		column.queue_free()
+	for row_control in $HBoxContainer/RowControlsContainer.get_children():
+		row_control.queue_free()
 
 
 func populate_from_tile(tile: TPTile, frame_index: int = 1):
 	var ruleset_parts := tile.loaded_ruleset.parts
+	var max_variants_number := 0
 	for part_index in tile.input_parts:
 		if part_index >= ruleset_parts.size():
 			break
@@ -21,28 +24,29 @@ func populate_from_tile(tile: TPTile, frame_index: int = 1):
 			frame_control.setup(ruleset_parts[part.part_index], part, 1, tile.input_parts[part_index].size())
 			total_priority += frame_control.random_priority
 			frames_container.add_child(frame_control)
-			frame_control.connect("random_priority_changed", frames_container, "recalculate_parts_total_priority")
-			frame_control.connect("random_edit_started", self, "hide_all_random_controls")
+#			frame_control.connect("random_priority_changed", frames_container, "recalculate_parts_total_priority")
+			frame_control.connect("random_priority_changed", self, "on_part_priority_change", [frames_container])
 		frames_container.set_parts_total_priority(total_priority)
 		$HBoxContainer/ScrollContainer/PartsContainer.add_child(frames_container)
 		$HBoxContainer/Control/Label.text = "Frame " + str(frame_index)
-#		$HBoxContainer/Label.rect_rotation = 270
+		if max_variants_number < tile.input_parts[part_index].size():
+			max_variants_number = tile.input_parts[part_index].size()
+	for v_index in range(max_variants_number):
+		var row_control := preload("res://FramePartsRowControl.tscn").instance()
+		if max_variants_number == 1:
+			row_control.block()
+		$HBoxContainer/RowControlsContainer.add_child(row_control)
+		row_control.connect("toggled", self, "on_row_control_change", [v_index])
 
 
-func hide_all_random_controls(except: PartFrameControl = null):
-	for container in $HBoxContainer/ScrollContainer/PartsContainer.get_children():
-		for part_control in container.get_children():
-			if part_control is PartFrameControl and part_control != except:
-				part_control.hide_random_controls()
+func on_row_control_change(is_row_enabled: bool, variant_index: int):
+	var parts_change_count := 0
+	for column in $HBoxContainer/ScrollContainer/PartsContainer.get_children():
+		if column.enable_variant_by_index(variant_index, is_row_enabled):
+			parts_change_count += 1
+	if parts_change_count == 0:
+		$HBoxContainer/RowControlsContainer.get_child(variant_index).set_enabled_quietly(true)
 
-#
-#func _unhandled_input(event):
-#	print(2)
-#	if event is InputEventMouseButton or event is InputEventMouseMotion:
-#		hide_all_random_controls()
-#
-#func _on_FramePartsContainer_gui_input(event):
-#	print(event)
-#	if event is InputEventMouseButton and event.pressed:
-#		print(event)
-#		hide_all_random_controls()
+
+func on_part_priority_change(part: PartFrameControl, column: FrameColumnVariants):
+	column.recalculate_parts_total_priority()

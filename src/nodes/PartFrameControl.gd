@@ -2,9 +2,7 @@ class_name PartFrameControl
 extends TextureRect
 
 
-signal random_priority_changed()
-signal random_edit_started(except_self)
-
+signal random_priority_changed(self_)
 
 #const RANDOM_ICON_POSITION := Vector2(4, 6)
 const RANDOM_ICON_POSITION := Vector2(4, 29)
@@ -23,13 +21,7 @@ var frame_index: int = 0
 var total_random_priority: int = 1
 var max_frames: int = 1
 var part_ref: WeakRef
-
-onready var random_label: Label = $RandomLabel
-
-
-func _ready():
-	$RandomSpinBox.rect_size = Vector2.ONE
-#	draw_labels()
+var is_enabled := true
 
 
 func setup(new_part_type: int, part: TilePart, new_random_priority: int = 1, new_total_prority: int = 1):
@@ -57,7 +49,7 @@ func get_part_variant_index() -> int:
 
 func draw_labels():	
 	hint_tooltip = "Part variant " + str(random_variant + 1) + " with randomization priority: " + str(random_priority) 
-	random_label.text = str(random_priority) + "/" + str(total_random_priority)  
+	$RandomLabel.text = str(random_priority) + "/" + str(total_random_priority)  
 
 
 func update_info():
@@ -70,41 +62,46 @@ func _draw():
 	draw_rect(Rect2(Vector2(1, 25), Vector2(46, 22)), BG_COLOR2)
 
 
-func _on_RandomLabel_gui_input(event: InputEvent):
-	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
-#		get_tree().set_input_as_handled()		
-		$RandomLabel.hide()
-		var el: AdvancedSpinBox = $RandomSpinBox
-		el.show()
-		el.value = random_priority
-		el.suffix = "/" + str(total_random_priority)
-		emit_signal("random_edit_started", self)
-#		el.focus_mode = Control.FOCUS_ALL
-#		el.grab_focus()
-
-
-func _on_PartFrameControl_mouse_exited():
-	hide_random_controls()
-
-
-func hide_random_controls():
-	$RandomSpinBox.hide()
-	var el := $RandomLabel
-	el.text = str(random_priority) + "/" + str(total_random_priority)
-	el.show()
-
-
-func _on_RandomSpinBox_mouse_exited():
-	hide_random_controls()
-
-
-func _on_RandomSpinBox_value_changed_no_silence(value):
-	random_priority = int(value)
-	emit_signal("random_priority_changed")
-
-
 func set_total_random_priority(value: int):
 	total_random_priority = value
-	$RandomSpinBox.suffix = "/" + str(total_random_priority)
 	$RandomLabel.text = str(random_priority) + "/" + str(total_random_priority)
-	
+
+
+func enable() -> bool:
+	$BlockingOverlay.hide()
+	if not is_enabled:
+		is_enabled = true
+		emit_signal("random_priority_changed", self)
+		return true
+	return false
+
+
+func disable() -> bool:
+	if float(total_random_priority) / float(random_priority) > 1 and is_enabled:
+		$BlockingOverlay.show()
+#		random_priority = 0
+		is_enabled = false
+		emit_signal("random_priority_changed", self)
+		return true
+	return false
+
+
+func _on_PartFrameControl_gui_input(event: InputEvent):
+	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+		if event.position.y < rect_size.y / 1.6 and is_enabled:
+			disable()
+
+
+func _on_TextureRect_gui_input(event):	
+	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+		if event.position.y > $SpinRect.rect_size.y:
+			random_priority -= 1
+		else:
+			random_priority += 1
+		emit_signal("random_priority_changed", self)
+
+
+func _on_BlockingOverlay_gui_input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+		if not is_enabled:
+			enable()

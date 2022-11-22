@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://FramePartsRowControl.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[node name="FramePartsRowControl" type="CenterContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 20, 48 )
+script = ExtResource( 1 )
+
+[node name="CheckBox" type="CheckBox" parent="."]
+margin_left = 10.0
+margin_top = 16.0
+margin_right = 30.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 20, 0 )
+custom_styles/normal = SubResource( 1 )
+pressed = true
+
+[connection signal="toggled" from="CheckBox" to="." method="_on_CheckBox_toggled"]
