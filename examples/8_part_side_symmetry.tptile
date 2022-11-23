@@ -1,7 +1,7 @@
 {
 	"texture": "textures/8_part_side_symmetry_random.png",
 	"ruleset": "rulesets/8_part_side_symmetry.json",
-	"template": "templates/template_47_double.png",
+	"template": "templates/template_47.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16
@@ -19,8 +19,8 @@
 	"smoothing": false,
 	"output_resize": true,
 	"output_tile_size": {
-		"x": 64,
-		"y": 64
+		"x": 32,
+		"y": 32
 	},
 	"export_png_path": "/home/alexander/GodotProjects/3dtests/8_part_side_symmetry_random_tp.png",
 	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/test.tres",
@@ -30,5 +30,6 @@
 	"subtile_spacing": {
 		"x": 0,
 		"y": 0
-	}
+	},
+	"frame_number": 1
 }

@@ -2,7 +2,7 @@ class_name TileRenderer
 extends Node
 
 
-signal tiles_ready()
+signal tiles_ready(frame_index)
 signal report_progress(progress)
 
 const RENDER_POOL_SIZE = 8
@@ -11,7 +11,6 @@ var is_rendering = false
 var render_pool := []
 var render_progress := 0 # from 0 to 100
 var input_tile_parts := {}
-var template
 var ruleset: Ruleset
 var input_tile_size := Vector2.ZERO
 var output_tile_size := Vector2.ZERO
@@ -21,6 +20,7 @@ var ready = false
 var last_mask := -1
 # subtiles[mask] = [random_variant1: Image, random_variant2: Image, ...]
 var subtiles := {} 
+var frame_index := 0
 
 
 func _ready():
@@ -47,14 +47,15 @@ func init_render_pool():
 		add_child(viewport)
 
 
-func start_render(tile: TPTile, input_image: Image = null):
-	subtiles = tile.result_subtiles_by_bitmask
+func start_render(tile: TPTile, new_frame_index: int = 0):
+	frame_index = new_frame_index
+	subtiles = tile.frames[frame_index].result_subtiles_by_bitmask
 	ruleset = tile.loaded_ruleset
 	input_tile_size = tile.input_tile_size
 	output_tile_size = tile.output_tile_size if tile.output_resize else tile.input_tile_size
 	input_tile_parts = tile.input_parts
 	smoothing_enabled = tile.smoothing
-	
+
 	if tile.random_seed_enabled:
 		rng.seed = tile.random_seed_value
 	else:
@@ -93,25 +94,25 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image, 0)
 	texture_rect.texture = itex
-	var piece_set := [-1, -1, -1, -1, -1, -1, -1, -1]
-	var piece_random := [0, 0, 0, 0, 0, 0, 0, 0]
+	var part_set := [-1, -1, -1, -1, -1, -1, -1, -1]
+	var part_random := [0, 0, 0, 0, 0, 0, 0, 0]
 	var mask_index: int = 0
 	for mask_name in Const.TILE_MASK:
-		var piece_index: int = parts_rules[mask_index]
-		var tile_variants: Array = input_tile_parts[piece_index]
+		var part_index: int = parts_rules[mask_index]
+		var part_variants: Array = input_tile_parts[part_index]
 		var random_tile_index: int = 0
-		var existing_piece_index := piece_set.find(piece_index)
-		if existing_piece_index != -1:
-			random_tile_index = piece_random[existing_piece_index]
+		var existing_part_index := part_set.find(part_index)
+		if existing_part_index != -1:
+			random_tile_index = part_random[existing_part_index]
 		else:
-			random_tile_index = rng.randi_range(0, tile_variants.size() - 1)
-			piece_random[mask_index] = random_tile_index
-		piece_set[mask_index] = piece_index
-		var piece_rot_index: int = parts_rotations[mask_index]
-		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[piece_rot_index]
+			random_tile_index = rng.randi_range(0, part_variants.size() - 1)
+			part_random[mask_index] = random_tile_index
+		part_set[mask_index] = part_index
+		var part_rot_index: int = parts_rotations[mask_index]
+		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[part_rot_index]
 		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
 		var overlay_image := Image.new()
-		overlay_image.copy_from(tile_variants[random_tile_index])
+		overlay_image.copy_from(part_variants[random_tile_index])
 #		if bool(tile_rules_data["part_flip_x"][mask_index]):
 #			overlay_image.flip_x()
 #		if bool(tile_rules_data["part_flip_y"][mask_index]):
@@ -127,7 +128,7 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 		
 		texture_rect.material.set_shader_param("flip_x_%s" % mask_key, flip_x)
 		texture_rect.material.set_shader_param("flip_y_%s" % mask_key, flip_y)
-		var overlap_vec: Vector2 = Ruleset.RULESET_PART_OVERLAP_VECTORS[ruleset.parts[piece_index]]
+		var overlap_vec: Vector2 = Ruleset.RULESET_PART_OVERLAP_VECTORS[ruleset.parts[part_index]]
 		if overlap_vec.length() == 1.0 and (rotation_angle == PI / 2 or rotation_angle == 3 * PI / 2):
 			overlap_vec = overlap_vec.rotated(-PI / 2.0)
 		texture_rect.material.set_shader_param("ovelap_direction_%s" % mask_key, overlap_vec)
@@ -177,4 +178,4 @@ func on_render():
 				viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
 			is_rendering = false
 			emit_signal("report_progress", 100)
-			emit_signal("tiles_ready")
+			emit_signal("tiles_ready", frame_index)

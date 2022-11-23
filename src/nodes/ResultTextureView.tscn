@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/nodes/ResultTextureView.gd" type="Script" id=1]
+
+[node name="ResultTextureView" type="TextureRect"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch_mode = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SubtileHighlight" type="ColorRect" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+color = Color( 1, 1, 1, 0.313726 )
+
+[node name="SubtileSelection" type="ColorRect" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+color = Color( 1, 1, 1, 0.54902 )
+
+[connection signal="gui_input" from="." to="." method="_on_ResultTextureViewRect_gui_input"]

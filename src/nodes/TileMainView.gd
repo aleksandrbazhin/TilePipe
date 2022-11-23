@@ -150,7 +150,7 @@ func _on_TextureFileDialog_file_selected(path):
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
-	var current_texture_image := tile.output_texture
+	var current_texture_image: Texture = tile.frames[0].result_texture
 	current_texture_image.get_data().save_png(path)
 	State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, path, false)
 	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, Const.EXPORT_TYPES.TEXTURE, false)

@@ -5,19 +5,25 @@ extends ColorRect
 var loaded_tile_ref: WeakRef
 var last_visible_tab
 
+var total_frames := 0
+var ready_frames := 0
+
+var is_rendering := false
+var is_render_scheduled := false
+
 onready var tile_main_view: TileMainView = $VSplitContainer/TopContainer/TileMainView
 onready var ruleset_view: RulesetView = $VSplitContainer/TopContainer/RulesetView
 onready var template_view: TemplateView = $VSplitContainer/TopContainer/TemplateView
 onready var result_view: ResultView = $VSplitContainer/ResultView
-onready var renderer: TileRenderer = $TileRenderer
+#onready var renderer: TileRenderer = $TileRenderer
 
 
 func _ready():
 	State.connect("tile_cleared", self, "on_tile_cleared")
 	State.connect("tile_selected", self, "on_tile_selected")
 	State.connect("tile_needs_render", self, "render_subtiles")
-	renderer.connect("tiles_ready", self, "on_tiles_rendered")
-	renderer.connect("report_progress", self, "update_progress")
+#	renderer.connect("tiles_ready", self, "on_tiles_rendered")
+#	renderer.connect("report_progress", self, "update_progress")
 
 
 func unhide_all():
@@ -61,8 +67,24 @@ func render_subtiles():
 			or not tile.loaded_ruleset.is_loaded or tile.loaded_template == null:
 		result_view.clear()
 		return
-#	var input_image: Image = tile.loaded_texture.get_data()
-	renderer.start_render(tile)
+	if is_rendering:
+		is_render_scheduled = true
+		return
+	is_rendering = true
+	
+	result_view.clear()
+	
+	total_frames = tile.frames.size()
+	ready_frames = 0
+	var frame_index: = 0
+	for frame in tile.frames:
+		print("start ", frame_index + 1, " of " , tile.frame_number, "(", tile.frames.size() ,") (", tile.tile_file_name,")")
+		var renderer := TileRenderer.new()
+		add_child(renderer)
+		renderer.connect("tiles_ready", self, "on_tiles_rendered", [renderer])
+		renderer.connect("report_progress", self, "update_progress")
+		renderer.start_render(tile, frame_index)
+		frame_index += 1 
 	update_progress(0)
 
 
@@ -70,10 +92,16 @@ func update_progress(progress: int):
 	State.emit_signal("render_progress", progress)
 
 
-func on_tiles_rendered():
-	var tile: TPTile = State.get_current_tile()
-	result_view.render_from_tile(tile)
+func on_tiles_rendered(frame_index: int, renderer: TileRenderer = null):
 	update_progress(100)
+	ready_frames += 1
+	if total_frames == ready_frames:
+		result_view.render_from_tile(State.get_current_tile())
+		is_rendering = false
+		if is_render_scheduled:
+			is_render_scheduled = false
+			render_subtiles()
+	renderer.queue_free()
 
 
 func _on_TileMainView_ruleset_view_called():

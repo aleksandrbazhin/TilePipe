@@ -22,7 +22,7 @@ enum {
 	PARAM_EXPORT_GODOT3_RESOURCE_PATH,
 	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE,
 	PARAM_EXPORT_GODOT3_TILE_NAME,
-	PARAM_FRAMES,
+	PARAM_FRAME_NUMBER,
 }
 
 const HEIGHT_EXPANDED := 120
@@ -39,8 +39,7 @@ var is_selected := false
 var loaded_texture: Texture
 var loaded_ruleset: Ruleset
 var loaded_template: Texture
-var parsed_template: Dictionary
-var result_subtiles_by_bitmask: Dictionary
+var frames := [] # Array of TPTileFrame
 
 var template_size: Vector2
 var texture_path: String
@@ -56,7 +55,8 @@ var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
-var frames := 1
+var frame_number := 1
+
 
 var export_type: int = Const.EXPORT_TYPE_UKNOWN
 var export_png_path: String
@@ -67,7 +67,7 @@ var export_godot3_tile_name: String
 var tile_row: TreeItem
 var ruleset_row: TreeItem
 var template_row: TreeItem
-var output_texture: Texture
+#var output_texture: Texture
 
 onready var tree: Tree = $Tree
 onready var highlight_rect := $ColorRect
@@ -127,7 +127,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 # warning-ignore:unused_variable
 	var is_ruleset_loaded := load_ruleset(_tile_data["ruleset"])
 # warning-ignore:unused_variable
-
+	set_tile_param("frame_number", "frame_number", 1)
 	var is_template_loaded := load_template(_tile_data["template"])
 	set_tile_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
 	set_tile_param("merge_level", "merge_level", Vector2(0.25, 0.25))
@@ -142,7 +142,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("export_godot3_resource_path", "export_godot3_resource_path", "")
 	set_tile_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
 	set_tile_param("export_godot3_tile_name", "export_godot3_tile_name", "")
-	set_tile_param("frames", "frames", 1)
+
 	if is_texture_loaded and is_ruleset_loaded:
 		split_input_into_tile_parts()
 	return true
@@ -239,23 +239,30 @@ func load_template(path: String) -> bool:
 
 
 func parse_template():
-	parsed_template = {}
-	result_subtiles_by_bitmask.clear()
-	if loaded_template == null:
-		return
-	template_size = loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
-	for x in range(template_size.x):
-		for y in range(template_size.y):
-			parsed_template[Vector2(x, y)] = null
-			var mask: int = get_template_mask_value(loaded_template.get_data(), x, y)
-			var has_tile: bool = get_template_has_tile(loaded_template.get_data(), x, y)
-			if has_tile:
-				if not result_subtiles_by_bitmask.has(mask):
-					result_subtiles_by_bitmask[mask] = []
-				var subtile := GeneratedSubTile.new(mask, Vector2(x, y))
-				result_subtiles_by_bitmask[mask].append(subtile)
-				parsed_template[Vector2(x, y)] = weakref(subtile)
-
+	print("parsing ", tile_file_name)
+	frames.clear()
+	for frame_index in frame_number:
+		print("adding frame ", frame_index + 1 , " of ", frame_number)
+		var frame := TPTileFrame.new()
+#		parsed_template = {}
+#		result_subtiles_by_bitmask.clear()
+		if loaded_template == null:
+			return
+		template_size = loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
+		for x in range(template_size.x):
+			for y in range(template_size.y):
+#				parsed_template[Vector2(x, y)] = null
+				var mask: int = get_template_mask_value(loaded_template.get_data(), x, y)
+				var has_tile: bool = get_template_has_tile(loaded_template.get_data(), x, y)
+				if not has_tile:
+					continue
+#				if not result_subtiles_by_bitmask.has(mask):
+#					result_subtiles_by_bitmask[mask] = []
+				frame.append_subtile(mask, Vector2(x, y))
+#				var subtile := GeneratedSubTile.new(mask, Vector2(x, y))
+#				result_subtiles_by_bitmask[mask].append(subtile)
+#				parsed_template[Vector2(x, y)] = weakref(subtile)
+		frames.append(frame)
 
 func get_template_mask_value(template_image: Image, x: int, y: int) -> int:
 	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS
@@ -490,9 +497,10 @@ func update_export_type(new_type: int) -> bool:
 	return true
 
 
-func update_frames(new_frames: int) -> bool:
-	frames = new_frames
-	_tile_data["frames"] = frames
+func update_frame_number(new_frame_number: int) -> bool:
+	frame_number = new_frame_number
+	parse_template()
+	_tile_data["frame_number"] = frame_number
 	return true
 
 
@@ -532,8 +540,8 @@ func update_param(param_key: int, value) -> bool:
 			return update_export_godot3_autotile_type(value)
 		PARAM_EXPORT_GODOT3_TILE_NAME:
 			return update_export_godot3_tile_name(value)
-		PARAM_FRAMES:
-			return update_frames(value)
+		PARAM_FRAME_NUMBER:
+			return update_frame_number(value)
 	return false
 
 

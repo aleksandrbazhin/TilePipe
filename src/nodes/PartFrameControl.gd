@@ -79,7 +79,6 @@ func enable() -> bool:
 func disable() -> bool:
 	if float(total_random_priority) / float(random_priority) > 1 and is_enabled:
 		$BlockingOverlay.show()
-#		random_priority = 0
 		is_enabled = false
 		emit_signal("random_priority_changed", self)
 		return true
@@ -94,7 +93,9 @@ func _on_PartFrameControl_gui_input(event: InputEvent):
 
 func _on_TextureRect_gui_input(event):	
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
-		if event.position.y > $SpinRect.rect_size.y:
+		if event.position.y > $SpinRect.rect_size.y / 2:
+			if random_priority <= 1:
+				return
 			random_priority -= 1
 		else:
 			random_priority += 1
