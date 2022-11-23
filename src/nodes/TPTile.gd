@@ -239,30 +239,21 @@ func load_template(path: String) -> bool:
 
 
 func parse_template():
-	print("parsing ", tile_file_name)
 	frames.clear()
 	for frame_index in frame_number:
-		print("adding frame ", frame_index + 1 , " of ", frame_number)
 		var frame := TPTileFrame.new()
-#		parsed_template = {}
-#		result_subtiles_by_bitmask.clear()
 		if loaded_template == null:
 			return
 		template_size = loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
 		for x in range(template_size.x):
 			for y in range(template_size.y):
-#				parsed_template[Vector2(x, y)] = null
 				var mask: int = get_template_mask_value(loaded_template.get_data(), x, y)
 				var has_tile: bool = get_template_has_tile(loaded_template.get_data(), x, y)
 				if not has_tile:
 					continue
-#				if not result_subtiles_by_bitmask.has(mask):
-#					result_subtiles_by_bitmask[mask] = []
 				frame.append_subtile(mask, Vector2(x, y))
-#				var subtile := GeneratedSubTile.new(mask, Vector2(x, y))
-#				result_subtiles_by_bitmask[mask].append(subtile)
-#				parsed_template[Vector2(x, y)] = weakref(subtile)
 		frames.append(frame)
+
 
 func get_template_mask_value(template_image: Image, x: int, y: int) -> int:
 	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS

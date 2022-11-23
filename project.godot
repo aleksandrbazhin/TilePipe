@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "CheckButton",
+"class": "AdvancedCheckButton",
+"language": "GDScript",
+"path": "res://src/nodes/AdvansedCheckButton.gd"
+}, {
+"base": "LineEdit",
+"class": "AdvancedLineEdit",
+"language": "GDScript",
+"path": "res://src/nodes/AdvancedLineEdit.gd"
+}, {
 "base": "HSlider",
 "class": "AdvancedSlider",
 "language": "GDScript",
@@ -150,6 +160,8 @@ _global_script_classes=[ {
 "path": "res://src/nodes/WorkZone.gd"
 } ]
 _global_script_class_icons={
+"AdvancedCheckButton": "",
+"AdvancedLineEdit": "",
 "AdvancedSlider": "",
 "AdvancedSpinBox": "",
 "CollisionGenerator": "",

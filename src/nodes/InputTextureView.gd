@@ -14,16 +14,17 @@ onready var merge_slider_x: AdvancedSlider = settings_vbox.get_node("Composition
 onready var merge_slider_y: AdvancedSlider = settings_vbox.get_node("Composition/MergeContainer/MergeYSliderContainer/MergeSliderY")
 onready var overlap_slider_x: AdvancedSlider = settings_vbox.get_node("Composition/OverlapContainer/OverlapXSliderContainer/OverlapSliderX")
 onready var overlap_slider_y: AdvancedSlider = settings_vbox.get_node("Composition/OverlapContainer/OverlapYSliderContainer/OverlapSliderY")
-onready var output_resize: CheckButton = settings_vbox.get_node("OutputSize/OutputResize/OutpuResizeButton")
+onready var output_resize: AdvancedCheckButton = settings_vbox.get_node("OutputSize/OutputResize/OutpuResizeButton")
 onready var output_tile_size_x: AdvancedSpinBox = settings_vbox.get_node("OutputSize/OutputResize/ResizeSpinBoxX")
 onready var subtile_spacing_x: AdvancedSpinBox = settings_vbox.get_node("OutputSize/SubtileSpacing/SpacingXSpinBox")
 #onready var subtile_spacing_y: AdvancedSpinBox = settings_vbox.get_node("OutputSize/SubtileSpacing/SpacingYSpinBox")
-onready var smoothing_enabled: CheckButton = settings_vbox.get_node("OutputSize/SmoothingContainer/Smoothing")
-onready var random_seed_enabled: CheckButton = settings_vbox.get_node("Randomization/SeedContainer/RandomCheckButton")
-onready var random_seed_edit: LineEdit = settings_vbox.get_node("Randomization/SeedContainer/SeedLineEdit")
+onready var smoothing_enabled: AdvancedCheckButton = settings_vbox.get_node("OutputSize/SmoothingContainer/Smoothing")
+onready var random_seed_enabled: AdvancedCheckButton = settings_vbox.get_node("Randomization/SeedContainer/RandomCheckButton")
+onready var random_seed_edit: AdvancedLineEdit = settings_vbox.get_node("Randomization/SeedContainer/SeedLineEdit")
 onready var random_seed_apply: Button = settings_vbox.get_node("Randomization/SeedContainer/SeedButton")
 onready var frames_container := settings_vbox.get_node("Randomization/PartSetupContainer/FramesContainer")
 onready var frames_spinbox: AdvancedSpinBox = settings_vbox.get_node("Randomization/FramesSetupContainer/FramesSpinBox")
+
 
 func load_data(tile: TPTile):
 	if tile == null:
@@ -33,13 +34,15 @@ func load_data(tile: TPTile):
 	populate_texture_option()
 	setup_sliders()
 	load_texture(tile.loaded_texture)
-	output_resize.pressed = tile.output_resize
+	output_resize.set_toggled_quietly(tile.output_resize)
 	output_tile_size_x.editable = tile.output_resize
 	output_tile_size_x.set_value_quietly(tile.output_tile_size.x)
-	subtile_spacing_x.set_value_quietly(tile.subtile_spacing.x)	
-	smoothing_enabled.pressed = tile.smoothing
-	random_seed_enabled.pressed = tile.random_seed_enabled
-	random_seed_edit.text = str(tile.random_seed_value)
+	subtile_spacing_x.set_value_quietly(tile.subtile_spacing.x)
+	smoothing_enabled.set_toggled_quietly(tile.smoothing)
+	random_seed_enabled.set_toggled_quietly(tile.random_seed_enabled)
+	random_seed_edit.editable = tile.random_seed_enabled
+	random_seed_apply.disabled = not tile.random_seed_enabled
+	random_seed_edit.set_text_quietly(str(tile.random_seed_value))
 	frames_spinbox.set_value_quietly(tile.frame_number)
 	populate_frame_control() # TODO: fix, called 3 times instead of 1
 
@@ -56,7 +59,6 @@ func populate_frame_control():
 			(settings_scroll.get_node("VBox").rect_size.y - settings_container.rect_size.y)
 	first_frame.populate_from_tile(tile)
 	for i in range(1, tile.frame_number):
-#		print("variant ", i)
 		var new_frame_container: FramePartsContainer = preload("res://src/nodes/FramePartsContainer.tscn").instance()
 		new_frame_container.populate_from_tile(tile, i + 1)
 		frames_container.add_child(new_frame_container)
@@ -167,47 +169,8 @@ func _on_OverlapSlider_released(value: float):
 	State.update_tile_param(TPTile.PARAM_OVERLAP, Vector2(value, value))
 
 
-func _on_Smoothing_toggled(button_pressed: bool):
-	State.update_tile_param(TPTile.PARAM_SMOOTHING, button_pressed)
-
-
-func _on_RandomCheckButton_toggled(button_pressed: bool):
-	random_seed_edit.editable = button_pressed
-	random_seed_apply.disabled = not button_pressed
-	State.update_tile_param(TPTile.PARAM_RANDOM_SEED_ENABLED, button_pressed)
-
-
-func _on_SeedButton_pressed():
-	_on_SeedLineEdit_text_entered(random_seed_edit.text)
-
-
-func _on_SeedLineEdit_text_entered(new_text: String):
-	var current_seed = int(new_text)
-	State.update_tile_param(TPTile.PARAM_RANDOM_SEED_VALUE, current_seed)
-
-
-func _on_OutpuResizeButton_toggled(button_pressed: bool):
-	State.update_tile_param(TPTile.PARAM_OUTPUT_RESIZE, button_pressed)
-	output_tile_size_x.editable = button_pressed
-	# the following writes output size along with resize toggle value
-#	var x_size := output_tile_size_x.value
-#	print(x_size)
-#	State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, Vector2(x_size, x_size), false)
-
-
-func _on_ResizeSpinBoxX_value_changed(value: float):
-	State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, Vector2(value, value))
-
-
-func _on_SpacingXSpinBox_value_changed(value: float):
-#	var y_spacing := subtile_spacing_y.value
-	var y_spacing := value
-	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(value, y_spacing))
-
-
-func _on_SpacingYSpinBox_value_changed(value):
-	var x_spacing := subtile_spacing_x.value
-	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(x_spacing, value))
+func _on_SeedButton_pressed(is_silenced: bool = false):
+	_on_SeedLineEdit_text_changed_no_silence(random_seed_edit.text)
 
 
 func reload_tile():
@@ -219,7 +182,7 @@ func reload_tile():
 
 func _on_ReloadButton_pressed():
 	reload_tile()
-	
+
 
 func _input(event: InputEvent):
 	if event is InputEventKey and event.pressed and event.scancode == KEY_F5:
@@ -233,5 +196,40 @@ func _on_FramesSpinBox_value_changed_no_silence(value):
 	populate_frame_control()
 
 
-#func _on_FramesSpinBox_value_changed(value):
-#	print("fvekgl")
+func _on_SpacingXSpinBox_value_changed_no_silence(value: float):
+#	var y_spacing := subtile_spacing_y.value
+	var y_spacing := value
+	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(value, y_spacing))
+
+
+#func _on_SpacingYSpinBox_value_changed(value):
+#	var x_spacing := subtile_spacing_x.value
+#	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(x_spacing, value))
+
+
+func _on_ResizeSpinBoxX_value_changed_no_silence(value: float):
+	State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, Vector2(value, value))
+
+
+func _on_SeedLineEdit_text_changed_no_silence(new_text: String):
+	var current_seed = int(new_text)
+	State.update_tile_param(TPTile.PARAM_RANDOM_SEED_VALUE, current_seed)
+
+
+func _on_OutpuResizeButton_toggled_no_silence(button_pressed):
+	State.update_tile_param(TPTile.PARAM_OUTPUT_RESIZE, button_pressed)
+	output_tile_size_x.editable = button_pressed
+	# the following writes output size along with resize toggle value
+#	var x_size := output_tile_size_x.value
+#	print(x_size)
+#	State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, Vector2(x_size, x_size), false)
+
+
+func _on_Smoothing_toggled_no_silence(button_pressed):
+	State.update_tile_param(TPTile.PARAM_SMOOTHING, button_pressed)
+
+
+func _on_RandomCheckButton_toggled_no_silence(button_pressed):
+	random_seed_edit.editable = button_pressed
+	random_seed_apply.disabled = not button_pressed
+	State.update_tile_param(TPTile.PARAM_RANDOM_SEED_ENABLED, button_pressed)

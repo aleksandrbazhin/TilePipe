@@ -28,7 +28,6 @@ var DEFAULT_USER_SETTINGS := {
 }
 
 
-
 func set_current_tile(tile: TPTile, row: TreeItem = null):
 	if current_tile_ref == null or current_tile_ref.get_ref() != tile:
 		current_tile_ref = weakref(tile)

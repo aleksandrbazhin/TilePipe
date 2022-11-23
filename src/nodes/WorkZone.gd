@@ -15,15 +15,12 @@ onready var tile_main_view: TileMainView = $VSplitContainer/TopContainer/TileMai
 onready var ruleset_view: RulesetView = $VSplitContainer/TopContainer/RulesetView
 onready var template_view: TemplateView = $VSplitContainer/TopContainer/TemplateView
 onready var result_view: ResultView = $VSplitContainer/ResultView
-#onready var renderer: TileRenderer = $TileRenderer
 
 
 func _ready():
 	State.connect("tile_cleared", self, "on_tile_cleared")
 	State.connect("tile_selected", self, "on_tile_selected")
 	State.connect("tile_needs_render", self, "render_subtiles")
-#	renderer.connect("tiles_ready", self, "on_tiles_rendered")
-#	renderer.connect("report_progress", self, "update_progress")
 
 
 func unhide_all():
@@ -71,14 +68,11 @@ func render_subtiles():
 		is_render_scheduled = true
 		return
 	is_rendering = true
-	
 	result_view.clear()
-	
 	total_frames = tile.frames.size()
 	ready_frames = 0
 	var frame_index: = 0
 	for frame in tile.frames:
-		print("start ", frame_index + 1, " of " , tile.frame_number, "(", tile.frames.size() ,") (", tile.tile_file_name,")")
 		var renderer := TileRenderer.new()
 		add_child(renderer)
 		renderer.connect("tiles_ready", self, "on_tiles_rendered", [renderer])
