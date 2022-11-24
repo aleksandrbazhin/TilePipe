@@ -241,7 +241,7 @@ func load_template(path: String) -> bool:
 func parse_template():
 	frames.clear()
 	for frame_index in frame_number:
-		var frame := TPTileFrame.new()
+		var frame := TPTileFrame.new(frame_index)
 		if loaded_template == null:
 			return
 		template_size = loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE

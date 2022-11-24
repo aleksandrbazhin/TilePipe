@@ -85,9 +85,9 @@ _global_script_classes=[ {
 "path": "res://src/nodes/ProjectTree.gd"
 }, {
 "base": "TextureRect",
-"class": "ResultTextureView",
+"class": "ResultFrameView",
 "language": "GDScript",
-"path": "res://src/nodes/ResultTextureView.gd"
+"path": "res://src/nodes/ResultFrameView.gd"
 }, {
 "base": "ColorRect",
 "class": "ResultView",
@@ -175,7 +175,7 @@ _global_script_class_icons={
 "PartFrameControl": "",
 "PartHighlight": "",
 "ProjectTree": "",
-"ResultTextureView": "",
+"ResultFrameView": "",
 "ResultView": "",
 "RuleInRuleset": "",
 "Ruleset": "",
