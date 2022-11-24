@@ -4,15 +4,10 @@ extends TextureRect
 
 signal random_priority_changed(self_)
 
-#const RANDOM_ICON_POSITION := Vector2(4, 6)
 const RANDOM_ICON_POSITION := Vector2(4, 29)
-#const FRAME_ICON_POSITION := Vector2(4, 26)
 export var BG_COLOR := Color(0.3, 0.4, 0.4, 0.5)
 export var BG_COLOR2 := Color(0.3, 0.4, 0.4, 0.5)
 
-# TODO: если нет рандомизации (макс рандом ные варианты == 1), то писать No вместо рандом лейбла
-# TODO: делить на 2 все варианты при выборе количества фреймов
-# TODO: переделать контрол со скролла на spinbox
 
 var part_type: int = Ruleset.RULESET_TILE_PARTS.FULL
 var random_variant: int = 0

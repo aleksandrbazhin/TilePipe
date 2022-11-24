@@ -156,23 +156,18 @@ func split_input_into_tile_parts() -> bool:
 	var min_input_tiles := loaded_ruleset.parts.size()
 	for part_index in range(min_input_tiles):
 		input_parts[part_index] = []
-		var part_is_empty := false
 		var variant_index := 0
-		while not part_is_empty:
+		while variant_index * input_tile_size.y <= input_image.get_size().y or input_parts[part_index].size() == 0 :
 			var part := TilePart.new()
 			part.create(int(input_tile_size.x), int(input_tile_size.y), false, Image.FORMAT_RGBA8)
-			if input_tile_size.y + variant_index * input_tile_size.y > input_image.get_size().y and input_parts[part_index].size() > 0:
-				break
 			var copy_rect := Rect2(part_index * input_tile_size.x, variant_index * input_tile_size.y, 
 				input_tile_size.x, input_tile_size.y)
 			part.blit_rect(input_image, copy_rect, Vector2.ZERO)
-			if part.is_invisible() and input_parts[part_index].size() > 0:
-				part_is_empty = true
-			else:
+			if not part.is_invisible() or input_parts[part_index].size() == 0:
 				input_parts[part_index].append(part)
 				part.part_index = part_index
 				part.variant_index = variant_index
-				variant_index += 1
+			variant_index += 1
 	return true
 
 
