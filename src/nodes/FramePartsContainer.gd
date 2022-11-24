@@ -16,23 +16,21 @@ func populate_from_tile(tile: TPTile, frame_index: int = 1):
 	for part_index in tile.input_parts:
 		if part_index >= ruleset_parts.size():
 			break
-		var frames_container := FrameColumnVariants.new()
-		frames_container.add_constant_override("separation", 2)
+		var variants_column := FrameColumnVariants.new()
+		variants_column.add_constant_override("separation", 2)
 		var total_priority := 0
 		for part in tile.input_parts[part_index]:
-			var frame_control: PartFrameControl = preload("res://src/nodes/PartFrameControl.tscn").instance()
-#			print(tile.get_part_frame_random_priority(frame_index, part_index, part.variant_index))
-			frame_control.setup(
-				ruleset_parts[part.part_index], 
-				part, 
-				tile.get_part_frame_random_priority(frame_index, part_index, part.variant_index),
-				tile.input_parts[part_index].size())
-			total_priority += frame_control.random_priority
-			frames_container.add_child(frame_control)
-#			frame_control.connect("random_priority_changed", frames_container, "recalculate_parts_total_priority")
-			frame_control.connect("random_priority_changed", self, "on_part_priority_change", [frames_container])
-		frames_container.set_parts_total_priority(total_priority)
-		$HBoxContainer/ScrollContainer/PartsContainer.add_child(frames_container)
+			var part_control: PartFrameControl = preload("res://src/nodes/PartFrameControl.tscn").instance()
+			var part_variant_random_priority = tile.get_part_frame_random_priority(
+					frame_index, part_index, part.variant_index)
+			part_control.setup( ruleset_parts[part.part_index],  part, 
+					part_variant_random_priority, tile.input_parts[part_index].size())
+			total_priority += part_control.random_priority
+			variants_column.add_child(part_control)
+			part_control.connect("random_priority_changed", self, "on_part_priority_change", 
+					[variants_column, frame_index, part_index, part.variant_index])
+		variants_column.set_parts_total_priority(total_priority)
+		$HBoxContainer/ScrollContainer/PartsContainer.add_child(variants_column)
 		$HBoxContainer/Control/Label.text = "Frame " + str(frame_index)
 		if max_variants_number < tile.input_parts[part_index].size():
 			max_variants_number = tile.input_parts[part_index].size()
@@ -53,5 +51,12 @@ func on_row_control_change(is_row_enabled: bool, variant_index: int):
 		$HBoxContainer/RowControlsContainer.get_child(variant_index).set_enabled_quietly(true)
 
 
-func on_part_priority_change(part: PartFrameControl, column: FrameColumnVariants):
+func on_part_priority_change(part: PartFrameControl, column: FrameColumnVariants,
+		frame_index: int, part_index: int, variant_index: int):
+	State.update_tile_param(TPTile.PARAM_FRAME_RANDOM_PRIORITIES, 
+			[frame_index, part_index, variant_index, part.random_priority])
+#	print("NEW_PRIORITY ", part.random_priority)
 	column.recalculate_parts_total_priority()
+	
+	
+	

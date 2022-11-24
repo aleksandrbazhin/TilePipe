@@ -80,6 +80,7 @@ func disable() -> bool:
 	if random_priority > 0 and float(total_random_priority) / float(random_priority) > 1 and is_enabled:
 		$BlockingOverlay.show()
 		is_enabled = false
+		random_priority = 0
 		emit_signal("random_priority_changed", self)
 		return true
 	return false
@@ -87,7 +88,7 @@ func disable() -> bool:
 
 func _on_PartFrameControl_gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
-		if event.position.y < rect_size.y / 1.6 and is_enabled:
+		if event.position.y < rect_size.y / 1.55 and is_enabled:
 			disable()
 
 

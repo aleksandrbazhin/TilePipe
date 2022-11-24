@@ -23,6 +23,7 @@ enum {
 	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE,
 	PARAM_EXPORT_GODOT3_TILE_NAME,
 	PARAM_FRAME_NUMBER,
+	PARAM_FRAME_RANDOM_PRIORITIES
 }
 
 const HEIGHT_EXPANDED := 120
@@ -56,7 +57,6 @@ var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
 var frame_number := 1
-
 
 var export_type: int = Const.EXPORT_TYPE_UKNOWN
 var export_png_path: String
@@ -154,33 +154,31 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 func get_part_frame_random_priority(frame_index: int, part_index: int, variant_index: int) -> int:
 	if frame_index >= frames.size():
 		return 1
-#	print(frames[frame_index].part_random_priorities)
 	return frames[frame_index].get_part_priority(part_index, variant_index)
 
 
 func set_frame_randomness():
 	if not "frame_randomness_data" in _tile_data:
 		return
-	var priorities: Array = _tile_data["frame_randomness_data"]
-	for frame_index in priorities.size():
-		if frame_index >= frames.size():
+	var priorities: Dictionary = _tile_data["frame_randomness_data"]
+	for frame_index in priorities:
+		if int(frame_index) >= frames.size():
 			return
-		var frame: TPTileFrame = frames[frame_index]
-		var frame_priorities: Array = priorities[frame_index]
-		for part_index in frame_priorities.size():
-			if part_index >= input_parts.size():
+		var frame: TPTileFrame = frames[int(frame_index)]
+		var frame_priorities: Dictionary = priorities[frame_index]
+		for part_index in frame_priorities:
+			if int(part_index) >= input_parts.size():
 				break
-			var variants: Array = input_parts[part_index]
-			var part_priorities: Array = frame_priorities[part_index]
-			for variant_index in part_priorities.size():
-				if variant_index >= variants.size():
+			var variants: Array = input_parts[int(part_index)]
+			var part_priorities: Dictionary = frame_priorities[part_index]
+			for variant_index in part_priorities:
+				if int(variant_index) >= variants.size():
 					break
-				frame.set_part_priority(part_index, variant_index, part_priorities[variant_index])
+				frame.set_part_priority(int(part_index), int(variant_index), part_priorities[variant_index])
 #		print(frame.part_random_priorities)
 
 
 func split_input_into_tile_parts() -> bool:
-	print("split")
 	if loaded_ruleset == null or loaded_texture == null:
 		return false
 	input_parts = {}
@@ -525,6 +523,23 @@ func update_frame_number(new_frame_number: int) -> bool:
 	return true
 
 
+func update_frame_random_priorities(frame_part_variant_priority: Array) -> bool:
+	var frame_index: int = frame_part_variant_priority[0]
+	var part_index: int = frame_part_variant_priority[1]
+	var variant_index: int = frame_part_variant_priority[2]
+	var priority: int = frame_part_variant_priority[3]
+	if frame_index >= frames.size():
+		return false
+	if part_index >= input_parts.size():
+		return false
+	frames[frame_index].set_part_priority(part_index, variant_index, priority)
+	var frame_randomness := {}
+	for frame_idx in frames.size():
+		frame_randomness[frame_idx] = frames[frame_idx].part_random_priorities
+	_tile_data["frame_randomness_data"] = frame_randomness
+	return true
+
+# returns if param successfully changed
 func update_param(param_key: int, value) -> bool:
 	match param_key:
 		PARAM_TEXTURE:
@@ -563,6 +578,8 @@ func update_param(param_key: int, value) -> bool:
 			return update_export_godot3_tile_name(value)
 		PARAM_FRAME_NUMBER:
 			return update_frame_number(value)
+		PARAM_FRAME_RANDOM_PRIORITIES:
+			return update_frame_random_priorities(value)
 	return false
 
 
