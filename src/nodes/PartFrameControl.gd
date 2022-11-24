@@ -11,7 +11,7 @@ export var BG_COLOR2 := Color(0.3, 0.4, 0.4, 0.5)
 
 var part_type: int = Ruleset.RULESET_TILE_PARTS.FULL
 var random_variant: int = 0
-var random_priority: int = 1 
+var random_priority: int = 1
 var frame_index: int = 0
 var total_random_priority: int = 1
 var max_frames: int = 1
@@ -24,6 +24,9 @@ func setup(new_part_type: int, part: TilePart, new_random_priority: int = 1, new
 	part_ref = weakref(part)
 	random_variant = part.variant_index
 	random_priority = new_random_priority
+	if random_priority == 0:
+		$BlockingOverlay.show()
+		is_enabled = false
 	total_random_priority = new_total_prority
 	var itex := ImageTexture.new()
 	if not part.is_empty():
@@ -65,6 +68,8 @@ func set_total_random_priority(value: int):
 func enable() -> bool:
 	$BlockingOverlay.hide()
 	if not is_enabled:
+		if random_priority == 0:
+			random_priority = 1
 		is_enabled = true
 		emit_signal("random_priority_changed", self)
 		return true
@@ -72,7 +77,7 @@ func enable() -> bool:
 
 
 func disable() -> bool:
-	if float(total_random_priority) / float(random_priority) > 1 and is_enabled:
+	if random_priority > 0 and float(total_random_priority) / float(random_priority) > 1 and is_enabled:
 		$BlockingOverlay.show()
 		is_enabled = false
 		emit_signal("random_priority_changed", self)

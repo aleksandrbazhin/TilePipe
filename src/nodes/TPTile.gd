@@ -142,13 +142,45 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("export_godot3_resource_path", "export_godot3_resource_path", "")
 	set_tile_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
 	set_tile_param("export_godot3_tile_name", "export_godot3_tile_name", "")
+#	set_tile_param("export_godot3_tile_name", "frame_randomness_data", "")
 
 	if is_texture_loaded and is_ruleset_loaded:
 		split_input_into_tile_parts()
+	set_frame_randomness()
+
 	return true
 
 
+func get_part_frame_random_priority(frame_index: int, part_index: int, variant_index: int) -> int:
+	if frame_index >= frames.size():
+		return 1
+#	print(frames[frame_index].part_random_priorities)
+	return frames[frame_index].get_part_priority(part_index, variant_index)
+
+
+func set_frame_randomness():
+	if not "frame_randomness_data" in _tile_data:
+		return
+	var priorities: Array = _tile_data["frame_randomness_data"]
+	for frame_index in priorities.size():
+		if frame_index >= frames.size():
+			return
+		var frame: TPTileFrame = frames[frame_index]
+		var frame_priorities: Array = priorities[frame_index]
+		for part_index in frame_priorities.size():
+			if part_index >= input_parts.size():
+				break
+			var variants: Array = input_parts[part_index]
+			var part_priorities: Array = frame_priorities[part_index]
+			for variant_index in part_priorities.size():
+				if variant_index >= variants.size():
+					break
+				frame.set_part_priority(part_index, variant_index, part_priorities[variant_index])
+#		print(frame.part_random_priorities)
+
+
 func split_input_into_tile_parts() -> bool:
+	print("split")
 	if loaded_ruleset == null or loaded_texture == null:
 		return false
 	input_parts = {}
@@ -168,6 +200,8 @@ func split_input_into_tile_parts() -> bool:
 				part.part_index = part_index
 				part.variant_index = variant_index
 			variant_index += 1
+			for frame in frames:
+				pass 
 	return true
 
 
@@ -486,6 +520,7 @@ func update_export_type(new_type: int) -> bool:
 func update_frame_number(new_frame_number: int) -> bool:
 	frame_number = new_frame_number
 	parse_template()
+	set_frame_randomness()
 	_tile_data["frame_number"] = frame_number
 	return true
 

@@ -21,7 +21,12 @@ func populate_from_tile(tile: TPTile, frame_index: int = 1):
 		var total_priority := 0
 		for part in tile.input_parts[part_index]:
 			var frame_control: PartFrameControl = preload("res://src/nodes/PartFrameControl.tscn").instance()
-			frame_control.setup(ruleset_parts[part.part_index], part, 1, tile.input_parts[part_index].size())
+#			print(tile.get_part_frame_random_priority(frame_index, part_index, part.variant_index))
+			frame_control.setup(
+				ruleset_parts[part.part_index], 
+				part, 
+				tile.get_part_frame_random_priority(frame_index, part_index, part.variant_index),
+				tile.input_parts[part_index].size())
 			total_priority += frame_control.random_priority
 			frames_container.add_child(frame_control)
 #			frame_control.connect("random_priority_changed", frames_container, "recalculate_parts_total_priority")
