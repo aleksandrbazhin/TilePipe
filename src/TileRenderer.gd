@@ -21,6 +21,7 @@ var last_mask := -1
 # subtiles[mask] = [random_variant1: Image, random_variant2: Image, ...]
 var subtiles := {} 
 var frame_index := 0
+var frame_ref: WeakRef
 
 
 func _ready():
@@ -49,6 +50,7 @@ func init_render_pool():
 
 func start_render(tile: TPTile, new_frame_index: int = 0):
 	frame_index = new_frame_index
+	frame_ref = weakref(tile.frames[new_frame_index])
 	subtiles = tile.frames[frame_index].result_subtiles_by_bitmask
 	ruleset = tile.loaded_ruleset
 	input_tile_size = tile.input_tile_size
@@ -60,7 +62,6 @@ func start_render(tile: TPTile, new_frame_index: int = 0):
 		rng.seed = tile.random_seed_value
 	else:
 		rng.randomize()
-
 	last_mask = subtiles.keys()[0]
 	for bitmask in subtiles:
 		for subtile in subtiles[bitmask]:
@@ -77,6 +78,10 @@ func start_render(tile: TPTile, new_frame_index: int = 0):
 
 
 func setup_subtile_render(bitmask: int, viewport: Viewport):
+	var frame: TPTileFrame = frame_ref.get_ref()
+	if frame == null:
+		return
+	
 	var random_center_index: int = rng.randi_range(0, input_tile_parts[0].size() - 1)
 	var center_image: Image = input_tile_parts[0][random_center_index]
 	var tile_rules_data: Dictionary = ruleset.get_mask_data(bitmask)
@@ -94,6 +99,7 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 	var itex = ImageTexture.new()
 	itex.create_from_image(center_image, 0)
 	texture_rect.texture = itex
+	# this is to choose the same part variant to use the same when blending parts into the subtile
 	var part_set := [-1, -1, -1, -1, -1, -1, -1, -1]
 	var part_random := [0, 0, 0, 0, 0, 0, 0, 0]
 	var mask_index: int = 0
@@ -105,7 +111,8 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 		if existing_part_index != -1:
 			random_tile_index = part_random[existing_part_index]
 		else:
-			random_tile_index = rng.randi_range(0, part_variants.size() - 1)
+			random_tile_index = frame.choose_random_part_variant(part_index, 
+					part_variants.size(), rng)
 			part_random[mask_index] = random_tile_index
 		part_set[mask_index] = part_index
 		var part_rot_index: int = parts_rotations[mask_index]
