@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/nodes/FramePartsContainer.gd"
 }, {
+"base": "CenterContainer",
+"class": "FramePartsRowControl",
+"language": "GDScript",
+"path": "res://FramePartsRowControl.gd"
+}, {
 "base": "Resource",
 "class": "GeneratedSubTile",
 "language": "GDScript",
@@ -167,6 +172,7 @@ _global_script_class_icons={
 "CollisionGenerator": "",
 "FrameColumnVariants": "",
 "FramePartsContainer": "",
+"FramePartsRowControl": "",
 "GeneratedSubTile": "",
 "GodotExporter": "",
 "GodotTileRow": "",

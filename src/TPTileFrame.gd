@@ -15,8 +15,17 @@ func _init(new_index):
 	index = new_index
 
 
+func is_variant_row_disabled(variant_index: int) -> bool:
+	var count := 0
+	for part_index in part_random_priorities:
+		if not variant_index in part_random_priorities[part_index]:
+			return false
+		else:
+			count += part_random_priorities[part_index][variant_index]
+	return count == 0
+
+
 func get_part_priority(part_index: int, variant_index: int) -> int:
-	print(part_index, " ", variant_index)
 	if not part_index in part_random_priorities:
 		return 1
 	if not variant_index in part_random_priorities[part_index]:
@@ -28,16 +37,6 @@ func set_part_priority(part_index: int, variant_index: int, priority: int):
 	if not part_index in part_random_priorities:
 		part_random_priorities[part_index] = {}
 	part_random_priorities[part_index][variant_index] = priority
-
-
-func get_randomness_as_array() -> Array:
-	var result := []
-	for part in part_random_priorities:
-		var priorities := []
-		for variant in part_random_priorities[part]:
-			priorities.append(part_random_priorities[part][variant])
-		result.append(priorities)
-	return result
 
 
 func append_subtile(mask: int, pos: Vector2):

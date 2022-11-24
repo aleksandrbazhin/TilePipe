@@ -10,7 +10,7 @@ func clear():
 		row_control.queue_free()
 
 
-func populate_from_tile(tile: TPTile, frame_index: int = 1):
+func populate_from_tile(tile: TPTile, frame_index: int):
 	var ruleset_parts := tile.loaded_ruleset.parts
 	var max_variants_number := 0
 	for part_index in tile.input_parts:
@@ -34,12 +34,15 @@ func populate_from_tile(tile: TPTile, frame_index: int = 1):
 		$HBoxContainer/Control/Label.text = "Frame " + str(frame_index)
 		if max_variants_number < tile.input_parts[part_index].size():
 			max_variants_number = tile.input_parts[part_index].size()
-	for v_index in range(max_variants_number):
-		var row_control := preload("res://FramePartsRowControl.tscn").instance()
+	for row_index in range(max_variants_number):
+		var row_control: FramePartsRowControl = preload("res://FramePartsRowControl.tscn").instance()
+		if tile.frames[frame_index].is_variant_row_disabled(row_index):
+			row_control.set_enabled_quietly(false)
 		if max_variants_number == 1:
 			row_control.block()
+			return
 		$HBoxContainer/RowControlsContainer.add_child(row_control)
-		row_control.connect("toggled", self, "on_row_control_change", [v_index])
+		row_control.connect("toggled", self, "on_row_control_change", [row_index])
 
 
 func on_row_control_change(is_row_enabled: bool, variant_index: int):
@@ -55,7 +58,6 @@ func on_part_priority_change(part: PartFrameControl, column: FrameColumnVariants
 		frame_index: int, part_index: int, variant_index: int):
 	State.update_tile_param(TPTile.PARAM_FRAME_RANDOM_PRIORITIES, 
 			[frame_index, part_index, variant_index, part.random_priority])
-#	print("NEW_PRIORITY ", part.random_priority)
 	column.recalculate_parts_total_priority()
 	
 	

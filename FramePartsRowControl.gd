@@ -1,5 +1,7 @@
 extends CenterContainer
 
+class_name FramePartsRowControl
+
 signal toggled(is_enabled)
 
 var is_silenced := false
