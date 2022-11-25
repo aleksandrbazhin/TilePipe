@@ -1,6 +1,6 @@
+class_name FramePartsRowControl
 extends CenterContainer
 
-class_name FramePartsRowControl
 
 signal toggled(is_enabled)
 

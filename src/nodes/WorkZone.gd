@@ -50,6 +50,8 @@ func on_tile_selected(tile: TPTile, row: TreeItem):
 			template_view.show()
 			template_view.load_data(tile)
 			last_visible_tab = template_view
+	result_view.set_export_option(tile.export_type)
+	result_view.display_export_path(tile.export_type)
 
 
 func on_tile_cleared():

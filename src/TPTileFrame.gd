@@ -1,6 +1,6 @@
+class_name TPTileFrame
 extends Reference
 
-class_name TPTileFrame
 
 var parsed_template := {}
 var result_subtiles_by_bitmask := {}

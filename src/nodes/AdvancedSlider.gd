@@ -1,6 +1,5 @@
-extends HSlider
-
 class_name AdvancedSlider
+extends HSlider
 
 # this file exists only because Godot "editable" implementation is bugged for sliders
 # they are tied to the mouse if set not editable during click callback

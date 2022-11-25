@@ -64,11 +64,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/exporters/Godot3/GodotExistingTileRow.gd"
 }, {
-"base": "VBoxContainer",
-"class": "InputTextureView",
-"language": "GDScript",
-"path": "res://src/nodes/InputTextureView.gd"
-}, {
 "base": "HBoxContainer",
 "class": "MenuPanel",
 "language": "GDScript",
@@ -118,6 +113,11 @@ _global_script_classes=[ {
 "class": "ScalableTextureContainer",
 "language": "GDScript",
 "path": "res://src/nodes/ScalableTextureContainer.gd"
+}, {
+"base": "PanelContainer",
+"class": "SettingsContainer",
+"language": "GDScript",
+"path": "res://src/nodes/SettingsContainer.gd"
 }, {
 "base": "Control",
 "class": "TPTile",
@@ -176,7 +176,6 @@ _global_script_class_icons={
 "GeneratedSubTile": "",
 "GodotExporter": "",
 "GodotTileRow": "",
-"InputTextureView": "",
 "MenuPanel": "",
 "PartFrameControl": "",
 "PartHighlight": "",
@@ -187,6 +186,7 @@ _global_script_class_icons={
 "Ruleset": "",
 "RulesetView": "",
 "ScalableTextureContainer": "",
+"SettingsContainer": "",
 "TPTile": "",
 "TPTileFrame": "",
 "TemplateView": "",

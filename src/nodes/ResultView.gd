@@ -14,6 +14,8 @@ onready var selected_subtile_container := $VBoxContainer/HSplitContainer/SingleT
 onready var selected_subtile_texture := $VBoxContainer/HSplitContainer/SingleTile/SubtileTexture
 onready var result_texture_container: = $VBoxContainer/HSplitContainer/Result/TextureContainer/VBoxContainer
 onready var bitmask_label := $VBoxContainer/HSplitContainer/SingleTile/BitmaskLabel
+onready var export_type_option := $VBoxContainer/ExportContainer/ExportOptionButton
+onready var export_path_edit := $VBoxContainer/ExportContainer/ExportPathLineEdit
 
 
 func render_from_tile(tile: TPTile):
@@ -151,4 +153,73 @@ func _on_SingleTile_resized():
 #			KEY_RIGHT:
 #				move_selection(Vector2.RIGHT)
 #				get_tree().set_input_as_handled()
+
+
+
+func display_export_path(export_type: int):
+	var tile: TPTile = State.get_current_tile()
+	if tile == null:
+		return
+	match export_type:
+		Const.EXPORT_TYPES.TEXTURE:
+			export_path_edit.text = tile.export_png_path
+		Const.EXPORT_TYPES.GODOT3:
+			export_path_edit.text = tile.export_godot3_resource_path
+#			export_path_edit.text += ": " + tile.export_godot3_tile_name
+		_:
+			export_path_edit.text = ""
+
+
+func set_export_option(export_type: int):
+	if export_type != Const.EXPORT_TYPE_UKNOWN:
+		export_type_option.select(export_type)
+
+
+
+
+func _on_Godot3ExportDialog_popup_hide():
+	display_export_path(Const.EXPORT_TYPES.GODOT3)
+	State.popup_ended()
+
+
+
+func _on_ExportOptionButton_item_selected(index):
+	display_export_path(index)
+	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, index, false)
+
+
+func _on_ExportButton_pressed():
+	var tile: TPTile = State.get_current_tile()
+	if tile == null:
+		return
+	if tile.output_texture == null or tile.output_texture.get_data() == null:
+		State.report_error("Error: No generated texture, tile not fully defined")
+		return
+	match export_type_option.selected:
+		Const.EXPORT_TYPES.TEXTURE:
+			var dialog := $ExportTextureFileDialog
+			dialog.current_path = State.get_current_tile().export_png_path
+			dialog.popup_centered()
+		Const.EXPORT_TYPES.GODOT3:
+			var dialog: GodotExporter = $Godot3ExportDialog
+			dialog.start_export_dialog(State.get_current_tile())
+
+
+func _on_ExportTextureFileDialog_file_selected(path):
+	var tile: TPTile = State.get_current_tile()
+	if tile == null:
+		return
+	var current_texture_image: Texture = tile.frames[0].result_texture
+	current_texture_image.get_data().save_png(path)
+	State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, path, false)
+	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, Const.EXPORT_TYPES.TEXTURE, false)
+	display_export_path(Const.EXPORT_TYPES.TEXTURE)
+
+
+func _on_ExportTextureFileDialog_popup_hide():
+	State.popup_ended()
+
+
+func _on_ExportTextureFileDialog_about_to_show():
+	State.popup_started($TextureFileDialog)
 

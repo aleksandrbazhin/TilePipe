@@ -5,19 +5,29 @@ extends VBoxContainer
 signal ruleset_view_called()
 signal template_view_called()
 
-onready var input_texture: InputTextureView = $InputTextureView
-onready var ruleset_option := $RulesetContainer/RulesetOptionButton
-onready var ruleset_texture := $RulesetContainer/ScrollContainer/TextureRect
-onready var template_option := $TemplateContainer/TemplateOptionButton
-onready var template_texture := $TemplateContainer/TextureRect
-onready var export_type_option := $ExportContainer/ExportOptionButton
-onready var export_path_edit := $ExportContainer/ExportPathLineEdit
+var current_texture_path := ""
+var current_input_tile_size := Vector2.ZERO
+
+onready var ruleset_option := $HBox/VBoxLeft/RulesetContainer/RulesetHeader/RulesetOptionButton
+onready var ruleset_texture := $HBox/VBoxLeft/RulesetContainer/ScrollContainer/TextureRect
+onready var template_option := $HBox/VBoxLeft/TemplateContainer/TemplateHeader/TemplateOptionButton
+onready var template_texture := $HBox/VBoxLeft/TemplateContainer/TextureRect
+#onready var export_type_option := $ExportContainer/ExportOptionButton
+#onready var export_path_edit := $ExportContainer/ExportPathLineEdit
+
+onready var texture_option := $HBox/VBoxLeft/HeaderContainer/TextureOption
+onready var texture_container: ScalableTextureContainer = $HBox/VBoxLeft/ScalableTextureContainer
+onready var settings_container: SettingsContainer = $HBox/SettingsContainer
 
 
 func load_data(tile: TPTile):
 	if tile == null:
 		return
-	input_texture.load_data(tile)
+	populate_texture_option()
+	current_texture_path = tile.texture_path
+	current_input_tile_size = tile.input_tile_size
+	load_texture(tile.loaded_texture)
+	settings_container.load_data(tile)
 	Helpers.populate_project_file_option(ruleset_option, 
 		State.current_dir + "/" + Const.RULESET_DIR, 
 		funcref(Helpers, "scan_for_rulesets_in_dir"),
@@ -35,10 +45,39 @@ func load_data(tile: TPTile):
 		template_texture.texture = tile.loaded_template
 	else:
 		clear_template()
-	
-	if tile.export_type != Const.EXPORT_TYPE_UKNOWN:
-		export_type_option.select(tile.export_type)
-	display_export_path(tile.export_type)
+
+
+
+#func populate_template_option():
+#	var search_path: String = State.current_dir + "/" + Const.TEMPLATE_DIR
+#	var scan_func: FuncRef = funcref(Helpers, "scan_for_templates_in_dir")
+#	Helpers.populate_project_file_option(template_option, search_path, 
+#		scan_func, current_template_path)
+
+
+func populate_texture_option():
+	var scan_func: FuncRef = funcref(Helpers, "scan_for_textures_in_dir")
+	Helpers.populate_project_file_option(texture_option, State.current_dir, 
+		scan_func, current_texture_path)
+
+
+func _on_AddTextureFileDialog_file_selected(path: String):
+	if not Helpers.ensure_directory_exists(State.current_dir, Const.TEXTURE_DIR):
+		State.report_error("Error: Creating directory \"/%s/\" error" % Const.TEXTURE_DIR)
+		return
+	var new_texture_path: String = State.current_dir + "/" + Const.TEXTURE_DIR + "/" + path.get_file()
+	var dir := Directory.new()
+	var error := dir.copy(path, new_texture_path)
+	if error != OK:
+		State.report_error("Error: Copy file error number %d." % error)
+	current_texture_path = new_texture_path
+	populate_texture_option()
+	State.update_tile_param(TPTile.PARAM_TEXTURE, current_texture_path)
+	load_texture(State.get_current_tile().loaded_texture)
+
+
+func load_texture(texture: Texture):
+	texture_container.set_main_texture(texture)
 
 
 func clear_ruleset():
@@ -52,9 +91,15 @@ func clear_template():
 
 
 func clear():
+	clear_texture()
 	clear_template()
 	clear_ruleset()
-	input_texture.clear()
+	settings_container.clear()
+
+
+func clear_texture():
+	texture_option.selected = texture_option.get_item_count() - 1
+	texture_container.clear()
 
 
 func add_ruleset_highlights(ruleset: Ruleset):
@@ -70,11 +115,11 @@ func add_ruleset_highlights(ruleset: Ruleset):
 
 
 func on_part_highlight_focused(part: PartHighlight):
-	input_texture.change_part_highlight(part.id, true)
+	texture_container.set_part_highlight(part.id, true)
 
 
 func on_part_highlight_unfocused(part: PartHighlight):
-	input_texture.change_part_highlight(part.id, false)
+	texture_container.set_part_highlight(part.id, false)
 
 
 func _on_RulesetButton_pressed():
@@ -110,61 +155,50 @@ func _on_TemplateOptionButton_item_selected(index):
 	template_texture.texture = tile.loaded_template
 
 
-func _on_ExportButton_pressed():
+func _on_TextureOption_item_selected(index):
+	current_texture_path = texture_option.get_item_metadata(index)
+	State.update_tile_param(TPTile.PARAM_TEXTURE, current_texture_path)
+	if current_texture_path.empty():
+		clear()
+	else:
+		var tile: TPTile = State.get_current_tile()
+		if tile == null:
+			return
+		load_texture(tile.loaded_texture)
+
+
+func reload_tile():
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
-	if tile.output_texture == null or tile.output_texture.get_data() == null:
-		State.report_error("Error: No generated texture, tile not fully defined")
-		return
-	match export_type_option.selected:
-		Const.EXPORT_TYPES.TEXTURE:
-			var dialog := $TextureFileDialog
-			dialog.current_path = State.get_current_tile().export_png_path
-			dialog.popup_centered()
-		Const.EXPORT_TYPES.GODOT3:
-			var dialog: GodotExporter = $Godot3ExportDialog
-			dialog.start_export_dialog(State.get_current_tile())
+	tile.reload()
 
 
-func display_export_path(export_type: int):
-	var tile: TPTile = State.get_current_tile()
-	if tile == null:
-		return
-	match export_type:
-		Const.EXPORT_TYPES.TEXTURE:
-			export_path_edit.text = tile.export_png_path
-		Const.EXPORT_TYPES.GODOT3:
-			export_path_edit.text = tile.export_godot3_resource_path
-#			export_path_edit.text += ": " + tile.export_godot3_tile_name
-		_:
-			export_path_edit.text = ""
+func _on_ReloadButton_pressed():
+	reload_tile()
 
 
-func _on_ExportOptionButton_item_selected(index):
-	display_export_path(index)
-	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, index, false)
+func _on_TextureDialogButton_pressed():
+	$AddTextureFileDialog.popup_centered()
 
 
-func _on_TextureFileDialog_file_selected(path):
-	var tile: TPTile = State.get_current_tile()
-	if tile == null:
-		return
-	var current_texture_image: Texture = tile.frames[0].result_texture
-	current_texture_image.get_data().save_png(path)
-	State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, path, false)
-	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, Const.EXPORT_TYPES.TEXTURE, false)
-	display_export_path(Const.EXPORT_TYPES.TEXTURE)
+func _on_AddTextureFileDialog_about_to_show():
+	State.popup_started($AddTextureFileDialog)
 
 
-func _on_TextureFileDialog_about_to_show():
-	State.popup_started($TextureFileDialog)
-
-
-func _on_TextureFileDialog_popup_hide():
+func _on_AddTextureFileDialog_popup_hide():
 	State.popup_ended()
 
 
-func _on_Godot3ExportDialog_popup_hide():
-	display_export_path(Const.EXPORT_TYPES.GODOT3)
-	State.popup_ended()
+func _on_ScalableTextureContainer_tile_size_changed(size):
+	current_input_tile_size = size
+	State.update_tile_param(TPTile.PARAM_INPUT_SIZE, current_input_tile_size)
+	settings_container.setup_sliders(current_input_tile_size)
+	settings_container.populate_frame_control()
+
+
+func _input(event: InputEvent):
+	if event is InputEventKey and event.pressed and event.scancode == KEY_F5:
+		if visible:
+			get_tree().set_input_as_handled()
+			reload_tile()

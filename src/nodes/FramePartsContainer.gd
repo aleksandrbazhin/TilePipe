@@ -1,6 +1,5 @@
-extends PanelContainer
-
 class_name FramePartsContainer
+extends PanelContainer
 
 
 func clear():
@@ -31,7 +30,7 @@ func populate_from_tile(tile: TPTile, frame_index: int):
 					[variants_column, frame_index, part_index, part.variant_index])
 		variants_column.set_parts_total_priority(total_priority)
 		$HBoxContainer/ScrollContainer/PartsContainer.add_child(variants_column)
-		$HBoxContainer/Control/Label.text = "Frame " + str(frame_index)
+		$HBoxContainer/Control/Label.text = "Frame " + str(frame_index + 1)
 		if max_variants_number < tile.input_parts[part_index].size():
 			max_variants_number = tile.input_parts[part_index].size()
 	for row_index in range(max_variants_number):

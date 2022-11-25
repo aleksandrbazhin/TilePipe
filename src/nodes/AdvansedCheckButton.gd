@@ -1,6 +1,6 @@
+class_name AdvancedCheckButton
 extends CheckButton
 
-class_name AdvancedCheckButton
 
 signal toggled_no_silence(button_pressed)
 

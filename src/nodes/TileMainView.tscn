@@ -1,9 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/nodes/TileMainView.gd" type="Script" id=1]
-[ext_resource path="res://src/nodes/InputTextureView.tscn" type="PackedScene" id=2]
-[ext_resource path="res://src/exporters/Godot3/Godot3Exporter.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/styles/ui_theme.tres" type="Theme" id=4]
+[ext_resource path="res://src/nodes/SettingsContainer.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/nodes/ScalableTextureContainer.tscn" type="PackedScene" id=8]
+[ext_resource path="res://assets/images/Load.svg" type="Texture" id=9]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.117647, 0.121569, 0.137255, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.439216, 0.415686, 0.415686, 1 )
 
 [node name="TileMainView" type="VBoxContainer"]
 anchor_right = 1.0
@@ -11,59 +19,124 @@ anchor_bottom = 1.0
 custom_constants/separation = 4
 script = ExtResource( 1 )
 
-[node name="InputTextureView" parent="." instance=ExtResource( 2 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="HBox" type="HBoxContainer" parent="."]
 margin_right = 1024.0
-margin_bottom = 432.0
+margin_bottom = 594.0
 size_flags_vertical = 3
+custom_constants/separation = 16
+alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="."]
-margin_top = 436.0
-margin_right = 1024.0
-margin_bottom = 438.0
-custom_constants/separation = 2
+[node name="VBoxLeft" type="VBoxContainer" parent="HBox"]
+margin_right = 530.0
+margin_bottom = 594.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
 
-[node name="RulesetContainer" type="HBoxContainer" parent="."]
-margin_top = 442.0
-margin_right = 1024.0
-margin_bottom = 490.0
+[node name="HeaderContainer" type="HBoxContainer" parent="HBox/VBoxLeft"]
+margin_right = 530.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
-[node name="Label" type="Label" parent="RulesetContainer"]
-margin_top = 17.0
-margin_right = 100.0
-margin_bottom = 31.0
-rect_min_size = Vector2( 100, 0 )
-text = "Ruleset:"
-align = 2
+[node name="CaptionLabel" type="Label" parent="HBox/VBoxLeft/HeaderContainer"]
+margin_right = 68.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 68, 0 )
+size_flags_vertical = 3
+text = " Texture:"
+align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RulesetOptionButton" type="OptionButton" parent="RulesetContainer"]
-margin_left = 108.0
-margin_top = 8.0
-margin_right = 308.0
-margin_bottom = 40.0
+[node name="TextureOption" type="OptionButton" parent="HBox/VBoxLeft/HeaderContainer"]
+margin_left = 76.0
+margin_top = 4.0
+margin_right = 276.0
+margin_bottom = 36.0
 rect_min_size = Vector2( 200, 32 )
+size_flags_horizontal = 3
 size_flags_vertical = 4
 clip_text = true
+align = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="RulesetContainer"]
-margin_left = 316.0
-margin_right = 818.0
-margin_bottom = 48.0
+[node name="TextureDialogButton" type="Button" parent="HBox/VBoxLeft/HeaderContainer"]
+margin_left = 284.0
+margin_top = 4.0
+margin_right = 464.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 180, 32 )
+hint_tooltip = "Copies texture to project folder. You can do it manually.."
+size_flags_vertical = 4
+button_mask = 0
+text = "Add texture"
+icon = ExtResource( 9 )
+
+[node name="Spacer" type="Control" parent="HBox/VBoxLeft/HeaderContainer"]
+visible = false
+margin_left = 504.0
+margin_right = 504.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="ReloadButton" type="Button" parent="HBox/VBoxLeft/HeaderContainer"]
+margin_left = 472.0
+margin_top = 4.0
+margin_right = 530.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 58, 32 )
+hint_tooltip = "Reload everything for this tile and render (F5)"
+size_flags_vertical = 4
+custom_styles/normal = SubResource( 1 )
+text = "↻ (F5)"
+
+[node name="Spacer2" type="Control" parent="HBox/VBoxLeft/HeaderContainer"]
+visible = false
+margin_left = 568.0
+margin_right = 578.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="ScalableTextureContainer" parent="HBox/VBoxLeft" instance=ExtResource( 8 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 40.0
+margin_right = 530.0
+margin_bottom = 342.0
+rect_min_size = Vector2( 32, 32 )
+rect_clip_content = true
+
+[node name="HSeparator" type="HSeparator" parent="HBox/VBoxLeft"]
+margin_top = 342.0
+margin_right = 530.0
+margin_bottom = 342.0
+custom_constants/separation = 0
+
+[node name="RulesetContainer" type="VBoxContainer" parent="HBox/VBoxLeft"]
+margin_top = 342.0
+margin_right = 530.0
+margin_bottom = 442.0
+custom_constants/separation = 4
+
+[node name="Control" type="Control" parent="HBox/VBoxLeft/RulesetContainer"]
+margin_right = 530.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 0, 12 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBox/VBoxLeft/RulesetContainer"]
+margin_top = 16.0
+margin_right = 530.0
+margin_bottom = 64.0
 size_flags_horizontal = 3
 scroll_vertical_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="RulesetContainer/ScrollContainer"]
-margin_right = 502.0
+[node name="TextureRect" type="TextureRect" parent="HBox/VBoxLeft/RulesetContainer/ScrollContainer"]
+margin_right = 530.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 160, 48 )
 size_flags_horizontal = 3
@@ -72,163 +145,150 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="RulesetButton" type="Button" parent="RulesetContainer"]
-margin_left = 826.0
-margin_top = 8.0
-margin_right = 1006.0
-margin_bottom = 40.0
+[node name="RulesetHeader" type="HBoxContainer" parent="HBox/VBoxLeft/RulesetContainer"]
+margin_top = 68.0
+margin_right = 530.0
+margin_bottom = 100.0
+size_flags_horizontal = 3
+custom_constants/separation = 8
+
+[node name="Label" type="Label" parent="HBox/VBoxLeft/RulesetContainer/RulesetHeader"]
+margin_top = 9.0
+margin_right = 68.0
+margin_bottom = 23.0
+rect_min_size = Vector2( 68, 0 )
+text = " Ruleset:"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RulesetOptionButton" type="OptionButton" parent="HBox/VBoxLeft/RulesetContainer/RulesetHeader"]
+margin_left = 76.0
+margin_right = 342.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 200, 32 )
+size_flags_horizontal = 3
+size_flags_vertical = 4
+clip_text = true
+
+[node name="RulesetButton" type="Button" parent="HBox/VBoxLeft/RulesetContainer/RulesetHeader"]
+margin_left = 350.0
+margin_right = 530.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 180, 32 )
 focus_mode = 0
 size_flags_vertical = 4
 text = "Manage rulesets"
 clip_text = true
 
-[node name="Spacer" type="Control" parent="RulesetContainer"]
-margin_left = 1014.0
-margin_right = 1024.0
-margin_bottom = 48.0
+[node name="Spacer" type="Control" parent="HBox/VBoxLeft/RulesetContainer/RulesetHeader"]
+visible = false
+margin_left = 568.0
+margin_right = 578.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 10, 0 )
 
-[node name="TemplateContainer" type="HBoxContainer" parent="."]
-margin_top = 494.0
-margin_right = 1024.0
-margin_bottom = 542.0
+[node name="HSeparator3" type="HSeparator" parent="HBox/VBoxLeft"]
+margin_top = 442.0
+margin_right = 530.0
+margin_bottom = 442.0
+custom_constants/separation = 0
+
+[node name="TemplateContainer" type="VBoxContainer" parent="HBox/VBoxLeft"]
+margin_top = 442.0
+margin_right = 530.0
+margin_bottom = 594.0
+
+[node name="Control" type="Control" parent="HBox/VBoxLeft/TemplateContainer"]
+margin_right = 530.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 0, 12 )
+
+[node name="TextureRect" type="TextureRect" parent="HBox/VBoxLeft/TemplateContainer"]
+margin_top = 16.0
+margin_right = 530.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 180, 100 )
+size_flags_horizontal = 3
+expand = true
+stretch_mode = 5
+
+[node name="TemplateHeader" type="HBoxContainer" parent="HBox/VBoxLeft/TemplateContainer"]
+margin_top = 120.0
+margin_right = 530.0
+margin_bottom = 152.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
-[node name="Label" type="Label" parent="TemplateContainer"]
-margin_top = 17.0
-margin_right = 100.0
-margin_bottom = 31.0
-rect_min_size = Vector2( 100, 0 )
-text = "Template:"
-align = 2
+[node name="Label" type="Label" parent="HBox/VBoxLeft/TemplateContainer/TemplateHeader"]
+margin_top = 9.0
+margin_right = 68.0
+margin_bottom = 23.0
+rect_min_size = Vector2( 64, 0 )
+text = " Template:"
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TemplateOptionButton" type="OptionButton" parent="TemplateContainer"]
-margin_left = 108.0
-margin_top = 8.0
-margin_right = 308.0
-margin_bottom = 40.0
+[node name="TemplateOptionButton" type="OptionButton" parent="HBox/VBoxLeft/TemplateContainer/TemplateHeader"]
+margin_left = 76.0
+margin_right = 342.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 200, 32 )
+size_flags_horizontal = 3
 size_flags_vertical = 4
 clip_text = true
 
-[node name="TextureRect" type="TextureRect" parent="TemplateContainer"]
-margin_left = 316.0
-margin_right = 818.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 180, 48 )
-size_flags_horizontal = 3
-expand = true
-stretch_mode = 5
-
-[node name="TemplateButton" type="Button" parent="TemplateContainer"]
-margin_left = 826.0
-margin_top = 8.0
-margin_right = 1006.0
-margin_bottom = 40.0
+[node name="TemplateButton" type="Button" parent="HBox/VBoxLeft/TemplateContainer/TemplateHeader"]
+margin_left = 350.0
+margin_right = 530.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 180, 32 )
 focus_mode = 0
 size_flags_vertical = 4
 text = "Manage templates"
 clip_text = true
 
-[node name="Spacer" type="Control" parent="TemplateContainer"]
-margin_left = 1014.0
-margin_right = 1024.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 10, 0 )
+[node name="Spacer" type="Control" parent="HBox/VBoxLeft/TemplateContainer/TemplateHeader"]
+visible = false
+margin_left = 482.0
+margin_right = 530.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 48, 0 )
 
-[node name="HSeparator2" type="HSeparator" parent="."]
-margin_top = 546.0
+[node name="SettingsContainer" parent="HBox" instance=ExtResource( 2 )]
+margin_left = 546.0
 margin_right = 1024.0
-margin_bottom = 548.0
-custom_constants/separation = 2
+margin_bottom = 594.0
 
-[node name="ExportContainer" type="HBoxContainer" parent="."]
-margin_top = 552.0
+[node name="HSeparator" type="HSeparator" parent="."]
+margin_top = 598.0
 margin_right = 1024.0
 margin_bottom = 600.0
-rect_min_size = Vector2( 0, 48 )
-size_flags_vertical = 0
-custom_constants/separation = 8
-__meta__ = {
-"_edit_use_anchors_": false
-}
+custom_constants/separation = 2
 
-[node name="Label" type="Label" parent="ExportContainer"]
-margin_top = 17.0
-margin_right = 100.0
-margin_bottom = 31.0
-rect_min_size = Vector2( 100, 0 )
-text = "Export as:"
-align = 2
-
-[node name="ExportOptionButton" type="OptionButton" parent="ExportContainer"]
-margin_left = 108.0
-margin_top = 8.0
-margin_right = 308.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 200, 32 )
-size_flags_vertical = 4
-text = "Texture"
-items = [ "Texture", null, false, 0, null, "Godot 3 Tileset", null, false, 1, null ]
-selected = 0
-
-[node name="ExportPathLineEdit" type="LineEdit" parent="ExportContainer"]
-margin_left = 316.0
-margin_top = 8.0
-margin_right = 818.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 0, 32 )
-focus_mode = 0
-size_flags_horizontal = 3
-size_flags_vertical = 4
-editable = false
-
-[node name="ExportButton" type="Button" parent="ExportContainer"]
-margin_left = 826.0
-margin_top = 8.0
-margin_right = 1006.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 180, 32 )
-size_flags_vertical = 4
-text = "Export"
-
-[node name="Control" type="Control" parent="ExportContainer"]
-margin_left = 1014.0
-margin_right = 1024.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 10, 0 )
-
-[node name="TextureFileDialog" type="FileDialog" parent="."]
-margin_top = 220.0
-margin_right = 1280.0
-margin_bottom = 720.0
-rect_min_size = Vector2( 700, 500 )
-theme = ExtResource( 4 )
+[node name="AddTextureFileDialog" type="FileDialog" parent="."]
+margin_right = 800.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 800, 600 )
 popup_exclusive = true
+window_title = "Open a File"
+mode_overrides_title = false
+mode = 0
 access = 2
-filters = PoolStringArray( "*.png ; PNG Images" )
+filters = PoolStringArray( "*.png; Texture PNG" )
 
-[node name="Godot3ExportDialog" parent="." instance=ExtResource( 3 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 222.0
-margin_right = 1100.0
-margin_bottom = 872.0
-
-[connection signal="item_selected" from="RulesetContainer/RulesetOptionButton" to="." method="_on_RulesetOptionButton_item_selected"]
-[connection signal="pressed" from="RulesetContainer/RulesetButton" to="." method="_on_RulesetButton_pressed"]
-[connection signal="item_selected" from="TemplateContainer/TemplateOptionButton" to="." method="_on_TemplateOptionButton_item_selected"]
-[connection signal="pressed" from="TemplateContainer/TemplateButton" to="." method="_on_TemplateButton_pressed"]
-[connection signal="item_selected" from="ExportContainer/ExportOptionButton" to="." method="_on_ExportOptionButton_item_selected"]
-[connection signal="pressed" from="ExportContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
-[connection signal="about_to_show" from="TextureFileDialog" to="." method="_on_TextureFileDialog_about_to_show"]
-[connection signal="file_selected" from="TextureFileDialog" to="." method="_on_TextureFileDialog_file_selected"]
-[connection signal="popup_hide" from="TextureFileDialog" to="." method="_on_TextureFileDialog_popup_hide"]
-[connection signal="popup_hide" from="Godot3ExportDialog" to="." method="_on_Godot3ExportDialog_popup_hide"]
+[connection signal="item_selected" from="HBox/VBoxLeft/HeaderContainer/TextureOption" to="." method="_on_TextureOption_item_selected"]
+[connection signal="pressed" from="HBox/VBoxLeft/HeaderContainer/TextureDialogButton" to="." method="_on_TextureDialogButton_pressed"]
+[connection signal="pressed" from="HBox/VBoxLeft/HeaderContainer/ReloadButton" to="." method="_on_ReloadButton_pressed"]
+[connection signal="tile_size_changed" from="HBox/VBoxLeft/ScalableTextureContainer" to="." method="_on_ScalableTextureContainer_tile_size_changed"]
+[connection signal="item_selected" from="HBox/VBoxLeft/RulesetContainer/RulesetHeader/RulesetOptionButton" to="." method="_on_RulesetOptionButton_item_selected"]
+[connection signal="pressed" from="HBox/VBoxLeft/RulesetContainer/RulesetHeader/RulesetButton" to="." method="_on_RulesetButton_pressed"]
+[connection signal="item_selected" from="HBox/VBoxLeft/TemplateContainer/TemplateHeader/TemplateOptionButton" to="." method="_on_TemplateOptionButton_item_selected"]
+[connection signal="pressed" from="HBox/VBoxLeft/TemplateContainer/TemplateHeader/TemplateButton" to="." method="_on_TemplateButton_pressed"]
+[connection signal="about_to_show" from="AddTextureFileDialog" to="." method="_on_AddTextureFileDialog_about_to_show"]
+[connection signal="file_selected" from="AddTextureFileDialog" to="." method="_on_AddTextureFileDialog_file_selected"]
+[connection signal="popup_hide" from="AddTextureFileDialog" to="." method="_on_AddTextureFileDialog_popup_hide"]

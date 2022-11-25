@@ -68,7 +68,6 @@ rect_min_size = Vector2( 200, 500 )
 margin_left = 318.0
 margin_right = 1024.0
 margin_bottom = 566.0
-color = Color( 0.156863, 0.176471, 0.2, 1 )
 
 [node name="StatusBar" type="PanelContainer" parent="VBoxContainer"]
 margin_top = 582.0

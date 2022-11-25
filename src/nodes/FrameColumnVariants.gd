@@ -1,7 +1,5 @@
-extends VBoxContainer
-
-
 class_name FrameColumnVariants
+extends VBoxContainer
 
 
 func compute_parts_total_priority() -> int:

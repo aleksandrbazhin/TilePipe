@@ -1,6 +1,6 @@
+class_name AdvancedLineEdit
 extends LineEdit
 
-class_name AdvancedLineEdit
 
 signal text_changed_no_silence(new_text)
 
