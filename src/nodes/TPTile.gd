@@ -593,3 +593,18 @@ func save():
 	file.open(path, File.WRITE)
 	file.store_string(JSON.print(_tile_data, "\t"))
 	file.close()
+
+
+func glue_frames_into_image() -> Image:
+	var result_image := Image.new()
+	if frames[0].result_texture == null or frames[0].result_texture.get_data() == null:
+		State.report_error("Error: No generated texture in frames, tile not fully defined")
+		return null
+	var frame_size: Vector2 = frames[0].result_texture.get_size()
+	result_image.create(frame_size.x, frame_size.y * frames.size(), false, Image.FORMAT_RGBA8)
+	for frame in frames:
+		var frame_image: Image = frame.result_texture.get_data()
+		result_image.blit_rect(frame_image, 
+			Rect2(Vector2.ZERO, frame_image.get_size()), 
+			Vector2(0, frame_size.y * frame.index))
+	return result_image 

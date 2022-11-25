@@ -192,7 +192,7 @@ func _on_ExportButton_pressed():
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
-	if tile.output_texture == null or tile.output_texture.get_data() == null:
+	if tile.frames[0].result_texture == null or tile.frames[0].result_texture.get_data() == null:
 		State.report_error("Error: No generated texture, tile not fully defined")
 		return
 	match export_type_option.selected:
@@ -209,8 +209,10 @@ func _on_ExportTextureFileDialog_file_selected(path):
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
-	var current_texture_image: Texture = tile.frames[0].result_texture
-	current_texture_image.get_data().save_png(path)
+	var result_image: Image = tile.glue_frames_into_image()
+	if result_image == null:
+		return
+	result_image.save_png(path)
 	State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, path, false)
 	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, Const.EXPORT_TYPES.TEXTURE, false)
 	display_export_path(Const.EXPORT_TYPES.TEXTURE)
@@ -221,5 +223,5 @@ func _on_ExportTextureFileDialog_popup_hide():
 
 
 func _on_ExportTextureFileDialog_about_to_show():
-	State.popup_started($TextureFileDialog)
+	State.popup_started($ExportTextureFileDialog)
 
