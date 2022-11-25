@@ -267,13 +267,18 @@ func load_template(path: String) -> bool:
 	return true
 
 
+# return template size in tiles 
+func get_template_size() -> Vector2:
+	return loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
+
+
 func parse_template():
 	frames.clear()
 	for frame_index in frame_number:
 		var frame := TPTileFrame.new(frame_index)
 		if loaded_template == null:
 			return
-		template_size = loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
+		template_size = get_template_size()
 		for x in range(template_size.x):
 			for y in range(template_size.y):
 				var mask: int = get_template_mask_value(loaded_template.get_data(), x, y)
@@ -595,13 +600,26 @@ func save():
 	file.close()
 
 
+func get_output_tile_size() -> Vector2:
+	if output_resize:
+		return output_tile_size
+	else:
+		return input_tile_size
+#
+#func get_frame_texture_size() -> Vector2:
+#	if frames[0].result_texture == null or frames[0].result_texture.get_data() == null:
+##		State.report_error("Error: No generated texture in frames, tile not fully defined")
+#		return Vector2.ONE
+#	return frames[0].result_texture.get_size()
+
+
 func glue_frames_into_image() -> Image:
 	var result_image := Image.new()
 	if frames[0].result_texture == null or frames[0].result_texture.get_data() == null:
 		State.report_error("Error: No generated texture in frames, tile not fully defined")
 		return null
 	var frame_size: Vector2 = frames[0].result_texture.get_size()
-	result_image.create(frame_size.x, frame_size.y * frames.size(), false, Image.FORMAT_RGBA8)
+	result_image.create(int(frame_size.x), int(frame_size.y) * frames.size(), false, Image.FORMAT_RGBA8)
 	for frame in frames:
 		var frame_image: Image = frame.result_texture.get_data()
 		result_image.blit_rect(frame_image, 

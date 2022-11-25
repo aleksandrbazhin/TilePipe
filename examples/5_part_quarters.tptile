@@ -15,14 +15,23 @@
 		"y": 0
 	},
 	"output_resize": false,
-	"output_tile_size": {
-		"x": 1,
-		"y": 1
-	},
 	"smoothing": true,
 	"random_seed_enabled": false,
 	"subtile_spacing": {
 		"x": 0,
 		"y": 0
+	},
+	"export_type": 1,
+	"export_png_path": "/home/alexander/GodotProjects/3dtests/5_part_quarters_tp.png",
+	"export_godot3_tile_name": "5_part_quarters_tp",
+	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/new.tres",
+	"export_godot3_autotile_type": 0,
+	"frame_number": 2,
+	"frame_randomness_data": {
+		"0": {
+			"0": {
+				"0": 1
+			}
+		}
 	}
 }

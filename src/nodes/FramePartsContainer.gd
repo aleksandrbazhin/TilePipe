@@ -71,8 +71,7 @@ func on_part_priority_change(part: PartFrameControl, column: FrameColumnVariants
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
+	if row_controls.get_child_count() == 0:
+		return
 	var is_row_off: bool = tile.frames[frame_index].is_variant_row_disabled(variant_index)
 	row_controls.get_child(variant_index).set_enabled_quietly(not is_row_off)
-	
-	
-	

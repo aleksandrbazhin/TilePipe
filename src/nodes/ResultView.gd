@@ -19,7 +19,7 @@ onready var export_path_edit := $VBoxContainer/ExportContainer/ExportPathLineEdi
 
 
 func render_from_tile(tile: TPTile):
-	current_output_tile_size = tile.output_tile_size if tile.output_resize else tile.input_tile_size
+	current_output_tile_size = tile.get_output_tile_size()
 	current_subtile_spacing = tile.subtile_spacing
 	if last_selected_frame >= tile.frames.size():
 		last_selected_frame = 0

@@ -5,7 +5,7 @@ extends Node
 signal tiles_ready(frame_index)
 signal report_progress(progress)
 
-const RENDER_POOL_SIZE = 8
+const RENDER_POOL_SIZE = 32
 
 var is_rendering = false
 var render_pool := []
@@ -54,7 +54,7 @@ func start_render(tile: TPTile, new_frame_index: int = 0):
 	subtiles = tile.frames[frame_index].result_subtiles_by_bitmask
 	ruleset = tile.loaded_ruleset
 	input_tile_size = tile.input_tile_size
-	output_tile_size = tile.output_tile_size if tile.output_resize else tile.input_tile_size
+	output_tile_size = tile.get_output_tile_size()
 	input_tile_parts = tile.input_parts
 	smoothing_enabled = tile.smoothing
 
