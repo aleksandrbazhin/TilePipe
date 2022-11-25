@@ -151,10 +151,12 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	return true
 
 
-func get_part_frame_random_priority(frame_index: int, part_index: int, variant_index: int) -> int:
+func get_part_frame_variant_priority(frame_index: int, part_index: int, 
+		variant_index: int) -> int:
 	if frame_index >= frames.size():
 		return 1
-	return frames[frame_index].get_part_priority(part_index, variant_index)
+	var frame: TPTileFrame = frames[frame_index]
+	return frame.get_part_priority(part_index, variant_index)
 
 
 func set_frame_randomness():
@@ -539,7 +541,8 @@ func update_frame_random_priorities(frame_part_variant_priority: Array) -> bool:
 	_tile_data["frame_randomness_data"] = frame_randomness
 	return true
 
-# returns if param successfully changed
+
+# returns true if param was successfully changed
 func update_param(param_key: int, value) -> bool:
 	match param_key:
 		PARAM_TEXTURE:

@@ -81,8 +81,8 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 	var frame: TPTileFrame = frame_ref.get_ref()
 	if frame == null:
 		return
-	
-	var random_center_index: int = rng.randi_range(0, input_tile_parts[0].size() - 1)
+	var random_center_index: int =  frame.choose_random_part_variant(0, 
+					input_tile_parts[0].size(), rng)
 	var center_image: Image = input_tile_parts[0][random_center_index]
 	var tile_rules_data: Dictionary = ruleset.get_mask_data(bitmask)
 	var texture_rect: TextureRect = viewport.get_node("TextureRect")
@@ -106,28 +106,23 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 	for mask_name in Const.TILE_MASK:
 		var part_index: int = parts_rules[mask_index]
 		var part_variants: Array = input_tile_parts[part_index]
-		var random_tile_index: int = 0
+		var random_part_index: int = 0
 		var existing_part_index := part_set.find(part_index)
 		if existing_part_index != -1:
-			random_tile_index = part_random[existing_part_index]
+			random_part_index = part_random[existing_part_index]
 		else:
-			random_tile_index = frame.choose_random_part_variant(part_index, 
+			random_part_index = frame.choose_random_part_variant(part_index, 
 					part_variants.size(), rng)
-			part_random[mask_index] = random_tile_index
+			part_random[mask_index] = random_part_index
 		part_set[mask_index] = part_index
 		var part_rot_index: int = parts_rotations[mask_index]
 		var rotation_shift: int = Const.ROTATION_SHIFTS.keys()[part_rot_index]
 		var rotation_angle: float = Const.ROTATION_SHIFTS[rotation_shift]["angle"]
-		var overlay_image := Image.new()
-		overlay_image.copy_from(part_variants[random_tile_index])
-#		if bool(tile_rules_data["part_flip_x"][mask_index]):
-#			overlay_image.flip_x()
-#		if bool(tile_rules_data["part_flip_y"][mask_index]):
-#			overlay_image.flip_y()
-		var piece_itex = ImageTexture.new()
-		piece_itex.create_from_image(overlay_image, 0)
+		var part_itex = ImageTexture.new()
+		part_itex.create_from_image(part_variants[random_part_index], 0)
 		var mask_key: int = Const.TILE_MASK[mask_name]
-		texture_rect.material.set_shader_param("overlay_texture_%s" % mask_key, piece_itex)
+
+		texture_rect.material.set_shader_param("overlay_texture_%s" % mask_key, part_itex)
 		texture_rect.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
 		
 		var flip_x: bool = bool(parts_flips_x[mask_index])

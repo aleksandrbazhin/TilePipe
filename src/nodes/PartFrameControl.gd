@@ -18,7 +18,7 @@ var max_frames: int = 1
 var part_ref: WeakRef
 var is_enabled := true
 
-
+# [before ready]
 func setup(new_part_type: int, part: TilePart, new_random_priority: int = 1, new_total_prority: int = 1):
 	part_type = new_part_type
 	part_ref = weakref(part)

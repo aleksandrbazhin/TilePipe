@@ -7,7 +7,7 @@ const SELECT_COLoR := Color(0.9, 0.9, 0.9, 0.2)
 
 var bitmask_variants: Array
 
-
+# [before ready]
 func setup(ruleset: Ruleset, tile_index: int):
 	var tile_data = ruleset.get_subtiles()[tile_index]
 	var masks_container := $BoxContainer/NeighborMasks/ScrollContainer/HBoxContainer
