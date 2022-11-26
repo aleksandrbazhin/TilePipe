@@ -71,7 +71,7 @@ func on_frame_subtile_selected(subtile_index: Vector2, frame_index: int):
 		return
 	if not subtile_index in tile.frames[frame_index].parsed_template:
 		selected_subtile_texture.texture = null
-		bitmask_label.text = "0"
+		bitmask_label.text = "No"
 		return
 #	if result_texture_container.get_child_count() == 0:
 #		selected_subtile_texture.texture = null
@@ -98,7 +98,7 @@ func on_frame_subtile_selected(subtile_index: Vector2, frame_index: int):
 		else:
 			selected_subtile_texture.texture = null
 			selected_subtile_texture.hide()
-			bitmask_label.text = "0"
+			bitmask_label.text = "No"
 		itex.set_size_override(current_output_tile_size * scale)
 		selected_subtile_texture.texture = itex
 		bitmask_label.text = str(subtile.bitmask)

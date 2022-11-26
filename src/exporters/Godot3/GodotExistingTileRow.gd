@@ -55,9 +55,13 @@ func populate(new_tile_name: String, new_tile_id: int, new_texture_path: String,
 	set_texture_path(new_texture_path)
 	is_temp = is_new
 	if image != null and image is Image:
-		var icon_image := Image.new()
-		icon_image.create(int(icon_rect.size.x), int(icon_rect.size.y), false, Image.FORMAT_RGBA8)
-		icon_image.blit_rect(image, icon_rect, Vector2.ZERO)
+		var icon_image: Image
+		if is_new:
+			icon_image = image
+		else:
+			icon_image = Image.new()
+			icon_image.create(int(icon_rect.size.x), int(icon_rect.size.y), false, Image.FORMAT_RGBA8)
+			icon_image.blit_rect(image, icon_rect, Vector2.ZERO)
 		icon_image.resize(int(icon.rect_size.x), int(icon.rect_size.y))
 		var icon_texture := ImageTexture.new()
 		icon_texture.create_from_image(icon_image)

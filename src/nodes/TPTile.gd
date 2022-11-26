@@ -626,3 +626,18 @@ func glue_frames_into_image() -> Image:
 			Rect2(Vector2.ZERO, frame_image.get_size()), 
 			Vector2(0, frame_size.y * frame.index))
 	return result_image 
+
+
+func get_tile_icon() -> Image:
+	if frames.size() == 0:
+		return null
+	if frames[0].result_texture == null or frames[0].result_texture.get_data() == null:
+		return null
+	var frame: TPTileFrame = frames[0]
+	if frame.result_subtiles_by_bitmask.size() == 0:
+		return null
+	var first_subtile_key = frame.result_subtiles_by_bitmask.keys()[0]
+	if frame.result_subtiles_by_bitmask[first_subtile_key].size() == 0:
+		return null
+	var first_subtile: GeneratedSubTile = frame.result_subtiles_by_bitmask[first_subtile_key][0]
+	return first_subtile.image

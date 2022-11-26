@@ -20,6 +20,7 @@ var current_template_size: Vector2
 var current_texture_size: Vector2
 var current_tile_spacing: Vector2
 var current_smoothing: bool = false
+var current_tile_icon: Image
 
 # {template_position (Vector2): id (int)}
 var collision_shapes_to_id: Dictionary
@@ -79,6 +80,7 @@ func start_export_dialog(tile: TPTile):
 	current_texture_size = current_texture_image.get_size()
 	current_smoothing = tile.smoothing
 	current_tile_frame_number = tile.frames.size()
+	current_tile_icon = tile.get_tile_icon()
 	
 	resource_path = Helpers.clear_path(tile.export_godot3_resource_path)
 	texture_path = Helpers.clear_path(tile.export_png_path)
@@ -341,11 +343,8 @@ func save_tileset_resource() -> bool:
 			tileset_resource_data["subresources"], collision_dialog.collision_contours)
 		resource_count += collision_dialog.collision_contours.size()
 	updated_content = _resource_update_load_steps(updated_content, resource_count)
-#	var tile_string := make_autotile_data_string(current_tile_size, 
-#			current_tile_masks, current_texture_size, tile_name, 
-#			current_tile_spacing, autotile_type, tile_id, tile_texture_id,
-#			current_tile_frame_number)
-	var tile_string := make_autotile_data_string(tile_name, autotile_type, tile_id, tile_texture_id)
+	var tile_string := make_autotile_data_string(tile_name, autotile_type, tile_id, 
+			tile_texture_id)
 	
 	if not tile_found: # we add new
 		updated_content += tile_string
@@ -739,7 +738,7 @@ func populate_temp_tile_from_inputs():
 		tile_name,
 		-1,
 		texture_relative_path,
-		current_texture_image,
+		current_tile_icon,
 		Rect2(Vector2.ZERO, current_tile_size),
 		TileSet.AUTO_TILE,
 		autotile_type,
