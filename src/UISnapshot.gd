@@ -27,15 +27,15 @@ func _set_element_state(node: Node, value):
 		node.pressed = value
 	elif node is Range:
 		node.value = value
-	elif node is FileDialog:
-		node.current_path = value
-		match node.mode:
-			FileDialog.MODE_OPEN_DIR:
-				node.current_dir = value
-				node.emit_signal("dir_selected", node.current_dir)
-			FileDialog.MODE_OPEN_FILE, FileDialog.MODE_OPEN_FILES, FileDialog.MODE_OPEN_ANY:
-				node.current_path = value
-				node.emit_signal("file_selected", node.current_path)
+#	elif node is FileDialog:
+#		node.current_path = value
+#		match node.mode:
+#			FileDialog.MODE_OPEN_DIR:
+#				node.current_dir = value
+#				node.emit_signal("dir_selected", node.current_dir)
+#			FileDialog.MODE_OPEN_FILE, FileDialog.MODE_OPEN_FILES, FileDialog.MODE_OPEN_ANY:
+#				node.current_path = value
+#				node.emit_signal("file_selected", node.current_path)
 	elif node is SplitContainer:
 		node.split_offset = value
 
@@ -51,14 +51,14 @@ func _get_element_state(node: Node):
 		return node.pressed
 	elif node is Range:
 		return node.value
-	elif node is FileDialog:
-		var value: String = node.current_path
+#	elif node is FileDialog:
+#		var value: String = node.current_path
 #		match node.mode:
 #			FileDialog.MODE_OPEN_DIR:
 #				value = node.current_dir
 #			FileDialog.MODE_OPEN_FILE, FileDialog.MODE_OPEN_FILES, FileDialog.MODE_OPEN_ANY:
 #				value = node.current_path
-		return value
+#		return value
 	elif node is SplitContainer:
 		return node.split_offset 
 	return null
@@ -77,10 +77,10 @@ func _watch_element_changes(node: Node):
 		node.connect("toggled", self, "capture_and_save")
 	elif node is Range:
 		node.connect("value_changed", self, "capture_and_save")
-	elif node is FileDialog:
-		node.connect("dir_selected", self, "capture_and_save")
-		node.connect("file_selected", self, "capture_and_save")
-		node.connect("files_selected", self, "capture_and_save")
+#	elif node is FileDialog:
+#		node.connect("dir_selected", self, "capture_and_save")
+#		node.connect("file_selected", self, "capture_and_save")
+#		node.connect("files_selected", self, "capture_and_save")
 #		match node.mode:
 #			FileDialog.MODE_OPEN_DIR:
 #				node.connect("dir_selected", self, "capture_and_save")

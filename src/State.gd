@@ -24,7 +24,11 @@ var DEFAULT_USER_SETTINGS := {
 		"window_position": var2str(Vector2.ZERO),
 		"window_size": var2str(Vector2(1280, 720))
 	},
-	"VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree/OpenFolderDialog": current_dir,
+#	"VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree/OpenFolderDialog": current_dir,
+	"VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree": {
+		"selected_tile": "_no_tile_means_we_select_first_",
+		"open_directory": "."
+	},
 }
 
 
