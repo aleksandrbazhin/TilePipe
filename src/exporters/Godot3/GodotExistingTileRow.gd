@@ -45,6 +45,13 @@ func _locate_nodes():
 		path_warning = path_rect.get_node("HBox/Control2/WarningSign")
 		collisions_check = $HBox/Collisions
 
+#"], 
+##							tile["id"],
+##							tile["icon_rect"], 
+##							tile["tile_mode"], 
+##							tile["bitmask_mode"],
+##							tile["shap
+
 
 func populate(new_tile_name: String, new_tile_id: int, new_texture_path: String, image: Image, 
 		icon_rect: Rect2, tile_mode: int, new_bitmask_mode: int, has_collisions: bool, is_new: bool = false):

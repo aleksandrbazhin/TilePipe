@@ -156,7 +156,7 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 				file.open(texture_absolute_path, File.READ)
 				var animated_regex_search_result := texture_regex.search(file.get_as_text())
 				file.close()
-				if animated_regex_search_result.get_start() != -1:
+				if animated_regex_search_result != null:
 					tile_image_png_path = animated_regex_search_result.strings[1].replace("res://", project_path)
 			var exisiting_image: Image = Image.new()
 			exisiting_image.load(tile_image_png_path)
@@ -188,7 +188,8 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 			"tile_mode": int(tile_parse_result.strings[5]),
 			"bitmask_mode": -1,
 			"icon_rect": Rect2(),
-			"shape_ids": []
+			"shape_ids": [],
+			"priority_map": ""
 		}
 		if not textures.has(tile_dict["texture_id"]):
 			parse_result["error"] = true
@@ -247,6 +248,15 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 #							var shape_autotile_coord := Vector2(int(one_shape_result.strings[1]), int(one_shape_result.strings[2]))
 #							print(shape_id, ": ", shape_autotile_coord)
 							tile_dict["shape_ids"].append(shape_id)
+				var priority_regex := RegEx.new()
+				priority_regex.compile(
+					str(tile_dict["id"]) + '/autotile/priority_map\\s*=\\s*\\[\\s*' + 
+					'([\\s\\S]*)' + 
+					'\\s*\\]\\s*' + 
+					str(tile_dict["id"]) + '/autotile/z_index_map')
+				var priority_search_result := priority_regex.search(tiles_data)
+				if priority_search_result != null:
+					tile_dict["priority_map"] = priority_search_result.strings[1]
 		parse_result["tiles"].append(tile_dict)
 	return parse_result
 
@@ -317,6 +327,8 @@ func save_tileset_resource() -> bool:
 		updated_content = _resource_add_texture_resource(updated_content, tile_texture_id)
 		resource_count += 1 # +1 for new texture and 
 	var tile_id: int = 0
+	var tile_array_index: int = 0
+	var tile_priority_map := ""
 	var tile_found: bool = false
 	for tile in tileset_resource_data["tiles"]:
 		if tile_name == tile["name"]:
@@ -325,6 +337,7 @@ func save_tileset_resource() -> bool:
 			break
 		else:
 			tile_id = int(max(tile_id, tile["id"]))
+		tile_array_index += 1
 	var tile_replace_tile_block_start := -1
 	var tile_replace_tile_block_end := -1
 	if tile_found:
@@ -345,6 +358,7 @@ func save_tileset_resource() -> bool:
 			var subresource_end := updated_content.find('\n\n', subresource_start)
 			updated_content.erase(subresource_start, subresource_end - subresource_start + 2)
 			tileset_resource_data["subresources"].erase(subresource_id)
+		tile_priority_map = tileset_resource_data["tiles"][tile_array_index]["priority_map"]
 	else:
 		tile_id += 1
 	if not tileset_resource_data["subresources"].empty(): # if there were subresources already
@@ -355,8 +369,7 @@ func save_tileset_resource() -> bool:
 		resource_count += collision_dialog.collision_contours.size()
 	updated_content = _resource_update_load_steps(updated_content, resource_count)
 	var tile_string := make_autotile_data_string(tile_name, autotile_type, tile_id, 
-			tile_texture_id)
-	
+			tile_texture_id, tile_priority_map)
 	if not tile_found: # we add new
 		updated_content += tile_string
 	else: #we modify exisiting
