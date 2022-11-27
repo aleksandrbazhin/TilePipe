@@ -147,8 +147,19 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 			"error": false # error when miage does not exist
 		}
 		if Helpers.file_exists(texture_absolute_path):
+			var tile_image_png_path: String
+			var texture_file_extension := texture_absolute_path.get_extension()
+			if texture_file_extension == "png":
+				tile_image_png_path = texture_absolute_path
+			elif texture_file_extension == "tres": # consider it being animated texture
+				var file := File.new()
+				file.open(texture_absolute_path, File.READ)
+				var animated_regex_search_result := texture_regex.search(file.get_as_text())
+				file.close()
+				if animated_regex_search_result.get_start() != -1:
+					tile_image_png_path = animated_regex_search_result.strings[1].replace("res://", project_path)
 			var exisiting_image: Image = Image.new()
-			exisiting_image.load(texture_absolute_path)
+			exisiting_image.load(tile_image_png_path)
 			textures[texture_id]["image"] = exisiting_image
 		else:
 			textures[texture_id]["error"] = true
