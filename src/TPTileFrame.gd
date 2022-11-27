@@ -16,13 +16,17 @@ func _init(new_index):
 
 
 func is_variant_row_disabled(variant_index: int) -> bool:
-	var count := 0
+	var enabled_variants_count := 0
+	var parts_count := 0
 	for part_index in part_random_priorities:
+		parts_count += 1
 		if not variant_index in part_random_priorities[part_index]:
 			return false
 		else:
-			count += part_random_priorities[part_index][variant_index]
-	return count == 0
+			enabled_variants_count += part_random_priorities[part_index][variant_index]
+	if parts_count == 0:
+		return false
+	return enabled_variants_count == 0
 
 
 func choose_random_part_variant(part_index: int, max_variants: int, 

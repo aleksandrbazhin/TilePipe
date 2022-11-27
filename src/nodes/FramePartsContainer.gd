@@ -65,6 +65,7 @@ func on_row_control_change(is_row_enabled: bool, variant_index: int):
 
 func on_part_priority_change(part: PartFrameControl, column: FrameColumnVariants,
 		frame_index: int, part_index: int, variant_index: int):
+
 	State.update_tile_param(TPTile.PARAM_FRAME_RANDOM_PRIORITIES, 
 			[frame_index, part_index, variant_index, part.random_priority])
 	column.recalculate_parts_total_priority()
