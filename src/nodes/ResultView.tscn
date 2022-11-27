@@ -110,7 +110,7 @@ margin_bottom = 40.0
 rect_min_size = Vector2( 320, 32 )
 size_flags_vertical = 4
 text = "Texture (single)"
-items = [ "Texture (single)", null, false, 0, null, "Tile in Godot 3 tileset", null, false, 1, null ]
+items = [ "Texture (single)", null, false, 0, null, "Godot 3 (tile in a tileset)", null, false, 1, null ]
 selected = 0
 
 [node name="ExportPathLineEdit" type="LineEdit" parent="VBoxContainer/ExportContainer"]

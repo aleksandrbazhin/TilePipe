@@ -274,40 +274,40 @@ func get_template_size() -> Vector2:
 
 func parse_template():
 	frames.clear()
+	if loaded_template == null:
+		return
+	template_size = get_template_size()
+	var template_image: Image = loaded_template.get_data()
+	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS
+	var mask_value: int = 0
+	template_image.lock()
 	for frame_index in frame_number:
 		var frame := TPTileFrame.new(frame_index)
-		if loaded_template == null:
-			return
-		template_size = get_template_size()
-		for x in range(template_size.x):
-			for y in range(template_size.y):
-				var mask: int = get_template_mask_value(loaded_template.get_data(), x, y)
-				var has_tile: bool = get_template_has_tile(loaded_template.get_data(), x, y)
-				if not has_tile:
-					continue
-				frame.append_subtile(mask, Vector2(x, y))
 		frames.append(frame)
+	for x in range(template_size.x):
+		for y in range(template_size.y):
+			if get_template_has_tile(template_image, x, y):
+				var mask: int = get_template_mask_value(template_image, x, y)
+				for frame in frames:
+					frame.append_subtile(mask, Vector2(x, y))
+	template_image.unlock()
 
 
 func get_template_mask_value(template_image: Image, x: int, y: int) -> int:
 	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS
 	var mask_value: int = 0
-	template_image.lock()
 	for mask in mask_check_points:
 		var pixel_x: int = x * Const.TEMPLATE_TILE_SIZE + mask_check_points[mask].x
 		var pixel_y: int = y * Const.TEMPLATE_TILE_SIZE + mask_check_points[mask].y
 		if not template_image.get_pixel(pixel_x, pixel_y).is_equal_approx(Color.white):
 			mask_value += mask
-	template_image.unlock()
 	return mask_value
 
 
 func get_template_has_tile(template_image: Image, x: int, y: int) -> bool:
-	template_image.lock()
 	var pixel_x: int = x * Const.TEMPLATE_TILE_SIZE + int(Const.MASK_CHECK_CENTER.x)
 	var pixel_y: int = y * Const.TEMPLATE_TILE_SIZE + int(Const.MASK_CHECK_CENTER.y)
 	var has_tile: bool = not template_image.get_pixel(pixel_x, pixel_y).is_equal_approx(Color.white)
-	template_image.unlock()
 	return has_tile
 
 
