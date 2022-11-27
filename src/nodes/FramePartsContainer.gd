@@ -57,17 +57,18 @@ func populate_from_tile(tile: TPTile, frame_index: int):
 func on_row_control_change(is_row_enabled: bool, variant_index: int):
 	var parts_change_count := 0
 	for column in part_columns.get_children():
-		if column.enable_variant_by_index(variant_index, is_row_enabled):
+		if column.enable_variant_by_index(variant_index, is_row_enabled, true):
 			parts_change_count += 1
 	if parts_change_count == 0:
 		row_controls.get_child(variant_index).set_enabled_quietly(true)
+	else:
+		State.emit_signal("tile_needs_render")
 
 
-func on_part_priority_change(part: PartFrameControl, column: FrameColumnVariants,
+func on_part_priority_change(part: PartFrameControl, suppress_render: bool, column: FrameColumnVariants,
 		frame_index: int, part_index: int, variant_index: int):
-
 	State.update_tile_param(TPTile.PARAM_FRAME_RANDOM_PRIORITIES, 
-			[frame_index, part_index, variant_index, part.random_priority])
+			[frame_index, part_index, variant_index, part.random_priority], not suppress_render)
 	column.recalculate_parts_total_priority()
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:

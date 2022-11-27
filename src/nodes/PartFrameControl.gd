@@ -2,7 +2,7 @@ class_name PartFrameControl
 extends TextureRect
 
 
-signal random_priority_changed(self_)
+signal random_priority_changed(self_, suppress_render)
 
 const RANDOM_ICON_POSITION := Vector2(4, 29)
 export var BG_COLOR := Color(0.3, 0.4, 0.4, 0.5)
@@ -65,23 +65,23 @@ func set_total_random_priority(value: int):
 	$RandomLabel.text = str(random_priority) + "/" + str(total_random_priority)
 
 
-func enable() -> bool:
+func enable(suppress_render: bool = false) -> bool:
 	$BlockingOverlay.hide()
 	if not is_enabled:
 		if random_priority == 0:
 			random_priority = 1
 		is_enabled = true
-		emit_signal("random_priority_changed", self)
+		emit_signal("random_priority_changed", self, suppress_render)
 		return true
 	return false
 
 
-func disable() -> bool:
+func disable(suppress_render: bool = false) -> bool:
 	if random_priority > 0 and float(total_random_priority) / float(random_priority) > 1 and is_enabled:
 		$BlockingOverlay.show()
 		is_enabled = false
 		random_priority = 0
-		emit_signal("random_priority_changed", self)
+		emit_signal("random_priority_changed", self, suppress_render)
 		return true
 	return false
 
