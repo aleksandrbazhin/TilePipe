@@ -15,9 +15,12 @@ var autotile_type: int = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
 var current_texture_image := Image.new()
 var current_tile_size: Vector2
 var current_tile_masks: Dictionary
+var current_tile_frame_number: int = 1
+var current_template_size: Vector2
 var current_texture_size: Vector2
 var current_tile_spacing: Vector2
 var current_smoothing: bool = false
+var current_tile_icon: Image
 
 # {template_position (Vector2): id (int)}
 var collision_shapes_to_id: Dictionary
@@ -67,12 +70,17 @@ func _process(delta):
 
 
 func start_export_dialog(tile: TPTile):
-	current_tile_size = tile.output_tile_size
-	current_texture_size = tile.output_texture.get_size()
+	current_tile_size = tile.get_output_tile_size()
 	current_tile_spacing = tile.subtile_spacing
-	current_tile_masks = tile.result_subtiles_by_bitmask
-	current_texture_image.copy_from(tile.output_texture.get_data())
+	var frame: TPTileFrame = tile.frames[0]
+	current_tile_masks = frame.result_subtiles_by_bitmask
+	current_template_size = tile.get_template_size()
+	
+	current_texture_image = tile.glue_frames_into_image()
+	current_texture_size = current_texture_image.get_size()
 	current_smoothing = tile.smoothing
+	current_tile_frame_number = tile.frames.size()
+	current_tile_icon = tile.get_tile_icon()
 	
 	resource_path = Helpers.clear_path(tile.export_godot3_resource_path)
 	texture_path = Helpers.clear_path(tile.export_png_path)
@@ -139,8 +147,19 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 			"error": false # error when miage does not exist
 		}
 		if Helpers.file_exists(texture_absolute_path):
+			var tile_image_png_path: String
+			var texture_file_extension := texture_absolute_path.get_extension()
+			if texture_file_extension == "png":
+				tile_image_png_path = texture_absolute_path
+			elif texture_file_extension == "tres": # consider it being animated texture
+				var file := File.new()
+				file.open(texture_absolute_path, File.READ)
+				var animated_regex_search_result := texture_regex.search(file.get_as_text())
+				file.close()
+				if animated_regex_search_result != null:
+					tile_image_png_path = animated_regex_search_result.strings[1].replace("res://", project_path)
 			var exisiting_image: Image = Image.new()
-			exisiting_image.load(texture_absolute_path)
+			exisiting_image.load(tile_image_png_path)
 			textures[texture_id]["image"] = exisiting_image
 		else:
 			textures[texture_id]["error"] = true
@@ -169,7 +188,8 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 			"tile_mode": int(tile_parse_result.strings[5]),
 			"bitmask_mode": -1,
 			"icon_rect": Rect2(),
-			"shape_ids": []
+			"shape_ids": [],
+			"priority_map": ""
 		}
 		if not textures.has(tile_dict["texture_id"]):
 			parse_result["error"] = true
@@ -228,6 +248,15 @@ func _parse_tileset(tileset_file_content: String, project_path: String) -> Dicti
 #							var shape_autotile_coord := Vector2(int(one_shape_result.strings[1]), int(one_shape_result.strings[2]))
 #							print(shape_id, ": ", shape_autotile_coord)
 							tile_dict["shape_ids"].append(shape_id)
+				var priority_regex := RegEx.new()
+				priority_regex.compile(
+					str(tile_dict["id"]) + '/autotile/priority_map\\s*=\\s*\\[\\s*' + 
+					'([\\s\\S]*)' + 
+					'\\s*\\]\\s*' + 
+					str(tile_dict["id"]) + '/autotile/z_index_map')
+				var priority_search_result := priority_regex.search(tiles_data)
+				if priority_search_result != null:
+					tile_dict["priority_map"] = priority_search_result.strings[1]
 		parse_result["tiles"].append(tile_dict)
 	return parse_result
 
@@ -298,6 +327,8 @@ func save_tileset_resource() -> bool:
 		updated_content = _resource_add_texture_resource(updated_content, tile_texture_id)
 		resource_count += 1 # +1 for new texture and 
 	var tile_id: int = 0
+	var tile_array_index: int = 0
+	var tile_priority_map := ""
 	var tile_found: bool = false
 	for tile in tileset_resource_data["tiles"]:
 		if tile_name == tile["name"]:
@@ -306,6 +337,7 @@ func save_tileset_resource() -> bool:
 			break
 		else:
 			tile_id = int(max(tile_id, tile["id"]))
+		tile_array_index += 1
 	var tile_replace_tile_block_start := -1
 	var tile_replace_tile_block_end := -1
 	if tile_found:
@@ -326,6 +358,7 @@ func save_tileset_resource() -> bool:
 			var subresource_end := updated_content.find('\n\n', subresource_start)
 			updated_content.erase(subresource_start, subresource_end - subresource_start + 2)
 			tileset_resource_data["subresources"].erase(subresource_id)
+		tile_priority_map = tileset_resource_data["tiles"][tile_array_index]["priority_map"]
 	else:
 		tile_id += 1
 	if not tileset_resource_data["subresources"].empty(): # if there were subresources already
@@ -335,10 +368,8 @@ func save_tileset_resource() -> bool:
 			tileset_resource_data["subresources"], collision_dialog.collision_contours)
 		resource_count += collision_dialog.collision_contours.size()
 	updated_content = _resource_update_load_steps(updated_content, resource_count)
-	var tile_string := make_autotile_data_string(current_tile_size, 
-			current_tile_masks, current_texture_size, tile_name, 
-			current_tile_spacing, autotile_type, tile_id, tile_texture_id)
-	
+	var tile_string := make_autotile_data_string(tile_name, autotile_type, tile_id, 
+			tile_texture_id, tile_priority_map)
 	if not tile_found: # we add new
 		updated_content += tile_string
 	else: #we modify exisiting
@@ -392,21 +423,23 @@ func make_texture_string(tile_texture_path: String, texture_id: int = 1) -> Stri
 	return "[ext_resource path=\"%s\" type=\"Texture\" id=%d]\n" % [texture_relative_path, texture_id]
 
 
-func make_autotile_data_string(tile_size: Vector2, tile_masks: Dictionary, 
-		texture_size: Vector2, new_tile_name: String, 
-		subtile_spacing: Vector2, new_autotile_type: int, 
-		tile_id: int, texture_id: int) -> String:
+func make_autotile_data_string(new_tile_name: String, new_autotile_type: int, 
+		tile_id: int, texture_id: int, priority_map_data: String = "") -> String:
 	var out_string: String = ""
 	var mask_out_strings: PoolStringArray = []
 	var tile_collision_strings: PoolStringArray = []
 	var line_beginning := str(tile_id) + "/"
-	for mask in tile_masks:
-		for tile in tile_masks[mask]:
-			var tile_position: Vector2 = tile.position_in_template
-			mask_out_strings.append("Vector2 ( %d, %d )" % [tile_position.x, tile_position.y])
-			var godot_mask: int = Helpers.convert_bitmask_to_godot(tile.bitmask, new_autotile_type)
-			mask_out_strings.append(str(godot_mask))
-			if collision_dialog.collisions_accepted_by_user and collisions_check.pressed:
+	
+	for frame_index in current_tile_frame_number:
+		var frame_offset := Vector2(0, frame_index * current_template_size.y)
+		for mask in current_tile_masks:
+			for tile in current_tile_masks[mask]:
+				var tile_position: Vector2 = frame_offset + tile.position_in_template
+				mask_out_strings.append("Vector2 ( %d, %d )" % [tile_position.x, tile_position.y])
+				var godot_mask: int = Helpers.convert_bitmask_to_godot(tile.bitmask, new_autotile_type)
+				mask_out_strings.append(str(godot_mask))
+				if not (collision_dialog.collisions_accepted_by_user and collisions_check.pressed):
+					continue
 				if tile_position in collision_shapes_to_id:
 					var collision_resource_id: int = collision_shapes_to_id[tile_position]
 					tile_collision_strings.append(make_tile_shape_string(tile_position, collision_resource_id))
@@ -419,16 +452,16 @@ func make_autotile_data_string(tile_size: Vector2, tile_masks: Dictionary,
 	out_string += line_beginning + "texture = ExtResource( %d )\n" % texture_id
 	out_string += line_beginning + "tex_offset = Vector2( 0, 0 )\n"
 	out_string += line_beginning + "modulate = Color( 1, 1, 1, 1 )\n"
-	out_string += line_beginning + "region = Rect2( 0, 0, %d, %d )\n" % [texture_size.x, texture_size.y]
+	out_string += line_beginning + "region = Rect2( 0, 0, %d, %d )\n" % [current_texture_size.x, current_texture_size.y]
 	out_string += line_beginning + "tile_mode = 1\n" 
 	out_string += line_beginning + "autotile/bitmask_mode = %d\n" % Const.GODOT_AUTOTILE_GODOT_INDEXES[new_autotile_type]
 	out_string += line_beginning + "autotile/bitmask_flags = [ %s ]\n" % mask_out_strings.join(", ")
 	out_string += line_beginning + "autotile/icon_coordinate = Vector2( 0, 0 )\n"
-	out_string += line_beginning + "autotile/tile_size = Vector2( %d, %d )\n" % [tile_size.x, tile_size.y]
-	out_string += line_beginning + "autotile/spacing = %d\n" % subtile_spacing.x
+	out_string += line_beginning + "autotile/tile_size = Vector2( %d, %d )\n" % [current_tile_size.x, current_tile_size.y]
+	out_string += line_beginning + "autotile/spacing = %d\n" % current_tile_spacing.x
 	out_string += line_beginning + "autotile/occluder_map = [  ]\n"
 	out_string += line_beginning + "autotile/navpoly_map = [  ]\n"
-	out_string += line_beginning + "autotile/priority_map = [  ]\n"
+	out_string += line_beginning + "autotile/priority_map = [ %s ]\n" % priority_map_data
 	out_string += line_beginning + "autotile/z_index_map = [  ]\n"
 	out_string += line_beginning + "occluder_offset = Vector2( 0, 0 )\n"
 	out_string += line_beginning + "navigation_offset = Vector2( 0, 0 )\n"
@@ -729,7 +762,7 @@ func populate_temp_tile_from_inputs():
 		tile_name,
 		-1,
 		texture_relative_path,
-		current_texture_image,
+		current_tile_icon,
 		Rect2(Vector2.ZERO, current_tile_size),
 		TileSet.AUTO_TILE,
 		autotile_type,

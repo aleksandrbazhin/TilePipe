@@ -94,5 +94,5 @@ visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 
-[connection signal="value_changed" from="InputInfo/HBoxContainer/XSpinBox" to="." method="_on_XSpinBox_value_changed"]
-[connection signal="value_changed" from="InputInfo/HBoxContainer/YSpinBox" to="." method="_on_YSpinBox_value_changed"]
+[connection signal="value_changed_no_silence" from="InputInfo/HBoxContainer/XSpinBox" to="." method="_on_XSpinBox_value_changed_no_silence"]
+[connection signal="value_changed_no_silence" from="InputInfo/HBoxContainer/YSpinBox" to="." method="_on_YSpinBox_value_changed_no_silence"]

@@ -22,6 +22,8 @@ enum {
 	PARAM_EXPORT_GODOT3_RESOURCE_PATH,
 	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE,
 	PARAM_EXPORT_GODOT3_TILE_NAME,
+	PARAM_FRAME_NUMBER,
+	PARAM_FRAME_RANDOM_PRIORITIES
 }
 
 const HEIGHT_EXPANDED := 120
@@ -38,8 +40,7 @@ var is_selected := false
 var loaded_texture: Texture
 var loaded_ruleset: Ruleset
 var loaded_template: Texture
-var parsed_template: Dictionary
-var result_subtiles_by_bitmask: Dictionary
+var frames := [] # Array of TPTileFrame
 
 var template_size: Vector2
 var texture_path: String
@@ -55,6 +56,7 @@ var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
+var frame_number := 1
 
 var export_type: int = Const.EXPORT_TYPE_UKNOWN
 var export_png_path: String
@@ -65,7 +67,7 @@ var export_godot3_tile_name: String
 var tile_row: TreeItem
 var ruleset_row: TreeItem
 var template_row: TreeItem
-var output_texture: Texture
+#var output_texture: Texture
 
 onready var tree: Tree = $Tree
 onready var highlight_rect := $ColorRect
@@ -125,7 +127,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 # warning-ignore:unused_variable
 	var is_ruleset_loaded := load_ruleset(_tile_data["ruleset"])
 # warning-ignore:unused_variable
-
+	set_tile_param("frame_number", "frame_number", 1)
 	var is_template_loaded := load_template(_tile_data["template"])
 	set_tile_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
 	set_tile_param("merge_level", "merge_level", Vector2(0.25, 0.25))
@@ -140,9 +142,42 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("export_godot3_resource_path", "export_godot3_resource_path", "")
 	set_tile_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
 	set_tile_param("export_godot3_tile_name", "export_godot3_tile_name", "")
+#	set_tile_param("export_godot3_tile_name", "frame_randomness_data", "")
+
 	if is_texture_loaded and is_ruleset_loaded:
 		split_input_into_tile_parts()
+	set_frame_randomness()
+
 	return true
+
+
+func get_part_frame_variant_priority(frame_index: int, part_index: int, 
+		variant_index: int) -> int:
+	if frame_index >= frames.size():
+		return 1
+	var frame: TPTileFrame = frames[frame_index]
+	return frame.get_part_priority(part_index, variant_index)
+
+
+func set_frame_randomness():
+	if not "frame_randomness_data" in _tile_data:
+		return
+	var priorities: Dictionary = _tile_data["frame_randomness_data"]
+	for frame_index in priorities:
+		if int(frame_index) >= frames.size():
+			return
+		var frame: TPTileFrame = frames[int(frame_index)]
+		var frame_priorities: Dictionary = priorities[frame_index]
+		for part_index in frame_priorities:
+			if int(part_index) >= input_parts.size():
+				break
+			var variants: Array = input_parts[int(part_index)]
+			var part_priorities: Dictionary = frame_priorities[part_index]
+			for variant_index in part_priorities:
+				if int(variant_index) >= variants.size():
+					break
+				frame.set_part_priority(int(part_index), int(variant_index), part_priorities[variant_index])
+#		print(frame.part_random_priorities)
 
 
 func split_input_into_tile_parts() -> bool:
@@ -153,23 +188,20 @@ func split_input_into_tile_parts() -> bool:
 	var min_input_tiles := loaded_ruleset.parts.size()
 	for part_index in range(min_input_tiles):
 		input_parts[part_index] = []
-		var part_is_empty := false
 		var variant_index := 0
-		while not part_is_empty:
+		while variant_index * input_tile_size.y <= input_image.get_size().y or input_parts[part_index].size() == 0 :
 			var part := TilePart.new()
 			part.create(int(input_tile_size.x), int(input_tile_size.y), false, Image.FORMAT_RGBA8)
-			if input_tile_size.y + variant_index * input_tile_size.y > input_image.get_size().y and input_parts[part_index].size() > 0:
-				break
 			var copy_rect := Rect2(part_index * input_tile_size.x, variant_index * input_tile_size.y, 
 				input_tile_size.x, input_tile_size.y)
 			part.blit_rect(input_image, copy_rect, Vector2.ZERO)
-			if part.is_invisible() and input_parts[part_index].size() > 0:
-				part_is_empty = true
-			else:
+			if not part.is_invisible() or input_parts[part_index].size() == 0:
 				input_parts[part_index].append(part)
 				part.part_index = part_index
 				part.variant_index = variant_index
-				variant_index += 1
+			variant_index += 1
+			for frame in frames:
+				pass 
 	return true
 
 
@@ -235,44 +267,47 @@ func load_template(path: String) -> bool:
 	return true
 
 
+# return template size in tiles 
+func get_template_size() -> Vector2:
+	return loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
+
+
 func parse_template():
-	parsed_template = {}
-	result_subtiles_by_bitmask.clear()
+	frames.clear()
 	if loaded_template == null:
 		return
-	template_size = loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
+	template_size = get_template_size()
+	var template_image: Image = loaded_template.get_data()
+	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS
+	var mask_value: int = 0
+	template_image.lock()
+	for frame_index in frame_number:
+		var frame := TPTileFrame.new(frame_index)
+		frames.append(frame)
 	for x in range(template_size.x):
 		for y in range(template_size.y):
-			parsed_template[Vector2(x, y)] = null
-			var mask: int = get_template_mask_value(loaded_template.get_data(), x, y)
-			var has_tile: bool = get_template_has_tile(loaded_template.get_data(), x, y)
-			if has_tile:
-				if not result_subtiles_by_bitmask.has(mask):
-					result_subtiles_by_bitmask[mask] = []
-				var subtile := GeneratedSubTile.new(mask, Vector2(x, y))
-				result_subtiles_by_bitmask[mask].append(subtile)
-				parsed_template[Vector2(x, y)] = weakref(subtile)
+			if get_template_has_tile(template_image, x, y):
+				var mask: int = get_template_mask_value(template_image, x, y)
+				for frame in frames:
+					frame.append_subtile(mask, Vector2(x, y))
+	template_image.unlock()
 
 
 func get_template_mask_value(template_image: Image, x: int, y: int) -> int:
 	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS
 	var mask_value: int = 0
-	template_image.lock()
 	for mask in mask_check_points:
 		var pixel_x: int = x * Const.TEMPLATE_TILE_SIZE + mask_check_points[mask].x
 		var pixel_y: int = y * Const.TEMPLATE_TILE_SIZE + mask_check_points[mask].y
 		if not template_image.get_pixel(pixel_x, pixel_y).is_equal_approx(Color.white):
 			mask_value += mask
-	template_image.unlock()
 	return mask_value
 
 
 func get_template_has_tile(template_image: Image, x: int, y: int) -> bool:
-	template_image.lock()
 	var pixel_x: int = x * Const.TEMPLATE_TILE_SIZE + int(Const.MASK_CHECK_CENTER.x)
 	var pixel_y: int = y * Const.TEMPLATE_TILE_SIZE + int(Const.MASK_CHECK_CENTER.y)
 	var has_tile: bool = not template_image.get_pixel(pixel_x, pixel_y).is_equal_approx(Color.white)
-	template_image.unlock()
 	return has_tile
 
 
@@ -487,6 +522,32 @@ func update_export_type(new_type: int) -> bool:
 	return true
 
 
+func update_frame_number(new_frame_number: int) -> bool:
+	frame_number = new_frame_number
+	parse_template()
+	set_frame_randomness()
+	_tile_data["frame_number"] = frame_number
+	return true
+
+
+func update_frame_random_priorities(frame_part_variant_priority: Array) -> bool:
+	var frame_index: int = frame_part_variant_priority[0]
+	var part_index: int = frame_part_variant_priority[1]
+	var variant_index: int = frame_part_variant_priority[2]
+	var priority: int = frame_part_variant_priority[3]
+	if frame_index >= frames.size():
+		return false
+	if part_index >= input_parts.size():
+		return false
+	frames[frame_index].set_part_priority(part_index, variant_index, priority)
+	var frame_randomness := {}
+	for frame_idx in frames.size():
+		frame_randomness[frame_idx] = frames[frame_idx].part_random_priorities
+	_tile_data["frame_randomness_data"] = frame_randomness
+	return true
+
+
+# returns true if param was successfully changed
 func update_param(param_key: int, value) -> bool:
 	match param_key:
 		PARAM_TEXTURE:
@@ -523,6 +584,10 @@ func update_param(param_key: int, value) -> bool:
 			return update_export_godot3_autotile_type(value)
 		PARAM_EXPORT_GODOT3_TILE_NAME:
 			return update_export_godot3_tile_name(value)
+		PARAM_FRAME_NUMBER:
+			return update_frame_number(value)
+		PARAM_FRAME_RANDOM_PRIORITIES:
+			return update_frame_random_priorities(value)
 	return false
 
 
@@ -533,3 +598,46 @@ func save():
 	file.open(path, File.WRITE)
 	file.store_string(JSON.print(_tile_data, "\t"))
 	file.close()
+
+
+func get_output_tile_size() -> Vector2:
+	if output_resize:
+		return output_tile_size
+	else:
+		return input_tile_size
+#
+#func get_frame_texture_size() -> Vector2:
+#	if frames[0].result_texture == null or frames[0].result_texture.get_data() == null:
+##		State.report_error("Error: No generated texture in frames, tile not fully defined")
+#		return Vector2.ONE
+#	return frames[0].result_texture.get_size()
+
+
+func glue_frames_into_image() -> Image:
+	var result_image := Image.new()
+	if frames[0].result_texture == null or frames[0].result_texture.get_data() == null:
+		State.report_error("Error: No generated texture in frames, tile not fully defined")
+		return null
+	var frame_size: Vector2 = frames[0].result_texture.get_size()
+	result_image.create(int(frame_size.x), int(frame_size.y) * frames.size(), false, Image.FORMAT_RGBA8)
+	for frame in frames:
+		var frame_image: Image = frame.result_texture.get_data()
+		result_image.blit_rect(frame_image, 
+			Rect2(Vector2.ZERO, frame_image.get_size()), 
+			Vector2(0, frame_size.y * frame.index))
+	return result_image 
+
+
+func get_tile_icon() -> Image:
+	if frames.size() == 0:
+		return null
+	if frames[0].result_texture == null or frames[0].result_texture.get_data() == null:
+		return null
+	var frame: TPTileFrame = frames[0]
+	if frame.result_subtiles_by_bitmask.size() == 0:
+		return null
+	var first_subtile_key = frame.result_subtiles_by_bitmask.keys()[0]
+	if frame.result_subtiles_by_bitmask[first_subtile_key].size() == 0:
+		return null
+	var first_subtile: GeneratedSubTile = frame.result_subtiles_by_bitmask[first_subtile_key][0]
+	return first_subtile.image

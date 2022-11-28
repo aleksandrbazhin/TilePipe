@@ -3,8 +3,8 @@
 [ext_resource path="res://src/nodes/AdvancedSpinBox.gd" type="Script" id=1]
 
 [node name="AdvancedSpinBox" type="SpinBox" groups=["blockable"]]
-margin_right = 85.0
-margin_bottom = 31.0
+margin_right = 74.0
+margin_bottom = 28.0
 size_flags_horizontal = 3
 min_value = 1.0
 max_value = 256.0
@@ -12,3 +12,5 @@ value = 1.0
 rounded = true
 align = 1
 script = ExtResource( 1 )
+
+[connection signal="value_changed" from="." to="." method="_on_AdvancedSpinBox_value_changed"]

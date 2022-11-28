@@ -34,8 +34,9 @@ func clear_masks():
 
 func label_bitmasks(tile: TPTile):
 	clear_masks()
-	for mask in tile.result_subtiles_by_bitmask.keys():
-		for result_tile in tile.result_subtiles_by_bitmask[mask]:
+	var frame: TPTileFrame = tile.frames[0]
+	for mask in frame.result_subtiles_by_bitmask.keys():
+		for result_tile in frame.result_subtiles_by_bitmask[mask]:
 			label_tile(result_tile)
 
 

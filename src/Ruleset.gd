@@ -1,6 +1,7 @@
 class_name Ruleset
 extends Resource
 
+
 enum RULESET_TILE_PARTS {
 	FULL, 
 	SIDE_TOP, 

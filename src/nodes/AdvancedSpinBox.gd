@@ -1,6 +1,10 @@
 class_name AdvancedSpinBox
 extends SpinBox
 
+# this signal is only emitted when triggered by not a quie
+signal value_changed_no_silence(value)
+
+var is_silenced: bool = false
 
 func _input(event: InputEvent):
 	if event is InputEventKey and event.is_pressed() and \
@@ -12,3 +16,18 @@ func _input(event: InputEvent):
 				else:
 					value -= 1
 			get_tree().set_input_as_handled()
+
+
+func set_value_quietly(new_value: float):
+	is_silenced = true
+	value = new_value
+	is_silenced = false
+
+
+func _on_AdvancedSpinBox_value_changed(value):
+	if not is_silenced:
+		emit_signal("value_changed_no_silence", value)
+
+
+func remove(_param1 = null, _param2 = null):
+	queue_free()

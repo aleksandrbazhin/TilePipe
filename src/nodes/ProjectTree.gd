@@ -4,6 +4,8 @@ extends Panel
 
 signal _snapshot_state_changed()
 
+const NO_TILE := "_no_tile_means_we_select_first_"
+
 onready var tile_container := $VBoxContainer/MarginContainer/TileScrollContainer/TileVBoxContainer
 onready var dir_edit := $VBoxContainer/HBoxContainer/DirLineEdit
 onready var no_tiles_found := $NoTilesFound
@@ -13,22 +15,21 @@ onready var open_dialog := $OpenFolderDialog
 
 
 func _take_snapshot() -> Dictionary:
-	var settings := {"selected_tile": 0}
+	var settings := {"selected_tile": NO_TILE}
 	for tile in tile_container.get_children():
 		if tile.is_selected:
 			settings["selected_tile"] = tile.tile_file_name
 			break
+	settings["open_directory"] = open_dialog.current_path 
 	return settings
 
 
 func _apply_snapshot(settings: Dictionary):
-	if tile_container.get_child_count() > 0:
-		for index in tile_container.get_child_count():
-			var tile: TPTile = tile_container.get_child(index)
-			if tile.tile_file_name == settings["selected_tile"]:
-				tile.set_selected(true)
-				tile.select_root()
-				break
+	var open_directory: String = settings["open_directory"] \
+		if "open_directory" in settings else\
+		State.current_dir
+	open_dialog.current_path = open_directory
+	load_project_directory(open_directory, settings["selected_tile"])
 
 
 func on_tile_row_selected(row: TreeItem, tile: TPTile):
@@ -61,7 +62,7 @@ func scan_directory(path: String) -> Array:
 	return files
 
 
-func load_project_directory(directory_path: String):
+func load_project_directory(directory_path: String, selected_tile: String = NO_TILE):
 	dir_edit.text = directory_path
 	State.current_dir = directory_path
 	clear_tree()
@@ -72,12 +73,17 @@ func load_project_directory(directory_path: String):
 	else:
 		no_tiles_found.hide()
 		tiles_found.sort()
-		var first_tile: TPTile = null
 		for tile_fname in tiles_found:
-			var tile := add_tile_to_tree(directory_path, tile_fname)
-			if first_tile == null:
-				first_tile = tile
-		State.set_current_tile(first_tile)
+			add_tile_to_tree(directory_path, tile_fname)
+		if tile_container.get_child_count() == 0:
+			return
+		var tile: TPTile = tile_container.get_child(0)
+		for tile_in_the_tree in tile_container.get_children():
+			if tile_in_the_tree.tile_file_name == selected_tile:
+				tile = tile_in_the_tree
+				break
+		tile.set_selected(true)
+		tile.select_root()
 
 
 func add_tile_to_tree(directory: String, tile_file: String, is_new: bool = false) -> TPTile:
@@ -144,7 +150,12 @@ func _on_NewTileDialog_confirmed():
 	new_tile.save()
 
 
-func _unhandled_input(event: InputEvent):
+func _on_LineEdit_text_entered(_new_text):
+	new_tile_dialog.hide()
+	new_tile_dialog.emit_signal("confirmed")
+
+
+func _on_ProjectTree_gui_input(event: InputEvent):
 	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
 		if new_tile_dialog.visible:
 			get_tree().set_input_as_handled()
@@ -154,8 +165,3 @@ func _unhandled_input(event: InputEvent):
 #				get_tree().set_input_as_handled()
 #			KEY_DOWN:
 #				get_tree().set_input_as_handled()
-
-
-func _on_LineEdit_text_entered(_new_text):
-	new_tile_dialog.hide()
-	new_tile_dialog.emit_signal("confirmed")

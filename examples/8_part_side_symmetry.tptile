@@ -1,34 +1,99 @@
 {
 	"texture": "textures/8_part_side_symmetry_random.png",
 	"ruleset": "rulesets/8_part_side_symmetry.json",
-	"template": "templates/template_47_double.png",
+	"template": "templates/template_47.png",
 	"input_tile_size": {
 		"x": 16,
 		"y": 16
 	},
 	"merge_level": {
-		"x": 0.25,
-		"y": 0.25
+		"x": 0.3125,
+		"y": 0.3125
 	},
 	"overlap_level": {
-		"x": 0.25,
-		"y": 0.25
+		"x": 0.3125,
+		"y": 0.3125
 	},
 	"random_seed_enabled": true,
-	"random_seed_value": 2,
+	"random_seed_value": 1,
 	"smoothing": false,
 	"output_resize": true,
 	"output_tile_size": {
-		"x": 64,
-		"y": 64
+		"x": 48,
+		"y": 48
 	},
-	"export_png_path": "/home/alexander/GodotProjects/3dtests/8_part_side_symmetry_random_tp.png",
-	"export_godot3_resource_path": "/home/alexander/GodotProjects/3dtests/test.tres",
-	"export_godot3_autotile_type": 0,
-	"export_godot3_tile_name": "8_part_side_symmetry_random_tp",
-	"export_type": 1,
 	"subtile_spacing": {
 		"x": 0,
 		"y": 0
+	},
+	"frame_number": 2,
+	"frame_randomness_data": {
+		"0": {
+			"5": {
+				"0": 1,
+				"1": 0
+			},
+			"4": {
+				"1": 0
+			},
+			"1": {
+				"0": 1,
+				"1": 0
+			},
+			"7": {
+				"0": 1,
+				"1": 0
+			},
+			"0": {
+				"0": 1,
+				"1": 0
+			},
+			"2": {
+				"0": 1,
+				"1": 0
+			},
+			"3": {
+				"0": 1,
+				"1": 0
+			},
+			"6": {
+				"0": 1,
+				"1": 0
+			}
+		},
+		"1": {
+			"0": {
+				"0": 0,
+				"1": 1
+			},
+			"1": {
+				"0": 0,
+				"1": 1
+			},
+			"2": {
+				"0": 0,
+				"1": 1
+			},
+			"3": {
+				"0": 0,
+				"1": 1
+			},
+			"4": {
+				"0": 0,
+				"1": 1
+			},
+			"5": {
+				"0": 0,
+				"1": 1
+			},
+			"6": {
+				"0": 0,
+				"1": 1
+			},
+			"7": {
+				"0": 0,
+				"1": 1
+			}
+		}
 	}
 }

@@ -9,27 +9,42 @@ import configparser
 GODOT = "~/Public/Godot_v3.5-stable_x11.64"
 EXPORT_PATH = "../build/TilePipe2"
 
-
 override_config = configparser.ConfigParser()
 override_config.read("override.cfg")
 VERSION = override_config['application']['config/version'].replace('"', '')
 APP_NAME = 'TilePipe2_v.%s' % VERSION
-WIN_PARAMS = {"godot": GODOT, "godot_params": "--no-window --path . --export",  "path": EXPORT_PATH, "build_path": EXPORT_PATH + "/win", 
-    "app_name": APP_NAME, "binary": "%s.exe" % APP_NAME, "version": VERSION, "platform": "Windows Desktop", "upload_suffix": "_win64"}
-LINUX_PARAMS = {"godot": GODOT, "godot_params": "--no-window --path . --export", "path": EXPORT_PATH, "build_path": EXPORT_PATH + "/linux", 
-    "app_name": APP_NAME, "binary": "%s.x86_64" % APP_NAME, "version": VERSION, "platform": "Linux/X11", "upload_suffix": "_linux"}
-MAC_PARAMS = {"godot": GODOT, "godot_params": "--no-window --path . --export", "path": EXPORT_PATH, "build_path": EXPORT_PATH + "/mac", 
-    "app_name": APP_NAME, "binary": "%s_mac.zip" % APP_NAME, "version": VERSION, "platform": "Mac OSX", "upload_suffix": "_mac"}
+GITHUB_USER = "aleksandrbazhin"
+
+_BASE_PARAMS = {"godot": GODOT, "godot_params": "--no-window --path . --export",  "path": EXPORT_PATH, "build_path": "", 
+    "app_name": APP_NAME, "binary": "", "version": VERSION, "platform": "", "upload_suffix": "_win64"}
+
+WIN_PARAMS = _BASE_PARAMS.copy()
+WIN_PARAMS["build_path"] = f"{EXPORT_PATH}/win"
+WIN_PARAMS["binary"] = f"{APP_NAME}.exe"
+WIN_PARAMS["platform"] = "Windows Desktop"
+WIN_PARAMS["upload_suffix"] = "_win64"
+
+LINUX_PARAMS = _BASE_PARAMS.copy()
+LINUX_PARAMS["build_path"] = f"{EXPORT_PATH}/linux"
+LINUX_PARAMS["binary"] = f"{APP_NAME}.x86_64"
+LINUX_PARAMS["platform"] = "Linux/X11"
+LINUX_PARAMS["upload_suffix"] = "_linux"
+
+MAC_PARAMS = _BASE_PARAMS.copy()
+MAC_PARAMS["build_path"] = f"{EXPORT_PATH}/mac"
+MAC_PARAMS["binary"] = f"{APP_NAME}._mac.zip"
+MAC_PARAMS["platform"] = "Mac OSX"
+MAC_PARAMS["upload_suffix"] = "_mac"
 
 
 def update_godot_export_templates():
     export_config = configparser.ConfigParser()
     export_config.read("export_presets.cfg")
     PRESETS = [
-                {"name": "preset.0", "export_path": WIN_PARAMS["build_path"] + "/" + WIN_PARAMS["binary"]}, 
-                {"name": "preset.2", "export_path": LINUX_PARAMS["build_path"] + "/" + LINUX_PARAMS["binary"]},
-                {"name": "preset.1", "export_path": MAC_PARAMS["build_path"] + "/" + MAC_PARAMS["binary"]},
-            ]
+        {"name": "preset.0", "export_path": f"{WIN_PARAMS['build_path']}/{WIN_PARAMS['binary']}"}, 
+        {"name": "preset.2", "export_path": f"{LINUX_PARAMS['build_path']}/{LINUX_PARAMS['binary']}"},
+        {"name": "preset.1", "export_path": f"{MAC_PARAMS['build_path']}/{MAC_PARAMS['binary']}"},
+    ]
     for preset in PRESETS:
         export_config[preset["name"]]["export_path"] = '"%s"' % preset["export_path"]
         export_config[preset["name"] + ".options"]["application/version"] = '"%s"' % VERSION
@@ -61,13 +76,7 @@ def build(params):
 
 
 def upload_itch(params):
-    # print('butler push %(build_path)s/ aleksandrbazhin/TilePipe2:%(platform)s --userversion %(version)s' % params)
     os.system('butler push %(build_path)s/ aleksandrbazhin/TilePipe2:"%(platform)s" --userversion %(version)s' % params)
-
-
-def _upload_other(params):
-    shutil.make_archive('%(path)s/uploads/%(app_name)s%(upload_suffix)s' % params, 'zip', '%(build_path)s' % params)
-    # upload command here
 
 
 if __name__ == "__main__":
@@ -81,5 +90,11 @@ if __name__ == "__main__":
         upload_itch(WIN_PARAMS)
         upload_itch(LINUX_PARAMS)
         upload_itch(MAC_PARAMS)
-        
+
+        print("\n____________________TilePipe______________________\nCreating a github release")
+        import github_release
+        github_release.create_git_tag(VERSION)
+        github_release.push_git_tag()
+        github_release.upload_github_release(GITHUB_USER, VERSION)
+
 

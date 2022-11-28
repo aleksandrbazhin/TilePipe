@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "CheckButton",
+"class": "AdvancedCheckButton",
+"language": "GDScript",
+"path": "res://src/nodes/AdvansedCheckButton.gd"
+}, {
+"base": "LineEdit",
+"class": "AdvancedLineEdit",
+"language": "GDScript",
+"path": "res://src/nodes/AdvancedLineEdit.gd"
+}, {
 "base": "HSlider",
 "class": "AdvancedSlider",
 "language": "GDScript",
@@ -24,6 +34,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/exporters/CollisionGenerator.gd"
 }, {
+"base": "VBoxContainer",
+"class": "FrameColumnVariants",
+"language": "GDScript",
+"path": "res://src/nodes/FrameColumnVariants.gd"
+}, {
+"base": "PanelContainer",
+"class": "FramePartsContainer",
+"language": "GDScript",
+"path": "res://src/nodes/FramePartsContainer.gd"
+}, {
+"base": "CenterContainer",
+"class": "FramePartsRowControl",
+"language": "GDScript",
+"path": "res://src/nodes/FramePartsRowControl.gd"
+}, {
 "base": "Resource",
 "class": "GeneratedSubTile",
 "language": "GDScript",
@@ -38,11 +63,6 @@ _global_script_classes=[ {
 "class": "GodotTileRow",
 "language": "GDScript",
 "path": "res://src/exporters/Godot3/GodotExistingTileRow.gd"
-}, {
-"base": "VBoxContainer",
-"class": "InputTextureView",
-"language": "GDScript",
-"path": "res://src/nodes/InputTextureView.gd"
 }, {
 "base": "HBoxContainer",
 "class": "MenuPanel",
@@ -63,6 +83,11 @@ _global_script_classes=[ {
 "class": "ProjectTree",
 "language": "GDScript",
 "path": "res://src/nodes/ProjectTree.gd"
+}, {
+"base": "TextureRect",
+"class": "ResultFrameView",
+"language": "GDScript",
+"path": "res://src/nodes/ResultFrameView.gd"
 }, {
 "base": "ColorRect",
 "class": "ResultView",
@@ -89,10 +114,20 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/nodes/ScalableTextureContainer.gd"
 }, {
+"base": "PanelContainer",
+"class": "SettingsContainer",
+"language": "GDScript",
+"path": "res://src/nodes/SettingsContainer.gd"
+}, {
 "base": "Control",
 "class": "TPTile",
 "language": "GDScript",
 "path": "res://src/nodes/TPTile.gd"
+}, {
+"base": "Reference",
+"class": "TPTileFrame",
+"language": "GDScript",
+"path": "res://src/TPTileFrame.gd"
 }, {
 "base": "VBoxContainer",
 "class": "TemplateView",
@@ -130,23 +165,30 @@ _global_script_classes=[ {
 "path": "res://src/nodes/WorkZone.gd"
 } ]
 _global_script_class_icons={
+"AdvancedCheckButton": "",
+"AdvancedLineEdit": "",
 "AdvancedSlider": "",
 "AdvancedSpinBox": "",
 "CollisionGenerator": "",
+"FrameColumnVariants": "",
+"FramePartsContainer": "",
+"FramePartsRowControl": "",
 "GeneratedSubTile": "",
 "GodotExporter": "",
 "GodotTileRow": "",
-"InputTextureView": "",
 "MenuPanel": "",
 "PartFrameControl": "",
 "PartHighlight": "",
 "ProjectTree": "",
+"ResultFrameView": "",
 "ResultView": "",
 "RuleInRuleset": "",
 "Ruleset": "",
 "RulesetView": "",
 "ScalableTextureContainer": "",
+"SettingsContainer": "",
 "TPTile": "",
+"TPTileFrame": "",
 "TemplateView": "",
 "TileMainView": "",
 "TileMaskPreview": "",
@@ -170,7 +212,7 @@ boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 0 )
 config/icon="res://assets/images/icon.png"
 config/macos_native_icon="res://assets/icon.icns"
 config/windows_native_icon="res://assets/icon.ico"
-config/version="2.0.alpha.2"
+config/version="2.0.alpha.3"
 
 [autoload]
 
@@ -198,10 +240,11 @@ import/open_asset_import/use_fbx=false
 
 vsync=false
 hidpi=false
+delay=false
 
 [gui]
 
-timers/tooltip_delay_sec=0.15
+timers/tooltip_delay_sec=0.3
 
 [importer_defaults]
 
