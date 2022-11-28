@@ -29,6 +29,7 @@ func _apply_snapshot(settings: Dictionary):
 		if "open_directory" in settings else\
 		State.current_dir
 	open_dialog.current_path = open_directory
+	print(open_directory, " ", State.current_dir)
 	load_project_directory(open_directory, settings["selected_tile"])
 
 

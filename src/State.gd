@@ -26,8 +26,7 @@ var DEFAULT_USER_SETTINGS := {
 	},
 #	"VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree/OpenFolderDialog": current_dir,
 	"VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree": {
-		"selected_tile": "_no_tile_means_we_select_first_",
-		"open_directory": "."
+		"selected_tile": "_no_tile_means_we_select_first_"
 	},
 }
 

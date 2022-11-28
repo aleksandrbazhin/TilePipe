@@ -100,7 +100,7 @@ func _on_TextureRect_gui_input(event):
 			random_priority -= 1
 		else:
 			random_priority += 1
-		emit_signal("random_priority_changed", self)
+		emit_signal("random_priority_changed", self, false)
 
 
 func _on_BlockingOverlay_gui_input(event):

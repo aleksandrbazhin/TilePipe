@@ -53,7 +53,6 @@ func setup_sliders(current_input_tile_size: Vector2):
 	overlap_slider_y.value = tile.overlap_level.y
 
 
-
 func clear():
 	clear_frames()
 	
@@ -64,7 +63,6 @@ func clear_frames():
 		parts_container.clear()
 		if parts_container != first_frame:
 			parts_container.queue_free()
-
 
 
 func populate_frame_control():
