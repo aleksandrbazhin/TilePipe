@@ -18,7 +18,7 @@ onready var export_type_option := $VBoxContainer/ExportContainer/ExportOptionBut
 onready var export_path_edit := $VBoxContainer/ExportContainer/ExportPathLineEdit
 
 
-func render_from_tile(tile: TPTile):
+func combine_result_from_tile(tile: TPTile):
 	current_output_tile_size = tile.get_output_tile_size()
 	current_subtile_spacing = tile.subtile_spacing
 	if last_selected_frame >= tile.frames.size():
@@ -122,6 +122,7 @@ func clear():
 		child.queue_free()
 	last_selected_subtile_index = Vector2.ZERO
 	last_selected_frame = 0
+	selected_subtile_texture.texture = null
 
 
 func _on_SingleTile_resized():

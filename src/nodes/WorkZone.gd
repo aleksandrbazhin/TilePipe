@@ -92,7 +92,7 @@ func on_tiles_rendered(frame_index: int, renderer: TileRenderer = null):
 	update_progress(100)
 	ready_frames += 1
 	if total_frames == ready_frames:
-		result_view.render_from_tile(State.get_current_tile())
+		result_view.combine_result_from_tile(State.get_current_tile())
 		is_rendering = false
 		if is_render_scheduled:
 			is_render_scheduled = false
