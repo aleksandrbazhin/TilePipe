@@ -19,6 +19,8 @@ onready var export_path_edit := $VBoxContainer/ExportContainer/ExportPathLineEdi
 
 
 func combine_result_from_tile(tile: TPTile):
+#	if tile == null:
+#		return
 	current_output_tile_size = tile.get_output_tile_size()
 	current_subtile_spacing = tile.subtile_spacing
 	if last_selected_frame >= tile.frames.size():

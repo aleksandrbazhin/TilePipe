@@ -77,7 +77,7 @@ func render_subtiles():
 	for frame in tile.frames:
 		var renderer := TileRenderer.new()
 		add_child(renderer)
-		renderer.connect("tiles_ready", self, "on_tiles_rendered", [renderer])
+		renderer.connect("subtiles_ready", self, "on_tile_rendered", [renderer])
 		renderer.connect("report_progress", self, "update_progress")
 		renderer.start_render(tile, frame_index)
 		frame_index += 1 
@@ -88,7 +88,7 @@ func update_progress(progress: int):
 	State.emit_signal("render_progress", progress)
 
 
-func on_tiles_rendered(frame_index: int, renderer: TileRenderer = null):
+func on_tile_rendered(frame_index: int, renderer: TileRenderer = null):
 	update_progress(100)
 	ready_frames += 1
 	if total_frames == ready_frames:
