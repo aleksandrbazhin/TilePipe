@@ -70,7 +70,6 @@ func render_subtiles():
 		is_render_scheduled = true
 		return
 	is_rendering = true
-	result_view.clear()
 	total_frames = tile.frames.size()
 	ready_frames = 0
 	var frame_index: = 0
@@ -89,6 +88,7 @@ func update_progress(progress: int):
 
 
 func on_tile_rendered(frame_index: int, renderer: TileRenderer = null):
+	result_view.clear()
 	update_progress(100)
 	ready_frames += 1
 	if total_frames == ready_frames:
