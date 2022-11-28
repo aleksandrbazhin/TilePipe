@@ -44,7 +44,7 @@ func populate_from_tile(tile: TPTile, frame_index: int):
 		if max_variants_number < tile.input_parts[part_index].size():
 			max_variants_number = tile.input_parts[part_index].size()
 	for row_index in range(max_variants_number):
-		var row_control: FramePartsRowControl = preload("res://FramePartsRowControl.tscn").instance()
+		var row_control: FramePartsRowControl = preload("res://src/nodes/FramePartsRowControl.tscn").instance()
 		if tile.frames[frame_index].is_variant_row_disabled(row_index):
 			row_control.set_enabled_quietly(false)
 		if max_variants_number == 1:

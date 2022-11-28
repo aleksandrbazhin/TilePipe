@@ -47,7 +47,7 @@ _global_script_classes=[ {
 "base": "CenterContainer",
 "class": "FramePartsRowControl",
 "language": "GDScript",
-"path": "res://FramePartsRowControl.gd"
+"path": "res://src/nodes/FramePartsRowControl.gd"
 }, {
 "base": "Resource",
 "class": "GeneratedSubTile",
