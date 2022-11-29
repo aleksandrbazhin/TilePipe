@@ -1,7 +1,7 @@
 class_name TPTileFrame
 extends Reference
 
-
+# {subtile_position: weakref(Subtile)} 
 var parsed_template := {}
 var result_subtiles_by_bitmask := {}
 var result_texture: Texture

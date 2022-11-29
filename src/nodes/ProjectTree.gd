@@ -132,6 +132,7 @@ func _on_OpenFolderDialog_popup_hide():
 func _on_NewButton_pressed():
 	new_tile_lineedit.clear()
 	new_tile_dialog.popup_centered()
+	State.current_modal_popup = new_tile_dialog
 	new_tile_lineedit.grab_focus()
 
 
@@ -154,13 +155,14 @@ func _on_NewTileDialog_confirmed():
 func _on_LineEdit_text_entered(_new_text):
 	new_tile_dialog.hide()
 	new_tile_dialog.emit_signal("confirmed")
+	State.current_modal_popup = null
 
 
-func _on_ProjectTree_gui_input(event: InputEvent):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
-		if new_tile_dialog.visible:
-			get_tree().set_input_as_handled()
-			new_tile_dialog.hide()
+#func _on_ProjectTree_gui_input(event: InputEvent):
+#	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
+#		if new_tile_dialog.visible:
+#			get_tree().set_input_as_handled()
+#			new_tile_dialog.hide()
 #		match event.scancode:
 #			KEY_UP:
 #				get_tree().set_input_as_handled()

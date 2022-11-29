@@ -19,9 +19,6 @@ margin_right = 48.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 48, 74 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Border" type="Panel" parent="."]
 margin_right = 48.0
