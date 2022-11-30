@@ -14,7 +14,7 @@ script = ExtResource( 1 )
 [node name="OpenFolderDialog" type="FileDialog" parent="." groups=["snapshottable"]]
 margin_right = 800.0
 margin_bottom = 600.0
-rect_min_size = Vector2( 800, 600 )
+rect_min_size = Vector2( 900, 600 )
 hint_tooltip = "Open project folder"
 popup_exclusive = true
 window_title = "Open a Project Folder"
@@ -112,7 +112,6 @@ margin_bottom = 56.0
 rect_min_size = Vector2( 300, 36 )
 size_flags_vertical = 4
 
-[connection signal="gui_input" from="." to="." method="_on_ProjectTree_gui_input"]
 [connection signal="about_to_show" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_about_to_show"]
 [connection signal="dir_selected" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_dir_selected"]
 [connection signal="popup_hide" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_popup_hide"]

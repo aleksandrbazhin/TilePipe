@@ -10,14 +10,23 @@ var id: int = -1
 onready var panel := $Panel
 onready var label := $Panel/Label
 
+
+func set_hightlight_universal_size(size: Vector2):
+	rect_size = size
+	$Border.rect_size = size
+	$Panel.rect_position.y = size.y - 13
+	$Panel.rect_position.x = size.x - 18
+	$Panel.rect_min_size.x = 16
+
+
+# [only after ready]
 func set_id(new_id: int, inside: bool = false):
 	var color_index := (new_id - 1) % Const.HIGHLIGHT_COLORS.size()
 	if inside:
-		panel.rect_position.y = 33
+		panel.rect_position.y = 35
 	if id == -1:
 		id = new_id
 		label.text = str(id)
-		label.text = str(new_id)
 		set_border_hew(color_index)
 		set_label_hew(color_index, panel)
 	else:

@@ -29,6 +29,7 @@ func _apply_snapshot(settings: Dictionary):
 		if "open_directory" in settings else\
 		State.current_dir
 	open_dialog.current_path = open_directory
+#	print(open_directory, " ", State.current_dir)
 	load_project_directory(open_directory, settings["selected_tile"])
 
 
@@ -44,7 +45,7 @@ func on_tile_row_selected(row: TreeItem, tile: TPTile):
 
 func clear_tree():
 	for tile in tile_container.get_children():
-		tile.queue_free()
+		tile.free()
 
 
 func scan_directory(path: String) -> Array:
@@ -131,6 +132,7 @@ func _on_OpenFolderDialog_popup_hide():
 func _on_NewButton_pressed():
 	new_tile_lineedit.clear()
 	new_tile_dialog.popup_centered()
+	State.current_modal_popup = new_tile_dialog
 	new_tile_lineedit.grab_focus()
 
 
@@ -153,13 +155,10 @@ func _on_NewTileDialog_confirmed():
 func _on_LineEdit_text_entered(_new_text):
 	new_tile_dialog.hide()
 	new_tile_dialog.emit_signal("confirmed")
+	State.current_modal_popup = null
 
 
-func _on_ProjectTree_gui_input(event: InputEvent):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
-		if new_tile_dialog.visible:
-			get_tree().set_input_as_handled()
-			new_tile_dialog.hide()
+#func _on_ProjectTree_gui_input(event: InputEvent):
 #		match event.scancode:
 #			KEY_UP:
 #				get_tree().set_input_as_handled()

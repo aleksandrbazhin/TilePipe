@@ -26,8 +26,7 @@ var DEFAULT_USER_SETTINGS := {
 	},
 #	"VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree/OpenFolderDialog": current_dir,
 	"VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree": {
-		"selected_tile": "_no_tile_means_we_select_first_",
-		"open_directory": "."
+		"selected_tile": "_no_tile_means_we_select_first_"
 	},
 }
 
@@ -71,6 +70,7 @@ func report_error(message: String):
 	emit_signal("report_error", message)	
 
 
+# call with null to disable close-on-escape behavior
 func popup_started(popup: Popup):
 	current_modal_popup = popup
 	emit_signal("popup_started")

@@ -141,6 +141,7 @@ func _on_RulesetOptionButton_item_selected(index):
 		return
 	ruleset_texture.texture = tile.loaded_ruleset.preview_texture
 	add_ruleset_highlights(tile.loaded_ruleset)
+	settings_container.populate_frame_control()
 
 
 func _on_TemplateOptionButton_item_selected(index):
@@ -202,3 +203,4 @@ func _input(event: InputEvent):
 		if visible:
 			get_tree().set_input_as_handled()
 			reload_tile()
+

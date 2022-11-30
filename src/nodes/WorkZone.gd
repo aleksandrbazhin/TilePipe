@@ -21,6 +21,8 @@ func _ready():
 	State.connect("tile_cleared", self, "on_tile_cleared")
 	State.connect("tile_selected", self, "on_tile_selected")
 	State.connect("tile_needs_render", self, "render_subtiles")
+	tile_main_view.connect("ruleset_view_called", self, "_on_TileMainView_ruleset_view_called")
+	tile_main_view.connect("template_view_called", self, "_on_TileMainView_template_view_called")
 
 
 func unhide_all():
@@ -70,14 +72,13 @@ func render_subtiles():
 		is_render_scheduled = true
 		return
 	is_rendering = true
-	result_view.clear()
 	total_frames = tile.frames.size()
 	ready_frames = 0
 	var frame_index: = 0
 	for frame in tile.frames:
 		var renderer := TileRenderer.new()
 		add_child(renderer)
-		renderer.connect("tiles_ready", self, "on_tiles_rendered", [renderer])
+		renderer.connect("subtiles_ready", self, "on_tile_rendered", [renderer])
 		renderer.connect("report_progress", self, "update_progress")
 		renderer.start_render(tile, frame_index)
 		frame_index += 1 
@@ -88,11 +89,12 @@ func update_progress(progress: int):
 	State.emit_signal("render_progress", progress)
 
 
-func on_tiles_rendered(frame_index: int, renderer: TileRenderer = null):
+func on_tile_rendered(frame_index: int, renderer: TileRenderer = null):
+	result_view.clear()
 	update_progress(100)
 	ready_frames += 1
 	if total_frames == ready_frames:
-		result_view.render_from_tile(State.get_current_tile())
+		result_view.combine_result_from_tile(State.get_current_tile())
 		is_rendering = false
 		if is_render_scheduled:
 			is_render_scheduled = false

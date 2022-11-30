@@ -272,6 +272,7 @@ func get_template_size() -> Vector2:
 	return loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
 
 
+# creates in each frame index of bitmasks and corresponding generated subtiles
 func parse_template():
 	frames.clear()
 	if loaded_template == null:

@@ -16,7 +16,7 @@ script = ExtResource( 1 )
 [node name="AddRulesetFileDialog" type="FileDialog" parent="."]
 margin_right = 800.0
 margin_bottom = 600.0
-rect_min_size = Vector2( 800, 600 )
+rect_min_size = Vector2( 900, 600 )
 popup_exclusive = true
 window_title = "Open a File"
 mode_overrides_title = false

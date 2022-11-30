@@ -18,7 +18,9 @@ onready var export_type_option := $VBoxContainer/ExportContainer/ExportOptionBut
 onready var export_path_edit := $VBoxContainer/ExportContainer/ExportPathLineEdit
 
 
-func render_from_tile(tile: TPTile):
+func combine_result_from_tile(tile: TPTile):
+#	if tile == null:
+#		return
 	current_output_tile_size = tile.get_output_tile_size()
 	current_subtile_spacing = tile.subtile_spacing
 	if last_selected_frame >= tile.frames.size():
@@ -122,6 +124,7 @@ func clear():
 		child.queue_free()
 	last_selected_subtile_index = Vector2.ZERO
 	last_selected_frame = 0
+	selected_subtile_texture.texture = null
 
 
 func _on_SingleTile_resized():
@@ -165,7 +168,8 @@ func display_export_path(export_type: int):
 			export_path_edit.text = tile.export_png_path
 		Const.EXPORT_TYPES.GODOT3:
 			export_path_edit.text = tile.export_godot3_resource_path
-#			export_path_edit.text += ": " + tile.export_godot3_tile_name
+		Const.EXPORT_TYPES.MULTITEXTURE:
+			pass
 		_:
 			export_path_edit.text = ""
 
@@ -175,15 +179,12 @@ func set_export_option(export_type: int):
 		export_type_option.select(export_type)
 
 
-
-
 func _on_Godot3ExportDialog_popup_hide():
 	display_export_path(Const.EXPORT_TYPES.GODOT3)
 	State.popup_ended()
 
 
-
-func _on_ExportOptionButton_item_selected(index):
+func _on_ExportOptionButton_item_selected(index: int):
 	display_export_path(index)
 	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, index, false)
 
@@ -198,11 +199,18 @@ func _on_ExportButton_pressed():
 	match export_type_option.selected:
 		Const.EXPORT_TYPES.TEXTURE:
 			var dialog := $ExportTextureFileDialog
-			dialog.current_path = State.get_current_tile().export_png_path
+			dialog.current_path = tile.export_png_path
 			dialog.popup_centered()
 		Const.EXPORT_TYPES.GODOT3:
 			var dialog: GodotExporter = $Godot3ExportDialog
-			dialog.start_export_dialog(State.get_current_tile())
+			dialog.start_export_dialog(tile)
+		Const.EXPORT_TYPES.MULTITEXTURE:
+			var dialog = $MutitextureExportDialog
+			var itex := ImageTexture.new()
+			itex.create_from_image(tile.glue_frames_into_image())
+			dialog.setup(itex)
+			dialog.popup_centered()
+			
 
 
 func _on_ExportTextureFileDialog_file_selected(path):

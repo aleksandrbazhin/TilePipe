@@ -1,0 +1,152 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/styles/ui_theme.tres" type="Theme" id=1]
+[ext_resource path="res://src/exporters/Multitexture/MutitextureExportDialog.gd" type="Script" id=2]
+[ext_resource path="res://assets/images/Save.svg" type="Texture" id=3]
+[ext_resource path="res://assets/images/folder.png" type="Texture" id=4]
+
+[node name="MutitextureExportDialog" type="WindowDialog"]
+margin_right = 1000.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 1100, 700 )
+theme = ExtResource( 1 )
+popup_exclusive = true
+window_title = "Setup multiple texture export"
+script = ExtResource( 2 )
+
+[node name="FileDialog" type="FileDialog" parent="."]
+margin_right = 363.0
+margin_bottom = 186.0
+rect_min_size = Vector2( 900, 600 )
+window_title = "Open a Directory"
+dialog_text = "Select existing directory"
+mode_overrides_title = false
+mode = 2
+access = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 1080.0
+margin_bottom = 680.0
+size_flags_horizontal = 3
+custom_constants/separation = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_right = 960.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_top = 6.0
+margin_right = 120.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 120, 0 )
+text = "Export directory"
+
+[node name="PathLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 124.0
+margin_right = 892.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+editable = false
+
+[node name="SelectDirButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 896.0
+margin_right = 982.0
+margin_bottom = 31.0
+text = "Select"
+icon = ExtResource( 4 )
+
+[node name="SplitTypeContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 68.0
+margin_right = 960.0
+margin_bottom = 99.0
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/SplitTypeContainer"]
+margin_top = 6.0
+margin_right = 120.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 120, 0 )
+text = "Split  type"
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/SplitTypeContainer"]
+margin_left = 124.0
+margin_right = 960.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+text = "Subtile per file"
+items = [ "Subtile per file", null, false, 0, null, "Frame per file", null, false, 1, null ]
+selected = 0
+
+[node name="PatternContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 35.0
+margin_right = 960.0
+margin_bottom = 64.0
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PatternContainer"]
+margin_top = 5.0
+margin_right = 120.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 120, 0 )
+text = "Filename pattern"
+
+[node name="PatternLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/PatternContainer"]
+margin_left = 124.0
+margin_right = 960.0
+margin_bottom = 29.0
+hint_tooltip = "Not modifyable currently"
+size_flags_horizontal = 3
+text = "{tile_name}_{bitmask}_{subtile_variant_index}.png"
+editable = false
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+margin_top = 103.0
+margin_right = 960.0
+margin_bottom = 509.0
+size_flags_vertical = 3
+expand = true
+stretch_mode = 6
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+margin_top = 513.0
+margin_right = 960.0
+margin_bottom = 525.0
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_right = 960.0
+margin_bottom = 560.0
+alignment = 2
+
+[node name="CancelButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer4"]
+margin_left = 900.0
+margin_top = 529.0
+margin_right = 960.0
+margin_bottom = 560.0
+size_flags_horizontal = 8
+text = "Cancel"
+
+[node name="OkButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer4"]
+margin_left = 900.0
+margin_top = 529.0
+margin_right = 960.0
+margin_bottom = 560.0
+size_flags_horizontal = 8
+text = "Save"
+icon = ExtResource( 3 )
+
+[connection signal="about_to_show" from="." to="." method="_on_MutitextureExportDialog_about_to_show"]
+[connection signal="popup_hide" from="." to="." method="_on_MutitextureExportDialog_popup_hide"]
+[connection signal="dir_selected" from="FileDialog" to="." method="_on_FileDialog_dir_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/SelectDirButton" to="." method="_on_SelectDirButton_pressed"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/SplitTypeContainer/OptionButton" to="." method="_on_OptionButton_item_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer4/CancelButton" to="." method="_on_CancelButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer4/OkButton" to="." method="_on_Button_pressed"]

@@ -91,7 +91,7 @@ func add_error_report(text: String):
 	start_modal_popup()
 	error_dialog.dialog_text += text + "\n"
 	if not error_dialog.visible:
-		error_dialog.popup_centered_clamped()
+		error_dialog.popup_centered()
 
 
 func _on_ErrorDialog_popup_hide():

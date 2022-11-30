@@ -70,7 +70,6 @@ margin_bottom = 36.0
 rect_min_size = Vector2( 180, 32 )
 hint_tooltip = "Copies texture to project folder. You can do it manually.."
 size_flags_vertical = 4
-button_mask = 0
 text = "Add texture"
 icon = ExtResource( 9 )
 
@@ -271,9 +270,9 @@ margin_bottom = 600.0
 custom_constants/separation = 2
 
 [node name="AddTextureFileDialog" type="FileDialog" parent="."]
-margin_right = 800.0
+margin_right = 900.0
 margin_bottom = 600.0
-rect_min_size = Vector2( 800, 600 )
+rect_min_size = Vector2( 900, 600 )
 popup_exclusive = true
 window_title = "Open a File"
 mode_overrides_title = false

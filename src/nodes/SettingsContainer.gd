@@ -20,10 +20,8 @@ onready var frames_container := settings_vbox.get_node("Randomization/PartSetupC
 onready var frames_spinbox: AdvancedSpinBox = settings_vbox.get_node("Randomization/FramesSetupContainer/FramesSpinBox")
 
 
-
 func load_data(tile: TPTile):
 	setup_sliders(tile.input_tile_size)
-
 	output_resize.set_toggled_quietly(tile.output_resize)
 	output_tile_size_x.editable = tile.output_resize
 	output_tile_size_x.set_value_quietly(tile.output_tile_size.x)
@@ -35,8 +33,6 @@ func load_data(tile: TPTile):
 	random_seed_edit.set_text_quietly(str(tile.random_seed_value))
 	frames_spinbox.set_value_quietly(tile.frame_number)
 	populate_frame_control() # TODO: fix, called 3 times instead of 1
-
-
 
 
 func setup_sliders(current_input_tile_size: Vector2):
@@ -53,7 +49,6 @@ func setup_sliders(current_input_tile_size: Vector2):
 	overlap_slider_y.value = tile.overlap_level.y
 
 
-
 func clear():
 	clear_frames()
 	
@@ -66,8 +61,8 @@ func clear_frames():
 			parts_container.queue_free()
 
 
-
 func populate_frame_control():
+	print()
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
@@ -82,7 +77,6 @@ func populate_frame_control():
 		var new_frame_container: FramePartsContainer = preload("res://src/nodes/FramePartsContainer.tscn").instance()
 		new_frame_container.populate_from_tile(tile, i)
 		frames_container.add_child(new_frame_container)
-
 	if is_scroll_bottom:
 		yield(VisualServer, "frame_post_draw")
 		settings_scroll.scroll_vertical = settings_scroll.get_node("VBox").rect_size.y

@@ -2,7 +2,7 @@ class_name TileRenderer
 extends Node
 
 
-signal tiles_ready(frame_index)
+signal subtiles_ready(frame_index)
 signal report_progress(progress)
 
 const RENDER_POOL_SIZE = 32
@@ -139,7 +139,7 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 
 func render_next_batch():
 	for viewport in render_pool:
-		var subtile: GeneratedSubTile = get_next_tile()
+		var subtile: GeneratedSubTile = get_next_subtile()
 		if subtile != null:
 			last_mask = subtile.bitmask
 			subtile.is_rendering = true
@@ -149,7 +149,7 @@ func render_next_batch():
 			viewport.remove_meta("subtile")
 
 
-func get_next_tile() -> GeneratedSubTile:
+func get_next_subtile() -> GeneratedSubTile:
 	for subtile in subtiles[last_mask]: # remaining subtile variants with last_mask
 		if subtile.image == null and not subtile.is_rendering:
 			return subtile
@@ -171,7 +171,7 @@ func capture_rendered_batch():
 func on_render():
 	if is_rendering:
 		capture_rendered_batch()
-		if get_next_tile() != null:
+		if get_next_subtile() != null:
 			var progress := int(float(subtiles.keys().find(last_mask)) / float(subtiles.size()) * 100)
 			render_next_batch()
 			emit_signal("report_progress", progress)
@@ -180,4 +180,4 @@ func on_render():
 				viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
 			is_rendering = false
 			emit_signal("report_progress", 100)
-			emit_signal("tiles_ready", frame_index)
+			emit_signal("subtiles_ready", frame_index)
