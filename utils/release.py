@@ -98,5 +98,3 @@ if __name__ == "__main__":
     github_release.upload_github_release(GITHUB_USER, VERSION)
 
     print("____________________EXPORT FINISHED______________________\n")
-    
-
