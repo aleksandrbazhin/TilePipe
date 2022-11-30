@@ -12,6 +12,9 @@ onready var ruleset_option := $HBox/VBoxLeft/RulesetContainer/RulesetHeader/Rule
 onready var ruleset_texture := $HBox/VBoxLeft/RulesetContainer/ScrollContainer/TextureRect
 onready var template_option := $HBox/VBoxLeft/TemplateContainer/TemplateHeader/TemplateOptionButton
 onready var template_texture := $HBox/VBoxLeft/TemplateContainer/TextureRect
+#onready var export_type_option := $ExportContainer/ExportOptionButton
+#onready var export_path_edit := $ExportContainer/ExportPathLineEdit
+
 onready var texture_option := $HBox/VBoxLeft/HeaderContainer/TextureOption
 onready var texture_container: ScalableTextureContainer = $HBox/VBoxLeft/ScalableTextureContainer
 onready var settings_container: SettingsContainer = $HBox/SettingsContainer
@@ -177,7 +180,10 @@ func _on_ReloadButton_pressed():
 
 
 func _on_TextureDialogButton_pressed():
+	print("WTF!")
+	print($AddTextureFileDialog)
 	$AddTextureFileDialog.popup_centered()
+	
 
 
 func _on_AddTextureFileDialog_about_to_show():
@@ -200,3 +206,4 @@ func _input(event: InputEvent):
 		if visible:
 			get_tree().set_input_as_handled()
 			reload_tile()
+

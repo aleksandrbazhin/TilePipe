@@ -26,7 +26,6 @@ func _on_MutitextureExportDialog_about_to_show():
 	yield(VisualServer, "frame_post_draw")
 	type_option_button.selected = 0
 	_on_OptionButton_item_selected(0)
-	State.current_modal_popup = self
 
 
 func _on_SelectDirButton_pressed():
@@ -110,3 +109,12 @@ func _on_CancelButton_pressed():
 	hide()
 
 
+
+
+func _unhandled_key_input(event: InputEventKey):
+	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
+		if visible:
+			if $FileDialog.visible:
+				$FileDialog.hide()
+			else:
+				hide()

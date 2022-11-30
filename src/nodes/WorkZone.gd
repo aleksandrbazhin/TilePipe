@@ -21,6 +21,8 @@ func _ready():
 	State.connect("tile_cleared", self, "on_tile_cleared")
 	State.connect("tile_selected", self, "on_tile_selected")
 	State.connect("tile_needs_render", self, "render_subtiles")
+	tile_main_view.connect("ruleset_view_called", self, "_on_TileMainView_ruleset_view_called")
+	tile_main_view.connect("template_view_called", self, "_on_TileMainView_template_view_called")
 
 
 func unhide_all():
