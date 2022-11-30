@@ -12,9 +12,6 @@ onready var ruleset_option := $HBox/VBoxLeft/RulesetContainer/RulesetHeader/Rule
 onready var ruleset_texture := $HBox/VBoxLeft/RulesetContainer/ScrollContainer/TextureRect
 onready var template_option := $HBox/VBoxLeft/TemplateContainer/TemplateHeader/TemplateOptionButton
 onready var template_texture := $HBox/VBoxLeft/TemplateContainer/TextureRect
-#onready var export_type_option := $ExportContainer/ExportOptionButton
-#onready var export_path_edit := $ExportContainer/ExportPathLineEdit
-
 onready var texture_option := $HBox/VBoxLeft/HeaderContainer/TextureOption
 onready var texture_container: ScalableTextureContainer = $HBox/VBoxLeft/ScalableTextureContainer
 onready var settings_container: SettingsContainer = $HBox/SettingsContainer
@@ -141,6 +138,7 @@ func _on_RulesetOptionButton_item_selected(index):
 		return
 	ruleset_texture.texture = tile.loaded_ruleset.preview_texture
 	add_ruleset_highlights(tile.loaded_ruleset)
+	settings_container.populate_frame_control()
 
 
 func _on_TemplateOptionButton_item_selected(index):

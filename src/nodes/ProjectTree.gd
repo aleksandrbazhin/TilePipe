@@ -159,10 +159,6 @@ func _on_LineEdit_text_entered(_new_text):
 
 
 #func _on_ProjectTree_gui_input(event: InputEvent):
-#	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
-#		if new_tile_dialog.visible:
-#			get_tree().set_input_as_handled()
-#			new_tile_dialog.hide()
 #		match event.scancode:
 #			KEY_UP:
 #				get_tree().set_input_as_handled()
