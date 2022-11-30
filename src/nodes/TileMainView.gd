@@ -180,10 +180,7 @@ func _on_ReloadButton_pressed():
 
 
 func _on_TextureDialogButton_pressed():
-	print("WTF!")
-	print($AddTextureFileDialog)
 	$AddTextureFileDialog.popup_centered()
-	
 
 
 func _on_AddTextureFileDialog_about_to_show():

@@ -118,7 +118,7 @@ margin_right = 360.0
 margin_bottom = -105.0
 rect_min_size = Vector2( 720, 240 )
 popup_exclusive = true
-window_title = "UH OH!"
+window_title = "Error"
 dialog_autowrap = true
 
 [connection signal="popup_hide" from="ErrorDialog" to="." method="_on_ErrorDialog_popup_hide"]

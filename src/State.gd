@@ -70,6 +70,7 @@ func report_error(message: String):
 	emit_signal("report_error", message)	
 
 
+# call with null to disable close-on-escape behavior
 func popup_started(popup: Popup):
 	current_modal_popup = popup
 	emit_signal("popup_started")
