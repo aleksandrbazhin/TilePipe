@@ -63,6 +63,7 @@ const MASK_CHECK_BOTTOM_RIGHT := Vector2(28, 28)
 
 # so it can be rotated by multiplication
 const TILE_MASK: Dictionary = {
+	"CENTER": 0,
 	"TOP": 1,
 	"TOP_RIGHT": 2,
 	"RIGHT": 4,

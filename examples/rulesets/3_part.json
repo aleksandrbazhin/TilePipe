@@ -1,70 +1,71 @@
 {
     "ruleset_name": "The simplest 3-part ruleset (rotation)",
+    "ruleset_type": "SQUARE",
     "ruleset_description": "Basic 3-part ruleset where parts are always rotated. \nHas only 16 subtile rules (suitable for 2x2 autotiles)",
     "tile_parts": ["FULL", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT"],
     "tiles": [
         {
             "mask_variants": [112],
-            "part_indexes": [1, 2, 1, 1, 0, 0, 0, 1],
-            "part_rotations": [0, 0, 1, 1, 0, 0, 0, 0],
-            "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]
+            "part_indexes": [0, 1, 2, 1, 1, 0, 0, 0, 1],
+            "part_rotations": [0, 0, 0, 1, 1, 0, 0, 0, 0],
+            "part_flip_x": [false, false, false, false, false, false, false, false, false],
+            "part_flip_y": [false, false, false, false, false, false, false, false, false]
         },
         {
             "mask_variants": [193],
-            "part_indexes": [0, 1, 1, 2, 1, 1, 0, 0],
-            "part_rotations": [1, 1, 1, 1, 2, 2, 1, 1],
-            "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]
+            "part_indexes": [0, 0, 1, 1, 2, 1, 1, 0, 0],
+            "part_rotations": [0, 1, 1, 1, 1, 2, 2, 1, 1],
+            "part_flip_x": [false, false, false, false, false, false, false, false, false],
+            "part_flip_y": [false, false, false, false, false, false, false, false, false]
         },
         {
             "mask_variants": [7],
-            "part_indexes": [0, 0, 0, 1, 1, 2, 1, 1],
-            "part_rotations": [2, 2, 2, 2, 2, 2, 3, 3],
-            "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]
+            "part_indexes": [0, 0, 0, 0, 1, 1, 2, 1, 1],
+            "part_rotations": [0, 2, 2, 2, 2, 2, 2, 3, 3],
+            "part_flip_x": [false, false, false, false, false, false, false, false, false],
+            "part_flip_y": [false, false, false, false, false, false, false, false, false]
         },
         {
             "mask_variants": [28],
-            "part_indexes": [1, 1, 0, 0, 0, 1, 1, 2],
-            "part_rotations": [0, 0, 3, 3, 3, 3, 3, 3],
-            "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]
+            "part_indexes": [0, 1, 1, 0, 0, 0, 1, 1, 2],
+            "part_rotations": [0, 0, 0, 3, 3, 3, 3, 3, 3],
+            "part_flip_x": [false, false, false, false, false, false, false, false, false],
+            "part_flip_y": [false, false, false, false, false, false, false, false, false]
         },
         {
             "mask_variants": [124],
-            "part_indexes": [1, 1, 0, 0, 0, 0, 0, 1],
-            "part_rotations": [0, 0, 0, 0, 0, 0, 0, 0],
-            "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]
+            "part_indexes": [0, 1, 1, 0, 0, 0, 0, 0, 1],
+            "part_rotations": [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            "part_flip_x": [false, false, false, false, false, false, false, false, false],
+            "part_flip_y": [false, false, false, false, false, false, false, false, false]
         },
         {
             "mask_variants": [241],
-            "part_indexes": [0, 1, 1, 1, 0, 0, 0, 0],
-            "part_rotations": [1, 1, 1, 1, 1, 1, 1, 1],
-            "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]
+            "part_indexes": [0, 0, 1, 1, 1, 0, 0, 0, 0],
+            "part_rotations": [0, 1, 1, 1, 1, 1, 1, 1, 1],
+            "part_flip_x": [false, false, false, false, false, false, false, false, false],
+            "part_flip_y": [false, false, false, false, false, false, false, false, false]
         },
         {
             "mask_variants": [199],
-            "part_indexes": [0, 0, 0, 1, 1, 1, 0, 0],
-            "part_rotations": [2, 2, 2, 2, 2, 2, 2, 2],
-            "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]
+            "part_indexes": [0, 0, 0, 0, 1, 1, 1, 0, 0],
+            "part_rotations": [0, 2, 2, 2, 2, 2, 2, 2, 2],
+            "part_flip_x": [false, false, false, false, false, false, false, false, false],
+            "part_flip_y": [false, false, false, false, false, false, false, false, false]
         },
         {
             "mask_variants": [31],
-            "part_indexes": [0, 0, 0, 0, 0, 1, 1, 1],
-            "part_rotations": [3, 3, 3, 3, 3, 3, 3, 3],
-            "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]
+            "part_indexes": [0, 0, 0, 0, 0, 0, 1, 1, 1],
+            "part_rotations": [0, 3, 3, 3, 3, 3, 3, 3, 3],
+            "part_flip_x": [false, false, false, false, false, false, false, false, false],
+            "part_flip_y": [false, false, false, false, false, false, false, false, false]
         },
         {
             "mask_variants": [253, 247, 223, 127, 221, 119, 255],
-            "part_indexes": [0, 0, 0, 0, 0, 0, 0, 0],
-            "part_rotations": [0, 0, 0, 0, 0, 0, 0, 0],
-            "part_flip_x": [false, false, false, false, false, false, false, false],
-            "part_flip_y": [false, false, false, false, false, false, false, false]
+            "part_indexes": [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            "part_rotations": [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            "part_flip_x": [false, false, false, false, false, false, false, false, false],
+            "part_flip_y": [false, false, false, false, false, false, false, false, false]
         }
     ]
 }

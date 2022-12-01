@@ -4,6 +4,7 @@
 
 [resource]
 shader = ExtResource( 1 )
+shader_param/rotation_0 = null
 shader_param/rotation_1 = null
 shader_param/rotation_2 = null
 shader_param/rotation_4 = null
@@ -12,6 +13,7 @@ shader_param/rotation_16 = null
 shader_param/rotation_32 = null
 shader_param/rotation_64 = null
 shader_param/rotation_128 = null
+shader_param/flip_x_0 = null
 shader_param/flip_x_1 = null
 shader_param/flip_x_2 = null
 shader_param/flip_x_4 = null
@@ -20,6 +22,7 @@ shader_param/flip_x_16 = null
 shader_param/flip_x_32 = null
 shader_param/flip_x_64 = null
 shader_param/flip_x_128 = null
+shader_param/flip_y_0 = null
 shader_param/flip_y_1 = null
 shader_param/flip_y_2 = null
 shader_param/flip_y_4 = null
@@ -28,6 +31,7 @@ shader_param/flip_y_16 = null
 shader_param/flip_y_32 = null
 shader_param/flip_y_64 = null
 shader_param/flip_y_128 = null
+shader_param/ovelap_direction_0 = null
 shader_param/ovelap_direction_1 = null
 shader_param/ovelap_direction_2 = null
 shader_param/ovelap_direction_4 = null

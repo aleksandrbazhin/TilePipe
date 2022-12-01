@@ -81,27 +81,20 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 	var frame: TPTileFrame = frame_ref.get_ref()
 	if frame == null:
 		return
-	var random_center_index: int =  frame.choose_random_part_variant(0, 
-					input_tile_parts[0].size(), rng)
-	var center_image: Image = input_tile_parts[0][random_center_index]
 	var tile_rules_data: Dictionary = ruleset.get_mask_data(bitmask)
 	var texture_rect: TextureRect = viewport.get_node("TextureRect")
-	if tile_rules_data.empty(): # no ruleset data for mask in template
-		var itex = ImageTexture.new()
-		itex.create_from_image(center_image, 0)
-		return
 	var parts_rules: Array = tile_rules_data["part_indexes"]
 	var parts_rotations: Array = tile_rules_data["part_rotations"]
 	var parts_flips_x: Array = tile_rules_data["part_flip_x"]
 	var parts_flips_y: Array = tile_rules_data["part_flip_y"]
-	assert (parts_rules.size() == 8 and parts_rotations.size() == 8 and \
-			parts_flips_x.size() == 8 and parts_flips_y.size() == 8)
+	assert (parts_rules.size() == 9 and parts_rotations.size() == 9 and \
+			parts_flips_x.size() == 9 and parts_flips_y.size() == 9)
 	var itex = ImageTexture.new()
-	itex.create_from_image(center_image, 0)
+	itex.create(output_tile_size.x, output_tile_size.y, Image.FORMAT_RGBA8)
 	texture_rect.texture = itex
-	# this is to choose the same part variant to use the same when blending parts into the subtile
-	var part_set := [-1, -1, -1, -1, -1, -1, -1, -1]
-	var part_random := [0, 0, 0, 0, 0, 0, 0, 0]
+
+	var part_set := [-1, -1, -1, -1, -1, -1, -1, -1, -1]
+	var part_random := [0, 0, 0, 0, 0, 0, 0, 0, 0]
 	var mask_index: int = 0
 	for mask_name in Const.TILE_MASK:
 		var part_index: int = parts_rules[mask_index]
@@ -121,7 +114,7 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 		var part_itex = ImageTexture.new()
 		part_itex.create_from_image(part_variants[random_part_index], 0)
 		var mask_key: int = Const.TILE_MASK[mask_name]
-
+		
 		texture_rect.material.set_shader_param("overlay_texture_%s" % mask_key, part_itex)
 		texture_rect.material.set_shader_param("rotation_%s" % mask_key, -rotation_angle)
 		
