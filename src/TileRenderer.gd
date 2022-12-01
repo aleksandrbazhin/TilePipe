@@ -82,6 +82,8 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 	if frame == null:
 		return
 	var tile_rules_data: Dictionary = ruleset.get_mask_data(bitmask)
+	if tile_rules_data.empty():
+		return
 	var texture_rect: TextureRect = viewport.get_node("TextureRect")
 	var parts_rules: Array = tile_rules_data["part_indexes"]
 	var parts_rotations: Array = tile_rules_data["part_rotations"]
