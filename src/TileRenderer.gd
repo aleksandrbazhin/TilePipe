@@ -90,7 +90,7 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 	assert (parts_rules.size() == 9 and parts_rotations.size() == 9 and \
 			parts_flips_x.size() == 9 and parts_flips_y.size() == 9)
 	var itex = ImageTexture.new()
-	itex.create(output_tile_size.x, output_tile_size.y, Image.FORMAT_RGBA8)
+	itex.create(input_tile_size.x, input_tile_size.y, Image.FORMAT_RGBA8)
 	texture_rect.texture = itex
 
 	var part_set := [-1, -1, -1, -1, -1, -1, -1, -1, -1]
