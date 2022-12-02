@@ -1,6 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://src/nodes/TPTile.gd" type="Script" id=1]
+[ext_resource path="res://assets/images/delete_normal.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/copy_normal.png" type="Texture" id=3]
+[ext_resource path="res://assets/images/copy_hover.png" type="Texture" id=4]
+[ext_resource path="res://assets/images/delete_hover.png" type="Texture" id=5]
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
@@ -45,5 +49,40 @@ anchor_bottom = 1.0
 hint_tooltip = "Error loading tile"
 color = Color( 0.835294, 0.419608, 0.419608, 0.184314 )
 
+[node name="Buttons" type="HBoxContainer" parent="."]
+visible = false
+anchor_right = 1.0
+margin_right = -52.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 44 )
+mouse_filter = 2
+alignment = 2
+
+[node name="CopyButton" type="TextureButton" parent="Buttons"]
+margin_left = 84.0
+margin_top = 12.0
+margin_right = 104.0
+margin_bottom = 32.0
+mouse_default_cursor_shape = 2
+size_flags_vertical = 4
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 4 )
+
+[node name="DelButton" type="TextureButton" parent="Buttons"]
+margin_left = 108.0
+margin_top = 12.0
+margin_right = 128.0
+margin_bottom = 32.0
+mouse_default_cursor_shape = 2
+size_flags_vertical = 4
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 5 )
+texture_hover = ExtResource( 5 )
+
+[connection signal="mouse_entered" from="." to="." method="_on_TileInTree_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_TileInTree_mouse_exited"]
 [connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_selected" from="Tree" to="." method="_on_Tree_item_selected"]
+[connection signal="pressed" from="Buttons/CopyButton" to="." method="_on_CopyButton_pressed"]
+[connection signal="pressed" from="Buttons/DelButton" to="." method="_on_DelButton_pressed"]

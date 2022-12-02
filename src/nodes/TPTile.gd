@@ -3,6 +3,9 @@ extends Control
 
 
 signal row_selected(row)
+signal copy_tile_called(tile)
+signal delete_tile_called(tile)
+
 
 enum {
 	PARAM_TEXTURE,
@@ -338,6 +341,7 @@ func _on_Tree_item_selected():
 #		tree.get_root().collapsed = false
 	emit_signal("row_selected", selected_row)
 	set_selected(true)
+	$Buttons.show()
 
 
 func select_root():
@@ -352,9 +356,11 @@ func set_selected(selected: bool):
 	if selected:
 		highlight_rect.show()
 		is_selected = true
+		$Buttons.show()
 	else:
 		highlight_rect.hide()
 		is_selected = false
+		$Buttons.hide()
 
 
 func deselect_except(row: TreeItem):
@@ -658,4 +664,20 @@ func _draw():
 	var source_rect := Rect2(Vector2.ZERO, get_output_tile_size())
 	if icon_texture == null:
 		return
-	draw_texture_rect_region(icon_texture, dest_rect, source_rect, Color(1.0, 1.0, 1.0, 0.7))
+	draw_texture_rect_region(icon_texture, dest_rect, source_rect, Color(1.0, 1.0, 1.0, 0.9))
+
+
+func _on_TileInTree_mouse_entered():
+	$Buttons.show()
+
+
+func _on_TileInTree_mouse_exited():
+	$Buttons.hide()
+
+
+func _on_CopyButton_pressed():
+	emit_signal("copy_tile_called", self)
+
+
+func _on_DelButton_pressed():
+	emit_signal("delete_tile_called", self)

@@ -62,7 +62,6 @@ func clear_frames():
 
 
 func populate_frame_control():
-	print()
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
