@@ -64,8 +64,8 @@ func on_tile_cleared():
 
 func render_subtiles():
 	var tile: TPTile = State.get_current_tile()
-	if tile == null or tile.loaded_texture == null or tile.loaded_ruleset == null \
-			or not tile.loaded_ruleset.is_loaded or tile.loaded_template == null:
+	if tile == null or tile.input_texture == null or tile.ruleset == null \
+			or not tile.ruleset.is_loaded or tile.template == null:
 		result_view.clear()
 		return
 	if is_rendering:

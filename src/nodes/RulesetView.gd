@@ -41,14 +41,14 @@ func load_data(tile: TPTile):
 	if tile.ruleset_path.empty():
 		clear()
 		return
-	header_data.text = tile.loaded_ruleset.get_raw_header()
-	ruleset_name.text = tile.loaded_ruleset.get_name()
-	description.text = tile.loaded_ruleset.get_description()
-	parts_texture.texture = tile.loaded_ruleset.preview_texture
-	add_ruleset_highlights(tile.loaded_ruleset)
-	add_tiles(tile.loaded_ruleset)
-	if tile.loaded_ruleset.last_error != -1:
-		State.report_error("Error loading tile:\n" + tile.loaded_ruleset.last_error_message)
+	header_data.text = tile.ruleset.get_raw_header()
+	ruleset_name.text = tile.ruleset.get_name()
+	description.text = tile.ruleset.get_description()
+	parts_texture.texture = tile.ruleset.preview_texture
+	add_ruleset_highlights(tile.ruleset)
+	add_tiles(tile.ruleset)
+	if tile.ruleset.last_error != -1:
+		State.report_error("Error loading tile:\n" + tile.ruleset.last_error_message)
 
 
 func add_ruleset_highlights(ruleset: Ruleset):

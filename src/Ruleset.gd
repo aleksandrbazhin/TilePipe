@@ -229,7 +229,7 @@ func get_raw_tile_data(tile_index: int) -> String:
 
 func split_data_into_tiles(data: String) -> PoolStringArray:
 	var result: PoolStringArray
-	var end_of_header := _raw_json.find('subtiles":')
+	var end_of_header := _raw_json.find('rules":')
 	if end_of_header != -1:
 		result = _raw_json.substr(end_of_header + 9).split("},")
 	return result

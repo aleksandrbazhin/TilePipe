@@ -26,15 +26,15 @@ func load_data(tile: TPTile):
 	populate_texture_option()
 	current_texture_path = tile.texture_path
 	current_input_tile_size = tile.input_tile_size
-	load_texture(tile.loaded_texture)
+	load_texture(tile.input_texture)
 	settings_container.load_data(tile)
 	Helpers.populate_project_file_option(ruleset_option, 
 		State.current_dir + "/" + Const.RULESET_DIR, 
 		funcref(Helpers, "scan_for_rulesets_in_dir"),
 		tile.ruleset_path)	
-	if tile.loaded_ruleset != null and tile.loaded_ruleset.is_loaded:
-		ruleset_texture.texture = tile.loaded_ruleset.preview_texture
-		add_ruleset_highlights(tile.loaded_ruleset)
+	if tile.ruleset != null and tile.ruleset.is_loaded:
+		ruleset_texture.texture = tile.ruleset.preview_texture
+		add_ruleset_highlights(tile.ruleset)
 	else:
 		clear_ruleset()
 	Helpers.populate_project_file_option(template_option, 
@@ -42,7 +42,7 @@ func load_data(tile: TPTile):
 		 funcref(Helpers, "scan_for_templates_in_dir"),
 		 tile.template_path)
 	if not tile.template_path.empty():
-		template_texture.texture = tile.loaded_template
+		template_texture.texture = tile.template
 	else:
 		clear_template()
 
@@ -73,7 +73,7 @@ func _on_AddTextureFileDialog_file_selected(path: String):
 	current_texture_path = new_texture_path
 	populate_texture_option()
 	State.update_tile_param(TPTile.PARAM_TEXTURE, current_texture_path)
-	load_texture(State.get_current_tile().loaded_texture)
+	load_texture(State.get_current_tile().input_texture)
 
 
 func load_texture(texture: Texture):
@@ -139,8 +139,8 @@ func _on_RulesetOptionButton_item_selected(index):
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
-	ruleset_texture.texture = tile.loaded_ruleset.preview_texture
-	add_ruleset_highlights(tile.loaded_ruleset)
+	ruleset_texture.texture = tile.ruleset.preview_texture
+	add_ruleset_highlights(tile.ruleset)
 	settings_container.populate_frame_control()
 
 
@@ -153,7 +153,7 @@ func _on_TemplateOptionButton_item_selected(index):
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
-	template_texture.texture = tile.loaded_template
+	template_texture.texture = tile.template
 
 
 func _on_TextureOption_item_selected(index):
@@ -165,7 +165,7 @@ func _on_TextureOption_item_selected(index):
 		var tile: TPTile = State.get_current_tile()
 		if tile == null:
 			return
-		load_texture(tile.loaded_texture)
+		load_texture(tile.input_texture)
 
 
 func reload_tile():

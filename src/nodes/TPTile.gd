@@ -33,13 +33,17 @@ const TEMPLATE_PREFIX := "[Template] "
 const EMPTY_TILE_CONTENT := {"texture": "", "ruleset": "", "template": ""}
 
 var is_loaded := false
+var is_texture_loaded := false
+var is_ruleset_loaded := false
+var is_template_loaded := false
+
 var _tile_data: Dictionary
 var current_directory: String
 var tile_file_name: String
 var is_selected := false
-var loaded_texture: Texture
-var loaded_ruleset: Ruleset
-var loaded_template: Texture
+var input_texture: Texture
+var ruleset: Ruleset
+var template: Texture
 var frames := [] # Array of TPTileFrame
 
 var template_size: Vector2
@@ -123,12 +127,12 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	_tile_data = parsed_data
 	is_loaded = true
 # warning-ignore:unused_variable
-	var is_texture_loaded := load_texture(_tile_data["texture"])
+	is_texture_loaded = load_texture(_tile_data["texture"])
 # warning-ignore:unused_variable
-	var is_ruleset_loaded := load_ruleset(_tile_data["ruleset"])
+	is_ruleset_loaded = load_ruleset(_tile_data["ruleset"])
 # warning-ignore:unused_variable
 	set_tile_param("frame_number", "frame_number", 1)
-	var is_template_loaded := load_template(_tile_data["template"])
+	is_template_loaded = load_template(_tile_data["template"])
 	set_tile_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
 	set_tile_param("merge_level", "merge_level", Vector2(0.25, 0.25))
 	set_tile_param("overlap_level", "overlap_level", Vector2(0.25, 0.25))
@@ -181,11 +185,11 @@ func set_frame_randomness():
 
 
 func split_input_into_tile_parts() -> bool:
-	if loaded_ruleset == null or loaded_texture == null:
+	if ruleset == null or input_texture == null:
 		return false
 	input_parts = {}
-	var input_image: Image = loaded_texture.get_data()
-	var min_input_tiles := loaded_ruleset.parts.size()
+	var input_image: Image = input_texture.get_data()
+	var min_input_tiles := ruleset.parts.size()
 	for part_index in range(min_input_tiles):
 		input_parts[part_index] = []
 		var variant_index := 0
@@ -218,7 +222,7 @@ func block_failed_tile():
 func load_texture(path: String) -> bool:
 	if path.empty():
 		texture_path = path
-		loaded_texture = null
+		input_texture = null
 		return false
 	var file_path: String = current_directory + "/" + path
 	var image = Image.new()
@@ -228,8 +232,8 @@ func load_texture(path: String) -> bool:
 		State.report_error("Error loading texture at: \"" + _tile_data["texture"] + "\" for tile \"" + tile_file_name + "\"")
 		return false
 	texture_path = file_path
-	loaded_texture = ImageTexture.new()
-	loaded_texture.create_from_image(image, 0)
+	input_texture = ImageTexture.new()
+	input_texture.create_from_image(image, 0)
 	return true
 
 
@@ -237,12 +241,11 @@ func load_ruleset(path: String) -> bool:
 	if path.empty():
 		return false	
 	var file_path: String = current_directory + "/" + path
-	loaded_ruleset = Ruleset.new(file_path)
-	if loaded_ruleset.is_loaded:
-		ruleset_path = file_path
-	if loaded_ruleset.last_error != -1:
-#		State.report_error("Error loading ruleset at: \"" + _tile_data["ruleset"] + "\" for tile \"" + tile_file_name + "\"")
-		State.report_error("\nError in ruleset %s :\n" % file_path + loaded_ruleset.last_error_message)
+	ruleset = Ruleset.new(file_path)
+#	if ruleset.is_loaded:
+	ruleset_path = file_path
+	if ruleset.last_error != -1:
+		State.report_error("\nError in ruleset %s :\n" % file_path + ruleset.last_error_message)
 		return false
 	return true
 
@@ -261,24 +264,24 @@ func load_template(path: String) -> bool:
 		State.report_error("Error in template: template texture size should be at least 32x32px")
 		return false
 	template_path = file_path
-	loaded_template = ImageTexture.new()
-	loaded_template.create_from_image(image, 0)
+	template = ImageTexture.new()
+	template.create_from_image(image, 0)
 	parse_template()
 	return true
 
 
 # return template size in tiles 
 func get_template_size() -> Vector2:
-	return loaded_template.get_size() / Const.TEMPLATE_TILE_SIZE
+	return template.get_size() / Const.TEMPLATE_TILE_SIZE
 
 
 # creates in each frame index of bitmasks and corresponding generated subtiles
 func parse_template():
 	frames.clear()
-	if loaded_template == null:
+	if template == null:
 		return
 	template_size = get_template_size()
-	var template_image: Image = loaded_template.get_data()
+	var template_image: Image = template.get_data()
 	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS
 	var mask_value: int = 0
 	template_image.lock()
@@ -372,7 +375,7 @@ func update_texture(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
 	texture_path = abs_path
 	if not load_texture(rel_path):
-		loaded_texture = null
+		input_texture = null
 		if not abs_path.empty():
 			State.report_error("Error: invalid texture path")
 	_tile_data["texture"] = rel_path
@@ -385,7 +388,7 @@ func update_ruleset(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
 	ruleset_path = abs_path
 	if not load_ruleset(rel_path):
-		loaded_ruleset = null
+		ruleset = null
 		if not abs_path.empty():
 			State.report_error("Error: invalid ruleset")
 	ruleset_row.set_text(0, RULESET_PREFIX + rel_path)
@@ -398,7 +401,7 @@ func update_template(abs_path: String) -> bool:
 	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
 	template_path = abs_path
 	if not load_template(rel_path):
-		loaded_template = null
+		template = null
 		if not abs_path.empty():
 			State.report_error("Error: invalid template")
 	template_row.set_text(0, TEMPLATE_PREFIX + rel_path)
@@ -413,10 +416,10 @@ func has_loaded_tile_size() -> bool:
 
 func assure_tile_size():
 	if !has_loaded_tile_size():
-		if loaded_texture == null:
+		if input_texture == null:
 			input_tile_size = Const.DEFAULT_TILE_SIZE
 		else:
-			var size = Vector2(loaded_texture.get_size().y, loaded_texture.get_size().y)
+			var size = Vector2(input_texture.get_size().y, input_texture.get_size().y)
 			update_input_tile_size(size)
 			output_tile_size = size
 

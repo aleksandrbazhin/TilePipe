@@ -34,7 +34,7 @@
           "SIDE_LEFT", "CORNER_OUT_TOP_LEFT", "CORNER_IN_TOP_LEFT"]
       }
     },
-    "subtiles": {
+    "rules":  {
       "type": "array",
       "items": {
         "type": "object",

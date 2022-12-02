@@ -103,7 +103,9 @@ func _on_ErrorDialog_popup_hide():
 
 
 func _input(event):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
-		if error_dialog.visible:
-			get_tree().set_input_as_handled()
-			error_dialog.hide()
+	if event is InputEventKey and event.pressed:
+		match event.scancode:
+			KEY_ESCAPE, KEY_SPACE, KEY_ENTER:
+				if error_dialog.visible:
+					get_tree().set_input_as_handled()
+					error_dialog.hide()

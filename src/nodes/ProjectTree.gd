@@ -6,6 +6,8 @@ signal _snapshot_state_changed()
 
 const NO_TILE := "_no_tile_means_we_select_first_"
 
+var convert_dialog_requested := false
+
 onready var tile_container := $VBoxContainer/MarginContainer/TileScrollContainer/TileVBoxContainer
 onready var dir_edit := $VBoxContainer/HBoxContainer/DirLineEdit
 onready var no_tiles_found := $NoTilesFound
@@ -29,7 +31,6 @@ func _apply_snapshot(settings: Dictionary):
 		if "open_directory" in settings else\
 		State.current_dir
 	open_dialog.current_path = open_directory
-#	print(open_directory, " ", State.current_dir)
 	load_project_directory(open_directory, settings["selected_tile"])
 
 
@@ -74,10 +75,14 @@ func load_project_directory(directory_path: String, selected_tile: String = NO_T
 	else:
 		no_tiles_found.hide()
 		tiles_found.sort()
+		convert_dialog_requested = false
 		for tile_fname in tiles_found:
 			add_tile_to_tree(directory_path, tile_fname)
 		if tile_container.get_child_count() == 0:
 			return
+		if convert_dialog_requested:
+			yield(VisualServer, "frame_post_draw")
+			call_ruleset_convert_dialog()
 		var tile: TPTile = tile_container.get_child(0)
 		for tile_in_the_tree in tile_container.get_children():
 			if tile_in_the_tree.tile_file_name == selected_tile:
@@ -90,6 +95,8 @@ func load_project_directory(directory_path: String, selected_tile: String = NO_T
 func add_tile_to_tree(directory: String, tile_file: String, is_new: bool = false) -> TPTile:
 	var tile: TPTile = preload("res://src/nodes/TPTile.tscn").instance()
 	if tile.load_tile(directory, tile_file, is_new):
+		if not tile.is_ruleset_loaded and tile.ruleset.last_error == Ruleset.ERRORS.OLD_FORMAT:
+			convert_dialog_requested = true
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
 	tile_container.add_child(tile)
 	
@@ -164,3 +171,14 @@ func _on_LineEdit_text_entered(_new_text):
 #				get_tree().set_input_as_handled()
 #			KEY_DOWN:
 #				get_tree().set_input_as_handled()
+
+
+
+func call_ruleset_convert_dialog():
+	$RulesetConvertDialog.list_rulesets(tile_container.get_children())
+	$RulesetConvertDialog.popup_centered()
+
+
+func _on_RulesetConvertDialog_popup_hide():
+	load_project_directory(open_dialog.current_path)
+

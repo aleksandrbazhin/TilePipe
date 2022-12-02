@@ -18,7 +18,7 @@ func load_data(tile: TPTile):
 	if current_template_path.empty():
 		clear()
 		return
-	template_texture_rect.texture = tile.loaded_template
+	template_texture_rect.texture = tile.template
 	label_bitmasks(tile)
 
 
