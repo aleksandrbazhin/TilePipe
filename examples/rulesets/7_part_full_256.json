@@ -3,7 +3,7 @@
     "ruleset_type": "SQUARE",
     "ruleset_description": "7-part fully symmetric ruleset to generate 256 different tiles (with no 47-tile simplification)",
     "tile_parts": ["FULL", "CORNER_IN_TOP_RIGHT", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT", "CORNER_OUT_TOP_RIGHT", "CORNER_OUT_TOP_RIGHT", "CORNER_OUT_TOP_RIGHT"],
-    "tiles": [
+    "rules":  [
         {
             "mask_variants": [64],
             "part_indexes": [0, 2, 3, 2, 3, 2, 2, 0, 2],

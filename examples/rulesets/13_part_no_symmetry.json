@@ -5,7 +5,7 @@
     "tile_parts": ["FULL", "CORNER_IN_TOP_RIGHT", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT", "SIDE_RIGHT", "CORNER_IN_BOTTOM_RIGHT", 
         "SIDE_BOTTOM", "CORNER_OUT_BOTTOM_RIGHT", "CORNER_OUT_BOTTOM_LEFT", "CORNER_IN_BOTTOM_LEFT", "SIDE_LEFT",
         "CORNER_OUT_TOP_LEFT", "CORNER_IN_TOP_LEFT"],
-    "tiles": [
+    "rules":  [
         {
             "mask_variants": [64],
             "part_indexes": [0, 2, 3, 4, 7, 6, 6, 0, 2],

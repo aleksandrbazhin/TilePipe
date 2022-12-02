@@ -9,7 +9,7 @@
         "CORNER_OUT_BOTTOM_RIGHT", "CORNER_OUT_BOTTOM_RIGHT", "CORNER_OUT_BOTTOM_RIGHT",
         "CORNER_OUT_BOTTOM_LEFT", "CORNER_OUT_BOTTOM_LEFT", "CORNER_OUT_BOTTOM_LEFT",
         "CORNER_OUT_TOP_LEFT", "CORNER_OUT_TOP_LEFT", "CORNER_OUT_TOP_LEFT"], 
-    "tiles": [
+    "rules":  [
         {
             "mask_variants": [64],
             "part_indexes": [0, 2, 3, 4, 7, 6, 6, 0, 2],

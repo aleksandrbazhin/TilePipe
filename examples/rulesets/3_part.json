@@ -3,7 +3,7 @@
     "ruleset_type": "SQUARE",
     "ruleset_description": "Basic 3-part ruleset. Has no inner corners so 47-part autotiles are often repeated. Uses flips over rotations when able.",
     "tile_parts": ["FULL", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT"],
-    "tiles": [
+    "rules":  [
         {
             "mask_variants": [64],
             "part_indexes": [0, 1, 2, 1, 2, 1, 1, 0, 1],

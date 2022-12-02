@@ -3,7 +3,7 @@
     "ruleset_type": "SQUARE",
     "ruleset_description": "Basic 4-part ruleset where parts are always flipped. Has only 47 subtile rules",
     "tile_parts": ["FULL", "CORNER_IN_TOP_RIGHT", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT"],
-    "tiles": [
+    "rules":  [
         {
             "mask_variants": [64],
             "part_indexes": [0, 2, 3, 2, 3, 2, 2, 0, 2],

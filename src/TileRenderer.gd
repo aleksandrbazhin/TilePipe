@@ -89,8 +89,9 @@ func setup_subtile_render(bitmask: int, viewport: Viewport):
 	var parts_rotations: Array = tile_rules_data["part_rotations"]
 	var parts_flips_x: Array = tile_rules_data["part_flip_x"]
 	var parts_flips_y: Array = tile_rules_data["part_flip_y"]
-	assert (parts_rules.size() == 9 and parts_rotations.size() == 9 and \
-			parts_flips_x.size() == 9 and parts_flips_y.size() == 9)
+	if not (parts_rules.size() == 9 and parts_rotations.size() == 9 and \
+			parts_flips_x.size() == 9 and parts_flips_y.size() == 9):
+		return
 	var itex = ImageTexture.new()
 	itex.create(input_tile_size.x, input_tile_size.y, Image.FORMAT_RGBA8)
 	texture_rect.texture = itex

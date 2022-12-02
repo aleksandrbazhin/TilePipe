@@ -3,7 +3,7 @@
     "ruleset_type": "SQUARE",
     "ruleset_description": "Implementation of what was a \"5-part quarters\" preset: with another side tile near the outer corners.",
     "tile_parts": ["FULL", "CORNER_IN_TOP_RIGHT", "SIDE_TOP", "SIDE_TOP", "CORNER_OUT_TOP_RIGHT"],
-    "tiles": [
+    "rules":  [
         {
             "mask_variants": [64],
             "part_indexes": [0, 3, 4, 3, 4, 3, 3, 0, 3],

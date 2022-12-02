@@ -3,7 +3,7 @@
   "title": "TilePipe Ruleset",
   "description": "Ruleset for tile generation used by TilePipe software",
   "type": "object",
-  "required": [ "ruleset_name", "ruleset_description", "tile_parts", "tiles" ],
+  "required": [ "ruleset_name", "ruleset_description", "tile_parts", "subtiles" ],
   "properties": {
     "ruleset_name": {
       "description": "Ruleset name",
@@ -34,7 +34,7 @@
           "SIDE_LEFT", "CORNER_OUT_TOP_LEFT", "CORNER_IN_TOP_LEFT"]
       }
     },
-    "tiles": {
+    "subtiles": {
       "type": "array",
       "items": {
         "type": "object",

@@ -2,6 +2,22 @@ class_name Ruleset
 extends Resource
 
 
+enum ERRORS {
+	OK,
+	OLD_FORMAT,
+	WRONG_FILE,
+	INVALID_JSON,
+	SCHEMA_MISMATCH
+}
+
+var ERROR_MESSAGES := {
+	ERRORS.OK: "Ok!",
+	ERRORS.OLD_FORMAT: "Wrong (old) ruleset format",
+	ERRORS.WRONG_FILE: "Data loader error: invalid path to ruleset JSON in .tptile.\n",
+	ERRORS.INVALID_JSON: "Data loader error: invalid JSON.\n",
+	ERRORS.SCHEMA_MISMATCH: "Data loader error: schema mismatch."
+}
+
 enum RULESET_TILE_PARTS {
 	FULL, 
 	SIDE_TOP, 
@@ -47,7 +63,6 @@ const RULESET_PART_TEXTURES := {
 	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_bottom_left.png"), 
 	RULESET_TILE_PARTS.CORNER_OUT_TOP_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_left.png"),
 }
-enum {ERROR_WRONG_FILE, ERROR_INVALID_JSON, ERROR_SCHEMA_MISMATCH}
 const SCHEMA_PATH := "res://rulesets/ruleset_schema.json"
 const PREVIEW_SIZE_PX := 48
 const PREVIEW_SPACE_PX := 6
@@ -83,12 +98,14 @@ func _init(data_path: String):
 	preview_texture = generate_preview()
 
 
-func validate_ruleset_json_to_schema(_json_data: Dictionary) -> String:
+func validate_ruleset_json_to_schema(_json_data: Dictionary) -> int:
+	if not _json_data.has("rules"):
+		return ERRORS.OLD_FORMAT
 #	tests:
 #	1. everything is according to schema
 #	2. part_indexes are never greater than tile_parts array size
 #	3. every mask is not used more than once
-	return ""
+	return ERRORS.OK
 
 
 func load_data_from_json(data_path: String):
@@ -101,40 +118,35 @@ func load_data_from_json(data_path: String):
 		if json_error == "":
 			var parse_result: JSONParseResult = JSON.parse(data_string)
 			if parse_result.error == OK:
-				json_error = validate_ruleset_json_to_schema(parse_result.result)
-				if json_error == "":
+				var validate_error := validate_ruleset_json_to_schema(parse_result.result)
+				if validate_error == ERRORS.OK:
 					_data = parse_result.result
 					_raw_json = data_string
 					_raw_tile_data = split_data_into_tiles(data_string)
 					is_loaded = true
 				else:
-					last_error = ERROR_SCHEMA_MISMATCH
-					last_error_message = "Data loader error: schema mismatch. Error message:\n"
-					last_error_message += json_error + "\n"
-					print(last_error_message)
+					last_error = validate_error
+					json_error = ERROR_MESSAGES[validate_error]
+					last_error_message += json_error
 			else:
-				last_error = ERROR_INVALID_JSON
-				last_error_message = "Data loader error: invalid JSON.\n" 
+				last_error = ERRORS.INVALID_JSON
+				last_error_message =  ERROR_MESSAGES[ERRORS.INVALID_JSON]
 				last_error_message += "Path to json:\n" + data_path + "\n"
-				print(last_error_message)
 		else:
-			last_error = ERROR_INVALID_JSON
-			last_error_message = "Data loader error: invalid JSON.\n" 
+			last_error = ERRORS.INVALID_JSON
+			last_error_message = ERROR_MESSAGES[ERRORS.INVALID_JSON]
 			last_error_message += "Path to json:\n" + data_path + "\n"
 			last_error_message += "Error message:\n" + json_error + "\n"
-			print(last_error_message)
 	else:
-		last_error = ERROR_WRONG_FILE
-		last_error_message = "Data loader error: invalid path to ruleset JSON in .tptile.\n" 
+		last_error = ERRORS.WRONG_FILE
+		last_error_message = ERROR_MESSAGES[ERRORS.WRONG_FILE]
 		last_error_message += "Invalid path: " + data_path + "\n"
-		print(last_error_message)
-
+	
 	if _data.has("tile_parts"):
 		parts = parse_parts(_data["tile_parts"])
-	else:
-		last_error = ERROR_SCHEMA_MISMATCH
-		last_error_message = "Error: wrong ruleset format."
-		print(last_error_message)
+	elif last_error == ERRORS.OK:
+		last_error = ERRORS.SCHEMA_MISMATCH
+		last_error_message = ERROR_MESSAGES[ERRORS.SCHEMA_MISMATCH]
 
 
 func parse_parts(raw_data: Array) -> Array:
@@ -142,26 +154,15 @@ func parse_parts(raw_data: Array) -> Array:
 	for part in raw_data:
 		if part in RULESET_TILE_PARSE_DATA:
 			parsed_parts.append(RULESET_TILE_PARSE_DATA[part])
-		else:
-			print(parts)
 	return parsed_parts
 
-#
-#func get_parts() -> Array:
-#	if _data.has("tile_parts"):
-#		return _data["tile_parts"]
-#	else:
-#		last_error = ERROR_SCHEMA_MISMATCH
-#		last_error_message = "Error: wrong ruleset format."
-#		return []
-#
 
 func get_subtiles() -> Array:
-	if _data.has("tiles"):
-		return _data["tiles"]
+	if _data.has("rules"):
+		return _data["rules"]
 	else:
-		last_error = ERROR_SCHEMA_MISMATCH
-		last_error_message = "Error: wrong ruleset format."
+		last_error = ERRORS.SCHEMA_MISMATCH
+		last_error_message = ERROR_MESSAGES[ERRORS.SCHEMA_MISMATCH]
 		return []
 
 
@@ -169,8 +170,8 @@ func get_name() -> String:
 	if _data.has("ruleset_name"):
 		return _data["ruleset_name"]
 	else:
-		last_error = ERROR_SCHEMA_MISMATCH
-		last_error_message = "Error: wrong ruleset format."
+		last_error = ERRORS.SCHEMA_MISMATCH
+		last_error_message = ERROR_MESSAGES[ERRORS.SCHEMA_MISMATCH]
 		return "Error:"
 
 
@@ -178,8 +179,8 @@ func get_description() -> String:
 	if _data.has("ruleset_description"):
 		return _data["ruleset_description"]
 	else:
-		last_error = ERROR_SCHEMA_MISMATCH
-		last_error_message = "Error: wrong ruleset format."
+		last_error = ERRORS.SCHEMA_MISMATCH
+		last_error_message = ERROR_MESSAGES[ERRORS.SCHEMA_MISMATCH]
 		return ""
 
 
@@ -187,7 +188,7 @@ func get_mask_data(mask: int) -> Dictionary:
 	for tile_data in get_subtiles():
 		if tile_data["mask_variants"].has(float(mask)):
 			return tile_data
-	last_error_message = "Error: wrong ruleset format. \n"
+	last_error_message = ERROR_MESSAGES[ERRORS.SCHEMA_MISMATCH]
 	last_error_message += "Invalid mask '%s'" % mask
 #	print("ERROR: invalid mask '%s'" % mask)
 	return {}
@@ -213,7 +214,7 @@ func generate_preview() -> Texture:
 
 
 func get_raw_header() -> String:
-	var end_of_header := _raw_json.find('"tiles":')
+	var end_of_header := _raw_json.find('"rules": ')
 	if end_of_header != -1:
 		return _raw_json.substr(0, end_of_header).lstrip("{").rstrip(", \n")
 	return ""
@@ -228,7 +229,7 @@ func get_raw_tile_data(tile_index: int) -> String:
 
 func split_data_into_tiles(data: String) -> PoolStringArray:
 	var result: PoolStringArray
-	var end_of_header := _raw_json.find('"tiles":')
+	var end_of_header := _raw_json.find('subtiles":')
 	if end_of_header != -1:
 		result = _raw_json.substr(end_of_header + 9).split("},")
 	return result

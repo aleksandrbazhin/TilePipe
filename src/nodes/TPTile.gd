@@ -241,7 +241,7 @@ func load_ruleset(path: String) -> bool:
 	if loaded_ruleset.is_loaded:
 		ruleset_path = file_path
 	if loaded_ruleset.last_error != -1:
-		State.report_error("Error loading ruleset at: \"" + _tile_data["ruleset"] + "\" for tile \"" + tile_file_name + "\"")
+#		State.report_error("Error loading ruleset at: \"" + _tile_data["ruleset"] + "\" for tile \"" + tile_file_name + "\"")
 		State.report_error("\nError in ruleset %s :\n" % file_path + loaded_ruleset.last_error_message)
 		return false
 	return true
