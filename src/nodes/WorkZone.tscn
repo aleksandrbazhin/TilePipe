@@ -39,3 +39,4 @@ visible = false
 margin_top = 352.0
 margin_right = 988.0
 margin_bottom = 712.0
+color = Color( 0.156863, 0.176471, 0.2, 1 )

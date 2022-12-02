@@ -1,6 +1,16 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/nodes/TPTile.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
+border_width_right = 48
+border_color = Color( 0.8, 0.8, 0.8, 0 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
+border_width_right = 48
+border_color = Color( 0.8, 0.8, 0.8, 0 )
 
 [sub_resource type="StyleBoxEmpty" id=2]
 content_margin_left = 6.0
@@ -24,6 +34,8 @@ color = Color( 0.262745, 0.388235, 0.466667, 0.152941 )
 [node name="Tree" type="Tree" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_styles/selected_focus = SubResource( 4 )
+custom_styles/selected = SubResource( 3 )
 custom_styles/bg = SubResource( 2 )
 
 [node name="ErrorOverlay" type="ColorRect" parent="."]

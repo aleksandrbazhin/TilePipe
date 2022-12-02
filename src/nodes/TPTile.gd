@@ -632,16 +632,30 @@ func glue_frames_into_image() -> Image:
 	return result_image 
 
 
-func get_tile_icon() -> Image:
+func get_first_frame_texture() -> Texture:
 	if frames.size() == 0:
 		return null
-	if frames[0].result_texture == null or frames[0].result_texture.get_data() == null:
+	if frames[0].result_texture == null:
 		return null
-	var frame: TPTileFrame = frames[0]
-	if frame.result_subtiles_by_bitmask.size() == 0:
+	return frames[0].result_texture
+
+
+func get_tile_icon() -> Image:
+	if get_first_frame_texture() == null:
 		return null
-	var first_subtile_key = frame.result_subtiles_by_bitmask.keys()[0]
-	if frame.result_subtiles_by_bitmask[first_subtile_key].size() == 0:
+	if frames[0].result_subtiles_by_bitmask.size() == 0:
 		return null
-	var first_subtile: GeneratedSubTile = frame.result_subtiles_by_bitmask[first_subtile_key][0]
+	var first_subtile_key = frames[0].result_subtiles_by_bitmask.keys()[0]
+	if frames[0].result_subtiles_by_bitmask[first_subtile_key].size() == 0:
+		return null
+	var first_subtile: GeneratedSubTile = frames[0].result_subtiles_by_bitmask[first_subtile_key][0]
 	return first_subtile.image
+
+
+func _draw():
+	var icon_texture := get_first_frame_texture()
+	var dest_rect := Rect2(Vector2(rect_size.x - 42, 0), Vector2(40, 40))
+	var source_rect := Rect2(Vector2.ZERO, get_output_tile_size())
+	if icon_texture == null:
+		return
+	draw_texture_rect_region(icon_texture, dest_rect, source_rect, Color(1.0, 1.0, 1.0, 0.7))

@@ -100,6 +100,9 @@ func on_tile_rendered(frame_index: int, renderer: TileRenderer = null):
 			is_render_scheduled = false
 			render_subtiles()
 	renderer.queue_free()
+	var tile: TPTile = State.get_current_tile()
+	if tile != null:
+		tile.update()
 
 
 func _on_TileMainView_ruleset_view_called():
