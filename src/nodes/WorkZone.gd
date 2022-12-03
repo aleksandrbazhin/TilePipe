@@ -102,7 +102,7 @@ func on_tile_rendered(frame_index: int, renderer: TileRenderer = null):
 	renderer.queue_free()
 	var tile: TPTile = State.get_current_tile()
 	if tile != null:
-		tile.update()
+		tile.update_icon()
 
 
 func _on_TileMainView_ruleset_view_called():

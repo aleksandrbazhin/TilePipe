@@ -31,7 +31,7 @@ enum {
 
 const HEIGHT_EXPANDED := 120
 const HEIGHT_COLLAPSED := 50
-const RULESET_PREFIX :=  "[  Ruleset  ] "
+const RULESET_PREFIX :=  "[Ruleset] "
 const TEMPLATE_PREFIX := "[Template] "
 const EMPTY_TILE_CONTENT := {"texture": "", "ruleset": "", "template": ""}
 
@@ -323,8 +323,8 @@ func get_template_has_tile(template_image: Image, x: int, y: int) -> bool:
 func create_tree_items():
 	tile_row = tree.create_item()
 	tile_row.set_text(0, tile_file_name)
-	add_ruleset_item(_tile_data["ruleset"])
-	add_template_item(_tile_data["template"])
+	add_ruleset_item(_tile_data["ruleset"].get_file())
+	add_template_item(_tile_data["template"].get_file())
 
 
 func add_ruleset_item(file_name: String):
@@ -339,11 +339,15 @@ func add_template_item(file_name: String):
 
 func _on_Tree_item_selected():
 	var selected_row: TreeItem = tree.get_selected()
+	if selected_row != tree.get_root():
+		$Controls.color = Color("282d33")
+	else:
+		$Controls.color = Color("444e62")
 #	if selected_row == tree.get_root():
 #		tree.get_root().collapsed = false
 	emit_signal("row_selected", selected_row)
 	set_selected(true)
-	$Buttons.show()
+	$Controls.show()
 
 
 func select_root():
@@ -358,11 +362,11 @@ func set_selected(selected: bool):
 	if selected:
 		highlight_rect.show()
 		is_selected = true
-		$Buttons.show()
+		$Controls.show()
 	else:
 		highlight_rect.hide()
 		is_selected = false
-		$Buttons.hide()
+		$Controls.hide()
 
 
 func deselect_except(row: TreeItem):
@@ -457,6 +461,13 @@ func update_output_tile_size(new_size: Vector2) -> bool:
 			"y": new_size.y,
 		}
 	return true
+
+
+func update_icon():
+	var icon := $TileInTreeIcon
+	icon.icon_texture = get_first_frame_texture()
+	icon.output_tile_size = get_output_tile_size()
+	icon.update()
 
 
 func update_merge_level(new_merge_level: Vector2) -> bool:
@@ -658,23 +669,6 @@ func get_tile_icon() -> Image:
 		return null
 	var first_subtile: GeneratedSubTile = frames[0].result_subtiles_by_bitmask[first_subtile_key][0]
 	return first_subtile.image
-
-
-func _draw():
-	var icon_texture := get_first_frame_texture()
-	var dest_rect := Rect2(Vector2(rect_size.x - 42, 0), Vector2(40, 40))
-	var source_rect := Rect2(Vector2.ZERO, get_output_tile_size())
-	if icon_texture == null:
-		return
-	draw_texture_rect_region(icon_texture, dest_rect, source_rect, Color(1.0, 1.0, 1.0, 0.9))
-
-
-func _on_TileInTree_mouse_entered():
-	$Buttons.show()
-
-
-func _on_TileInTree_mouse_exited():
-	$Buttons.hide()
 
 
 func _on_CopyButton_pressed():
