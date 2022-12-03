@@ -378,7 +378,7 @@ func _on_Tree_item_collapsed(item: TreeItem):
 
 
 func update_texture(abs_path: String) -> bool:
-	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
+	var rel_path := abs_path.trim_prefix(State.current_dir)
 	texture_path = abs_path
 	if not load_texture(rel_path):
 		input_texture = null
@@ -391,7 +391,7 @@ func update_texture(abs_path: String) -> bool:
 
 
 func update_ruleset(abs_path: String) -> bool:
-	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
+	var rel_path := abs_path.trim_prefix(State.current_dir)
 	ruleset_path = abs_path
 	if not load_ruleset(rel_path):
 		ruleset = null
@@ -404,7 +404,7 @@ func update_ruleset(abs_path: String) -> bool:
 
 
 func update_template(abs_path: String) -> bool:
-	var rel_path := abs_path.trim_prefix(State.current_dir + "/")
+	var rel_path := abs_path.trim_prefix(State.current_dir)
 	template_path = abs_path
 	if not load_template(rel_path):
 		template = null

@@ -115,7 +115,7 @@ func _on_AddRulesetFileDialog_file_selected(path: String):
 	if not Helpers.ensure_directory_exists(State.current_dir, Const.RULESET_DIR):
 		State.report_error("Error: Creating directory \"/%s/\" error" % Const.RULESET_DIR)
 		return
-	var new_ruleset_path := State.current_dir + "/" + Const.RULESET_DIR + "/" + path.get_file()
+	var new_ruleset_path := State.current_dir + Const.RULESET_DIR + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_ruleset_path)
 	if error != OK:
@@ -128,7 +128,7 @@ func _on_AddRulesetFileDialog_file_selected(path: String):
 
 
 func populate_ruleset_option():
-	var search_path: String = State.current_dir + "/" + Const.RULESET_DIR
+	var search_path: String = State.current_dir + Const.RULESET_DIR
 	var scan_func: FuncRef = funcref(Helpers, "scan_for_rulesets_in_dir")
 	Helpers.populate_project_file_option(ruleset_option, search_path, 
 		scan_func, current_ruleset_path)

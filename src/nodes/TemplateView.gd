@@ -70,7 +70,7 @@ func _on_AddTemplateFileDialog_file_selected(path: String):
 	if not Helpers.ensure_directory_exists(State.current_dir, Const.TEMPLATE_DIR):
 		State.report_error("Error: Creating directory \"/%s/\" error" % Const.TEMPLATE_DIR)
 		return
-	var new_template_path := State.current_dir + "/" + Const.TEMPLATE_DIR + "/" + path.get_file()
+	var new_template_path := State.current_dir + Const.TEMPLATE_DIR + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_template_path)
 	if error != OK:
@@ -92,7 +92,7 @@ func _on_TemplateFileName_item_selected(index: int):
 
 
 func populate_template_option():
-	var search_path: String = State.current_dir + "/" + Const.TEMPLATE_DIR
+	var search_path: String = State.current_dir + Const.TEMPLATE_DIR
 	var scan_func: FuncRef = funcref(Helpers, "scan_for_templates_in_dir")
 	Helpers.populate_project_file_option(template_option, search_path, 
 		scan_func, current_template_path)

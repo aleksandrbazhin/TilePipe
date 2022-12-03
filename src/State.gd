@@ -15,7 +15,7 @@ signal subtile_selected(bitmask)
 var app_version: String = ProjectSettings.get_setting("application/config/version")
 var window_title_base := "TilePipe v.%s" % app_version
 var current_window_title := window_title_base
-var current_dir := OS.get_executable_path().get_base_dir() + "/" + Const.EXAMPLES_DIR
+var current_dir := OS.get_executable_path().get_base_dir() + "/" + Const.EXAMPLES_DIR + "/"
 var current_tile_ref: WeakRef = null
 var current_modal_popup: Popup = null
 var DEFAULT_USER_SETTINGS := {
@@ -29,6 +29,13 @@ var DEFAULT_USER_SETTINGS := {
 		"selected_tile": "_no_tile_means_we_select_first_"
 	},
 }
+
+
+func set_current_dir(new_path: String):
+	current_dir = new_path
+	if not current_dir.ends_with("/"):
+		current_dir += "/"
+	
 
 
 func set_current_tile(tile: TPTile, row: TreeItem = null):

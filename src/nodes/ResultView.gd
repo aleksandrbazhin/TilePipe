@@ -71,6 +71,8 @@ func on_frame_subtile_selected(subtile_index: Vector2, frame_index: int):
 	if tile == null:
 		selected_subtile_texture.texture = null
 		return
+	if tile.frames.empty():
+		return
 	if not subtile_index in tile.frames[frame_index].parsed_template:
 		selected_subtile_texture.texture = null
 		bitmask_label.text = "No"

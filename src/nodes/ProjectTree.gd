@@ -24,7 +24,7 @@ func _take_snapshot() -> Dictionary:
 		if tile.is_selected:
 			settings["selected_tile"] = tile.tile_file_name
 			break
-	settings["open_directory"] = open_dialog.current_path 
+	settings["open_directory"] = State.current_dir 
 	return settings
 
 
@@ -69,7 +69,7 @@ func scan_directory(path: String) -> Array:
 
 func load_project_directory(directory_path: String, selected_tile: String = NO_TILE):
 	dir_edit.text = directory_path
-	State.current_dir = directory_path
+	State.set_current_dir(directory_path)
 	clear_tree()
 	var tiles_found := scan_directory(directory_path)
 	if tiles_found.empty():
@@ -80,7 +80,7 @@ func load_project_directory(directory_path: String, selected_tile: String = NO_T
 		tiles_found.sort()
 		convert_dialog_requested = false
 		for tile_fname in tiles_found:
-			add_tile_to_tree(directory_path, tile_fname)
+			add_tile_to_tree(directory_path, tile_fname, false)
 		if get_tile_count() == 0:
 			return
 		if convert_dialog_requested:
@@ -95,33 +95,30 @@ func load_project_directory(directory_path: String, selected_tile: String = NO_T
 		tile.select_root()
 
 
-func add_tile_to_tree(directory: String, tile_file: String, is_new: bool = false) -> TPTile:
+func add_tile_to_tree(directory: String, tile_file: String, is_new: bool, select_position: bool = false) -> TPTile:
 	var tile: TPTile = preload("res://src/nodes/TPTile.tscn").instance()
 	if tile.load_tile(directory, tile_file, is_new):
-		if not tile.is_ruleset_loaded and tile.ruleset.last_error == Ruleset.ERRORS.OLD_FORMAT:
+		if not tile.is_ruleset_loaded and tile.ruleset != null and tile.ruleset.last_error == Ruleset.ERRORS.OLD_FORMAT:
 			convert_dialog_requested = true
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
 		tile.connect("delete_tile_called", self, "start_delete_tile")
 		tile.connect("copy_tile_called", self, "copy_tile")
+
 	tile_container.add_child(tile)
-	
-## This is the correct way (to have tile sorted), but there seems to be 
-## difference in add_child() and add_child_below_node() (possibly, a bug)
-#	if not is_new or tile_container.get_child_count() == 0:
-#		tile_container.add_child(tile)
-#	else:
-#		var insert_below_tile: TPTile = tile_container.get_child(0)
-#		for t in tile_container.get_children():
-#			if tile_file < t.tile_file_name:
-#				insert_below_tile = t
-#		tile.owner = tile_container
-#		tile_container.add_child_below_node(tile, insert_below_tile)
+	if select_position and tile_container.get_child_count() > 0:
+		var insert_position := 0
+		for i in tile_container.get_child_count():
+			var test_tile: TPTile = tile_container.get_child(i)
+			insert_position = i
+			if test_tile.tile_file_name > tile_file:
+				break
+		tile_container.move_child(tile, insert_position)
 	return tile
 
 
 func _on_OpenFolderDialog_dir_selected(dir: String):
-	if dir + "/" != open_dialog.current_path:
-		open_dialog.current_path = dir + "/"
+	if dir != open_dialog.current_path:
+		open_dialog.current_path = dir
 	load_project_directory(dir)
 
 
@@ -159,8 +156,8 @@ func _on_NewTileDialog_confirmed():
 		State.report_error("Error: tile \"%s\" already exists" % new_name)
 		return
 	no_tiles_found.hide()
-	var new_tile := add_tile_to_tree(State.current_dir, new_name, true)
-	State.set_current_tile(new_tile)
+	var new_tile := add_tile_to_tree(State.current_dir, new_name, true, true)
+#	State.set_current_tile(new_tile)
 	new_tile.save()
 
 
@@ -200,11 +197,11 @@ func get_tile_count() -> int:
 func _on_DeleteTileDialog_confirmed():
 	var tile := State.get_current_tile()
 	if tile != null:
-		var new_tile_count := get_tile_count() - 1
-		if new_tile_count > 0:
+		var tile_count := get_tile_count()
+		if tile_count > 1:
 			var tile_index := tile.get_index()
-			var next_tile: TPTile = tile_container.get_child(tile_index + 1 % new_tile_count)
-			State.set_current_tile(next_tile)
+			var next_tile: TPTile = tile_container.get_child((tile_index + 1) % tile_count)
+			State.call_deferred("set_current_tile", next_tile)
 		else:
 			State.clear_current_tile()
 		OS.move_to_trash(State.current_dir + tile.tile_file_name)
@@ -233,11 +230,7 @@ func copy_tile(tile: TPTile):
 		State.report_error("Failed to copy tile to \"%s\"" % 
 			(State.current_dir + new_file_name))
 		return
-	# TODO: this is wasteful, need to load only the new tile
-	# deferred is because otherwise reload directory cannot clear the calling tile
-	call_deferred("load_project_directory", State.current_dir)
-	
-
+	add_tile_to_tree(State.current_dir, new_file_name, false, true)
 
 
 

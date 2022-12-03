@@ -23,13 +23,13 @@ onready var settings_container: SettingsContainer = $HBox/SettingsContainer
 func load_data(tile: TPTile):
 	if tile == null:
 		return
-	populate_texture_option()
 	current_texture_path = tile.texture_path
+	populate_texture_option(current_texture_path)
 	current_input_tile_size = tile.input_tile_size
 	load_texture(tile.input_texture)
 	settings_container.load_data(tile)
 	Helpers.populate_project_file_option(ruleset_option, 
-		State.current_dir + "/" + Const.RULESET_DIR, 
+		State.current_dir + Const.RULESET_DIR, 
 		funcref(Helpers, "scan_for_rulesets_in_dir"),
 		tile.ruleset_path)	
 	if tile.ruleset != null and tile.ruleset.is_loaded:
@@ -38,7 +38,7 @@ func load_data(tile: TPTile):
 	else:
 		clear_ruleset()
 	Helpers.populate_project_file_option(template_option, 
-		State.current_dir + "/" + Const.TEMPLATE_DIR, 
+		State.current_dir + Const.TEMPLATE_DIR, 
 		 funcref(Helpers, "scan_for_templates_in_dir"),
 		 tile.template_path)
 	if not tile.template_path.empty():
@@ -49,29 +49,29 @@ func load_data(tile: TPTile):
 
 
 #func populate_template_option():
-#	var search_path: String = State.current_dir + "/" + Const.TEMPLATE_DIR
+#	var search_path: String = State.current_dir + Const.TEMPLATE_DIR
 #	var scan_func: FuncRef = funcref(Helpers, "scan_for_templates_in_dir")
 #	Helpers.populate_project_file_option(template_option, search_path, 
 #		scan_func, current_template_path)
 
 
-func populate_texture_option():
+func populate_texture_option(texture_path: String):
 	var scan_func: FuncRef = funcref(Helpers, "scan_for_textures_in_dir")
 	Helpers.populate_project_file_option(texture_option, State.current_dir, 
-		scan_func, current_texture_path)
+		scan_func, texture_path)
 
 
 func _on_AddTextureFileDialog_file_selected(path: String):
 	if not Helpers.ensure_directory_exists(State.current_dir, Const.TEXTURE_DIR):
 		State.report_error("Error: Creating directory \"/%s/\" error" % Const.TEXTURE_DIR)
 		return
-	var new_texture_path: String = State.current_dir + "/" + Const.TEXTURE_DIR + "/" + path.get_file()
+	var new_texture_path: String = State.current_dir + Const.TEXTURE_DIR + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_texture_path)
 	if error != OK:
 		State.report_error("Error: Copy file error number %d." % error)
 	current_texture_path = new_texture_path
-	populate_texture_option()
+	populate_texture_option(current_texture_path)
 	State.update_tile_param(TPTile.PARAM_TEXTURE, current_texture_path)
 	load_texture(State.get_current_tile().input_texture)
 
