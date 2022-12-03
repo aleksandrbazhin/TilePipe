@@ -68,10 +68,12 @@ func scan_directory(path: String) -> Array:
 
 
 func load_project_directory(directory_path: String, selected_tile: String = NO_TILE):
-	dir_edit.text = directory_path
 	State.set_current_dir(directory_path)
+	dir_edit.text = State.current_dir
+	open_dialog.current_path = State.current_dir
+	
 	clear_tree()
-	var tiles_found := scan_directory(directory_path)
+	var tiles_found := scan_directory(State.current_dir)
 	if tiles_found.empty():
 		no_tiles_found.show()
 		State.clear_current_tile()
@@ -80,7 +82,7 @@ func load_project_directory(directory_path: String, selected_tile: String = NO_T
 		tiles_found.sort()
 		convert_dialog_requested = false
 		for tile_fname in tiles_found:
-			add_tile_to_tree(directory_path, tile_fname, false)
+			add_tile_to_tree(State.current_dir, tile_fname, false)
 		if get_tile_count() == 0:
 			return
 		if convert_dialog_requested:
@@ -103,7 +105,6 @@ func add_tile_to_tree(directory: String, tile_file: String, is_new: bool, select
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
 		tile.connect("delete_tile_called", self, "start_delete_tile")
 		tile.connect("copy_tile_called", self, "copy_tile")
-
 	tile_container.add_child(tile)
 	if select_position and tile_container.get_child_count() > 0:
 		var insert_position := 0
@@ -175,15 +176,6 @@ func _on_LineEdit_text_entered(_new_text):
 #				get_tree().set_input_as_handled()
 
 
-func call_ruleset_convert_dialog():
-	$RulesetConvertDialog.list_rulesets(tile_container.get_children())
-	$RulesetConvertDialog.popup_centered()
-
-
-func _on_RulesetConvertDialog_popup_hide():
-	load_project_directory(State.current_dir)
-
-
 func start_delete_tile(tile: TPTile):
 	delete_tile_text.text = "  Delete the tile \"%s\" ? (Moves to trash) " % tile.tile_file_name
 	delete_tile_dialog.popup_centered()
@@ -233,4 +225,20 @@ func copy_tile(tile: TPTile):
 	add_tile_to_tree(State.current_dir, new_file_name, false, true)
 
 
+func call_ruleset_convert_dialog():
+	var tile_list := tile_container.get_children()
+	for i in tile_list.size():
+		var tile: TPTile = tile_list[i]
+		if not(tile.ruleset != null and tile.ruleset.last_error == Ruleset.ERRORS.OLD_FORMAT):
+			tile_list[i] = null
+	$RulesetConvertDialog.list_rulesets(tile_list)
+	$RulesetConvertDialog.popup_centered()
 
+
+func _on_RulesetConvertDialog_popup_hide():
+	State.popup_ended()
+
+
+func _on_RulesetConvertDialog_confirmed():
+	yield(VisualServer, "frame_post_draw")
+	load_project_directory(State.current_dir)

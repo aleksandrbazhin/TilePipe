@@ -38,7 +38,7 @@ func load_data(tile: TPTile):
 	tile_name.text = tile.tile_file_name
 	current_ruleset_path = tile.ruleset_path
 	populate_ruleset_option()
-	if tile.ruleset_path.empty():
+	if tile.ruleset_path.empty() || tile.ruleset == null:
 		clear()
 		return
 	header_data.text = tile.ruleset.get_raw_header()

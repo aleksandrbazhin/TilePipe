@@ -12,9 +12,6 @@ onready var ruleset_option := $HBox/VBoxLeft/RulesetContainer/RulesetHeader/Rule
 onready var ruleset_texture := $HBox/VBoxLeft/RulesetContainer/ScrollContainer/TextureRect
 onready var template_option := $HBox/VBoxLeft/TemplateContainer/TemplateHeader/TemplateOptionButton
 onready var template_texture := $HBox/VBoxLeft/TemplateContainer/TextureRect
-#onready var export_type_option := $ExportContainer/ExportOptionButton
-#onready var export_path_edit := $ExportContainer/ExportPathLineEdit
-
 onready var texture_option := $HBox/VBoxLeft/HeaderContainer/TextureOption
 onready var texture_container: ScalableTextureContainer = $HBox/VBoxLeft/ScalableTextureContainer
 onready var settings_container: SettingsContainer = $HBox/SettingsContainer
@@ -28,37 +25,40 @@ func load_data(tile: TPTile):
 	current_input_tile_size = tile.input_tile_size
 	load_texture(tile.input_texture)
 	settings_container.load_data(tile)
-	Helpers.populate_project_file_option(ruleset_option, 
-		State.current_dir + Const.RULESET_DIR, 
-		funcref(Helpers, "scan_for_rulesets_in_dir"),
-		tile.ruleset_path)	
+	
+	populate_ruleset_option(tile.ruleset_path)
 	if tile.ruleset != null and tile.ruleset.is_loaded:
 		ruleset_texture.texture = tile.ruleset.preview_texture
 		add_ruleset_highlights(tile.ruleset)
 	else:
 		clear_ruleset()
-	Helpers.populate_project_file_option(template_option, 
-		State.current_dir + Const.TEMPLATE_DIR, 
-		 funcref(Helpers, "scan_for_templates_in_dir"),
-		 tile.template_path)
+
+	populate_template_option(tile.template_path)
 	if not tile.template_path.empty():
 		template_texture.texture = tile.template
 	else:
 		clear_template()
 
 
-
-#func populate_template_option():
-#	var search_path: String = State.current_dir + Const.TEMPLATE_DIR
-#	var scan_func: FuncRef = funcref(Helpers, "scan_for_templates_in_dir")
-#	Helpers.populate_project_file_option(template_option, search_path, 
-#		scan_func, current_template_path)
-
-
 func populate_texture_option(texture_path: String):
-	var scan_func: FuncRef = funcref(Helpers, "scan_for_textures_in_dir")
-	Helpers.populate_project_file_option(texture_option, State.current_dir, 
-		scan_func, texture_path)
+	Helpers.populate_project_file_option(texture_option, 
+		State.current_dir, 
+		funcref(Helpers, "scan_for_textures_in_dir"),
+		texture_path)
+
+
+func populate_ruleset_option(ruleset_path: String):
+	Helpers.populate_project_file_option(ruleset_option, 
+		State.current_dir + Const.RULESET_DIR, 
+		funcref(Helpers, "scan_for_rulesets_in_dir"),
+		ruleset_path)
+
+	
+func populate_template_option(template_path: String):
+	Helpers.populate_project_file_option(template_option, 
+		State.current_dir + Const.TEMPLATE_DIR, 
+		funcref(Helpers, "scan_for_templates_in_dir"),
+		template_path)
 
 
 func _on_AddTextureFileDialog_file_selected(path: String):
@@ -138,6 +138,8 @@ func _on_RulesetOptionButton_item_selected(index):
 		return
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
+		return
+	if tile.ruleset == null:
 		return
 	ruleset_texture.texture = tile.ruleset.preview_texture
 	add_ruleset_highlights(tile.ruleset)

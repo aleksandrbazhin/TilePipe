@@ -124,14 +124,14 @@ window_title = "Confirm deletion"
 [node name="CenterContainer" type="CenterContainer" parent="DeleteTileDialog"]
 margin_left = 8.0
 margin_top = 8.0
-margin_right = 192.0
-margin_bottom = 50.0
+margin_right = 492.0
+margin_bottom = 114.0
 
 [node name="Label" type="Label" parent="DeleteTileDialog/CenterContainer"]
-margin_left = 92.0
-margin_top = 14.0
-margin_right = 92.0
-margin_bottom = 28.0
+margin_left = 242.0
+margin_top = 46.0
+margin_right = 242.0
+margin_bottom = 60.0
 
 [node name="RulesetConvertDialog" parent="." instance=ExtResource( 3 )]
 
@@ -144,4 +144,5 @@ margin_bottom = 28.0
 [connection signal="text_entered" from="NewTileDialog/CenterContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="confirmed" from="DeleteTileDialog" to="." method="_on_DeleteTileDialog_confirmed"]
 [connection signal="popup_hide" from="DeleteTileDialog" to="." method="_on_DeleteTileDialog_popup_hide"]
+[connection signal="confirmed" from="RulesetConvertDialog" to="." method="_on_RulesetConvertDialog_confirmed"]
 [connection signal="popup_hide" from="RulesetConvertDialog" to="." method="_on_RulesetConvertDialog_popup_hide"]

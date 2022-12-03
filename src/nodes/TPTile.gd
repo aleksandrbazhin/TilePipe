@@ -117,7 +117,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	if is_new:
 		file_text = JSON.print(EMPTY_TILE_CONTENT, "\t")
 	else:
-		var path := directory + "/" + tile_file
+		var path := directory + tile_file
 		var file := File.new()
 		file.open(path, File.READ)
 		file_text = file.get_as_text()
@@ -227,11 +227,13 @@ func load_texture(path: String) -> bool:
 		texture_path = path
 		input_texture = null
 		return false
-	var file_path: String = current_directory + "/" + path
+	var file_path: String = current_directory + path
 	var image = Image.new()
-	var err: int
-	err = image.load(file_path)
+	var err: int = image.load(file_path)
 	if err != OK:
+		print(current_directory)
+		print (State.current_dir)
+		print (file_path)
 		State.report_error("Error loading texture at: \"" + _tile_data["texture"] + "\" for tile \"" + tile_file_name + "\"")
 		return false
 	texture_path = file_path
@@ -243,7 +245,7 @@ func load_texture(path: String) -> bool:
 func load_ruleset(path: String) -> bool:
 	if path.empty():
 		return false	
-	var file_path: String = current_directory + "/" + path
+	var file_path: String = current_directory + path
 	ruleset = Ruleset.new(file_path)
 #	if ruleset.is_loaded:
 	ruleset_path = file_path
@@ -256,7 +258,7 @@ func load_ruleset(path: String) -> bool:
 func load_template(path: String) -> bool:
 	if path.empty():
 		return false	
-	var file_path: String = current_directory + "/" + path
+	var file_path: String = current_directory + path
 	var image = Image.new()
 	var err: int
 	err = image.load(file_path)
@@ -603,7 +605,7 @@ func update_param(param_key: int, value) -> bool:
 
 func save():
 #	print("tile %s saved" % tile_file_name)
-	var path := current_directory + "/" + tile_file_name
+	var path := current_directory + tile_file_name
 	var file := File.new()
 	file.open(path, File.WRITE)
 	file.store_string(JSON.print(_tile_data, "\t"))

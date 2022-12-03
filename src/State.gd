@@ -15,7 +15,7 @@ signal subtile_selected(bitmask)
 var app_version: String = ProjectSettings.get_setting("application/config/version")
 var window_title_base := "TilePipe v.%s" % app_version
 var current_window_title := window_title_base
-var current_dir := OS.get_executable_path().get_base_dir() + "/" + Const.EXAMPLES_DIR + "/"
+var current_dir := OS.get_executable_path().get_base_dir() + "/" + Const.EXAMPLES_DIR
 var current_tile_ref: WeakRef = null
 var current_modal_popup: Popup = null
 var DEFAULT_USER_SETTINGS := {

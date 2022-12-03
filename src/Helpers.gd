@@ -2,10 +2,10 @@ extends Node
 
 
 func get_default_dir_path() -> String:
-	if OS.get_name() == "OSX":
-		return OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
-	else:
-		return OS.get_executable_path().get_base_dir()
+#	if OS.get_name() == "OSX":
+#		return OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
+#	else:
+	return OS.get_executable_path().get_base_dir()
 
 
 func clear_path(path: String) -> String:
@@ -171,7 +171,7 @@ func scan_for_rulesets_in_dir(path: String) -> PoolStringArray:
 		if file == "":
 			break
 		elif not file.begins_with(".") and file.get_extension() == "json":
-			var file_path: String = path + "/" + file
+			var file_path: String = path + file
 			if Helpers.is_file_a_ruleset(file_path):
 				files.append(file_path)
 	dir.list_dir_end()
@@ -188,7 +188,7 @@ func scan_for_templates_in_dir(path: String) -> PoolStringArray:
 		if file == "":
 			break
 		elif not file.begins_with(".") and file.get_extension() == "png":
-			files.append(path + "/" + file)
+			files.append(path + file)
 	dir.list_dir_end()
 	return files
 
@@ -204,10 +204,10 @@ func scan_for_textures_in_dir(path: String) -> PoolStringArray:
 			continue
 		elif file == "":
 			break
-		elif dir.dir_exists(file) and file != Const.TEMPLATE_DIR and file != Const.RULESET_DIR:
-			files.append_array(scan_for_textures_in_dir(path + "/" + file))
+		elif dir.dir_exists(file) and file != Const.TEMPLATE_DIR.rstrip("/") and file != Const.RULESET_DIR.rstrip("/"):
+			files.append_array(scan_for_textures_in_dir(path + file + "/" ))
 		elif file.get_extension() == "png":
-			files.append(path + "/" + file)
+			files.append(path + file)
 	dir.list_dir_end()
 	return files
 

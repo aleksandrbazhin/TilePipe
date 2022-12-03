@@ -2,15 +2,15 @@ extends Node
 
 
 const SETTINGS_PATH := "user://settings.json"
-const EXAMPLES_DIR := "examples"
+const EXAMPLES_DIR := "examples/"
 const TILE_EXTENXSION := "tptile"
 const MIN_WINDOW_SIZE := Vector2(800, 600)
 const DRAG_END_MSEC := 200
 const DEFAULT_TILE_SIZE := Vector2(64, 64)
 
-const RULESET_DIR := "rulesets"
-const TEMPLATE_DIR := "templates"
-const TEXTURE_DIR := "textures"
+const RULESET_DIR := "rulesets/"
+const TEMPLATE_DIR := "templates/"
+const TEXTURE_DIR := "textures/"
 
 const HIGHLIGHT_COLORS := [
 	Color("98c0ef"), 
