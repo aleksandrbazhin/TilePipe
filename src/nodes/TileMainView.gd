@@ -148,14 +148,16 @@ func _on_RulesetOptionButton_item_selected(index):
 
 func _on_TemplateOptionButton_item_selected(index):
 	var template_path: String = template_option.get_item_metadata(index)
-	State.update_tile_param(TPTile.PARAM_TEMPLATE, template_path)
+	State.update_tile_param(TPTile.PARAM_TEMPLATE, template_path, false)
 	if template_path.empty():
 		clear_template()
 		return
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
+	State.emit_signal("tile_needs_render")
 	template_texture.texture = tile.template
+#	tile.reload()
 
 
 func _on_TextureOption_item_selected(index):

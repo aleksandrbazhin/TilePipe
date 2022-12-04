@@ -59,7 +59,7 @@ func append_output_texture(texture: Texture, frame_index: int):
 		result_frame_view.rect_size = image_size
 	result_texture_container.add_child(result_frame_view)
 	result_frame_view.setup_highlights(current_output_tile_size, current_subtile_spacing, Vector2.ZERO, frame_index)
-	result_frame_view.connect("mouse_entered", self, "clear_other_frames", [result_frame_view, true, false])
+	result_frame_view.connect("mouse_entered", self, "clear_other_frames_selection", [result_frame_view, true, false])
 	result_frame_view.connect("subtile_selected", self, "on_frame_subtile_selected")
 	if frame_index == last_selected_frame:
 		result_frame_view.select_subtile(last_selected_subtile_index)
@@ -109,12 +109,12 @@ func on_frame_subtile_selected(subtile_index: Vector2, frame_index: int):
 		State.emit_signal("subtile_selected", subtile.bitmask)
 		var frame_view: ResultFrameView = result_texture_container.get_child(frame_index)
 		if frame_index != null:
-			clear_other_frames(frame_view, true, true)
+			clear_other_frames_selection(frame_view, true, true)
 	last_selected_subtile_index = subtile_index
 	last_selected_frame = frame_index
 
 
-func clear_other_frames(except: ResultFrameView, clear_highlights: bool, clear_selections: bool):
+func clear_other_frames_selection(except: ResultFrameView, clear_highlights: bool, clear_selections: bool):
 	for child in result_texture_container.get_children():
 		if child != except:
 			child.clear_subtile_overlays(clear_highlights, clear_selections)
@@ -123,7 +123,7 @@ func clear_other_frames(except: ResultFrameView, clear_highlights: bool, clear_s
 func clear():
 	bitmask_label.text = ""
 	for child in result_texture_container.get_children():
-		child.queue_free()
+		child.free()
 	last_selected_subtile_index = Vector2.ZERO
 	last_selected_frame = 0
 	selected_subtile_texture.texture = null
@@ -212,7 +212,6 @@ func _on_ExportButton_pressed():
 			itex.create_from_image(tile.glue_frames_into_image())
 			dialog.setup(itex)
 			dialog.popup_centered()
-			
 
 
 func _on_ExportTextureFileDialog_file_selected(path):

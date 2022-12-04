@@ -57,7 +57,6 @@ func start_render(tile: TPTile, new_frame_index: int = 0):
 	output_tile_size = tile.get_output_tile_size()
 	input_tile_parts = tile.input_parts
 	smoothing_enabled = tile.smoothing
-
 	if tile.random_seed_enabled:
 		rng.seed = tile.random_seed_value
 	else:

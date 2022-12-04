@@ -136,7 +136,6 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	is_ruleset_loaded = load_ruleset(_tile_data["ruleset"])
 # warning-ignore:unused_variable
 	set_tile_param("frame_number", "frame_number", 1)
-	init_frames()
 	is_template_loaded = load_template(_tile_data["template"])
 	set_tile_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
 	set_tile_param("merge_level", "merge_level", Vector2(0.25, 0.25))
@@ -186,8 +185,6 @@ func set_frame_randomness():
 				if int(variant_index) >= variants.size():
 					break
 				frame.set_part_priority(int(part_index), int(variant_index), part_priorities[variant_index])
-#		print(frame.part_random_priorities)
-
 
 func split_input_into_tile_parts() -> bool:
 	if ruleset == null or input_texture == null:
@@ -233,9 +230,6 @@ func load_texture(path: String) -> bool:
 	var image = Image.new()
 	var err: int = image.load(file_path)
 	if err != OK:
-		print(current_directory)
-		print (State.current_dir)
-		print (file_path)
 		State.report_error("Error loading texture at: \"" + _tile_data["texture"] + "\" for tile \"" + tile_file_name + "\"")
 		return false
 	texture_path = file_path
@@ -290,7 +284,9 @@ func init_frames():
 
 
 # creates in each frame index of bitmasks and corresponding generated subtiles
+# initializes the frames in a way
 func parse_template():
+	init_frames()
 	if template == null:
 		return
 	template_size = get_template_size()
@@ -552,7 +548,6 @@ func update_export_type(new_type: int) -> bool:
 
 func update_frame_number(new_frame_number: int) -> bool:
 	frame_number = new_frame_number
-	init_frames()
 	parse_template()
 	set_frame_randomness()
 	_tile_data["frame_number"] = frame_number
@@ -621,7 +616,6 @@ func update_param(param_key: int, value) -> bool:
 
 
 func save():
-#	print("tile %s saved" % tile_file_name)
 	var path := current_directory + tile_file_name
 	var file := File.new()
 	file.open(path, File.WRITE)
