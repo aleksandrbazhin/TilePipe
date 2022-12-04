@@ -170,17 +170,11 @@ func _on_TextureOption_item_selected(index):
 		load_texture(tile.input_texture)
 
 
-func reload_tile():
+func _on_ReloadButton_pressed():
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
 	tile.reload()
-	load_texture(tile.input_texture)
-	
-
-
-func _on_ReloadButton_pressed():
-	reload_tile()
 
 
 func _on_TextureDialogButton_pressed():
@@ -200,11 +194,3 @@ func _on_ScalableTextureContainer_tile_size_changed(size):
 	State.update_tile_param(TPTile.PARAM_INPUT_SIZE, current_input_tile_size)
 	settings_container.setup_sliders(current_input_tile_size)
 	settings_container.populate_frame_control()
-
-
-func _input(event: InputEvent):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_F5:
-		if visible:
-			get_tree().set_input_as_handled()
-			reload_tile()
-

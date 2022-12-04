@@ -98,16 +98,16 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="VBoxContainer/ExportContainer"]
 margin_top = 14.0
-margin_right = 68.0
+margin_right = 70.0
 margin_bottom = 33.0
-rect_min_size = Vector2( 68, 0 )
+rect_min_size = Vector2( 70, 0 )
 text = "Export as:"
-align = 1
+align = 2
 
 [node name="ExportOptionButton" type="OptionButton" parent="VBoxContainer/ExportContainer"]
-margin_left = 76.0
+margin_left = 78.0
 margin_top = 8.0
-margin_right = 396.0
+margin_right = 398.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 320, 32 )
 size_flags_vertical = 4
@@ -116,7 +116,7 @@ items = [ "Texture (single)", null, false, 0, null, "Godot 3 (tile in tileset)",
 selected = 0
 
 [node name="ExportPathLineEdit" type="LineEdit" parent="VBoxContainer/ExportContainer"]
-margin_left = 404.0
+margin_left = 406.0
 margin_top = 8.0
 margin_right = 1074.0
 margin_bottom = 40.0

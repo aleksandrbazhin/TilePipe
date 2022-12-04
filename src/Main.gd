@@ -112,8 +112,14 @@ func _on_ErrorDialog_popup_hide():
 
 func _input(event):
 	if event is InputEventKey and event.pressed:
+		get_tree().set_input_as_handled()
 		match event.scancode:
 			KEY_ESCAPE, KEY_SPACE, KEY_ENTER:
 				if error_dialog.visible:
-					get_tree().set_input_as_handled()
 					error_dialog.hide()
+			KEY_F5:
+				var tile: TPTile = State.get_current_tile()
+				if tile == null:
+					return
+				tile.reload()
+
