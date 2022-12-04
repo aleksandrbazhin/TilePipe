@@ -4,7 +4,7 @@
 [ext_resource path="res://src/nodes/ResultView.gd" type="Script" id=2]
 [ext_resource path="res://assets/styles/ui_theme.tres" type="Theme" id=3]
 [ext_resource path="res://src/exporters/Godot3/Godot3Exporter.tscn" type="PackedScene" id=4]
-[ext_resource path="res://src/exporters/Multitexture/MutitextureExportDialog.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/exporters/Multitexture/MultitextureExportDialog.tscn" type="PackedScene" id=5]
 
 [node name="ResultPreview" type="ColorRect"]
 margin_top = 440.0
