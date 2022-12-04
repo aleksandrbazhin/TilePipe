@@ -122,6 +122,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	var file_text := ""
 	if is_new:
 		file_text = JSON.print(EMPTY_TILE_CONTENT, "\t")
+		init_frames()
 	else:
 		var path := directory + tile_file
 		var file := File.new()
@@ -235,6 +236,7 @@ func smart_reload_assets():
 	if check_texture_changed() or check_template_changed() or check_ruleset_changed():
 		load_texture(texture_path.trim_prefix(State.current_dir))
 		load_ruleset(ruleset_path.trim_prefix(State.current_dir))
+		init_frames()
 		load_template(template_path.trim_prefix(State.current_dir))
 		split_input_into_tile_parts()
 		set_frame_randomness()
@@ -285,6 +287,7 @@ func load_ruleset(path: String) -> bool:
 
 
 func load_template(path: String) -> bool:
+	init_frames()
 	if path.empty():
 		return false
 	var file_path: String = current_directory + path
@@ -317,11 +320,9 @@ func init_frames():
 		var frame := TPTileFrame.new(frame_index)
 		frames.append(frame)
 
-
+# IMPORTANT! always call init_frames before it
 # creates in each frame index of bitmasks and corresponding generated subtiles
-# initializes the frames in a way
 func parse_template():
-	init_frames()
 	if template == null:
 		return
 	template_size = get_template_size()
@@ -582,6 +583,7 @@ func update_export_type(new_type: int) -> bool:
 
 func update_frame_number(new_frame_number: int) -> bool:
 	frame_number = new_frame_number
+	init_frames()
 	parse_template()
 	set_frame_randomness()
 	_tile_data["frame_number"] = frame_number

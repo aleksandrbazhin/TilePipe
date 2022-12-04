@@ -4,7 +4,7 @@
 [ext_resource path="res://assets/images/Load.svg" type="Texture" id=2]
 [ext_resource path="res://src/nodes/RulesetConvertDialog.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=4]
-[ext_resource path="res://assets/images/plus.png" type="Texture" id=5]
+[ext_resource path="res://assets/images/add.png" type="Texture" id=5]
 
 [node name="ProjectTree" type="Panel" groups=["snapshottable"]]
 anchor_right = 1.0
@@ -54,7 +54,7 @@ icon = ExtResource( 2 )
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 margin_top = 46.0
 margin_right = 1024.0
-margin_bottom = 568.0
+margin_bottom = 556.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_left = 2
@@ -62,7 +62,7 @@ custom_constants/margin_left = 2
 [node name="TileScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer"]
 margin_left = 2.0
 margin_right = 1024.0
-margin_bottom = 522.0
+margin_bottom = 510.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
@@ -72,14 +72,14 @@ margin_right = 1022.0
 size_flags_horizontal = 3
 
 [node name="NewButton" type="Button" parent="VBoxContainer"]
-margin_top = 580.0
+margin_top = 568.0
 margin_right = 1024.0
 margin_bottom = 600.0
+rect_min_size = Vector2( 0, 32 )
 custom_constants/hseparation = 12
 text = "New Tile"
 icon = ExtResource( 5 )
 align = 0
-expand_icon = true
 
 [node name="NoTilesFound" type="Label" parent="."]
 visible = false

@@ -23,17 +23,17 @@ script = ExtResource( 1 )
 margin_right = 1024.0
 margin_bottom = 594.0
 size_flags_vertical = 3
-custom_constants/separation = 8
+custom_constants/separation = 0
 alignment = 1
 
 [node name="VBoxLeft" type="VBoxContainer" parent="HBox"]
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 594.0
 size_flags_horizontal = 3
 custom_constants/separation = 0
 
 [node name="HeaderContainer" type="HBoxContainer" parent="HBox/VBoxLeft"]
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
@@ -54,7 +54,7 @@ __meta__ = {
 [node name="TextureOption" type="OptionButton" parent="HBox/VBoxLeft/HeaderContainer"]
 margin_left = 78.0
 margin_top = 4.0
-margin_right = 320.0
+margin_right = 324.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 200, 32 )
 size_flags_horizontal = 3
@@ -63,9 +63,9 @@ clip_text = true
 align = 1
 
 [node name="TextureDialogButton" type="Button" parent="HBox/VBoxLeft/HeaderContainer"]
-margin_left = 328.0
+margin_left = 332.0
 margin_top = 4.0
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 180, 32 )
 hint_tooltip = "Copies texture to project folder. You can do it manually.."
@@ -96,31 +96,31 @@ text = "↻ (F5)"
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 40.0
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 342.0
 rect_min_size = Vector2( 32, 32 )
 rect_clip_content = true
 
 [node name="HSeparator" type="HSeparator" parent="HBox/VBoxLeft"]
 margin_top = 342.0
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 342.0
 custom_constants/separation = 0
 
 [node name="RulesetContainer" type="VBoxContainer" parent="HBox/VBoxLeft"]
 margin_top = 342.0
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 442.0
 custom_constants/separation = 4
 
 [node name="Control" type="Control" parent="HBox/VBoxLeft/RulesetContainer"]
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 12.0
 rect_min_size = Vector2( 0, 12 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HBox/VBoxLeft/RulesetContainer"]
 margin_top = 16.0
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 64.0
 size_flags_horizontal = 3
 scroll_vertical_enabled = false
@@ -129,7 +129,7 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="HBox/VBoxLeft/RulesetContainer/ScrollContainer"]
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 160, 48 )
 size_flags_horizontal = 3
@@ -140,7 +140,7 @@ __meta__ = {
 
 [node name="RulesetHeader" type="HBoxContainer" parent="HBox/VBoxLeft/RulesetContainer"]
 margin_top = 68.0
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 100.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
@@ -159,7 +159,7 @@ __meta__ = {
 
 [node name="RulesetOptionButton" type="OptionButton" parent="HBox/VBoxLeft/RulesetContainer/RulesetHeader"]
 margin_left = 78.0
-margin_right = 320.0
+margin_right = 324.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 200, 32 )
 size_flags_horizontal = 3
@@ -167,8 +167,8 @@ size_flags_vertical = 4
 clip_text = true
 
 [node name="RulesetButton" type="Button" parent="HBox/VBoxLeft/RulesetContainer/RulesetHeader"]
-margin_left = 328.0
-margin_right = 508.0
+margin_left = 332.0
+margin_right = 512.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 180, 32 )
 focus_mode = 0
@@ -185,23 +185,23 @@ rect_min_size = Vector2( 10, 0 )
 
 [node name="HSeparator3" type="HSeparator" parent="HBox/VBoxLeft"]
 margin_top = 442.0
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 442.0
 custom_constants/separation = 0
 
 [node name="TemplateContainer" type="VBoxContainer" parent="HBox/VBoxLeft"]
 margin_top = 442.0
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 594.0
 
 [node name="Control" type="Control" parent="HBox/VBoxLeft/TemplateContainer"]
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 12.0
 rect_min_size = Vector2( 0, 12 )
 
 [node name="TextureRect" type="TextureRect" parent="HBox/VBoxLeft/TemplateContainer"]
 margin_top = 16.0
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 116.0
 rect_min_size = Vector2( 180, 100 )
 size_flags_horizontal = 3
@@ -210,7 +210,7 @@ stretch_mode = 5
 
 [node name="TemplateHeader" type="HBoxContainer" parent="HBox/VBoxLeft/TemplateContainer"]
 margin_top = 120.0
-margin_right = 508.0
+margin_right = 512.0
 margin_bottom = 152.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
@@ -229,7 +229,7 @@ __meta__ = {
 
 [node name="TemplateOptionButton" type="OptionButton" parent="HBox/VBoxLeft/TemplateContainer/TemplateHeader"]
 margin_left = 78.0
-margin_right = 320.0
+margin_right = 324.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 200, 32 )
 size_flags_horizontal = 3
@@ -237,8 +237,8 @@ size_flags_vertical = 4
 clip_text = true
 
 [node name="TemplateButton" type="Button" parent="HBox/VBoxLeft/TemplateContainer/TemplateHeader"]
-margin_left = 328.0
-margin_right = 508.0
+margin_left = 332.0
+margin_right = 512.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 180, 32 )
 focus_mode = 0
@@ -254,7 +254,7 @@ margin_bottom = 32.0
 rect_min_size = Vector2( 48, 0 )
 
 [node name="SettingsContainer" parent="HBox" instance=ExtResource( 2 )]
-margin_left = 516.0
+margin_left = 512.0
 margin_right = 1024.0
 margin_bottom = 594.0
 
