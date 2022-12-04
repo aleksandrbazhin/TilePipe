@@ -552,6 +552,7 @@ func update_export_type(new_type: int) -> bool:
 
 func update_frame_number(new_frame_number: int) -> bool:
 	frame_number = new_frame_number
+	init_frames()
 	parse_template()
 	set_frame_randomness()
 	_tile_data["frame_number"] = frame_number
