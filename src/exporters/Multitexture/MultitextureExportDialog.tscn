@@ -1,11 +1,11 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/styles/ui_theme.tres" type="Theme" id=1]
-[ext_resource path="res://src/exporters/Multitexture/MutitextureExportDialog.gd" type="Script" id=2]
+[ext_resource path="res://src/exporters/Multitexture/MultitextureExportDialog.gd" type="Script" id=2]
 [ext_resource path="res://assets/images/Save.svg" type="Texture" id=3]
 [ext_resource path="res://assets/images/folder.png" type="Texture" id=4]
 
-[node name="MutitextureExportDialog" type="WindowDialog"]
+[node name="MultitextureExportDialog" type="WindowDialog"]
 margin_right = 1000.0
 margin_bottom = 600.0
 rect_min_size = Vector2( 1100, 700 )

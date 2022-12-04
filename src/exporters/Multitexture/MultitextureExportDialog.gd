@@ -1,4 +1,4 @@
-class_name MutitextureExportDialog
+class_name MultitextureExportDialog
 extends WindowDialog
 
 
@@ -19,7 +19,6 @@ func setup(result: Texture):
 func clear():
 	for highlight in texture_rect.get_children():
 		highlight.queue_free()
-
 
 
 func _on_SelectDirButton_pressed():

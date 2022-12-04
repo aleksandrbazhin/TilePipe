@@ -70,9 +70,9 @@ _global_script_classes=[ {
 "path": "res://src/nodes/MenuPanel.gd"
 }, {
 "base": "WindowDialog",
-"class": "MutitextureExportDialog",
+"class": "MultitextureExportDialog",
 "language": "GDScript",
-"path": "res://src/exporters/Multitexture/MutitextureExportDialog.gd"
+"path": "res://src/exporters/Multitexture/MultitextureExportDialog.gd"
 }, {
 "base": "TextureRect",
 "class": "PartFrameControl",
@@ -182,7 +182,7 @@ _global_script_class_icons={
 "GodotExporter": "",
 "GodotTileRow": "",
 "MenuPanel": "",
-"MutitextureExportDialog": "",
+"MultitextureExportDialog": "",
 "PartFrameControl": "",
 "PartHighlight": "",
 "ProjectTree": "",
