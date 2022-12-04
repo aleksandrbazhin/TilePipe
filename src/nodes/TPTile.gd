@@ -4,6 +4,7 @@ extends Control
 
 signal row_selected(row)
 signal copy_tile_called(tile)
+signal rename_tile_called(tile)
 signal delete_tile_called(tile)
 
 
@@ -135,6 +136,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	is_ruleset_loaded = load_ruleset(_tile_data["ruleset"])
 # warning-ignore:unused_variable
 	set_tile_param("frame_number", "frame_number", 1)
+	init_frames()
 	is_template_loaded = load_template(_tile_data["template"])
 	set_tile_param("input_tile_size", "input_tile_size", Const.DEFAULT_TILE_SIZE)
 	set_tile_param("merge_level", "merge_level", Vector2(0.25, 0.25))
@@ -207,8 +209,8 @@ func split_input_into_tile_parts() -> bool:
 				part.part_index = part_index
 				part.variant_index = variant_index
 			variant_index += 1
-			for frame in frames:
-				pass 
+#			for frame in frames:
+#				pass 
 	return true
 
 
@@ -257,7 +259,7 @@ func load_ruleset(path: String) -> bool:
 
 func load_template(path: String) -> bool:
 	if path.empty():
-		return false	
+		return false
 	var file_path: String = current_directory + path
 	var image = Image.new()
 	var err: int
@@ -280,9 +282,15 @@ func get_template_size() -> Vector2:
 	return template.get_size() / Const.TEMPLATE_TILE_SIZE
 
 
+func init_frames():
+	frames.clear()
+	for frame_index in frame_number:
+		var frame := TPTileFrame.new(frame_index)
+		frames.append(frame)
+
+
 # creates in each frame index of bitmasks and corresponding generated subtiles
 func parse_template():
-	frames.clear()
 	if template == null:
 		return
 	template_size = get_template_size()
@@ -290,9 +298,6 @@ func parse_template():
 	var mask_check_points: Dictionary = Const.TEMPLATE_MASK_CHECK_POINTS
 	var mask_value: int = 0
 	template_image.lock()
-	for frame_index in frame_number:
-		var frame := TPTileFrame.new(frame_index)
-		frames.append(frame)
 	for x in range(template_size.x):
 		for y in range(template_size.y):
 			if get_template_has_tile(template_image, x, y):
@@ -677,3 +682,13 @@ func _on_CopyButton_pressed():
 
 func _on_DelButton_pressed():
 	emit_signal("delete_tile_called", self)
+
+
+func _on_RenameButton_pressed():
+	emit_signal("rename_tile_called", self)
+
+
+func rename(new_name: String):
+	tile_file_name = new_name
+	tile_row.set_text(0, tile_file_name)
+	

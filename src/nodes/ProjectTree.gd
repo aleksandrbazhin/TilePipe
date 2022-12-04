@@ -13,6 +13,8 @@ onready var dir_edit := $VBoxContainer/HBoxContainer/DirLineEdit
 onready var no_tiles_found := $NoTilesFound
 onready var new_tile_dialog := $NewTileDialog
 onready var new_tile_lineedit := $NewTileDialog/CenterContainer/LineEdit
+onready var rename_tile_dialog := $RenameTileDialog
+onready var rename_tile_lineedit := $RenameTileDialog/CenterContainer/TileNameLineEdit
 onready var delete_tile_dialog := $DeleteTileDialog
 onready var delete_tile_text := $DeleteTileDialog/CenterContainer/Label
 onready var open_dialog := $OpenFolderDialog
@@ -105,6 +107,7 @@ func add_tile_to_tree(directory: String, tile_file: String, is_new: bool, select
 		tile.connect("row_selected", self, "on_tile_row_selected", [tile])
 		tile.connect("delete_tile_called", self, "start_delete_tile")
 		tile.connect("copy_tile_called", self, "copy_tile")
+		tile.connect("rename_tile_called", self, "start_rename_tile")
 	tile_container.add_child(tile)
 	if select_position and tile_container.get_child_count() > 0:
 		var insert_position := 0
@@ -142,7 +145,7 @@ func _on_OpenFolderDialog_popup_hide():
 func _on_NewButton_pressed():
 	new_tile_lineedit.clear()
 	new_tile_dialog.popup_centered()
-	State.current_modal_popup = new_tile_dialog
+	State.popup_started(new_tile_dialog)
 	new_tile_lineedit.grab_focus()
 
 
@@ -165,15 +168,8 @@ func _on_NewTileDialog_confirmed():
 func _on_LineEdit_text_entered(_new_text):
 	new_tile_dialog.hide()
 	new_tile_dialog.emit_signal("confirmed")
-	State.current_modal_popup = null
-
-
-#func _on_ProjectTree_gui_input(event: InputEvent):
-#		match event.scancode:
-#			KEY_UP:
-#				get_tree().set_input_as_handled()
-#			KEY_DOWN:
-#				get_tree().set_input_as_handled()
+	State.popup_ended()
+#	State.current_modal_popup = null
 
 
 func start_delete_tile(tile: TPTile):
@@ -242,3 +238,42 @@ func _on_RulesetConvertDialog_popup_hide():
 func _on_RulesetConvertDialog_confirmed():
 	yield(VisualServer, "frame_post_draw")
 	load_project_directory(State.current_dir)
+
+
+func start_rename_tile(tile: TPTile):
+	rename_tile_lineedit.text = tile.tile_file_name.get_basename()
+	rename_tile_dialog.popup_centered()
+	rename_tile_lineedit.grab_focus()
+	State.popup_started(rename_tile_dialog)
+
+
+func _on_RenameTileDialog_confirmed():
+	var dir := Directory.new()
+	if dir.open(State.current_dir) != OK:
+		State.report_error("Can not open current directory.")
+		return
+#	var copy_index := 1
+	var new_file_name: String = rename_tile_lineedit.text + ".tptile"
+	if dir.file_exists(new_file_name):
+		State.report_error("File \"%s\" alreay exisists." % new_file_name)
+		return
+	var tile = State.get_current_tile()
+	if tile == null:
+		return
+	if dir.rename(tile.tile_file_name, new_file_name) == OK:
+		tile.rename(new_file_name)
+	else:
+		State.report_error("Rename failed.")
+
+
+func _on_TileNameLineEdit_text_entered(new_text):
+	rename_tile_dialog.hide()
+	rename_tile_dialog.emit_signal("confirmed")
+
+
+func _on_NewTileDialog_popup_hide():
+	State.popup_ended()
+
+
+func _on_RenameTileDialog_popup_hide():
+	State.popup_ended()

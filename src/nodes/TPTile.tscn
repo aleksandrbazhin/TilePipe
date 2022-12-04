@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://src/nodes/TPTile.gd" type="Script" id=1]
 [ext_resource path="res://assets/images/delete_normal.png" type="Texture" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://assets/images/copy_hover.png" type="Texture" id=4]
 [ext_resource path="res://assets/images/delete_hover.png" type="Texture" id=5]
 [ext_resource path="res://src/nodes/TileInTreeIcon.gd" type="Script" id=6]
+[ext_resource path="res://assets/images/rename_normal.png" type="Texture" id=7]
+[ext_resource path="res://assets/images/rename_hover.png" type="Texture" id=8]
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
@@ -56,7 +58,7 @@ color = Color( 0.835294, 0.419608, 0.419608, 0.184314 )
 visible = false
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -88.0
+margin_left = -112.0
 margin_top = 6.0
 margin_right = -38.0
 margin_bottom = 37.0
@@ -68,11 +70,24 @@ anchor_bottom = 1.0
 mouse_filter = 2
 alignment = 1
 
-[node name="CopyButton" type="TextureButton" parent="Controls/Buttons"]
+[node name="RenameButton" type="TextureButton" parent="Controls/Buttons"]
 margin_left = 3.0
 margin_top = 5.0
 margin_right = 23.0
 margin_bottom = 25.0
+hint_tooltip = "Rename tile"
+mouse_default_cursor_shape = 2
+size_flags_vertical = 4
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 8 )
+texture_hover = ExtResource( 8 )
+
+[node name="CopyButton" type="TextureButton" parent="Controls/Buttons"]
+margin_left = 27.0
+margin_top = 5.0
+margin_right = 47.0
+margin_bottom = 25.0
+hint_tooltip = "Make a copy"
 mouse_default_cursor_shape = 2
 size_flags_vertical = 4
 texture_normal = ExtResource( 3 )
@@ -80,10 +95,11 @@ texture_pressed = ExtResource( 4 )
 texture_hover = ExtResource( 4 )
 
 [node name="DelButton" type="TextureButton" parent="Controls/Buttons"]
-margin_left = 27.0
+margin_left = 51.0
 margin_top = 5.0
-margin_right = 47.0
+margin_right = 71.0
 margin_bottom = 25.0
+hint_tooltip = "Delete tile"
 mouse_default_cursor_shape = 2
 size_flags_vertical = 4
 texture_normal = ExtResource( 2 )
@@ -101,5 +117,6 @@ script = ExtResource( 6 )
 
 [connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_selected" from="Tree" to="." method="_on_Tree_item_selected"]
+[connection signal="pressed" from="Controls/Buttons/RenameButton" to="." method="_on_RenameButton_pressed"]
 [connection signal="pressed" from="Controls/Buttons/CopyButton" to="." method="_on_CopyButton_pressed"]
 [connection signal="pressed" from="Controls/Buttons/DelButton" to="." method="_on_DelButton_pressed"]
