@@ -54,6 +54,11 @@ var template_size: Vector2
 var texture_path: String
 var template_path: String
 var ruleset_path: String
+var texture_modified_time: int
+var template_modified_time: int
+var ruleset_modified_time: int
+
+
 var input_tile_size: Vector2
 var input_parts: Dictionary
 var output_resize: bool
@@ -211,6 +216,31 @@ func split_input_into_tile_parts() -> bool:
 	return true
 
 
+func check_texture_changed() -> bool:
+	var f := File.new()
+	return texture_modified_time < f.get_modified_time(texture_path)
+
+
+func check_template_changed() -> bool:
+	var f := File.new()
+	return template_modified_time < f.get_modified_time(template_path)
+
+
+func check_ruleset_changed() -> bool:
+	var f := File.new()
+	return ruleset_modified_time < f.get_modified_time(ruleset_path)
+
+
+func smart_reload_assets():
+	if check_texture_changed() or check_template_changed() or check_ruleset_changed():
+		load_texture(texture_path.trim_prefix(State.current_dir))
+		load_ruleset(ruleset_path.trim_prefix(State.current_dir))
+		load_template(template_path.trim_prefix(State.current_dir))
+		split_input_into_tile_parts()
+		set_frame_randomness()
+		State.emit_signal("tile_needs_render")
+
+
 func reload():
 	load_tile(current_directory, tile_file_name)
 	State.emit_signal("tile_needs_render")
@@ -227,7 +257,7 @@ func load_texture(path: String) -> bool:
 		input_texture = null
 		return false
 	var file_path: String = current_directory + path
-	var image = Image.new()
+	var image = Image.new()	
 	var err: int = image.load(file_path)
 	if err != OK:
 		State.report_error("Error loading texture at: \"" + _tile_data["texture"] + "\" for tile \"" + tile_file_name + "\"")
@@ -235,6 +265,8 @@ func load_texture(path: String) -> bool:
 	texture_path = file_path
 	input_texture = ImageTexture.new()
 	input_texture.create_from_image(image, 0)
+	var f := File.new()
+	texture_modified_time = f.get_modified_time(file_path)
 	return true
 
 
@@ -243,11 +275,12 @@ func load_ruleset(path: String) -> bool:
 		return false	
 	var file_path: String = current_directory + path
 	ruleset = Ruleset.new(file_path)
-#	if ruleset.is_loaded:
 	ruleset_path = file_path
 	if ruleset.last_error != -1:
 		State.report_error("\nError in ruleset %s :\n" % file_path + ruleset.last_error_message)
 		return false
+	var f := File.new()
+	ruleset_modified_time = f.get_modified_time(file_path)
 	return true
 
 
@@ -268,6 +301,8 @@ func load_template(path: String) -> bool:
 	template = ImageTexture.new()
 	template.create_from_image(image, 0)
 	parse_template()
+	var f := File.new()
+	template_modified_time = f.get_modified_time(file_path)	
 	return true
 
 
@@ -340,12 +375,11 @@ func add_template_item(file_name: String):
 
 func _on_Tree_item_selected():
 	var selected_row: TreeItem = tree.get_selected()
-	if selected_row != tree.get_root():
-		$Controls.color = Color("282d33")
-	else:
+	if selected_row == tree.get_root():
 		$Controls.color = Color("444e62")
-#	if selected_row == tree.get_root():
-#		tree.get_root().collapsed = false
+	else:
+		$Controls.color = Color("282d33")
+	smart_reload_assets()
 	emit_signal("row_selected", selected_row)
 	set_selected(true)
 	$Controls.show()

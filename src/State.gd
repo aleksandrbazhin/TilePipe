@@ -4,6 +4,7 @@ extends Node
 signal tile_selected(tile_node, row_item)
 signal tile_cleared()
 signal tile_needs_render()
+#signal tile_texture_changed()
 signal popup_started()
 signal popup_ended()
 signal report_error(message)

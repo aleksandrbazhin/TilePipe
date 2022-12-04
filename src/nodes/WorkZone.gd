@@ -68,6 +68,10 @@ func render_subtiles():
 			or not tile.ruleset.is_loaded or tile.template == null:
 		result_view.clear()
 		return
+#	print(tile.check_texture_changed())
+#	if tile.check_texture_changed():
+#		print("check_texture_changed")
+	tile_main_view.load_texture(tile.input_texture)
 	if is_rendering:
 		is_render_scheduled = true
 		return

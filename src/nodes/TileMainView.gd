@@ -25,14 +25,12 @@ func load_data(tile: TPTile):
 	current_input_tile_size = tile.input_tile_size
 	load_texture(tile.input_texture)
 	settings_container.load_data(tile)
-	
 	populate_ruleset_option(tile.ruleset_path)
 	if tile.ruleset != null and tile.ruleset.is_loaded:
 		ruleset_texture.texture = tile.ruleset.preview_texture
 		add_ruleset_highlights(tile.ruleset)
 	else:
 		clear_ruleset()
-
 	populate_template_option(tile.template_path)
 	if not tile.template_path.empty():
 		template_texture.texture = tile.template
@@ -177,6 +175,8 @@ func reload_tile():
 	if tile == null:
 		return
 	tile.reload()
+	load_texture(tile.input_texture)
+	
 
 
 func _on_ReloadButton_pressed():

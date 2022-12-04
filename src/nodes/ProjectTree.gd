@@ -38,6 +38,7 @@ func _apply_snapshot(settings: Dictionary):
 
 
 func on_tile_row_selected(row: TreeItem, tile: TPTile):
+#	tile.reload()
 	for other_tile in tile_container.get_children():
 		other_tile.deselect_except(row)
 		if other_tile.is_selected:
@@ -169,7 +170,6 @@ func _on_LineEdit_text_entered(_new_text):
 	new_tile_dialog.hide()
 	new_tile_dialog.emit_signal("confirmed")
 	State.popup_ended()
-#	State.current_modal_popup = null
 
 
 func start_delete_tile(tile: TPTile):

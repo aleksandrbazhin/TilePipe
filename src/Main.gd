@@ -55,6 +55,14 @@ func _apply_snapshot(settings: Dictionary):
 		OS.window_size = str2var(settings["window_size"])
 
 
+func _notification(what):
+	match what:
+		MainLoop.NOTIFICATION_WM_FOCUS_IN:
+			var tile := State.get_current_tile()
+			if tile != null:
+				tile.smart_reload_assets()
+
+
 func on_size_changed():
 	var saved_state := ui_snapshot.get_state(self)
 	if not saved_state.empty():
