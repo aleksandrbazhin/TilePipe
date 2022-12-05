@@ -16,7 +16,7 @@ APP_NAME = 'TilePipe2_v.%s' % VERSION
 GITHUB_USER = "aleksandrbazhin"
 
 _BASE_PARAMS = {"godot": GODOT, "godot_params": "--no-window --path . --export",  "path": EXPORT_PATH, "build_path": "", 
-    "app_name": APP_NAME, "binary": "", "version": VERSION, "platform": "", "upload_suffix": "_win64"}
+    "app_name": APP_NAME, "binary": "", "version": VERSION, "platform": "", "upload_suffix": ""}
 
 WIN_PARAMS = _BASE_PARAMS.copy()
 WIN_PARAMS["build_path"] = f"{EXPORT_PATH}/win"
@@ -32,7 +32,7 @@ LINUX_PARAMS["upload_suffix"] = "_linux"
 
 MAC_PARAMS = _BASE_PARAMS.copy()
 MAC_PARAMS["build_path"] = f"{EXPORT_PATH}/mac"
-MAC_PARAMS["binary"] = f"{APP_NAME}._mac.zip"
+MAC_PARAMS["binary"] = f"{APP_NAME}.mac.zip"
 MAC_PARAMS["platform"] = "Mac OSX"
 MAC_PARAMS["upload_suffix"] = "_mac"
 
@@ -86,15 +86,15 @@ if __name__ == "__main__":
     build(LINUX_PARAMS)
     build(MAC_PARAMS)
 
-    print("\n____________________TilePipe______________________\nUploading build to itch.io")
-    upload_itch(WIN_PARAMS)
-    upload_itch(LINUX_PARAMS)
-    upload_itch(MAC_PARAMS)
+    # print("\n____________________TilePipe______________________\nUploading build to itch.io")
+    # upload_itch(WIN_PARAMS)
+    # upload_itch(LINUX_PARAMS)
+    # upload_itch(MAC_PARAMS)
 
-    print("\n____________________TilePipe______________________\nCreating a github release")
-    import github_release
-    github_release.create_git_tag(VERSION)
-    github_release.push_git_tag()
-    github_release.upload_github_release(GITHUB_USER, VERSION)
+    # print("\n____________________TilePipe______________________\nCreating a github release")
+    # import github_release
+    # github_release.create_git_tag(VERSION)
+    # github_release.push_git_tag()
+    # github_release.upload_github_release(GITHUB_USER, VERSION)
 
     print("____________________EXPORT FINISHED______________________\n")

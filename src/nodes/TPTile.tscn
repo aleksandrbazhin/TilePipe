@@ -11,13 +11,11 @@
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
-border_width_right = 40
 border_color = Color( 0, 0, 0, 0 )
 expand_margin_left = 2.0
 
 [sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
-border_width_right = 40
 border_color = Color( 0, 0, 0, 0 )
 expand_margin_left = 2.0
 
