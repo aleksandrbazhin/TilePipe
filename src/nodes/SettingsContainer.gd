@@ -103,9 +103,13 @@ func _on_SpacingXSpinBox_value_changed_no_silence(value: float):
 	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(value, y_spacing))
 
 
-func _on_OutpuResizeButton_toggled_no_silence(button_pressed):
-	State.update_tile_param(TPTile.PARAM_OUTPUT_RESIZE, button_pressed)
+func _on_OutpuResizeButton_toggled_no_silence(button_pressed: bool):
+	State.update_tile_param(TPTile.PARAM_OUTPUT_RESIZE, button_pressed, false)
 	output_tile_size_x.editable = button_pressed
+	var tile := State.get_current_tile()
+	if button_pressed and tile != null and not tile.has_loaded_output_tile_size():
+		State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, Const.DEFAULT_TILE_SIZE, false)
+	State.emit_signal("tile_needs_render")
 
 
 func _on_ResizeSpinBoxX_value_changed_no_silence(value):

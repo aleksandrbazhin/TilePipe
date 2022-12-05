@@ -460,18 +460,18 @@ func update_template(abs_path: String) -> bool:
 	return true
 
 
-func has_loaded_tile_size() -> bool:
-	return _tile_data.has("input_tile_size")
+func has_loaded_output_tile_size() -> bool:
+	return _tile_data.has("output_tile_size")
 
 
 func assure_tile_size():
-	if !has_loaded_tile_size():
+	if !_tile_data.has("input_tile_size"):
 		if input_texture == null:
 			input_tile_size = Const.DEFAULT_TILE_SIZE
 		else:
 			var size = Vector2(input_texture.get_size().y, input_texture.get_size().y)
 			update_input_tile_size(size)
-			output_tile_size = size
+			output_tile_size = get_output_tile_size()
 
 
 func update_input_tile_size(new_size: Vector2) -> bool:
