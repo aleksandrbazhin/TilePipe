@@ -58,7 +58,7 @@ func set_current_tile(tile: TPTile, row: TreeItem = null):
 		emit_signal("tile_selected", tile, row, is_same_tile)
 	else:
 		emit_signal("tile_cleared")
-		tile.select_root()
+		tile.select_root() # this will lead to call to this same function, but with current tile and row valid
 
 
 func get_current_tile() -> TPTile:

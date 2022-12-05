@@ -183,6 +183,7 @@ func _on_DeleteTileDialog_confirmed():
 			var tile_index := tile.get_index()
 			var next_tile: TPTile = tile_container.get_child((tile_index + 1) % tile_count)
 			State.call_deferred("set_current_tile", next_tile)
+			State.call_deferred("emit_signal", "tile_needs_render")
 		else:
 			State.clear_current_tile()
 		OS.move_to_trash(State.current_dir + tile.tile_file_name)
