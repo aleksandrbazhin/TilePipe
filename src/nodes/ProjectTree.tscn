@@ -65,6 +65,7 @@ margin_right = 1024.0
 margin_bottom = 510.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+follow_focus = true
 scroll_horizontal_enabled = false
 
 [node name="TileVBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/TileScrollContainer"]

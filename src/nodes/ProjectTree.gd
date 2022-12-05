@@ -8,6 +8,7 @@ const NO_TILE := "_no_tile_means_we_select_first_"
 
 var convert_dialog_requested := false
 
+onready var tile_scroll: ScrollContainer = $VBoxContainer/MarginContainer/TileScrollContainer
 onready var tile_container := $VBoxContainer/MarginContainer/TileScrollContainer/TileVBoxContainer
 onready var dir_edit := $VBoxContainer/HBoxContainer/DirLineEdit
 onready var no_tiles_found := $NoTilesFound
@@ -96,8 +97,7 @@ func load_project_directory(directory_path: String, selected_tile: String = NO_T
 			if tile_in_the_tree.tile_file_name == selected_tile:
 				tile = tile_in_the_tree
 				break
-		tile.set_selected(true)
-		tile.select_root()
+		select_tile_in_project(tile)
 
 
 func add_tile_to_tree(directory: String, tile_file: String, is_new: bool, select_position: bool = false) -> TPTile:
@@ -121,18 +121,115 @@ func add_tile_to_tree(directory: String, tile_file: String, is_new: bool, select
 	return tile
 
 
-func _on_OpenFolderDialog_dir_selected(dir: String):
-	if dir != open_dialog.current_path:
-		open_dialog.current_path = dir
-	load_project_directory(dir)
+func start_rename_tile(tile: TPTile):
+	rename_tile_lineedit.text = tile.tile_file_name.get_basename()
+	rename_tile_dialog.popup_centered()
+	rename_tile_lineedit.grab_focus()
+	State.popup_started(rename_tile_dialog)
+
+
+func start_delete_tile(tile: TPTile):
+	delete_tile_text.text = "  Delete the tile \"%s\" ? (Moves to trash) " % tile.tile_file_name
+	delete_tile_dialog.popup_centered()
+	State.popup_started(delete_tile_dialog)
+
+
+func scroll_to_tile(tile: TPTile):
+	var tile_bottom := tile.rect_position.y + tile.rect_size.y
+	if tile_bottom > tile_scroll.scroll_vertical + tile_scroll.rect_size.y:
+		tile_scroll.scroll_vertical = int(tile_bottom - tile_scroll.rect_size.y)
+	elif tile.rect_position.y < tile_scroll.scroll_vertical:
+		tile_scroll.scroll_vertical = int(tile.rect_position.y)
+
+
+func select_tile_in_project(tile: TPTile):
+	tile.set_selected(true)
+	tile.select_root()
+	yield(VisualServer, "frame_post_draw")
+	scroll_to_tile(tile)
+
+
+func get_tile_count() -> int:
+	return tile_container.get_child_count()
+
+
+func generate_copy_file_name(file_name: String, copy_index: int) -> String:
+	return file_name.get_basename() + "_(%d)." % copy_index + file_name.get_extension()
+
+
+func copy_tile(tile: TPTile):
+	var dir := Directory.new()
+	if dir.open(State.current_dir) != OK:
+		State.report_error("Can not open current directory.")
+		return
+	var copy_index := 1
+	var new_file_name := generate_copy_file_name(tile.tile_file_name, copy_index)
+	while dir.file_exists(new_file_name):
+		copy_index += 1
+		new_file_name = generate_copy_file_name(tile.tile_file_name, copy_index)
+	if dir.copy(State.current_dir + tile.tile_file_name,  State.current_dir + new_file_name) != OK:
+		State.report_error("Failed to copy tile to \"%s\"" % 
+			(State.current_dir + new_file_name))
+		return
+	var new_tile := add_tile_to_tree(State.current_dir, new_file_name, false, true)
+	yield(VisualServer, "frame_post_draw")
+	scroll_to_tile(new_tile)
+
+
+func _on_DeleteTileDialog_confirmed():
+	var tile := State.get_current_tile()
+	if tile != null:
+		var tile_count := get_tile_count()
+		if tile_count > 1:
+			var tile_index := tile.get_index()
+			var next_tile: TPTile = tile_container.get_child((tile_index + 1) % tile_count)
+			State.call_deferred("set_current_tile", next_tile)
+		else:
+			State.clear_current_tile()
+		OS.move_to_trash(State.current_dir + tile.tile_file_name)
+		tile.queue_free()
+
+
+func _on_DeleteTileDialog_popup_hide():
+	State.popup_ended()
+
+
+func _on_RenameTileDialog_confirmed():
+	var dir := Directory.new()
+	if dir.open(State.current_dir) != OK:
+		State.report_error("Can not open current directory.")
+		return
+#	var copy_index := 1
+	var new_file_name: String = rename_tile_lineedit.text + ".tptile"
+	if dir.file_exists(new_file_name):
+		State.report_error("File \"%s\" alreay exisists." % new_file_name)
+		return
+	var tile = State.get_current_tile()
+	if tile == null:
+		return
+	if dir.rename(tile.tile_file_name, new_file_name) == OK:
+		tile.rename(new_file_name)
+	else:
+		State.report_error("Rename failed.")
+
+
+func _on_TileNameLineEdit_text_entered(new_text):
+	rename_tile_dialog.hide()
+	rename_tile_dialog.emit_signal("confirmed")
+
+
+func _on_RenameTileDialog_popup_hide():
+	State.popup_ended()
 
 
 func _on_DirLoadButton_pressed():
 	open_dialog.popup_centered()
 
 
-func hide_file_dialog():
-	open_dialog.hide()
+func _on_OpenFolderDialog_dir_selected(dir: String):
+	if dir != open_dialog.current_path:
+		open_dialog.current_path = dir
+	load_project_directory(dir)
 
 
 func _on_OpenFolderDialog_about_to_show():
@@ -162,8 +259,12 @@ func _on_NewTileDialog_confirmed():
 		return
 	no_tiles_found.hide()
 	var new_tile := add_tile_to_tree(State.current_dir, new_name, true, true)
-#	State.set_current_tile(new_tile)
 	new_tile.save()
+	select_tile_in_project(new_tile)
+
+
+func _on_NewTileDialog_popup_hide():
+	State.popup_ended()
 
 
 func _on_LineEdit_text_entered(_new_text):
@@ -171,54 +272,6 @@ func _on_LineEdit_text_entered(_new_text):
 	new_tile_dialog.emit_signal("confirmed")
 	State.popup_ended()
 
-
-func start_delete_tile(tile: TPTile):
-	delete_tile_text.text = "  Delete the tile \"%s\" ? (Moves to trash) " % tile.tile_file_name
-	delete_tile_dialog.popup_centered()
-	State.popup_started(delete_tile_dialog)
-
-
-func get_tile_count() -> int:
-	return tile_container.get_child_count()
-
-
-func _on_DeleteTileDialog_confirmed():
-	var tile := State.get_current_tile()
-	if tile != null:
-		var tile_count := get_tile_count()
-		if tile_count > 1:
-			var tile_index := tile.get_index()
-			var next_tile: TPTile = tile_container.get_child((tile_index + 1) % tile_count)
-			State.call_deferred("set_current_tile", next_tile)
-		else:
-			State.clear_current_tile()
-		OS.move_to_trash(State.current_dir + tile.tile_file_name)
-		tile.queue_free()
-
-
-func _on_DeleteTileDialog_popup_hide():
-	State.popup_ended()
-
-
-func generate_copy_file_name(file_name: String, copy_index: int) -> String:
-	return file_name.get_basename() + "_(%d)." % copy_index + file_name.get_extension()
-
-
-func copy_tile(tile: TPTile):
-	var dir := Directory.new()
-	if dir.open(State.current_dir) != OK:
-		State.report_error("Can not open current directory.")
-		return
-	var copy_index := 1
-	var new_file_name := generate_copy_file_name(tile.tile_file_name, copy_index)
-	while dir.file_exists(new_file_name):
-		copy_index += 1
-		new_file_name = generate_copy_file_name(tile.tile_file_name, copy_index)
-	if dir.copy(State.current_dir + tile.tile_file_name,  State.current_dir + new_file_name) != OK:
-		State.report_error("Failed to copy tile to \"%s\"" % 
-			(State.current_dir + new_file_name))
-		return
-	add_tile_to_tree(State.current_dir, new_file_name, false, true)
 
 
 func call_ruleset_convert_dialog():
@@ -240,40 +293,3 @@ func _on_RulesetConvertDialog_confirmed():
 	load_project_directory(State.current_dir)
 
 
-func start_rename_tile(tile: TPTile):
-	rename_tile_lineedit.text = tile.tile_file_name.get_basename()
-	rename_tile_dialog.popup_centered()
-	rename_tile_lineedit.grab_focus()
-	State.popup_started(rename_tile_dialog)
-
-
-func _on_RenameTileDialog_confirmed():
-	var dir := Directory.new()
-	if dir.open(State.current_dir) != OK:
-		State.report_error("Can not open current directory.")
-		return
-#	var copy_index := 1
-	var new_file_name: String = rename_tile_lineedit.text + ".tptile"
-	if dir.file_exists(new_file_name):
-		State.report_error("File \"%s\" alreay exisists." % new_file_name)
-		return
-	var tile = State.get_current_tile()
-	if tile == null:
-		return
-	if dir.rename(tile.tile_file_name, new_file_name) == OK:
-		tile.rename(new_file_name)
-	else:
-		State.report_error("Rename failed.")
-
-
-func _on_TileNameLineEdit_text_entered(new_text):
-	rename_tile_dialog.hide()
-	rename_tile_dialog.emit_signal("confirmed")
-
-
-func _on_NewTileDialog_popup_hide():
-	State.popup_ended()
-
-
-func _on_RenameTileDialog_popup_hide():
-	State.popup_ended()
