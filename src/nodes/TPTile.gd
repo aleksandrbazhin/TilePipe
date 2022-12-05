@@ -23,6 +23,7 @@ enum {
 	PARAM_SUBTILE_SPACING,
 	PARAM_EXPORT_TYPE,
 	PARAM_EXPORT_PNG_PATH,
+	PARAM_EXPORT_MULTIPLE_PNG_PATH,
 	PARAM_EXPORT_GODOT3_RESOURCE_PATH,
 	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE,
 	PARAM_EXPORT_GODOT3_TILE_NAME,
@@ -73,6 +74,7 @@ var frame_number := 1
 
 var export_type: int = Const.EXPORT_TYPE_UKNOWN
 var export_png_path: String
+var export_multiple_png_path: String
 var export_godot3_resource_path: String
 var export_godot3_autotile_type: int = Const.GODOT3_UNKNOWN_AUTOTILE_TYPE
 var export_godot3_tile_name: String
@@ -153,6 +155,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("subtile_spacing", "subtile_spacing", Vector2.ZERO)
 	set_tile_param("export_type", "export_type", Const.EXPORT_TYPE_UKNOWN)
 	set_tile_param("export_png_path", "export_png_path", "")
+	set_tile_param("export_multiple_png_path", "export_multiple_png_path", "")
 	set_tile_param("export_godot3_resource_path", "export_godot3_resource_path", "")
 	set_tile_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
 	set_tile_param("export_godot3_tile_name", "export_godot3_tile_name", "")
@@ -161,7 +164,6 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	if is_texture_loaded and is_ruleset_loaded:
 		split_input_into_tile_parts()
 	set_frame_randomness()
-
 	return true
 
 
@@ -557,6 +559,12 @@ func update_export_png_path(new_path: String) -> bool:
 	return true
 
 
+func update_export_multiple_png_path(new_path: String) -> bool:
+	export_multiple_png_path = new_path
+	_tile_data["export_multiple_png_path"] = export_multiple_png_path
+	return true
+
+
 func update_export_godot3_resource_path(new_path: String) -> bool:
 	export_godot3_resource_path = new_path
 	_tile_data["export_godot3_resource_path"] = export_godot3_resource_path
@@ -638,6 +646,8 @@ func update_param(param_key: int, value) -> bool:
 			return update_export_type(value)
 		PARAM_EXPORT_PNG_PATH:
 			return update_export_png_path(value)
+		PARAM_EXPORT_MULTIPLE_PNG_PATH:
+			return update_export_multiple_png_path(value)
 		PARAM_EXPORT_GODOT3_RESOURCE_PATH:
 			return update_export_godot3_resource_path(value)
 		PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE:

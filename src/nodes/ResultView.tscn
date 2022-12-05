@@ -167,3 +167,4 @@ margin_bottom = 872.0
 [connection signal="file_selected" from="ExportTextureFileDialog" to="." method="_on_ExportTextureFileDialog_file_selected"]
 [connection signal="popup_hide" from="ExportTextureFileDialog" to="." method="_on_ExportTextureFileDialog_popup_hide"]
 [connection signal="popup_hide" from="Godot3ExportDialog" to="." method="_on_Godot3ExportDialog_popup_hide"]
+[connection signal="popup_hide" from="MutitextureExportDialog" to="." method="_on_MutitextureExportDialog_popup_hide"]

@@ -171,7 +171,7 @@ func display_export_path(export_type: int):
 		Const.EXPORT_TYPES.GODOT3:
 			export_path_edit.text = tile.export_godot3_resource_path
 		Const.EXPORT_TYPES.MULTITEXTURE:
-			pass
+			export_path_edit.text = tile.export_multiple_png_path
 		_:
 			export_path_edit.text = ""
 
@@ -210,7 +210,7 @@ func _on_ExportButton_pressed():
 			var dialog = $MutitextureExportDialog
 			var itex := ImageTexture.new()
 			itex.create_from_image(tile.glue_frames_into_image())
-			dialog.setup(itex)
+			dialog.setup(itex, tile.export_multiple_png_path)
 			dialog.popup_centered()
 
 
@@ -234,3 +234,7 @@ func _on_ExportTextureFileDialog_popup_hide():
 func _on_ExportTextureFileDialog_about_to_show():
 	State.popup_started($ExportTextureFileDialog)
 
+
+
+func _on_MutitextureExportDialog_popup_hide():
+	display_export_path(Const.EXPORT_TYPES.MULTITEXTURE)
