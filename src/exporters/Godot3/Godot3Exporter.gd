@@ -82,8 +82,9 @@ func start_export_dialog(tile: TPTile):
 	current_tile_frame_number = tile.frames.size()
 	current_tile_icon = tile.get_tile_icon()
 	
-	resource_path = Helpers.clear_path(tile.export_godot3_resource_path)
-	texture_path = Helpers.clear_path(tile.export_png_path)
+	resource_path = tile.export_godot3_resource_path
+	texture_path = tile.export_png_path
+
 	tile_name = tile.export_godot3_tile_name
 	autotile_type = tile.export_godot3_autotile_type
 	if autotile_type == Const.GODOT3_UNKNOWN_AUTOTILE_TYPE:

@@ -86,15 +86,15 @@ if __name__ == "__main__":
     build(LINUX_PARAMS)
     build(MAC_PARAMS)
 
-    # print("\n____________________TilePipe______________________\nUploading build to itch.io")
-    # upload_itch(WIN_PARAMS)
-    # upload_itch(LINUX_PARAMS)
-    # upload_itch(MAC_PARAMS)
+    print("\n____________________TilePipe______________________\nUploading build to itch.io")
+    upload_itch(WIN_PARAMS)
+    upload_itch(LINUX_PARAMS)
+    upload_itch(MAC_PARAMS)
 
-    # print("\n____________________TilePipe______________________\nCreating a github release")
-    # import github_release
-    # github_release.create_git_tag(VERSION)
-    # github_release.push_git_tag()
-    # github_release.upload_github_release(GITHUB_USER, VERSION)
+    print("\n____________________TilePipe______________________\nCreating a github release")
+    import github_release
+    github_release.create_git_tag(VERSION)
+    github_release.push_git_tag()
+    github_release.upload_github_release(GITHUB_USER, VERSION)
 
     print("____________________EXPORT FINISHED______________________\n")
