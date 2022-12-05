@@ -68,7 +68,8 @@ func render_subtiles():
 	if tile == null or tile.input_texture == null or tile.ruleset == null \
 			or not tile.ruleset.is_loaded or tile.template == null:
 		result_view.clear()
-		tile.update_tree_icon()
+		if tile != null:
+			tile.update_tree_icon()
 		return
 	tile_main_view.load_texture(tile.input_texture)
 	if is_rendering:
