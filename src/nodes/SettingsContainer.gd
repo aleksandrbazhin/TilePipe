@@ -62,14 +62,16 @@ func clear_frames():
 
 
 func populate_frame_control():
-	print()
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
 	clear_frames()
 	var first_frame: FramePartsContainer = frames_container.get_child(0)
-	if tile.loaded_ruleset == null:
+	if tile.ruleset == null or tile.input_texture == null:
+		first_frame.hide()
 		return
+	else:
+		first_frame.show()
 	var is_scroll_bottom: bool = settings_scroll.scroll_vertical == \
 			(settings_scroll.get_node("VBox").rect_size.y - self.rect_size.y)
 	first_frame.populate_from_tile(tile, 0)
@@ -104,9 +106,13 @@ func _on_SpacingXSpinBox_value_changed_no_silence(value: float):
 	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(value, y_spacing))
 
 
-func _on_OutpuResizeButton_toggled_no_silence(button_pressed):
-	State.update_tile_param(TPTile.PARAM_OUTPUT_RESIZE, button_pressed)
+func _on_OutpuResizeButton_toggled_no_silence(button_pressed: bool):
+	State.update_tile_param(TPTile.PARAM_OUTPUT_RESIZE, button_pressed, false)
 	output_tile_size_x.editable = button_pressed
+	var tile := State.get_current_tile()
+	if button_pressed and tile != null and not tile.has_loaded_output_tile_size():
+		State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, Const.DEFAULT_TILE_SIZE, false)
+	State.emit_signal("tile_needs_render")
 
 
 func _on_ResizeSpinBoxX_value_changed_no_silence(value):

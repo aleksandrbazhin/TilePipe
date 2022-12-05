@@ -12,9 +12,6 @@ onready var ruleset_option := $HBox/VBoxLeft/RulesetContainer/RulesetHeader/Rule
 onready var ruleset_texture := $HBox/VBoxLeft/RulesetContainer/ScrollContainer/TextureRect
 onready var template_option := $HBox/VBoxLeft/TemplateContainer/TemplateHeader/TemplateOptionButton
 onready var template_texture := $HBox/VBoxLeft/TemplateContainer/TextureRect
-#onready var export_type_option := $ExportContainer/ExportOptionButton
-#onready var export_path_edit := $ExportContainer/ExportPathLineEdit
-
 onready var texture_option := $HBox/VBoxLeft/HeaderContainer/TextureOption
 onready var texture_container: ScalableTextureContainer = $HBox/VBoxLeft/ScalableTextureContainer
 onready var settings_container: SettingsContainer = $HBox/SettingsContainer
@@ -23,57 +20,58 @@ onready var settings_container: SettingsContainer = $HBox/SettingsContainer
 func load_data(tile: TPTile):
 	if tile == null:
 		return
-	populate_texture_option()
 	current_texture_path = tile.texture_path
+	populate_texture_option(current_texture_path)
 	current_input_tile_size = tile.input_tile_size
-	load_texture(tile.loaded_texture)
+	load_texture(tile.input_texture)
 	settings_container.load_data(tile)
-	Helpers.populate_project_file_option(ruleset_option, 
-		State.current_dir + "/" + Const.RULESET_DIR, 
-		funcref(Helpers, "scan_for_rulesets_in_dir"),
-		tile.ruleset_path)	
-	if tile.loaded_ruleset != null and tile.loaded_ruleset.is_loaded:
-		ruleset_texture.texture = tile.loaded_ruleset.preview_texture
-		add_ruleset_highlights(tile.loaded_ruleset)
+	populate_ruleset_option(tile.ruleset_path)
+	if tile.ruleset != null and tile.ruleset.is_loaded:
+		ruleset_texture.texture = tile.ruleset.preview_texture
+		add_ruleset_highlights(tile.ruleset)
 	else:
 		clear_ruleset()
-	Helpers.populate_project_file_option(template_option, 
-		State.current_dir + "/" + Const.TEMPLATE_DIR, 
-		 funcref(Helpers, "scan_for_templates_in_dir"),
-		 tile.template_path)
+	populate_template_option(tile.template_path)
 	if not tile.template_path.empty():
-		template_texture.texture = tile.loaded_template
+		template_texture.texture = tile.template
 	else:
 		clear_template()
 
 
+func populate_texture_option(texture_path: String):
+	Helpers.populate_project_file_option(texture_option, 
+		State.current_dir, 
+		funcref(Helpers, "scan_for_textures_in_dir"),
+		texture_path)
 
-#func populate_template_option():
-#	var search_path: String = State.current_dir + "/" + Const.TEMPLATE_DIR
-#	var scan_func: FuncRef = funcref(Helpers, "scan_for_templates_in_dir")
-#	Helpers.populate_project_file_option(template_option, search_path, 
-#		scan_func, current_template_path)
 
+func populate_ruleset_option(ruleset_path: String):
+	Helpers.populate_project_file_option(ruleset_option, 
+		State.current_dir + Const.RULESET_DIR, 
+		funcref(Helpers, "scan_for_rulesets_in_dir"),
+		ruleset_path)
 
-func populate_texture_option():
-	var scan_func: FuncRef = funcref(Helpers, "scan_for_textures_in_dir")
-	Helpers.populate_project_file_option(texture_option, State.current_dir, 
-		scan_func, current_texture_path)
+	
+func populate_template_option(template_path: String):
+	Helpers.populate_project_file_option(template_option, 
+		State.current_dir + Const.TEMPLATE_DIR, 
+		funcref(Helpers, "scan_for_templates_in_dir"),
+		template_path)
 
 
 func _on_AddTextureFileDialog_file_selected(path: String):
 	if not Helpers.ensure_directory_exists(State.current_dir, Const.TEXTURE_DIR):
 		State.report_error("Error: Creating directory \"/%s/\" error" % Const.TEXTURE_DIR)
 		return
-	var new_texture_path: String = State.current_dir + "/" + Const.TEXTURE_DIR + "/" + path.get_file()
+	var new_texture_path: String = State.current_dir + Const.TEXTURE_DIR + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_texture_path)
 	if error != OK:
 		State.report_error("Error: Copy file error number %d." % error)
 	current_texture_path = new_texture_path
-	populate_texture_option()
+	populate_texture_option(current_texture_path)
 	State.update_tile_param(TPTile.PARAM_TEXTURE, current_texture_path)
-	load_texture(State.get_current_tile().loaded_texture)
+	load_texture(State.get_current_tile().input_texture)
 
 
 func load_texture(texture: Texture):
@@ -135,48 +133,47 @@ func _on_RulesetOptionButton_item_selected(index):
 	State.update_tile_param(TPTile.PARAM_RULESET, ruleset_path)
 	if ruleset_path.empty():
 		clear_ruleset()
-		return
-	var tile: TPTile = State.get_current_tile()
-	if tile == null:
-		return
-	ruleset_texture.texture = tile.loaded_ruleset.preview_texture
-	add_ruleset_highlights(tile.loaded_ruleset)
+	else:
+		var tile: TPTile = State.get_current_tile()
+		if tile == null:
+			return
+		if tile.ruleset != null:
+			ruleset_texture.texture = tile.ruleset.preview_texture
+			add_ruleset_highlights(tile.ruleset)
 	settings_container.populate_frame_control()
 
 
 func _on_TemplateOptionButton_item_selected(index):
 	var template_path: String = template_option.get_item_metadata(index)
-	State.update_tile_param(TPTile.PARAM_TEMPLATE, template_path)
+	State.update_tile_param(TPTile.PARAM_TEMPLATE, template_path, false)
 	if template_path.empty():
 		clear_template()
 		return
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
-	template_texture.texture = tile.loaded_template
+	State.emit_signal("tile_needs_render")
+	template_texture.texture = tile.template
 
 
 func _on_TextureOption_item_selected(index):
 	current_texture_path = texture_option.get_item_metadata(index)
 	State.update_tile_param(TPTile.PARAM_TEXTURE, current_texture_path)
 	if current_texture_path.empty():
-		clear()
+		clear_texture()
 	else:
 		var tile: TPTile = State.get_current_tile()
 		if tile == null:
 			return
-		load_texture(tile.loaded_texture)
+		load_texture(tile.input_texture)
+	settings_container.populate_frame_control()
 
 
-func reload_tile():
+func _on_ReloadButton_pressed():
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
 	tile.reload()
-
-
-func _on_ReloadButton_pressed():
-	reload_tile()
 
 
 func _on_TextureDialogButton_pressed():
@@ -196,11 +193,3 @@ func _on_ScalableTextureContainer_tile_size_changed(size):
 	State.update_tile_param(TPTile.PARAM_INPUT_SIZE, current_input_tile_size)
 	settings_container.setup_sliders(current_input_tile_size)
 	settings_container.populate_frame_control()
-
-
-func _input(event: InputEvent):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_F5:
-		if visible:
-			get_tree().set_input_as_handled()
-			reload_tile()
-

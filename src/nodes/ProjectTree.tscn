@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/nodes/ProjectTree.gd" type="Script" id=1]
 [ext_resource path="res://assets/images/Load.svg" type="Texture" id=2]
+[ext_resource path="res://src/nodes/RulesetConvertDialog.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=4]
+[ext_resource path="res://assets/images/add.png" type="Texture" id=5]
 
 [node name="ProjectTree" type="Panel" groups=["snapshottable"]]
 anchor_right = 1.0
@@ -52,7 +54,7 @@ icon = ExtResource( 2 )
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 margin_top = 46.0
 margin_right = 1024.0
-margin_bottom = 568.0
+margin_bottom = 556.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_left = 2
@@ -60,9 +62,10 @@ custom_constants/margin_left = 2
 [node name="TileScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer"]
 margin_left = 2.0
 margin_right = 1024.0
-margin_bottom = 522.0
+margin_bottom = 510.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+follow_focus = true
 scroll_horizontal_enabled = false
 
 [node name="TileVBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/TileScrollContainer"]
@@ -70,10 +73,14 @@ margin_right = 1022.0
 size_flags_horizontal = 3
 
 [node name="NewButton" type="Button" parent="VBoxContainer"]
-margin_top = 580.0
+margin_top = 568.0
 margin_right = 1024.0
 margin_bottom = 600.0
+rect_min_size = Vector2( 0, 32 )
+custom_constants/hseparation = 12
 text = "New Tile"
+icon = ExtResource( 5 )
+align = 0
 
 [node name="NoTilesFound" type="Label" parent="."]
 visible = false
@@ -112,10 +119,63 @@ margin_bottom = 56.0
 rect_min_size = Vector2( 300, 36 )
 size_flags_vertical = 4
 
+[node name="RenameTileDialog" type="ConfirmationDialog" parent="."]
+margin_right = 83.0
+margin_bottom = 58.0
+rect_min_size = Vector2( 340, 120 )
+popup_exclusive = true
+window_title = "Enter new tile name"
+
+[node name="CenterContainer" type="CenterContainer" parent="RenameTileDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -36.0
+
+[node name="TileNameLineEdit" type="LineEdit" parent="RenameTileDialog/CenterContainer"]
+margin_left = 12.0
+margin_top = 20.0
+margin_right = 312.0
+margin_bottom = 56.0
+rect_min_size = Vector2( 300, 36 )
+size_flags_vertical = 4
+
+[node name="DeleteTileDialog" type="ConfirmationDialog" parent="."]
+margin_top = -20.0
+margin_right = 200.0
+margin_bottom = 66.0
+rect_min_size = Vector2( 500, 150 )
+popup_exclusive = true
+window_title = "Confirm deletion"
+
+[node name="CenterContainer" type="CenterContainer" parent="DeleteTileDialog"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 492.0
+margin_bottom = 114.0
+
+[node name="Label" type="Label" parent="DeleteTileDialog/CenterContainer"]
+margin_left = 242.0
+margin_top = 46.0
+margin_right = 242.0
+margin_bottom = 60.0
+
+[node name="RulesetConvertDialog" parent="." instance=ExtResource( 3 )]
+
 [connection signal="about_to_show" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_about_to_show"]
 [connection signal="dir_selected" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_dir_selected"]
 [connection signal="popup_hide" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_popup_hide"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DirLoadButton" to="." method="_on_DirLoadButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/NewButton" to="." method="_on_NewButton_pressed"]
 [connection signal="confirmed" from="NewTileDialog" to="." method="_on_NewTileDialog_confirmed"]
+[connection signal="popup_hide" from="NewTileDialog" to="." method="_on_NewTileDialog_popup_hide"]
 [connection signal="text_entered" from="NewTileDialog/CenterContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
+[connection signal="confirmed" from="RenameTileDialog" to="." method="_on_RenameTileDialog_confirmed"]
+[connection signal="popup_hide" from="RenameTileDialog" to="." method="_on_RenameTileDialog_popup_hide"]
+[connection signal="text_entered" from="RenameTileDialog/CenterContainer/TileNameLineEdit" to="." method="_on_TileNameLineEdit_text_entered"]
+[connection signal="confirmed" from="DeleteTileDialog" to="." method="_on_DeleteTileDialog_confirmed"]
+[connection signal="popup_hide" from="DeleteTileDialog" to="." method="_on_DeleteTileDialog_popup_hide"]
+[connection signal="confirmed" from="RulesetConvertDialog" to="." method="_on_RulesetConvertDialog_confirmed"]
+[connection signal="popup_hide" from="RulesetConvertDialog" to="." method="_on_RulesetConvertDialog_popup_hide"]

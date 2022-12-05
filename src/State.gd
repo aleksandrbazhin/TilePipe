@@ -1,9 +1,10 @@
 extends Node
 
 
-signal tile_selected(tile_node, row_item)
+signal tile_selected(tile_node, row_item, is_same)
 signal tile_cleared()
 signal tile_needs_render()
+#signal tile_texture_changed()
 signal popup_started()
 signal popup_ended()
 signal report_error(message)
@@ -15,7 +16,7 @@ signal subtile_selected(bitmask)
 var app_version: String = ProjectSettings.get_setting("application/config/version")
 var window_title_base := "TilePipe v.%s" % app_version
 var current_window_title := window_title_base
-var current_dir := OS.get_executable_path().get_base_dir() + "/" + Const.EXAMPLES_DIR
+var current_dir := get_default_open_dir()
 var current_tile_ref: WeakRef = null
 var current_modal_popup: Popup = null
 var DEFAULT_USER_SETTINGS := {
@@ -31,16 +32,33 @@ var DEFAULT_USER_SETTINGS := {
 }
 
 
+func get_default_open_dir() -> String:
+	var base_dir := OS.get_executable_path().get_base_dir() 
+	if OS.get_name() == "OSX":
+		base_dir += "../.."
+	return base_dir + "/" + Const.EXAMPLES_DIR
+
+
+func set_current_dir(new_path: String):
+	current_dir = new_path
+	if not current_dir.ends_with("/"):
+		current_dir += "/"
+	
+
+
 func set_current_tile(tile: TPTile, row: TreeItem = null):
+	var is_same_tile := false
 	if current_tile_ref == null or current_tile_ref.get_ref() != tile:
 		current_tile_ref = weakref(tile)
+	else:
+		is_same_tile = true
 	current_window_title = tile.tile_file_name + " - " + window_title_base
 	OS.set_window_title(current_window_title)
 	if row != null:
-		emit_signal("tile_selected", tile, row)
+		emit_signal("tile_selected", tile, row, is_same_tile)
 	else:
 		emit_signal("tile_cleared")
-		tile.select_root()
+		tile.select_root() # this will lead to call to this same function, but with current tile and row valid
 
 
 func get_current_tile() -> TPTile:

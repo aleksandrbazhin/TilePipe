@@ -59,7 +59,7 @@ func append_output_texture(texture: Texture, frame_index: int):
 		result_frame_view.rect_size = image_size
 	result_texture_container.add_child(result_frame_view)
 	result_frame_view.setup_highlights(current_output_tile_size, current_subtile_spacing, Vector2.ZERO, frame_index)
-	result_frame_view.connect("mouse_entered", self, "clear_other_frames", [result_frame_view, true, false])
+	result_frame_view.connect("mouse_entered", self, "clear_other_frames_selection", [result_frame_view, true, false])
 	result_frame_view.connect("subtile_selected", self, "on_frame_subtile_selected")
 	if frame_index == last_selected_frame:
 		result_frame_view.select_subtile(last_selected_subtile_index)
@@ -70,6 +70,8 @@ func on_frame_subtile_selected(subtile_index: Vector2, frame_index: int):
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		selected_subtile_texture.texture = null
+		return
+	if tile.frames.empty():
 		return
 	if not subtile_index in tile.frames[frame_index].parsed_template:
 		selected_subtile_texture.texture = null
@@ -107,12 +109,12 @@ func on_frame_subtile_selected(subtile_index: Vector2, frame_index: int):
 		State.emit_signal("subtile_selected", subtile.bitmask)
 		var frame_view: ResultFrameView = result_texture_container.get_child(frame_index)
 		if frame_index != null:
-			clear_other_frames(frame_view, true, true)
+			clear_other_frames_selection(frame_view, true, true)
 	last_selected_subtile_index = subtile_index
 	last_selected_frame = frame_index
 
 
-func clear_other_frames(except: ResultFrameView, clear_highlights: bool, clear_selections: bool):
+func clear_other_frames_selection(except: ResultFrameView, clear_highlights: bool, clear_selections: bool):
 	for child in result_texture_container.get_children():
 		if child != except:
 			child.clear_subtile_overlays(clear_highlights, clear_selections)
@@ -121,7 +123,7 @@ func clear_other_frames(except: ResultFrameView, clear_highlights: bool, clear_s
 func clear():
 	bitmask_label.text = ""
 	for child in result_texture_container.get_children():
-		child.queue_free()
+		child.free()
 	last_selected_subtile_index = Vector2.ZERO
 	last_selected_frame = 0
 	selected_subtile_texture.texture = null
@@ -169,7 +171,7 @@ func display_export_path(export_type: int):
 		Const.EXPORT_TYPES.GODOT3:
 			export_path_edit.text = tile.export_godot3_resource_path
 		Const.EXPORT_TYPES.MULTITEXTURE:
-			pass
+			export_path_edit.text = tile.export_multiple_png_path
 		_:
 			export_path_edit.text = ""
 
@@ -208,9 +210,8 @@ func _on_ExportButton_pressed():
 			var dialog = $MutitextureExportDialog
 			var itex := ImageTexture.new()
 			itex.create_from_image(tile.glue_frames_into_image())
-			dialog.setup(itex)
+			dialog.setup(itex, tile.export_multiple_png_path)
 			dialog.popup_centered()
-			
 
 
 func _on_ExportTextureFileDialog_file_selected(path):
@@ -233,3 +234,7 @@ func _on_ExportTextureFileDialog_popup_hide():
 func _on_ExportTextureFileDialog_about_to_show():
 	State.popup_started($ExportTextureFileDialog)
 
+
+
+func _on_MutitextureExportDialog_popup_hide():
+	display_export_path(Const.EXPORT_TYPES.MULTITEXTURE)

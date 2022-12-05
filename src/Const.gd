@@ -2,15 +2,15 @@ extends Node
 
 
 const SETTINGS_PATH := "user://settings.json"
-const EXAMPLES_DIR := "examples"
+const EXAMPLES_DIR := "examples/"
 const TILE_EXTENXSION := "tptile"
 const MIN_WINDOW_SIZE := Vector2(800, 600)
 const DRAG_END_MSEC := 200
 const DEFAULT_TILE_SIZE := Vector2(64, 64)
 
-const RULESET_DIR := "rulesets"
-const TEMPLATE_DIR := "templates"
-const TEXTURE_DIR := "textures"
+const RULESET_DIR := "rulesets/"
+const TEMPLATE_DIR := "templates/"
+const TEXTURE_DIR := "textures/"
 
 const HIGHLIGHT_COLORS := [
 	Color("98c0ef"), 
@@ -31,7 +31,11 @@ const HIGHLIGHT_COLORS := [
 
 
 const EXPORT_TYPE_UKNOWN := -1
-enum EXPORT_TYPES {TEXTURE, GODOT3, MULTITEXTURE, TEXTURE_PLUS_JSON}
+enum EXPORT_TYPES {
+		TEXTURE, 
+		GODOT3, 
+		MULTITEXTURE, T
+		EXTURE_PLUS_JSON}
 
 const GODOT3_UNKNOWN_AUTOTILE_TYPE := -1
 enum GODOT_AUTOTILE_TYPE {BLOB_3x3, WANG_2x2, FULL_3x3}
@@ -49,7 +53,7 @@ const GODOT_AUTOTILE_GODOT_INDEXES: Dictionary = {
 const TEMPLATE_TILE_SIZE: int = 32
 const DEFAULT_OUTPUT_SIZE: int = 64
 
-const TILE_SAVE_SUFFIX: String = "_tp"
+const TILE_SAVE_SUFFIX: String = ""
 
 const MASK_CHECK_TOP_LEFT := Vector2(4, 4)
 const MASK_CHECK_TOP := Vector2(16, 4)
@@ -63,6 +67,7 @@ const MASK_CHECK_BOTTOM_RIGHT := Vector2(28, 28)
 
 # so it can be rotated by multiplication
 const TILE_MASK: Dictionary = {
+	"CENTER": 0,
 	"TOP": 1,
 	"TOP_RIGHT": 2,
 	"RIGHT": 4,

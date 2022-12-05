@@ -13,12 +13,11 @@
 		"y": 0.5
 	},
 	"output_tile_size": {
-		"x": 12,
-		"y": 12
+		"x": 48,
+		"y": 48
 	},
 	"overlap_level": {
 		"x": 0,
 		"y": 0
-	},
-	"frame_number": 1
+	}
 }

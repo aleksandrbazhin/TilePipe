@@ -38,17 +38,17 @@ func load_data(tile: TPTile):
 	tile_name.text = tile.tile_file_name
 	current_ruleset_path = tile.ruleset_path
 	populate_ruleset_option()
-	if tile.ruleset_path.empty():
+	if tile.ruleset_path.empty() || tile.ruleset == null:
 		clear()
 		return
-	header_data.text = tile.loaded_ruleset.get_raw_header()
-	ruleset_name.text = tile.loaded_ruleset.get_name()
-	description.text = tile.loaded_ruleset.get_description()
-	parts_texture.texture = tile.loaded_ruleset.preview_texture
-	add_ruleset_highlights(tile.loaded_ruleset)
-	add_tiles(tile.loaded_ruleset)
-	if tile.loaded_ruleset.last_error != -1:
-		State.report_error("Error loading tile:\n" + tile.loaded_ruleset.last_error_message)
+	header_data.text = tile.ruleset.get_raw_header()
+	ruleset_name.text = tile.ruleset.get_name()
+	description.text = tile.ruleset.get_description()
+	parts_texture.texture = tile.ruleset.preview_texture
+	add_ruleset_highlights(tile.ruleset)
+	add_tiles(tile.ruleset)
+	if tile.ruleset.last_error != -1:
+		State.report_error("Error loading tile:\n" + tile.ruleset.last_error_message)
 
 
 func add_ruleset_highlights(ruleset: Ruleset):
@@ -115,7 +115,7 @@ func _on_AddRulesetFileDialog_file_selected(path: String):
 	if not Helpers.ensure_directory_exists(State.current_dir, Const.RULESET_DIR):
 		State.report_error("Error: Creating directory \"/%s/\" error" % Const.RULESET_DIR)
 		return
-	var new_ruleset_path := State.current_dir + "/" + Const.RULESET_DIR + "/" + path.get_file()
+	var new_ruleset_path := State.current_dir + Const.RULESET_DIR + "/" + path.get_file()
 	var dir := Directory.new()
 	var error := dir.copy(path, new_ruleset_path)
 	if error != OK:
@@ -128,7 +128,7 @@ func _on_AddRulesetFileDialog_file_selected(path: String):
 
 
 func populate_ruleset_option():
-	var search_path: String = State.current_dir + "/" + Const.RULESET_DIR
+	var search_path: String = State.current_dir + Const.RULESET_DIR
 	var scan_func: FuncRef = funcref(Helpers, "scan_for_rulesets_in_dir")
 	Helpers.populate_project_file_option(ruleset_option, search_path, 
 		scan_func, current_ruleset_path)

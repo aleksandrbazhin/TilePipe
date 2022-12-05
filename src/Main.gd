@@ -7,6 +7,7 @@ var is_ui_blocked: bool = false
 var rng := RandomNumberGenerator.new()
 var last_dragged := 0
 var ui_snapshot: UISnapshot
+var is_ready := false
 
 onready var project_tree: ProjectTree = $VBoxContainer/HSplitContainer/ProjectContainer/ProjectTree
 onready var blocking_overlay := $BlockingOverlay
@@ -26,7 +27,7 @@ func _ready():
 	OS.set_window_title(State.current_window_title)
 	rng.randomize()
 	error_dialog.get_label().align = Label.ALIGN_CENTER
-
+	is_ready = true
 
 
 func connect_signals():
@@ -52,6 +53,14 @@ func _apply_snapshot(settings: Dictionary):
 		OS.window_maximized = false
 		OS.window_position = str2var(settings["window_position"])
 		OS.window_size = str2var(settings["window_size"])
+
+
+func _notification(what):
+	match what:
+		MainLoop.NOTIFICATION_WM_FOCUS_IN:
+			var tile := State.get_current_tile()
+			if tile != null:
+				tile.smart_reload_assets()
 
 
 func on_size_changed():
@@ -90,6 +99,8 @@ func end_modal_popup():
 func add_error_report(text: String):
 	start_modal_popup()
 	error_dialog.dialog_text += text + "\n"
+	if not is_ready:
+		yield(VisualServer, "frame_post_draw")
 	if not error_dialog.visible:
 		error_dialog.popup_centered()
 
@@ -100,7 +111,16 @@ func _on_ErrorDialog_popup_hide():
 
 
 func _input(event):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
-		if error_dialog.visible:
-			get_tree().set_input_as_handled()
-			error_dialog.hide()
+	if event is InputEventKey and event.pressed:
+		match event.scancode:
+			KEY_ESCAPE, KEY_SPACE, KEY_ENTER:
+				if error_dialog.visible:
+					get_tree().set_input_as_handled()
+					error_dialog.hide()
+			KEY_F5:
+				get_tree().set_input_as_handled()
+				var tile: TPTile = State.get_current_tile()
+				if tile == null:
+					return
+				tile.reload()
+

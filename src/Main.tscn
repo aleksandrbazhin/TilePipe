@@ -44,13 +44,13 @@ margin_top = 8.0
 margin_right = 1024.0
 margin_bottom = 574.0
 size_flags_vertical = 3
-split_offset = 106
+split_offset = 160
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ProjectContainer" type="MarginContainer" parent="VBoxContainer/HSplitContainer"]
-margin_right = 312.0
+margin_right = 366.0
 margin_bottom = 566.0
 custom_constants/margin_right = 0
 custom_constants/margin_left = 6
@@ -60,12 +60,12 @@ custom_constants/margin_bottom = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 6.0
-margin_right = 312.0
+margin_right = 366.0
 margin_bottom = 566.0
 rect_min_size = Vector2( 200, 500 )
 
 [node name="WorkZone" parent="VBoxContainer/HSplitContainer" instance=ExtResource( 1 )]
-margin_left = 318.0
+margin_left = 372.0
 margin_right = 1024.0
 margin_bottom = 566.0
 
@@ -118,7 +118,7 @@ margin_right = 360.0
 margin_bottom = -105.0
 rect_min_size = Vector2( 720, 240 )
 popup_exclusive = true
-window_title = "Error"
+window_title = "Error warning!"
 dialog_autowrap = true
 
 [connection signal="popup_hide" from="ErrorDialog" to="." method="_on_ErrorDialog_popup_hide"]

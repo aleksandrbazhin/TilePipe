@@ -3,11 +3,16 @@
   "title": "TilePipe Ruleset",
   "description": "Ruleset for tile generation used by TilePipe software",
   "type": "object",
-  "required": [ "ruleset_name", "ruleset_description", "tile_parts", "tiles" ],
+  "required": [ "ruleset_name", "ruleset_description", "tile_parts", "subtiles" ],
   "properties": {
     "ruleset_name": {
       "description": "Ruleset name",
       "type": "string"
+    },
+    "ruleset_type": {
+      "description": "Ruleset type",
+      "type": "string",
+      "enum": ["SQUARE"]
     },
     "ruleset_description": {
       "description": "Ruleset descriprion",
@@ -29,7 +34,7 @@
           "SIDE_LEFT", "CORNER_OUT_TOP_LEFT", "CORNER_IN_TOP_LEFT"]
       }
     },
-    "tiles": {
+    "rules":  {
       "type": "array",
       "items": {
         "type": "object",
@@ -49,10 +54,10 @@
             "items": {
               "type": "integer",
               "minimum": 0,
-              "description": "What input parts to take to use in specified positions. The length is always 8, parts are place clockwise starting from the top direction. Maximum should not be grater than the length of Input parts array."
+              "description": "What input parts to take to use in specified positions. The length is always 9, first part is always the center. Other parts are placed clockwise starting from the top. Maximum should not be grater than the length of Input parts array."
             },
-            "minItems": 8,
-            "maxItems": 8
+            "minItems": 9,
+            "maxItems": 9
           },
           "part_rotations": {
             "type": "array",
@@ -62,8 +67,8 @@
               "maximum": 3,
               "description": "How many times the input part is rotated on placement. Each rotation is 90 degrees clockwise. From 0 to 3."
             },
-            "minItems": 8,
-            "maxItems": 8
+            "minItems": 9,
+            "maxItems": 9
           },
           "part_flip_x": {
             "type": "array",
@@ -71,8 +76,8 @@
               "type": "boolean",
               "description": "If the input part is flipped on placement over the X-axis."
             },
-            "minItems": 8,
-            "maxItems": 8
+            "minItems": 9,
+            "maxItems": 9
           },
           "part_flip_y": {
             "type": "array",
@@ -80,8 +85,8 @@
               "type": "boolean",
               "description": "If the input part is flipped on placement over the Y-axis."
             },
-            "minItems": 8,
-            "maxItems": 8
+            "minItems": 9,
+            "maxItems": 9
           }
         }
       }

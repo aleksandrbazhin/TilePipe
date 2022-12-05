@@ -36,9 +36,10 @@ func hide_all():
 	template_view.hide()
 
 
-func on_tile_selected(tile: TPTile, row: TreeItem):
+func on_tile_selected(tile: TPTile, row: TreeItem, is_same_tile: bool):
 	hide_all()
-	render_subtiles()
+	if not is_same_tile:
+		render_subtiles()
 	match row:
 		tile.tile_row:
 			tile_main_view.show()
@@ -64,10 +65,13 @@ func on_tile_cleared():
 
 func render_subtiles():
 	var tile: TPTile = State.get_current_tile()
-	if tile == null or tile.loaded_texture == null or tile.loaded_ruleset == null \
-			or not tile.loaded_ruleset.is_loaded or tile.loaded_template == null:
+	if tile == null or tile.input_texture == null or tile.ruleset == null \
+			or not tile.ruleset.is_loaded or tile.template == null:
 		result_view.clear()
+		if tile != null:
+			tile.update_tree_icon()
 		return
+	tile_main_view.load_texture(tile.input_texture)
 	if is_rendering:
 		is_render_scheduled = true
 		return
@@ -100,6 +104,9 @@ func on_tile_rendered(frame_index: int, renderer: TileRenderer = null):
 			is_render_scheduled = false
 			render_subtiles()
 	renderer.queue_free()
+	var tile: TPTile = State.get_current_tile()
+	if tile != null:
+		tile.update_tree_icon()
 
 
 func _on_TileMainView_ruleset_view_called():

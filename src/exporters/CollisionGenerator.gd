@@ -313,7 +313,7 @@ func get_side_overlap(side_points: Array, cutoff: Vector2, vertical_direction: i
 	for i in range(range_from, range_to, increment):
 		var is_y_overlapping: bool = side_points[i].y >= cutoff.y if \
 			vertical_direction == DIRECTION_FORWARD else side_points[i].y <= cutoff.y
-		print(i, " ", side_points[i].y, " ", is_y_overlapping)
+#		print(i, " ", side_points[i].y, " ", is_y_overlapping)
 		overlap_index = i
 		if is_y_overlapping:
 			overlap_index = i

@@ -70,9 +70,9 @@ _global_script_classes=[ {
 "path": "res://src/nodes/MenuPanel.gd"
 }, {
 "base": "WindowDialog",
-"class": "MutitextureExportDialog",
+"class": "MultitextureExportDialog",
 "language": "GDScript",
-"path": "res://src/exporters/Multitexture/MutitextureExportDialog.gd"
+"path": "res://src/exporters/Multitexture/MultitextureExportDialog.gd"
 }, {
 "base": "TextureRect",
 "class": "PartFrameControl",
@@ -139,6 +139,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/nodes/TemplateView.gd"
 }, {
+"base": "Control",
+"class": "TileInTreeIcon",
+"language": "GDScript",
+"path": "res://src/nodes/TileInTreeIcon.gd"
+}, {
 "base": "VBoxContainer",
 "class": "TileMainView",
 "language": "GDScript",
@@ -182,7 +187,7 @@ _global_script_class_icons={
 "GodotExporter": "",
 "GodotTileRow": "",
 "MenuPanel": "",
-"MutitextureExportDialog": "",
+"MultitextureExportDialog": "",
 "PartFrameControl": "",
 "PartHighlight": "",
 "ProjectTree": "",
@@ -196,6 +201,7 @@ _global_script_class_icons={
 "TPTile": "",
 "TPTileFrame": "",
 "TemplateView": "",
+"TileInTreeIcon": "",
 "TileMainView": "",
 "TileMaskPreview": "",
 "TilePart": "",
@@ -218,7 +224,7 @@ boot_splash/bg_color=Color( 0.360784, 0.360784, 0.360784, 0 )
 config/icon="res://assets/images/icon.png"
 config/macos_native_icon="res://assets/icon.icns"
 config/windows_native_icon="res://assets/icon.ico"
-config/version="2.0.alpha.3"
+config/version="2.0.alpha.5"
 
 [autoload]
 

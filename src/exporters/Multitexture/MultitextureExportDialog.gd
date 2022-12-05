@@ -1,4 +1,4 @@
-class_name MutitextureExportDialog
+class_name MultitextureExportDialog
 extends WindowDialog
 
 
@@ -9,17 +9,20 @@ onready var path_edit: LineEdit = $MarginContainer/VBoxContainer/HBoxContainer/P
 onready var pattern_edit: LineEdit = $MarginContainer/VBoxContainer/PatternContainer/PatternLineEdit
 onready var texture_rect: TextureRect = $MarginContainer/VBoxContainer/TextureRect
 onready var type_option_button: OptionButton = $MarginContainer/VBoxContainer/SplitTypeContainer/OptionButton
+onready var file_dialog: FileDialog = $FileDialog
 
 
-func setup(result: Texture):
+func setup(result: Texture, path: String):
 	clear()
+	path_edit.text = path
+	file_dialog.current_dir = path
 	texture_rect.texture = result
 
 
 func clear():
+#	path_edit.text = ""
 	for highlight in texture_rect.get_children():
 		highlight.queue_free()
-
 
 
 func _on_SelectDirButton_pressed():
@@ -158,6 +161,7 @@ func _on_Button_pressed():
 			export_subtiles(dir_path, tile)
 		SPLIT_TYPE.BY_FRAME:
 			export_frames(dir_path, tile)
+	State.update_tile_param(TPTile.PARAM_EXPORT_MULTIPLE_PNG_PATH, dir_path)
 	hide()
 
 

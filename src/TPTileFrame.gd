@@ -76,3 +76,10 @@ func append_subtile(mask: int, pos: Vector2):
 
 func set_result_texture(tex: Texture):
 	result_texture = tex
+
+
+func clear():
+	result_texture = null
+	for mask in result_subtiles_by_bitmask:
+		for variant in result_subtiles_by_bitmask[mask]:
+			variant.reset()

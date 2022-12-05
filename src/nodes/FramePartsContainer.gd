@@ -20,7 +20,7 @@ func populate_from_tile(tile: TPTile, frame_index: int):
 # warning-ignore:shadowed_variable
 	var row_controls := $HBoxContainer/RowControlsContainer
 	var label := $HBoxContainer/Control/Label
-	var ruleset_parts := tile.loaded_ruleset.parts
+	var ruleset_parts := tile.ruleset.parts
 	var max_variants_number := 0
 	for part_index in tile.input_parts:
 		if part_index >= ruleset_parts.size():
