@@ -426,6 +426,7 @@ func update_texture(abs_path: String) -> bool:
 	texture_path = abs_path
 	if not load_texture(rel_path):
 		input_texture = null
+		clear_render_result()
 		if not abs_path.empty():
 			State.report_error("Error: invalid texture path")
 	_tile_data["texture"] = rel_path
@@ -439,6 +440,7 @@ func update_ruleset(abs_path: String) -> bool:
 	ruleset_path = abs_path
 	if not load_ruleset(rel_path):
 		ruleset = null
+		clear_render_result()
 		if not abs_path.empty():
 			State.report_error("Error: invalid ruleset")
 	ruleset_row.set_text(0, RULESET_PREFIX + rel_path)
@@ -452,6 +454,7 @@ func update_template(abs_path: String) -> bool:
 	template_path = abs_path
 	if not load_template(rel_path):
 		template = null
+		clear_render_result()
 		if not abs_path.empty():
 			State.report_error("Error: invalid template")
 	template_row.set_text(0, TEMPLATE_PREFIX + rel_path)
@@ -501,11 +504,11 @@ func update_output_tile_size(new_size: Vector2) -> bool:
 	return true
 
 
-func update_icon():
-	var icon := $TileInTreeIcon
-	icon.icon_texture = get_first_frame_texture()
-	icon.output_tile_size = get_output_tile_size()
-	icon.update()
+func update_tree_icon():
+	var tree_icon: TileInTreeIcon = $TileInTreeIcon
+	tree_icon.icon_texture = get_first_frame_texture()
+	tree_icon.output_tile_size = get_output_tile_size()
+	tree_icon.update()
 
 
 func update_merge_level(new_merge_level: Vector2) -> bool:
@@ -674,12 +677,6 @@ func get_output_tile_size() -> Vector2:
 		return output_tile_size
 	else:
 		return input_tile_size
-#
-#func get_frame_texture_size() -> Vector2:
-#	if frames[0].result_texture == null or frames[0].result_texture.get_data() == null:
-##		State.report_error("Error: No generated texture in frames, tile not fully defined")
-#		return Vector2.ONE
-#	return frames[0].result_texture.get_size()
 
 
 func glue_frames_into_image() -> Image:
@@ -733,3 +730,7 @@ func rename(new_name: String):
 	tile_file_name = new_name
 	tile_row.set_text(0, tile_file_name)
 	
+
+func clear_render_result():
+	for frame in frames:
+		frame.clear()

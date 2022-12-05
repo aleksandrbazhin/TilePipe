@@ -133,14 +133,13 @@ func _on_RulesetOptionButton_item_selected(index):
 	State.update_tile_param(TPTile.PARAM_RULESET, ruleset_path)
 	if ruleset_path.empty():
 		clear_ruleset()
-		return
-	var tile: TPTile = State.get_current_tile()
-	if tile == null:
-		return
-	if tile.ruleset == null:
-		return
-	ruleset_texture.texture = tile.ruleset.preview_texture
-	add_ruleset_highlights(tile.ruleset)
+	else:
+		var tile: TPTile = State.get_current_tile()
+		if tile == null:
+			return
+		if tile.ruleset != null:
+			ruleset_texture.texture = tile.ruleset.preview_texture
+			add_ruleset_highlights(tile.ruleset)
 	settings_container.populate_frame_control()
 
 
@@ -155,19 +154,19 @@ func _on_TemplateOptionButton_item_selected(index):
 		return
 	State.emit_signal("tile_needs_render")
 	template_texture.texture = tile.template
-#	tile.reload()
 
 
 func _on_TextureOption_item_selected(index):
 	current_texture_path = texture_option.get_item_metadata(index)
 	State.update_tile_param(TPTile.PARAM_TEXTURE, current_texture_path)
 	if current_texture_path.empty():
-		clear()
+		clear_texture()
 	else:
 		var tile: TPTile = State.get_current_tile()
 		if tile == null:
 			return
 		load_texture(tile.input_texture)
+	settings_container.populate_frame_control()
 
 
 func _on_ReloadButton_pressed():

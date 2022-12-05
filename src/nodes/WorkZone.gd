@@ -67,10 +67,8 @@ func render_subtiles():
 	if tile == null or tile.input_texture == null or tile.ruleset == null \
 			or not tile.ruleset.is_loaded or tile.template == null:
 		result_view.clear()
+		tile.update_tree_icon()
 		return
-#	print(tile.check_texture_changed())
-#	if tile.check_texture_changed():
-#		print("check_texture_changed")
 	tile_main_view.load_texture(tile.input_texture)
 	if is_rendering:
 		is_render_scheduled = true
@@ -106,7 +104,7 @@ func on_tile_rendered(frame_index: int, renderer: TileRenderer = null):
 	renderer.queue_free()
 	var tile: TPTile = State.get_current_tile()
 	if tile != null:
-		tile.update_icon()
+		tile.update_tree_icon()
 
 
 func _on_TileMainView_ruleset_view_called():

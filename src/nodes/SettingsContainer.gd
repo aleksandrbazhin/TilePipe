@@ -67,8 +67,11 @@ func populate_frame_control():
 		return
 	clear_frames()
 	var first_frame: FramePartsContainer = frames_container.get_child(0)
-	if tile.ruleset == null:
+	if tile.ruleset == null or tile.input_texture == null:
+		first_frame.hide()
 		return
+	else:
+		first_frame.show()
 	var is_scroll_bottom: bool = settings_scroll.scroll_vertical == \
 			(settings_scroll.get_node("VBox").rect_size.y - self.rect_size.y)
 	first_frame.populate_from_tile(tile, 0)
