@@ -39,7 +39,6 @@ func _apply_snapshot(settings: Dictionary):
 
 
 func on_tile_row_selected(row: TreeItem, tile: TPTile):
-#	tile.reload()
 	for other_tile in tile_container.get_children():
 		other_tile.deselect_except(row)
 		if other_tile.is_selected:

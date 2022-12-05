@@ -36,9 +36,10 @@ func hide_all():
 	template_view.hide()
 
 
-func on_tile_selected(tile: TPTile, row: TreeItem):
+func on_tile_selected(tile: TPTile, row: TreeItem, is_same_tile: bool):
 	hide_all()
-	render_subtiles()
+	if not is_same_tile:
+		render_subtiles()
 	match row:
 		tile.tile_row:
 			tile_main_view.show()
