@@ -6,16 +6,33 @@ signal value_changed_no_silence(value)
 
 var is_silenced: bool = false
 
+
+#func _unhandled_key_input(event: InputEventKey):
+#	if not event.is_pressed() or get_focus_owner() != get_line_edit():
+#		return
+#	match event.scancode:
+#		KEY_UP:
+#			value += 1
+#		KEY_DOWN:
+#			value -= 1
+
+
+# trying to prevent default behavior(focus change)
 func _input(event: InputEvent):
-	if event is InputEventKey and event.is_pressed() and \
-			(event.scancode == KEY_UP or event.scancode == KEY_DOWN):
-		if get_focus_owner() == get_line_edit():
-			if get_line_edit().editable:
-				if event.scancode == KEY_UP:
-					value += 1
-				else:
-					value -= 1
-			get_tree().set_input_as_handled()
+	if not event is InputEventKey:
+		return
+	if not  event.is_pressed():
+		return
+	if get_focus_owner() != get_line_edit():
+		return
+	if not (event.scancode == KEY_UP or event.scancode == KEY_DOWN):
+		return
+	if get_line_edit().editable:
+		if event.scancode == KEY_UP:
+			value += 1
+		else:
+			value -= 1
+	get_tree().set_input_as_handled()
 
 
 func set_value_quietly(new_value: float):

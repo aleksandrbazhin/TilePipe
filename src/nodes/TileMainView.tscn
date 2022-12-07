@@ -97,31 +97,31 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 40.0
 margin_right = 512.0
-margin_bottom = 342.0
+margin_bottom = 384.0
 rect_min_size = Vector2( 32, 32 )
 rect_clip_content = true
 
 [node name="HSeparator" type="HSeparator" parent="HBox/VBoxLeft"]
-margin_top = 342.0
+margin_top = 384.0
 margin_right = 512.0
-margin_bottom = 342.0
+margin_bottom = 384.0
 custom_constants/separation = 0
 
 [node name="RulesetContainer" type="VBoxContainer" parent="HBox/VBoxLeft"]
-margin_top = 342.0
+margin_top = 384.0
 margin_right = 512.0
-margin_bottom = 442.0
+margin_bottom = 477.0
 custom_constants/separation = 4
 
 [node name="Control" type="Control" parent="HBox/VBoxLeft/RulesetContainer"]
 margin_right = 512.0
-margin_bottom = 12.0
-rect_min_size = Vector2( 0, 12 )
+margin_bottom = 5.0
+rect_min_size = Vector2( 0, 5 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HBox/VBoxLeft/RulesetContainer"]
-margin_top = 16.0
+margin_top = 9.0
 margin_right = 512.0
-margin_bottom = 64.0
+margin_bottom = 57.0
 size_flags_horizontal = 3
 scroll_vertical_enabled = false
 __meta__ = {
@@ -139,9 +139,9 @@ __meta__ = {
 }
 
 [node name="RulesetHeader" type="HBoxContainer" parent="HBox/VBoxLeft/RulesetContainer"]
-margin_top = 68.0
+margin_top = 61.0
 margin_right = 512.0
-margin_bottom = 100.0
+margin_bottom = 93.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 
@@ -176,42 +176,35 @@ size_flags_vertical = 4
 text = "Manage rulesets"
 clip_text = true
 
-[node name="Spacer" type="Control" parent="HBox/VBoxLeft/RulesetContainer/RulesetHeader"]
-visible = false
-margin_left = 568.0
-margin_right = 578.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 10, 0 )
-
 [node name="HSeparator3" type="HSeparator" parent="HBox/VBoxLeft"]
-margin_top = 442.0
+margin_top = 477.0
 margin_right = 512.0
-margin_bottom = 442.0
+margin_bottom = 477.0
 custom_constants/separation = 0
 
 [node name="TemplateContainer" type="VBoxContainer" parent="HBox/VBoxLeft"]
-margin_top = 442.0
+margin_top = 477.0
 margin_right = 512.0
 margin_bottom = 594.0
 
 [node name="Control" type="Control" parent="HBox/VBoxLeft/TemplateContainer"]
 margin_right = 512.0
-margin_bottom = 12.0
-rect_min_size = Vector2( 0, 12 )
+margin_bottom = 5.0
+rect_min_size = Vector2( 0, 5 )
 
 [node name="TextureRect" type="TextureRect" parent="HBox/VBoxLeft/TemplateContainer"]
-margin_top = 16.0
+margin_top = 9.0
 margin_right = 512.0
-margin_bottom = 116.0
-rect_min_size = Vector2( 180, 100 )
+margin_bottom = 81.0
+rect_min_size = Vector2( 180, 72 )
 size_flags_horizontal = 3
 expand = true
 stretch_mode = 5
 
 [node name="TemplateHeader" type="HBoxContainer" parent="HBox/VBoxLeft/TemplateContainer"]
-margin_top = 120.0
+margin_top = 85.0
 margin_right = 512.0
-margin_bottom = 152.0
+margin_bottom = 117.0
 size_flags_horizontal = 3
 custom_constants/separation = 8
 

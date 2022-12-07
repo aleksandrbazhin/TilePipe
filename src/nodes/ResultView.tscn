@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://src/nodes/ResultView.gd" type="Script" id=2]
 [ext_resource path="res://assets/styles/ui_theme.tres" type="Theme" id=3]
 [ext_resource path="res://src/exporters/Godot3/Godot3Exporter.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/exporters/Multitexture/MultitextureExportDialog.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/nodes/ScaleControls.tscn" type="PackedScene" id=6]
 
 [node name="ResultPreview" type="ColorRect"]
 margin_top = 440.0
@@ -83,7 +84,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/Result/TextureContainer"]
+focus_mode = 2
 custom_constants/separation = 0
+
+[node name="ScaleControls" parent="VBoxContainer/HSplitContainer/Result" instance=ExtResource( 6 )]
+margin_left = -148.0
 
 [node name="ExportContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 232.0
@@ -161,6 +166,8 @@ margin_bottom = 872.0
 [node name="MutitextureExportDialog" parent="." instance=ExtResource( 5 )]
 
 [connection signal="resized" from="VBoxContainer/HSplitContainer/SingleTile" to="." method="_on_SingleTile_resized"]
+[connection signal="gui_input" from="VBoxContainer/HSplitContainer/Result/TextureContainer" to="." method="_on_TextureContainer_gui_input"]
+[connection signal="scale_changed" from="VBoxContainer/HSplitContainer/Result/ScaleControls" to="." method="_on_ScaleControls_scale_changed"]
 [connection signal="item_selected" from="VBoxContainer/ExportContainer/ExportOptionButton" to="." method="_on_ExportOptionButton_item_selected"]
 [connection signal="pressed" from="VBoxContainer/ExportContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
 [connection signal="about_to_show" from="ExportTextureFileDialog" to="." method="_on_ExportTextureFileDialog_about_to_show"]

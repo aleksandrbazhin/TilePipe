@@ -16,6 +16,7 @@ onready var result_texture_container: = $VBoxContainer/HSplitContainer/Result/Te
 onready var bitmask_label := $VBoxContainer/HSplitContainer/SingleTile/BitmaskLabel
 onready var export_type_option := $VBoxContainer/ExportContainer/ExportOptionButton
 onready var export_path_edit := $VBoxContainer/ExportContainer/ExportPathLineEdit
+onready var scale_controls := $VBoxContainer/HSplitContainer/Result/ScaleControls
 
 
 func combine_result_from_tile(tile: TPTile):
@@ -52,18 +53,21 @@ func combine_result_from_tile(tile: TPTile):
 
 
 func append_output_texture(texture: Texture, frame_index: int):
-	var result_frame_view: ResultFrameView = preload("res://src/nodes/ResultFrameView.tscn").instance()
-	result_frame_view.texture = texture
-	if result_frame_view != null:
-		var image_size: Vector2 = result_frame_view.texture.get_size()
-		result_frame_view.rect_size = image_size
-	result_texture_container.add_child(result_frame_view)
-	result_frame_view.setup_highlights(current_output_tile_size, current_subtile_spacing, Vector2.ZERO, frame_index)
-	result_frame_view.connect("mouse_entered", self, "clear_other_frames_selection", [result_frame_view, true, false])
-	result_frame_view.connect("subtile_selected", self, "on_frame_subtile_selected")
-	if frame_index == last_selected_frame:
-		result_frame_view.select_subtile(last_selected_subtile_index)
-		result_frame_view.highlight_subtile(last_selected_subtile_index)
+	var frame: ResultFrameView = preload("res://src/nodes/ResultFrameView.tscn").instance()
+	frame.texture = texture
+	if frame != null:
+		var image_size: Vector2 = frame.texture.get_size()
+		frame.rect_min_size = image_size
+	result_texture_container.add_child(frame)
+	frame.connect("mouse_entered", self, "clear_other_frames_selection", [frame, true, false])
+	frame.connect("subtile_selected", self, "on_frame_subtile_selected")
+	var scale: float = scale_controls.get_current_scale()
+	var is_frame_selected: bool = last_selected_frame == frame_index
+	frame.set_current_scale(Vector2(scale, scale), is_frame_selected)
+	frame.setup_highlights(current_output_tile_size, current_subtile_spacing, Vector2.ZERO, frame_index)
+	if is_frame_selected:
+		frame.select_subtile(last_selected_subtile_index)
+		frame.highlight_subtile(last_selected_subtile_index)
 
 
 func on_frame_subtile_selected(subtile_index: Vector2, frame_index: int):
@@ -124,13 +128,13 @@ func clear():
 	bitmask_label.text = ""
 	for child in result_texture_container.get_children():
 		child.free()
-	last_selected_subtile_index = Vector2.ZERO
-	last_selected_frame = 0
+#	last_selected_subtile_index = Vector2.ZERO
+#	last_selected_frame = 0
 	selected_subtile_texture.texture = null
 
 
 func _on_SingleTile_resized():
-	on_frame_subtile_selected(last_selected_subtile_index, 0)
+	on_frame_subtile_selected(last_selected_subtile_index, last_selected_frame)
 
 
 #func move_selection(delta:Vector2, frame_index: int = 0):
@@ -235,6 +239,17 @@ func _on_ExportTextureFileDialog_about_to_show():
 	State.popup_started($ExportTextureFileDialog)
 
 
-
 func _on_MutitextureExportDialog_popup_hide():
 	display_export_path(Const.EXPORT_TYPES.MULTITEXTURE)
+
+
+func _on_ScaleControls_scale_changed(scale: float):
+	for frame in result_texture_container.get_children():
+		var is_frame_selected: bool = last_selected_frame == frame.frame_index
+		frame.set_current_scale(Vector2(scale, scale), is_frame_selected)
+
+
+func _on_TextureContainer_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
+		result_texture_container.grab_focus()
+#		$VBoxContainer/HSplitContainer/Result/TextureContainer.call_deferred("grab_focus")
