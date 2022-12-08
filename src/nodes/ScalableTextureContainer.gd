@@ -15,7 +15,7 @@ onready var bg_rect := $BGTextureRect
 onready var texture_rect := $TextureRect
 onready var x_spinbox: AdvancedSpinBox = $InputInfo/HBoxContainer/XSpinBox
 onready var y_spinbox: AdvancedSpinBox = $InputInfo/HBoxContainer/YSpinBox
-onready var part_highlight := $PartHihglight
+onready var highlight_contaoner := $Highlights
 
 
 func _ready():
@@ -62,34 +62,31 @@ func setup_size_display(tile_size: Vector2):
 	y_spinbox.set_value_quietly(tile_size.y)
 
 
-func set_part_highlight(part_id: int, is_on: bool):
-	# TODO: search highlighted part by position set in ruleset or tile settings
+func set_part_highlight(part_id: int, is_on: bool, tile: TPTile = null):
 	if part_id == highlight_part_id and is_on == is_highlighting_tile:
 		return
-	if is_on:
-		part_highlight.show()
-		highlight_position = Vector2(part_id - 1, 0)
-		var color_index := (part_id - 1) % Const.HIGHLIGHT_COLORS.size()
-		part_highlight.color = Const.HIGHLIGHT_COLORS[color_index]
-		part_highlight.color.a = 0.6
-	else:
-		part_highlight.hide()
-	is_highlighting_tile = is_on
-	draw_part_highlight()
-
-
-func draw_part_highlight():
-	if is_highlighting_tile:
-		var tile_size := current_scale * current_tile_size
-		part_highlight.rect_position = highlight_position * tile_size
-		part_highlight.rect_size = tile_size
+	if tile == null:
+		return
+	if not is_on:
+		for highlight in highlight_contaoner.get_children():
+			highlight.free()
+		return
+	if not (part_id - 1) in tile.input_parts:
+		return
+	var tile_size := current_scale * current_tile_size
+	for part in tile.input_parts[part_id - 1]:
+		var highlight := TextureRect.new()
+		highlight.rect_position = Vector2(part.part_index, part.variant_index) * tile_size
+		highlight.rect_size = tile_size
+		highlight.expand = true
+		highlight.texture = Ruleset.PART_HIGHLIGHT_MASKS[part.ruleset_part_index]
+		highlight_contaoner.add_child(highlight)
 
 
 func _draw():
-	#TODO: redraws 2 times instead of one
+	#TODO: redraws multiple times on startup
 	if is_ready:
 		set_input_tile_size(current_tile_size)
-		draw_part_highlight()
 
 
 func _on_XSpinBox_value_changed_no_silence(value):

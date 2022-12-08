@@ -61,7 +61,8 @@ var template_modified_time: int
 var ruleset_modified_time: int
 
 var input_tile_size: Vector2
-var input_parts: Dictionary
+# input_parts[part_index] = [variant1: TilePart, variant2: TilePart, ...]
+var input_parts: Dictionary 
 var output_resize: bool
 var output_tile_size: Vector2 = Vector2(64,64)
 var subtile_spacing := Vector2.ZERO
@@ -198,13 +199,14 @@ func set_frame_randomness():
 					break
 				frame.set_part_priority(int(part_index), int(variant_index), part_priorities[variant_index])
 
+
 func split_input_into_tile_parts() -> bool:
 	if ruleset == null or input_texture == null:
 		return false
 	input_parts = {}
 	var input_image: Image = input_texture.get_data()
-	var min_input_tiles := ruleset.parts.size()
-	for part_index in range(min_input_tiles):
+#	var min_input_tiles := ruleset.parts.size()
+	for part_index in ruleset.parts.size():
 		input_parts[part_index] = []
 		var variant_index := 0
 		while variant_index * input_tile_size.y <= input_image.get_size().y or input_parts[part_index].size() == 0 :
@@ -217,6 +219,7 @@ func split_input_into_tile_parts() -> bool:
 				input_parts[part_index].append(part)
 				part.part_index = part_index
 				part.variant_index = variant_index
+				part.ruleset_part_index = ruleset.parts[part_index]
 			variant_index += 1
 #			for frame in frames:
 #				pass 

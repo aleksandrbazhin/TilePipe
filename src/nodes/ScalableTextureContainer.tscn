@@ -89,8 +89,11 @@ margin_bottom = 30.0
 min_value = 2.0
 value = 2.0
 
-[node name="PartHihglight" type="ColorRect" parent="."]
-visible = false
+[node name="Highlights" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="TextureRect2" type="TextureRect" parent="."]
 margin_right = 40.0
 margin_bottom = 40.0
 
