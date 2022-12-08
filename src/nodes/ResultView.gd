@@ -59,6 +59,7 @@ func append_output_texture(texture: Texture, frame_index: int):
 	if frame != null:
 		var image_size: Vector2 = frame.texture.get_size()
 		frame.rect_min_size = image_size
+	frame.set_frame_index(frame_index)
 	result_texture_container.add_child(frame)
 	frame.connect("mouse_entered", self, "clear_other_frames_selection", [frame, true, false])
 	frame.connect("subtile_selected", self, "on_frame_subtile_selected")

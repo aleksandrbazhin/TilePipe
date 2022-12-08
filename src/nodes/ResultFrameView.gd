@@ -6,7 +6,7 @@ signal subtile_selected(position, frame_index)
 
 onready var subtile_highlight := $SubtileHighlight
 onready var subtile_selection := $SubtileSelection
-
+onready var label := $Label
 
 var frame_index := 0
 
@@ -80,3 +80,13 @@ func set_current_scale(current_scale: Vector2, is_selected: bool):
 	subtile_selection.rect_scale = _scale
 	subtile_selection.rect_position = calculate_subtile_position(_tile_size, _subtile_spacing, _selected_index)
 	subtile_highlight.rect_position = subtile_selection.rect_position
+	label.hide()
+	yield(VisualServer, "frame_post_draw")
+	var y = (rect_min_size.y + $Label.rect_size.x) / 2.0
+	label.rect_position.y =  y 
+	label.show()
+
+
+func set_frame_index(index: int):
+	frame_index = index
+	$Label.text = "Frame " + str(frame_index + 1)
