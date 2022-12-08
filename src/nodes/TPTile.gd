@@ -60,7 +60,6 @@ var texture_modified_time: int
 var template_modified_time: int
 var ruleset_modified_time: int
 
-
 var input_tile_size: Vector2
 var input_parts: Dictionary
 var output_resize: bool

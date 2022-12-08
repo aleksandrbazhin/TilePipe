@@ -129,41 +129,11 @@ func clear():
 	bitmask_label.text = ""
 	for child in result_texture_container.get_children():
 		child.free()
-#	last_selected_subtile_index = Vector2.ZERO
-#	last_selected_frame = 0
 	selected_subtile_texture.texture = null
 
 
 func _on_SingleTile_resized():
 	on_frame_subtile_selected(last_selected_subtile_index, last_selected_frame)
-
-
-#func move_selection(delta:Vector2, frame_index: int = 0):
-#	var tile: TPTile = State.get_current_tile()
-#	if tile == null:
-#		return
-#	var new_index := last_selected_subtile_index + delta
-#	if new_index in tile.frames[frame_index].parsed_template:
-#		select_subtile(new_index)
-
-
-#
-#func _unhandled_input(event: InputEvent):
-#	if event is InputEventKey and event.pressed:
-#		match event.scancode:
-#			KEY_UP:
-#				move_selection(Vector2.UP)
-#				get_tree().set_input_as_handled()
-#			KEY_DOWN:
-#				move_selection(Vector2.DOWN)
-#				get_tree().set_input_as_handled()
-#			KEY_LEFT:
-#				move_selection(Vector2.LEFT)
-#				get_tree().set_input_as_handled()
-#			KEY_RIGHT:
-#				move_selection(Vector2.RIGHT)
-#				get_tree().set_input_as_handled()
-
 
 
 func display_export_path(export_type: int):
@@ -254,4 +224,48 @@ func _on_ScaleControls_scale_changed(scale: float):
 func _on_TextureContainer_gui_input(event):
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
 		result_texture_container.grab_focus()
-#		$VBoxContainer/HSplitContainer/Result/TextureContainer.call_deferred("grab_focus")
+
+
+func move_subtile_selection(delta: Vector2):
+	var tile: TPTile = State.get_current_tile()
+	if tile == null or tile.frames.empty() or tile.frames[0] == null:
+		return
+	var new_index := last_selected_subtile_index + delta
+	if not new_index in tile.frames[0].parsed_template:
+		if new_index.y < 0 and delta == Vector2.UP and last_selected_frame > 0:
+			last_selected_frame -= 1
+			new_index.y = tile.template_size.y - 1
+		elif new_index.y > 0 and delta == Vector2.DOWN and last_selected_frame < tile.frames.size() - 1:
+			last_selected_frame += 1
+			new_index.y = 0
+		else:
+			new_index = last_selected_subtile_index
+	last_selected_subtile_index = new_index
+	var frame: ResultFrameView = result_texture_container.get_child(last_selected_frame)
+	if frame == null:
+		return
+	frame.select_subtile(last_selected_subtile_index)
+	frame.highlight_subtile(last_selected_subtile_index)
+
+
+func _input(event: InputEvent):
+	if not event is InputEventKey:
+		return
+	if not event.is_pressed():
+		return
+	if not result_texture_container.has_focus():
+		return
+	match event.scancode:
+		KEY_UP, KEY_KP_8:
+			move_subtile_selection(Vector2.UP)
+			get_tree().set_input_as_handled()
+		KEY_DOWN, KEY_KP_2:
+			move_subtile_selection(Vector2.DOWN)
+			get_tree().set_input_as_handled()
+		KEY_LEFT, KEY_KP_4:
+			move_subtile_selection(Vector2.LEFT)
+			get_tree().set_input_as_handled()
+		KEY_RIGHT, KEY_KP_6:
+			move_subtile_selection(Vector2.RIGHT)
+			get_tree().set_input_as_handled()
+
