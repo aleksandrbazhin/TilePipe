@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://src/nodes/ResultView.gd" type="Script" id=2]
 [ext_resource path="res://assets/styles/ui_theme.tres" type="Theme" id=3]
 [ext_resource path="res://src/exporters/Godot3/Godot3Exporter.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/exporters/Multitexture/MultitextureExportDialog.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/nodes/ScaleControls.tscn" type="PackedScene" id=6]
 
 [node name="ResultPreview" type="ColorRect"]
 margin_top = 440.0
@@ -40,27 +41,18 @@ valign = 1
 margin_right = 1280.0
 margin_bottom = 232.0
 size_flags_vertical = 3
-split_offset = 140
+split_offset = 100
 
 [node name="SingleTile" type="ColorRect" parent="VBoxContainer/HSplitContainer"]
-margin_right = 340.0
+margin_right = 164.0
 margin_bottom = 232.0
-rect_min_size = Vector2( 200, 0 )
+rect_min_size = Vector2( 64, 0 )
 size_flags_vertical = 3
 color = Color( 0.380392, 0.388235, 0.411765, 0.47451 )
 
 [node name="SubtileTexture" type="TextureRect" parent="VBoxContainer/HSplitContainer/SingleTile"]
-margin_right = 300.0
+margin_right = 64.0
 margin_bottom = 232.0
-
-[node name="Label" type="Label" parent="VBoxContainer/HSplitContainer/SingleTile"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -88.0
-margin_top = -22.0
-text = "Bitmask:"
 
 [node name="BitmaskLabel" type="Label" parent="VBoxContainer/HSplitContainer/SingleTile"]
 anchor_left = 1.0
@@ -69,10 +61,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -30.0
 margin_top = -22.0
-margin_right = -2.0
+margin_right = -3.0
+hint_tooltip = "Bitmask"
+mouse_filter = 1
+align = 2
+valign = 2
 
 [node name="Result" type="Control" parent="VBoxContainer/HSplitContainer"]
-margin_left = 346.0
+margin_left = 170.0
 margin_right = 1280.0
 margin_bottom = 232.0
 rect_min_size = Vector2( 320, 180 )
@@ -83,7 +79,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HSplitContainer/Result/TextureContainer"]
+focus_mode = 2
 custom_constants/separation = 0
+
+[node name="ScaleControls" parent="VBoxContainer/HSplitContainer/Result" instance=ExtResource( 6 )]
+margin_left = -148.0
 
 [node name="ExportContainer" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 232.0
@@ -161,6 +161,8 @@ margin_bottom = 872.0
 [node name="MutitextureExportDialog" parent="." instance=ExtResource( 5 )]
 
 [connection signal="resized" from="VBoxContainer/HSplitContainer/SingleTile" to="." method="_on_SingleTile_resized"]
+[connection signal="gui_input" from="VBoxContainer/HSplitContainer/Result/TextureContainer" to="." method="_on_TextureContainer_gui_input"]
+[connection signal="scale_changed" from="VBoxContainer/HSplitContainer/Result/ScaleControls" to="." method="_on_ScaleControls_scale_changed"]
 [connection signal="item_selected" from="VBoxContainer/ExportContainer/ExportOptionButton" to="." method="_on_ExportOptionButton_item_selected"]
 [connection signal="pressed" from="VBoxContainer/ExportContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
 [connection signal="about_to_show" from="ExportTextureFileDialog" to="." method="_on_ExportTextureFileDialog_about_to_show"]

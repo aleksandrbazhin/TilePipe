@@ -29,8 +29,24 @@ margin_top = 2.0
 margin_right = 431.0
 margin_bottom = 2.0
 
+[node name="RowControlsContainer" type="VBoxContainer" parent="HBoxContainer"]
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+margin_left = 4.0
+margin_right = 406.0
+size_flags_horizontal = 3
+scroll_vertical_enabled = false
+
+[node name="PartsContainer" type="HBoxContainer" parent="HBoxContainer/ScrollContainer"]
+margin_right = 402.0
+hint_tooltip = "Setup the usage frequency of each detected part variant."
+size_flags_horizontal = 3
+custom_constants/separation = 2
+alignment = 1
+
 [node name="Control" type="Control" parent="HBoxContainer"]
-margin_right = 20.0
+margin_left = 410.0
+margin_right = 430.0
 rect_min_size = Vector2( 20, 0 )
 
 [node name="Label" type="Label" parent="HBoxContainer/Control"]
@@ -45,20 +61,3 @@ size_flags_vertical = 7
 custom_fonts/font = ExtResource( 2 )
 text = "Frame"
 align = 1
-
-[node name="RowControlsContainer" type="VBoxContainer" parent="HBoxContainer"]
-margin_left = 24.0
-margin_right = 24.0
-
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
-margin_left = 28.0
-margin_right = 430.0
-size_flags_horizontal = 3
-scroll_vertical_enabled = false
-
-[node name="PartsContainer" type="HBoxContainer" parent="HBoxContainer/ScrollContainer"]
-margin_right = 402.0
-hint_tooltip = "Setup the usage frequency of each detected part variant."
-size_flags_horizontal = 3
-custom_constants/separation = 2
-alignment = 1

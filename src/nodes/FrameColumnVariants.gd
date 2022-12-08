@@ -19,11 +19,13 @@ func recalculate_parts_total_priority():
 
 
 func enable_variant_by_index(index: int, is_enabled: bool, suppress_render: bool = false) -> bool:
+	if index >= get_child_count():
+		return false
 	var part_control: PartFrameControl = get_child(index)
 	if is_enabled:
-		if part_control.enable(suppress_render):
+		if part_control != null and part_control.enable(suppress_render):
 			return true
 	else:
-		if part_control.disable(suppress_render):
+		if part_control != null and part_control.disable(suppress_render):
 			return true
 	return false

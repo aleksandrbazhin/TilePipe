@@ -103,21 +103,22 @@ func clear_texture():
 func add_ruleset_highlights(ruleset: Ruleset):
 	for old_highlight in ruleset_texture.get_children():
 		old_highlight.queue_free()
+	var tile := State.get_current_tile()
 	for i in ruleset.parts.size():
 		var highlight := preload("res://src/nodes/PartHighlight.tscn").instance()
 		ruleset_texture.add_child(highlight)
 		highlight.rect_position.x = i * (ruleset.PREVIEW_SIZE_PX + ruleset.PREVIEW_SPACE_PX)
 		highlight.set_id(i + 1, true)
-		highlight.connect("focused", self, "on_part_highlight_focused")
-		highlight.connect("unfocused", self, "on_part_highlight_unfocused")
+		highlight.connect("focused", self, "on_part_highlight_focused", [tile])
+		highlight.connect("unfocused", self, "on_part_highlight_unfocused", [tile])
 
 
-func on_part_highlight_focused(part: PartHighlight):
-	texture_container.set_part_highlight(part.id, true)
+func on_part_highlight_focused(part: PartHighlight, tile: TPTile):
+	texture_container.set_part_highlight(part.id, true, tile)
 
 
-func on_part_highlight_unfocused(part: PartHighlight):
-	texture_container.set_part_highlight(part.id, false)
+func on_part_highlight_unfocused(part: PartHighlight, tile: TPTile):
+	texture_container.set_part_highlight(part.id, false, tile)
 
 
 func _on_RulesetButton_pressed():

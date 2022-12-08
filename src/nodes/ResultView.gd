@@ -16,6 +16,7 @@ onready var result_texture_container: = $VBoxContainer/HSplitContainer/Result/Te
 onready var bitmask_label := $VBoxContainer/HSplitContainer/SingleTile/BitmaskLabel
 onready var export_type_option := $VBoxContainer/ExportContainer/ExportOptionButton
 onready var export_path_edit := $VBoxContainer/ExportContainer/ExportPathLineEdit
+onready var scale_controls: ScaleControls = $VBoxContainer/HSplitContainer/Result/ScaleControls
 
 
 func combine_result_from_tile(tile: TPTile):
@@ -25,10 +26,11 @@ func combine_result_from_tile(tile: TPTile):
 	current_subtile_spacing = tile.subtile_spacing
 	if last_selected_frame >= tile.frames.size():
 		last_selected_frame = 0
+	scale_controls.set_current_scale(tile.result_display_scale, true)
 	for frame in tile.frames:
 		var subtiles_by_bitmasks: Dictionary = frame.result_subtiles_by_bitmask
 		if subtiles_by_bitmasks.empty():
-			return
+			continue
 		var out_image := Image.new()
 		var out_image_size: Vector2 = tile.template_size * current_output_tile_size
 		out_image_size += (tile.template_size - Vector2.ONE) * tile.subtile_spacing
@@ -52,18 +54,22 @@ func combine_result_from_tile(tile: TPTile):
 
 
 func append_output_texture(texture: Texture, frame_index: int):
-	var result_frame_view: ResultFrameView = preload("res://src/nodes/ResultFrameView.tscn").instance()
-	result_frame_view.texture = texture
-	if result_frame_view != null:
-		var image_size: Vector2 = result_frame_view.texture.get_size()
-		result_frame_view.rect_size = image_size
-	result_texture_container.add_child(result_frame_view)
-	result_frame_view.setup_highlights(current_output_tile_size, current_subtile_spacing, Vector2.ZERO, frame_index)
-	result_frame_view.connect("mouse_entered", self, "clear_other_frames_selection", [result_frame_view, true, false])
-	result_frame_view.connect("subtile_selected", self, "on_frame_subtile_selected")
-	if frame_index == last_selected_frame:
-		result_frame_view.select_subtile(last_selected_subtile_index)
-		result_frame_view.highlight_subtile(last_selected_subtile_index)
+	var frame: ResultFrameView = preload("res://src/nodes/ResultFrameView.tscn").instance()
+	frame.texture = texture
+	if frame != null:
+		var image_size: Vector2 = frame.texture.get_size()
+		frame.rect_min_size = image_size
+	frame.set_frame_index(frame_index)
+	result_texture_container.add_child(frame)
+	frame.connect("mouse_entered", self, "clear_other_frames_selection", [frame, true, false])
+	frame.connect("subtile_selected", self, "on_frame_subtile_selected")
+	var scale: float = scale_controls.get_current_scale()
+	var is_frame_selected: bool = last_selected_frame == frame_index
+	frame.set_current_scale(Vector2(scale, scale), is_frame_selected)
+	frame.setup_highlights(current_output_tile_size, current_subtile_spacing, Vector2.ZERO, frame_index)
+	if is_frame_selected:
+		frame.select_subtile(last_selected_subtile_index)
+		frame.highlight_subtile(last_selected_subtile_index)
 
 
 func on_frame_subtile_selected(subtile_index: Vector2, frame_index: int):
@@ -124,41 +130,11 @@ func clear():
 	bitmask_label.text = ""
 	for child in result_texture_container.get_children():
 		child.free()
-	last_selected_subtile_index = Vector2.ZERO
-	last_selected_frame = 0
 	selected_subtile_texture.texture = null
 
 
 func _on_SingleTile_resized():
-	on_frame_subtile_selected(last_selected_subtile_index, 0)
-
-
-#func move_selection(delta:Vector2, frame_index: int = 0):
-#	var tile: TPTile = State.get_current_tile()
-#	if tile == null:
-#		return
-#	var new_index := last_selected_subtile_index + delta
-#	if new_index in tile.frames[frame_index].parsed_template:
-#		select_subtile(new_index)
-
-
-#
-#func _unhandled_input(event: InputEvent):
-#	if event is InputEventKey and event.pressed:
-#		match event.scancode:
-#			KEY_UP:
-#				move_selection(Vector2.UP)
-#				get_tree().set_input_as_handled()
-#			KEY_DOWN:
-#				move_selection(Vector2.DOWN)
-#				get_tree().set_input_as_handled()
-#			KEY_LEFT:
-#				move_selection(Vector2.LEFT)
-#				get_tree().set_input_as_handled()
-#			KEY_RIGHT:
-#				move_selection(Vector2.RIGHT)
-#				get_tree().set_input_as_handled()
-
+	on_frame_subtile_selected(last_selected_subtile_index, last_selected_frame)
 
 
 func display_export_path(export_type: int):
@@ -235,6 +211,62 @@ func _on_ExportTextureFileDialog_about_to_show():
 	State.popup_started($ExportTextureFileDialog)
 
 
-
 func _on_MutitextureExportDialog_popup_hide():
 	display_export_path(Const.EXPORT_TYPES.MULTITEXTURE)
+
+
+func _on_ScaleControls_scale_changed(scale: float):
+	for frame in result_texture_container.get_children():
+		var is_frame_selected: bool = last_selected_frame == frame.frame_index
+		frame.set_current_scale(Vector2(scale, scale), is_frame_selected)
+	State.update_tile_param(TPTile.PARAM_RESULT_DISPLAY_SCALE, scale, false)
+
+
+func _on_TextureContainer_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
+		result_texture_container.grab_focus()
+
+
+func move_subtile_selection(delta: Vector2):
+	var tile: TPTile = State.get_current_tile()
+	if tile == null or tile.frames.empty() or tile.frames[0] == null:
+		return
+	var new_index := last_selected_subtile_index + delta
+	if not new_index in tile.frames[0].parsed_template:
+		if new_index.y < 0 and delta == Vector2.UP and last_selected_frame > 0:
+			last_selected_frame -= 1
+			new_index.y = tile.template_size.y - 1
+		elif new_index.y > 0 and delta == Vector2.DOWN and last_selected_frame < tile.frames.size() - 1:
+			last_selected_frame += 1
+			new_index.y = 0
+		else:
+			new_index = last_selected_subtile_index
+	last_selected_subtile_index = new_index
+	var frame: ResultFrameView = result_texture_container.get_child(last_selected_frame)
+	if frame == null:
+		return
+	frame.select_subtile(last_selected_subtile_index)
+	frame.highlight_subtile(last_selected_subtile_index)
+
+
+func _input(event: InputEvent):
+	if not event is InputEventKey:
+		return
+	if not event.is_pressed():
+		return
+	if not result_texture_container.has_focus():
+		return
+	match event.scancode:
+		KEY_UP, KEY_KP_8:
+			move_subtile_selection(Vector2.UP)
+			get_tree().set_input_as_handled()
+		KEY_DOWN, KEY_KP_2:
+			move_subtile_selection(Vector2.DOWN)
+			get_tree().set_input_as_handled()
+		KEY_LEFT, KEY_KP_4:
+			move_subtile_selection(Vector2.LEFT)
+			get_tree().set_input_as_handled()
+		KEY_RIGHT, KEY_KP_6:
+			move_subtile_selection(Vector2.RIGHT)
+			get_tree().set_input_as_handled()
+

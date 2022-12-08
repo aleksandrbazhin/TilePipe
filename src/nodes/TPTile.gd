@@ -28,7 +28,8 @@ enum {
 	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE,
 	PARAM_EXPORT_GODOT3_TILE_NAME,
 	PARAM_FRAME_NUMBER,
-	PARAM_FRAME_RANDOM_PRIORITIES
+	PARAM_FRAME_RANDOM_PRIORITIES,
+	PARAM_RESULT_DISPLAY_SCALE
 }
 
 const HEIGHT_EXPANDED := 120
@@ -59,9 +60,9 @@ var texture_modified_time: int
 var template_modified_time: int
 var ruleset_modified_time: int
 
-
 var input_tile_size: Vector2
-var input_parts: Dictionary
+# input_parts[part_index] = [variant1: TilePart, variant2: TilePart, ...]
+var input_parts: Dictionary 
 var output_resize: bool
 var output_tile_size: Vector2 = Vector2(64,64)
 var subtile_spacing := Vector2.ZERO
@@ -71,6 +72,7 @@ var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
 var frame_number := 1
+var result_display_scale: float = 1.0
 
 var export_type: int = Const.EXPORT_TYPE_UKNOWN
 var export_png_path: String
@@ -111,6 +113,8 @@ func set_tile_param(param_name: String, settings_param_name: String, default_val
 				set(param_name, bool(_tile_data[settings_param_name]))
 			TYPE_STRING:
 				set(param_name, _tile_data[settings_param_name])
+			TYPE_REAL:
+				set(param_name, float(_tile_data[settings_param_name]))
 	else:
 		if typeof(get(param_name)) == typeof(default_value):
 			set(param_name, default_value)
@@ -160,7 +164,8 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
 	set_tile_param("export_godot3_tile_name", "export_godot3_tile_name", "")
 #	set_tile_param("export_godot3_tile_name", "frame_randomness_data", "")
-
+	set_tile_param("result_display_scale", "result_display_scale", 1.0)
+	
 	if is_texture_loaded and is_ruleset_loaded:
 		split_input_into_tile_parts()
 	set_frame_randomness()
@@ -194,13 +199,14 @@ func set_frame_randomness():
 					break
 				frame.set_part_priority(int(part_index), int(variant_index), part_priorities[variant_index])
 
+
 func split_input_into_tile_parts() -> bool:
 	if ruleset == null or input_texture == null:
 		return false
 	input_parts = {}
 	var input_image: Image = input_texture.get_data()
-	var min_input_tiles := ruleset.parts.size()
-	for part_index in range(min_input_tiles):
+#	var min_input_tiles := ruleset.parts.size()
+	for part_index in ruleset.parts.size():
 		input_parts[part_index] = []
 		var variant_index := 0
 		while variant_index * input_tile_size.y <= input_image.get_size().y or input_parts[part_index].size() == 0 :
@@ -213,6 +219,7 @@ func split_input_into_tile_parts() -> bool:
 				input_parts[part_index].append(part)
 				part.part_index = part_index
 				part.variant_index = variant_index
+				part.ruleset_part_index = ruleset.parts[part_index]
 			variant_index += 1
 #			for frame in frames:
 #				pass 
@@ -618,6 +625,13 @@ func update_frame_random_priorities(frame_part_variant_priority: Array) -> bool:
 	return true
 
 
+func update_result_display_scale(value: float) -> bool:
+	result_display_scale = value
+	_tile_data["result_display_scale"] = result_display_scale
+	return true
+
+
+
 # returns true if param was successfully changed
 func update_param(param_key: int, value) -> bool:
 	match param_key:
@@ -661,6 +675,8 @@ func update_param(param_key: int, value) -> bool:
 			return update_frame_number(value)
 		PARAM_FRAME_RANDOM_PRIORITIES:
 			return update_frame_random_priorities(value)
+		PARAM_RESULT_DISPLAY_SCALE:
+			return update_result_display_scale(value)
 	return false
 
 

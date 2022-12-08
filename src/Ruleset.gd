@@ -63,6 +63,21 @@ const RULESET_PART_TEXTURES := {
 	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_bottom_left.png"), 
 	RULESET_TILE_PARTS.CORNER_OUT_TOP_LEFT: preload("res://assets/images/ruleset_icons/ruleset_tile_out_top_left.png"),
 }
+const PART_HIGHLIGHT_MASKS := {
+	RULESET_TILE_PARTS.FULL: preload("res://assets/images/part_masks/tile_full.png"), 
+	RULESET_TILE_PARTS.SIDE_TOP: preload("res://assets/images/part_masks/tile_top.png"),
+	RULESET_TILE_PARTS.SIDE_RIGHT: preload("res://assets/images/part_masks/tile_right.png"),
+	RULESET_TILE_PARTS.SIDE_BOTTOM: preload("res://assets/images/part_masks/tile_bottom.png"),
+	RULESET_TILE_PARTS.SIDE_LEFT: preload("res://assets/images/part_masks/tile_left.png"),
+	RULESET_TILE_PARTS.CORNER_IN_TOP_RIGHT: preload("res://assets/images/part_masks/tile_in_top_right.png"),
+	RULESET_TILE_PARTS.CORNER_IN_BOTTOM_RIGHT: preload("res://assets/images/part_masks/tile_in_bottom_right.png"),
+	RULESET_TILE_PARTS.CORNER_IN_BOTTOM_LEFT: preload("res://assets/images/part_masks/tile_in_bottom_left.png"),
+	RULESET_TILE_PARTS.CORNER_IN_TOP_LEFT: preload("res://assets/images/part_masks/tile_in_top_left.png"),
+	RULESET_TILE_PARTS.CORNER_OUT_TOP_RIGHT: preload("res://assets/images/part_masks/tile_out_top_right.png"),
+	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_RIGHT: preload("res://assets/images/part_masks/tile_out_bottom_right.png"), 
+	RULESET_TILE_PARTS.CORNER_OUT_BOTTOM_LEFT: preload("res://assets/images/part_masks/tile_out_bottom_left.png"), 
+	RULESET_TILE_PARTS.CORNER_OUT_TOP_LEFT: preload("res://assets/images/part_masks/tile_out_top_left.png"),
+}
 const SCHEMA_PATH := "res://rulesets/ruleset_schema.json"
 const PREVIEW_SIZE_PX := 48
 const PREVIEW_SPACE_PX := 6
