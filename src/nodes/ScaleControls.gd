@@ -19,10 +19,11 @@ func get_current_scale() -> float:
 	return _scale
 
 
-func set_current_scale(scale: float):
+func set_current_scale(scale: float, is_silenced: bool = false):
 	_scale = clamp(scale, _min_scale, _max_scale)
 	$Label.text = str(int(100.0 * _scale)) + "%"
-	emit_signal("scale_changed", _scale)
+	if not is_silenced:
+		emit_signal("scale_changed", _scale)
 
 
 func increase_scale():
@@ -40,11 +41,10 @@ func _on_PlusScaleButton_pressed():
 func _on_MinusScaleButton_pressed():
 	decrease_scale()
 
+
 func _unhandled_key_input(event: InputEventKey):
 	if not event.is_pressed():
 		return
-#	if get_focus_owner() != get_line_edit():
-#		return
 	match event.scancode:
 		KEY_PLUS, KEY_EQUAL, KEY_KP_ADD:
 			increase_scale()

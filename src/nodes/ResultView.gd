@@ -16,7 +16,7 @@ onready var result_texture_container: = $VBoxContainer/HSplitContainer/Result/Te
 onready var bitmask_label := $VBoxContainer/HSplitContainer/SingleTile/BitmaskLabel
 onready var export_type_option := $VBoxContainer/ExportContainer/ExportOptionButton
 onready var export_path_edit := $VBoxContainer/ExportContainer/ExportPathLineEdit
-onready var scale_controls := $VBoxContainer/HSplitContainer/Result/ScaleControls
+onready var scale_controls: ScaleControls = $VBoxContainer/HSplitContainer/Result/ScaleControls
 
 
 func combine_result_from_tile(tile: TPTile):
@@ -26,10 +26,11 @@ func combine_result_from_tile(tile: TPTile):
 	current_subtile_spacing = tile.subtile_spacing
 	if last_selected_frame >= tile.frames.size():
 		last_selected_frame = 0
+	scale_controls.set_current_scale(tile.result_display_scale, true)
 	for frame in tile.frames:
 		var subtiles_by_bitmasks: Dictionary = frame.result_subtiles_by_bitmask
 		if subtiles_by_bitmasks.empty():
-			return
+			continue
 		var out_image := Image.new()
 		var out_image_size: Vector2 = tile.template_size * current_output_tile_size
 		out_image_size += (tile.template_size - Vector2.ONE) * tile.subtile_spacing
@@ -247,6 +248,7 @@ func _on_ScaleControls_scale_changed(scale: float):
 	for frame in result_texture_container.get_children():
 		var is_frame_selected: bool = last_selected_frame == frame.frame_index
 		frame.set_current_scale(Vector2(scale, scale), is_frame_selected)
+	State.update_tile_param(TPTile.PARAM_RESULT_DISPLAY_SCALE, scale, false)
 
 
 func _on_TextureContainer_gui_input(event):
