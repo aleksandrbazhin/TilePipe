@@ -171,9 +171,10 @@ func copy_tile(tile: TPTile):
 			(State.current_dir + new_file_name))
 		return
 	var new_tile := add_tile_to_tree(State.current_dir, new_file_name, false, true)
+
 	yield(VisualServer, "frame_post_draw")
 	scroll_to_tile(new_tile)
-
+	new_tile.collapse_tree()
 
 func _on_DeleteTileDialog_confirmed():
 	var tile := State.get_current_tile()

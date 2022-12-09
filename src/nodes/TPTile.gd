@@ -29,7 +29,8 @@ enum {
 	PARAM_EXPORT_GODOT3_TILE_NAME,
 	PARAM_FRAME_NUMBER,
 	PARAM_FRAME_RANDOM_PRIORITIES,
-	PARAM_RESULT_DISPLAY_SCALE
+	PARAM_UI_RESULT_DISPLAY_SCALE,
+	PARAM_UI_TREE_COLLAPSED,
 }
 
 const HEIGHT_EXPANDED := 120
@@ -72,7 +73,8 @@ var smoothing := false
 var random_seed_enabled := false
 var random_seed_value := 0
 var frame_number := 1
-var result_display_scale: float = 1.0
+var ui_result_display_scale: float = 1.0
+var ui_tree_collapsed: bool = true
 
 var export_type: int = Const.EXPORT_TYPE_UKNOWN
 var export_png_path: String
@@ -93,7 +95,11 @@ onready var highlight_rect := $ColorRect
 func _ready():
 	if is_loaded:
 		create_tree_items()
-		rect_min_size.y = HEIGHT_EXPANDED
+		tile_row.collapsed = ui_tree_collapsed
+		if ui_tree_collapsed:
+			rect_min_size.y = HEIGHT_COLLAPSED
+		else:
+			rect_min_size.y = HEIGHT_EXPANDED
 
 
 # the purpose of this is to be able to add new parameters to .tptile in the future
@@ -163,8 +169,8 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("export_godot3_resource_path", "export_godot3_resource_path", "")
 	set_tile_param("export_godot3_autotile_type", "export_godot3_autotile_type", Const.GODOT3_UNKNOWN_AUTOTILE_TYPE)
 	set_tile_param("export_godot3_tile_name", "export_godot3_tile_name", "")
-#	set_tile_param("export_godot3_tile_name", "frame_randomness_data", "")
-	set_tile_param("result_display_scale", "result_display_scale", 1.0)
+	set_tile_param("ui_result_display_scale", "ui_result_display_scale", 1.0)
+	set_tile_param("ui_tree_collapsed", "ui_tree_collapsed", true)
 	
 	if is_texture_loaded and is_ruleset_loaded:
 		split_input_into_tile_parts()
@@ -426,6 +432,8 @@ func _on_Tree_item_collapsed(item: TreeItem):
 		rect_min_size.y = HEIGHT_COLLAPSED
 	else:
 		rect_min_size.y = HEIGHT_EXPANDED
+	update_param(PARAM_UI_TREE_COLLAPSED, item.collapsed)
+	save()
 
 
 func update_texture(abs_path: String) -> bool:
@@ -625,11 +633,16 @@ func update_frame_random_priorities(frame_part_variant_priority: Array) -> bool:
 	return true
 
 
-func update_result_display_scale(value: float) -> bool:
-	result_display_scale = value
-	_tile_data["result_display_scale"] = result_display_scale
+func update_ui_result_display_scale(value: float) -> bool:
+	ui_result_display_scale = value
+	_tile_data["ui_result_display_scale"] = ui_result_display_scale
 	return true
 
+
+func update_ui_tree_collapsed(value: bool):
+	ui_tree_collapsed = value
+	_tile_data["ui_tree_collapsed"] = ui_tree_collapsed
+	return true
 
 
 # returns true if param was successfully changed
@@ -675,8 +688,10 @@ func update_param(param_key: int, value) -> bool:
 			return update_frame_number(value)
 		PARAM_FRAME_RANDOM_PRIORITIES:
 			return update_frame_random_priorities(value)
-		PARAM_RESULT_DISPLAY_SCALE:
-			return update_result_display_scale(value)
+		PARAM_UI_RESULT_DISPLAY_SCALE:
+			return update_ui_result_display_scale(value)
+		PARAM_UI_TREE_COLLAPSED:
+			return update_ui_tree_collapsed(value)
 	return false
 
 

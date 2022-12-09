@@ -26,7 +26,7 @@ func combine_result_from_tile(tile: TPTile):
 	current_subtile_spacing = tile.subtile_spacing
 	if last_selected_frame >= tile.frames.size():
 		last_selected_frame = 0
-	scale_controls.set_current_scale(tile.result_display_scale, true)
+	scale_controls.set_current_scale(tile.ui_result_display_scale, true)
 	for frame in tile.frames:
 		var subtiles_by_bitmasks: Dictionary = frame.result_subtiles_by_bitmask
 		if subtiles_by_bitmasks.empty():
@@ -219,7 +219,7 @@ func _on_ScaleControls_scale_changed(scale: float):
 	for frame in result_texture_container.get_children():
 		var is_frame_selected: bool = last_selected_frame == frame.frame_index
 		frame.set_current_scale(Vector2(scale, scale), is_frame_selected)
-	State.update_tile_param(TPTile.PARAM_RESULT_DISPLAY_SCALE, scale, false)
+	State.update_tile_param(TPTile.PARAM_UI_RESULT_DISPLAY_SCALE, scale, false)
 
 
 func _on_TextureContainer_gui_input(event):
