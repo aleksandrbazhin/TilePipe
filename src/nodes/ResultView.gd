@@ -128,8 +128,8 @@ func clear_other_frames_selection(except: ResultFrameView, clear_highlights: boo
 
 func clear():
 	bitmask_label.text = ""
-	for child in result_texture_container.get_children():
-		child.free()
+	for frame in result_texture_container.get_children():
+		frame.queue_free()
 	selected_subtile_texture.texture = null
 
 
@@ -222,11 +222,6 @@ func _on_ScaleControls_scale_changed(scale: float):
 	State.update_tile_param(TPTile.PARAM_UI_RESULT_DISPLAY_SCALE, scale, false)
 
 
-func _on_TextureContainer_gui_input(event):
-	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
-		result_texture_container.grab_focus()
-
-
 func move_subtile_selection(delta: Vector2):
 	var tile: TPTile = State.get_current_tile()
 	if tile == null or tile.frames.empty() or tile.frames[0] == null:
@@ -270,3 +265,7 @@ func _input(event: InputEvent):
 			move_subtile_selection(Vector2.RIGHT)
 			get_tree().set_input_as_handled()
 
+
+func _on_TextureContainer_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
+		result_texture_container.grab_focus()

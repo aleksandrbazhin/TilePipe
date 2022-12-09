@@ -45,6 +45,7 @@ func on_tile_row_selected(row: TreeItem, tile: TPTile):
 			other_tile.set_selected(false)
 	tile.set_selected(true)
 	State.set_current_tile(tile, row)
+	grab_focus()
 	emit_signal("_snapshot_state_changed")
 
 
@@ -174,7 +175,7 @@ func copy_tile(tile: TPTile):
 
 	yield(VisualServer, "frame_post_draw")
 	scroll_to_tile(new_tile)
-	new_tile.collapse_tree()
+
 
 func _on_DeleteTileDialog_confirmed():
 	var tile := State.get_current_tile()
@@ -294,3 +295,53 @@ func _on_RulesetConvertDialog_confirmed():
 	load_project_directory(State.current_dir)
 
 
+func get_selected_tile_index() -> int:
+	for i in tile_container.get_child_count():
+		if tile_container.get_child(i).is_selected:
+			return  i
+	return 0
+	
+
+
+func _input(event: InputEvent):
+	if not has_focus():
+		return
+	if not event is InputEventKey:
+		return
+	if not event.is_pressed():
+		return
+	var selected_tile_index := get_selected_tile_index()
+	match event.scancode:
+		KEY_UP, KEY_KP_8:
+			selected_tile_index -= 1
+			if selected_tile_index < 0:
+				selected_tile_index = tile_container.get_child_count() - 1
+			select_tile_in_project(tile_container.get_child(selected_tile_index))
+			get_tree().set_input_as_handled()
+		KEY_DOWN, KEY_KP_2:
+			selected_tile_index += 1
+			selected_tile_index = selected_tile_index % tile_container.get_child_count()
+			select_tile_in_project(tile_container.get_child(selected_tile_index))
+			get_tree().set_input_as_handled()
+		KEY_SPACE, KEY_ENTER:
+			tile_container.get_child(selected_tile_index).toggle_collapse()
+			get_tree().set_input_as_handled()
+		KEY_O:
+			if event.control:
+				_on_DirLoadButton_pressed()
+				get_tree().set_input_as_handled()
+		KEY_N:
+			if event.control:
+				_on_NewButton_pressed()
+				get_tree().set_input_as_handled()
+		KEY_DELETE:
+			start_delete_tile(tile_container.get_child(selected_tile_index))
+			get_tree().set_input_as_handled()
+		KEY_D:
+			if event.control:
+				copy_tile(tile_container.get_child(selected_tile_index))
+				get_tree().set_input_as_handled()
+		KEY_R:
+			if event.control:
+				start_rename_tile(tile_container.get_child(selected_tile_index))
+				get_tree().set_input_as_handled()

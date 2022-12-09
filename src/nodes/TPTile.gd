@@ -427,6 +427,10 @@ func deselect_except(row: TreeItem):
 		set_selected(false)
 
 
+func toggle_collapse():
+	tile_row.collapsed = not tile_row.collapsed
+
+
 func _on_Tree_item_collapsed(item: TreeItem):
 	if item.collapsed:
 		rect_min_size.y = HEIGHT_COLLAPSED
@@ -765,3 +769,5 @@ func rename(new_name: String):
 func clear_render_result():
 	for frame in frames:
 		frame.clear()
+
+
