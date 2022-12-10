@@ -1,11 +1,12 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/exporters/Project/ExportProjectDialog.gd" type="Script" id=1]
 [ext_resource path="res://src/exporters/Project/ProjectResultTextureRect.gd" type="Script" id=2]
 [ext_resource path="res://assets/styles/subscribe_font.tres" type="DynamicFont" id=3]
+[ext_resource path="res://assets/images/folder.png" type="Texture" id=4]
+[ext_resource path="res://assets/images/Save.svg" type="Texture" id=5]
 
 [node name="ExportProjectDialog" type="WindowDialog"]
-visible = true
 margin_right = 48.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 1100, 720 )
@@ -51,17 +52,18 @@ selected = 0
 
 [node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
 margin_left = 253.0
-margin_right = 1068.0
+margin_right = 924.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
+editable = false
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
-visible = false
-margin_left = 948.0
+[node name="FileDialogButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 928.0
 margin_right = 1068.0
 margin_bottom = 24.0
-rect_min_size = Vector2( 120, 0 )
-text = "What?"
+rect_min_size = Vector2( 140, 0 )
+text = "Path"
+icon = ExtResource( 4 )
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
 margin_top = 32.0
@@ -71,7 +73,7 @@ margin_bottom = 36.0
 [node name="ProjectResultTextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
 margin_top = 44.0
 margin_right = 1068.0
-margin_bottom = 626.0
+margin_bottom = 618.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 expand = true
@@ -82,16 +84,16 @@ script = ExtResource( 2 )
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -2.0
-margin_bottom = 12.0
+margin_bottom = 15.0
 grow_horizontal = 2
 custom_fonts/font = ExtResource( 3 )
 align = 1
 
 [node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
-margin_top = 634.0
+margin_top = 626.0
 margin_right = 1068.0
 margin_bottom = 638.0
+custom_constants/separation = 12
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 margin_top = 646.0
@@ -112,7 +114,8 @@ margin_left = 968.0
 margin_right = 1068.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 100, 32 )
-text = "Ok"
+text = "Save"
+icon = ExtResource( 5 )
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
 anchor_top = 1.0
@@ -120,7 +123,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -14.0
 
+[node name="FileDialog" type="FileDialog" parent="."]
+margin_right = 315.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 900, 600 )
+popup_exclusive = true
+window_title = "Choose export texture"
+access = 2
+filters = PoolStringArray( "*.png ; PNG Images" )
+
 [connection signal="about_to_show" from="." to="." method="_on_ExportProjectDialog_about_to_show"]
 [connection signal="popup_hide" from="." to="." method="_on_ExportProjectDialog_popup_hide"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/FileDialogButton" to="." method="_on_FileDialogButton_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/ButtonCancel" to="." method="_on_ButtonCancel_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/ButtonOk" to="." method="_on_ButtonOk_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]

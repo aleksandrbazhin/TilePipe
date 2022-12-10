@@ -80,7 +80,7 @@ margin_top = 516.0
 margin_right = 1024.0
 margin_bottom = 548.0
 rect_min_size = Vector2( 0, 32 )
-hint_tooltip = "Creates a tile file (Ctrl+N))"
+hint_tooltip = "Creates a tile file (Ctrl+N)"
 custom_constants/hseparation = 12
 text = "New Tile"
 icon = ExtResource( 5 )
@@ -184,7 +184,6 @@ margin_bottom = 60.0
 [node name="RulesetConvertDialog" parent="." instance=ExtResource( 3 )]
 
 [node name="ExportProjectDialog" parent="." instance=ExtResource( 6 )]
-visible = false
 
 [connection signal="about_to_show" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_about_to_show"]
 [connection signal="dir_selected" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_dir_selected"]
@@ -203,3 +202,4 @@ visible = false
 [connection signal="popup_hide" from="DeleteTileDialog" to="." method="_on_DeleteTileDialog_popup_hide"]
 [connection signal="confirmed" from="RulesetConvertDialog" to="." method="_on_RulesetConvertDialog_confirmed"]
 [connection signal="popup_hide" from="RulesetConvertDialog" to="." method="_on_RulesetConvertDialog_popup_hide"]
+[connection signal="export_path_changed" from="ExportProjectDialog" to="." method="_on_ExportProjectDialog_export_path_changed"]

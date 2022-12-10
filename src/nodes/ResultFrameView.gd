@@ -86,6 +86,7 @@ func set_current_scale(current_scale: Vector2, is_selected: bool):
 	label.rect_position.y =  y 
 	label.show()
 
+
 func set_frame_index(index: int):
 	frame_index = index
 	$Label.text = "Frame " + str(frame_index + 1)

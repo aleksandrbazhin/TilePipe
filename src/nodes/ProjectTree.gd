@@ -28,7 +28,8 @@ func _take_snapshot() -> Dictionary:
 		if tile.is_selected:
 			settings["selected_tile"] = tile.tile_file_name
 			break
-	settings["open_directory"] = State.current_dir 
+	settings["open_directory"] = State.current_dir
+	settings["project_export_path"] = export_dialog.get_export_path()
 	return settings
 
 
@@ -37,6 +38,8 @@ func _apply_snapshot(settings: Dictionary):
 		if "open_directory" in settings else State.current_dir
 	open_dialog.current_path = open_directory
 	load_project_directory(open_directory, settings["selected_tile"])
+	if "project_export_path" in settings: 
+		export_dialog.set_export_path(settings["project_export_path"])
 
 
 func on_tile_row_selected(row: TreeItem, tile: TPTile):
@@ -194,8 +197,6 @@ func _on_DeleteTileDialog_confirmed():
 	State.call_deferred("emit_signal", "tile_needs_render")
 	yield(VisualServer, "frame_post_draw")
 	scroll_to_tile(next_tile)
-
-		
 
 
 func _on_DeleteTileDialog_popup_hide():
@@ -364,7 +365,6 @@ func start_export_dialog():
 	export_dialog.popup_centered()
 	export_dialog.setup(tile_container.get_children())
 	yield(VisualServer, "frame_post_draw")
-	
 	for tile_index in tile_container.get_child_count():
 		var tile: TPTile =  tile_container.get_child(tile_index)
 		if tile == null or not tile.is_able_to_render():
@@ -388,3 +388,7 @@ func _on_ExportButton_pressed():
 func _on_TileScrollContainer_gui_input(event):
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
 		grab_focus()
+
+
+func _on_ExportProjectDialog_export_path_changed():
+	emit_signal("_snapshot_state_changed")

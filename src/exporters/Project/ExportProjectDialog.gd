@@ -1,17 +1,22 @@
 class_name ExportProjectDialog
 extends WindowDialog
 
+
+signal export_path_changed()
+
+
 var tile_number := 0
 var frame_number := 0
 var subtile_number := 0
 var render_subtile_count := 0
 var total_size := Vector2.ZERO
-
+var tile_offsets: Array
+var export_path: String = ""
 
 onready var result_texture := $MarginContainer/VBoxContainer/ProjectResultTextureRect
 onready var progress_bar := $ProgressBar
-
-var tile_offsets: Array
+onready var file_dialog := $FileDialog
+onready var path_edit := $MarginContainer/VBoxContainer/HBoxContainer2/LineEdit
 
 
 func setup(tiles: Array):
@@ -70,6 +75,38 @@ func _on_ExportProjectDialog_popup_hide():
 func _on_ButtonCancel_pressed():
 	hide()
 
-
+# TODO:
+# 1 - check path
+# 2 - esc subdialog hierarchy
 func _on_ButtonOk_pressed():
+	if progress_bar.value < 100:
+		return
+	if result_texture.texture == null:
+		State.report_error("No texture")
+		return
+	var export_image: Image = result_texture.texture.get_data()
+	if export_image == null:
+		State.report_error("No texture")
+		return
+	export_image.save_png(export_path)
 	hide()
+
+
+func _on_FileDialogButton_pressed():
+	file_dialog.popup_centered()
+
+
+func _on_FileDialog_file_selected(path: String):
+	export_path = path
+	path_edit.text = path
+	emit_signal("export_path_changed")
+
+
+func get_export_path() -> String:
+	return export_path
+
+
+func set_export_path(path: String):
+	export_path = path
+	path_edit.text = path
+	file_dialog.current_path = path
