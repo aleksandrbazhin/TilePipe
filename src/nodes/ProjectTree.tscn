@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/nodes/ProjectTree.gd" type="Script" id=1]
 [ext_resource path="res://assets/images/Load.svg" type="Texture" id=2]
 [ext_resource path="res://src/nodes/RulesetConvertDialog.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=4]
 [ext_resource path="res://assets/images/add.png" type="Texture" id=5]
+[ext_resource path="res://src/exporters/Project/ExportProjectDialog.tscn" type="PackedScene" id=6]
 
 [node name="ProjectTree" type="Panel" groups=["snapshottable"]]
 anchor_right = 1.0
@@ -50,6 +51,7 @@ margin_left = 992.0
 margin_right = 1024.0
 margin_bottom = 34.0
 rect_min_size = Vector2( 32, 32 )
+hint_tooltip = "Open a project folder (Ctrl+O)"
 icon = ExtResource( 2 )
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
@@ -78,6 +80,7 @@ margin_top = 516.0
 margin_right = 1024.0
 margin_bottom = 548.0
 rect_min_size = Vector2( 0, 32 )
+hint_tooltip = "Creates a tile file (Ctrl+N))"
 custom_constants/hseparation = 12
 text = "New Tile"
 icon = ExtResource( 5 )
@@ -85,9 +88,9 @@ align = 0
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 visible = false
-margin_top = 546.0
+margin_top = 544.0
 margin_right = 1024.0
-margin_bottom = 550.0
+margin_bottom = 548.0
 custom_constants/separation = 4
 
 [node name="ExportButton" type="Button" parent="VBoxContainer"]
@@ -95,7 +98,8 @@ margin_top = 554.0
 margin_right = 1024.0
 margin_bottom = 600.0
 rect_min_size = Vector2( 0, 46 )
-text = "Export all"
+hint_tooltip = "Export all tiles as a single tileset or texture (Ctrl+E)"
+text = "Export project"
 
 [node name="NoTilesFound" type="Label" parent="."]
 visible = false
@@ -179,11 +183,16 @@ margin_bottom = 60.0
 
 [node name="RulesetConvertDialog" parent="." instance=ExtResource( 3 )]
 
+[node name="ExportProjectDialog" parent="." instance=ExtResource( 6 )]
+visible = false
+
 [connection signal="about_to_show" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_about_to_show"]
 [connection signal="dir_selected" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_dir_selected"]
 [connection signal="popup_hide" from="OpenFolderDialog" to="." method="_on_OpenFolderDialog_popup_hide"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/DirLoadButton" to="." method="_on_DirLoadButton_pressed"]
+[connection signal="gui_input" from="VBoxContainer/MarginContainer/TileScrollContainer" to="." method="_on_TileScrollContainer_gui_input"]
 [connection signal="pressed" from="VBoxContainer/NewButton" to="." method="_on_NewButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/ExportButton" to="." method="_on_ExportButton_pressed"]
 [connection signal="confirmed" from="NewTileDialog" to="." method="_on_NewTileDialog_confirmed"]
 [connection signal="popup_hide" from="NewTileDialog" to="." method="_on_NewTileDialog_popup_hide"]
 [connection signal="text_entered" from="NewTileDialog/CenterContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]

@@ -20,37 +20,16 @@ onready var scale_controls: ScaleControls = $VBoxContainer/HSplitContainer/Resul
 
 
 func combine_result_from_tile(tile: TPTile):
-#	if tile == null:
-#		return
 	current_output_tile_size = tile.get_output_tile_size()
 	current_subtile_spacing = tile.subtile_spacing
 	if last_selected_frame >= tile.frames.size():
 		last_selected_frame = 0
 	scale_controls.set_current_scale(tile.ui_result_display_scale, true)
 	for frame in tile.frames:
-		var subtiles_by_bitmasks: Dictionary = frame.result_subtiles_by_bitmask
-		if subtiles_by_bitmasks.empty():
-			continue
-		var out_image := Image.new()
-		var out_image_size: Vector2 = tile.template_size * current_output_tile_size
-		out_image_size += (tile.template_size - Vector2.ONE) * tile.subtile_spacing
-		out_image.create(int(out_image_size.x), int(out_image_size.y), false, Image.FORMAT_RGBA8)
-		var tile_rect := Rect2(Vector2.ZERO, current_output_tile_size)
-		var itex = ImageTexture.new()
-		itex.create_from_image(out_image, 0)
-		for mask in subtiles_by_bitmasks.keys():
-			for tile_variant_index in range(subtiles_by_bitmasks[mask].size()):
-				var subtile: GeneratedSubTile = subtiles_by_bitmasks[mask][tile_variant_index]
-				var tile_position: Vector2 = subtile.position_in_template * current_output_tile_size
-				tile_position +=  subtile.position_in_template * tile.subtile_spacing
-				if subtile.image == null:
-					continue
-				out_image.blit_rect(subtile.image, tile_rect, tile_position)
-				itex.set_data(out_image)
-		frame.set_result_texture(itex)
+		frame.merge_result_from_subtiles(tile.template_size, current_output_tile_size, tile.subtile_spacing)
 		if not last_selected_subtile_index in frame.parsed_template:
 			last_selected_subtile_index = Vector2.ZERO
-		append_output_texture(itex, frame.index)
+		append_output_texture(frame.result_texture, frame.index)
 
 
 func append_output_texture(texture: Texture, frame_index: int):

@@ -524,8 +524,16 @@ func update_output_tile_size(new_size: Vector2) -> bool:
 
 
 func update_tree_icon():
+	if frames.size() == 0:
+		return null
+	var subtile: GeneratedSubTile = frames[0].get_first_subtile()
+	if subtile == null or subtile.image == null:
+		return
+	var icon := subtile.image
 	var tree_icon: TileInTreeIcon = $TileInTreeIcon
-	tree_icon.icon_texture = get_first_frame_texture()
+	var itex := ImageTexture.new()
+	itex.create_from_image(icon)
+	tree_icon.icon_texture = itex
 	tree_icon.output_tile_size = get_output_tile_size()
 	tree_icon.update()
 
@@ -736,16 +744,18 @@ func get_first_frame_texture() -> Texture:
 		return null
 	return frames[0].result_texture
 
+#
+#func get_first_rendered_subtile(frame: TPTileFrame) -> 
+
 
 func get_tile_icon() -> Image:
 	if get_first_frame_texture() == null:
 		return null
 	if frames[0].result_subtiles_by_bitmask.size() == 0:
 		return null
-	var first_subtile_key = frames[0].result_subtiles_by_bitmask.keys()[0]
-	if frames[0].result_subtiles_by_bitmask[first_subtile_key].size() == 0:
+	var first_subtile: GeneratedSubTile = frames[0].get_first_subtile()
+	if first_subtile == null:
 		return null
-	var first_subtile: GeneratedSubTile = frames[0].result_subtiles_by_bitmask[first_subtile_key][0]
 	return first_subtile.image
 
 
@@ -771,3 +781,6 @@ func clear_render_result():
 		frame.clear()
 
 
+func is_able_to_render() -> bool:
+	return input_texture != null and ruleset != null \
+			and ruleset.is_loaded and template != null

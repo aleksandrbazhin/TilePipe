@@ -65,10 +65,9 @@ func on_tile_cleared():
 
 func render_subtiles():
 	var tile: TPTile = State.get_current_tile()
-	if tile == null or tile.input_texture == null or tile.ruleset == null \
-			or not tile.ruleset.is_loaded or tile.template == null:
+	if tile == null or not tile.is_able_to_render():
 		result_view.clear()
-		if tile != null:
+		if tile != null: # removes icon
 			tile.update_tree_icon()
 		return
 	tile_main_view.load_texture(tile.input_texture)
@@ -82,7 +81,7 @@ func render_subtiles():
 	for frame in tile.frames:
 		var renderer := TileRenderer.new()
 		add_child(renderer)
-		renderer.connect("subtiles_ready", self, "on_tile_rendered", [renderer])
+		renderer.connect("subtiles_ready", self, "on_frame_rendered", [tile, renderer])
 		renderer.connect("report_progress", self, "update_progress")
 		renderer.start_render(tile, frame_index)
 		frame_index += 1 
@@ -93,20 +92,18 @@ func update_progress(progress: int):
 	State.emit_signal("render_progress", progress)
 
 
-func on_tile_rendered(frame_index: int, renderer: TileRenderer = null):
+func on_frame_rendered(frame_index: int, tile: TPTile, renderer: TileRenderer = null):
 	result_view.clear()
 	update_progress(100)
 	ready_frames += 1
 	if total_frames == ready_frames:
-		result_view.combine_result_from_tile(State.get_current_tile())
+		result_view.combine_result_from_tile(tile)
 		is_rendering = false
 		if is_render_scheduled:
 			is_render_scheduled = false
 			render_subtiles()
 	renderer.queue_free()
-	var tile: TPTile = State.get_current_tile()
-	if tile != null:
-		tile.update_tree_icon()
+	tile.update_tree_icon()
 
 
 func _on_TileMainView_ruleset_view_called():

@@ -10,5 +10,4 @@ func _draw():
 	if icon_texture == null or output_tile_size == Vector2.ZERO:
 		draw_rect(dest_rect, Color.transparent)
 		return
-	var source_rect := Rect2(Vector2.ZERO, output_tile_size)
-	draw_texture_rect_region(icon_texture, dest_rect, source_rect, Color(0.88, 0.88, 0.92, 1.0))
+	draw_texture_rect(icon_texture, dest_rect, false, Color(0.88, 0.88, 0.92, 1.0))

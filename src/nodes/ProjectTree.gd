@@ -19,6 +19,7 @@ onready var rename_tile_lineedit := $RenameTileDialog/CenterContainer/TileNameLi
 onready var delete_tile_dialog := $DeleteTileDialog
 onready var delete_tile_text := $DeleteTileDialog/CenterContainer/Label
 onready var open_dialog := $OpenFolderDialog
+onready var export_dialog: ExportProjectDialog = $ExportProjectDialog
 
 
 func _take_snapshot() -> Dictionary:
@@ -179,17 +180,22 @@ func copy_tile(tile: TPTile):
 
 func _on_DeleteTileDialog_confirmed():
 	var tile := State.get_current_tile()
-	if tile != null:
-		var tile_count := get_tile_count()
-		if tile_count > 1:
-			var tile_index := tile.get_index()
-			var next_tile: TPTile = tile_container.get_child((tile_index + 1) % tile_count)
-			State.call_deferred("set_current_tile", next_tile)
-			State.call_deferred("emit_signal", "tile_needs_render")
-		else:
-			State.clear_current_tile()
-		OS.move_to_trash(State.current_dir + tile.tile_file_name)
-		tile.queue_free()
+	if tile == null:
+		return
+	var tile_count := get_tile_count()
+	OS.move_to_trash(State.current_dir + tile.tile_file_name)
+	tile.queue_free()
+	if tile_count <= 1:
+		State.clear_current_tile()
+		return
+	var tile_index := tile.get_index()
+	var next_tile: TPTile = tile_container.get_child((tile_index + 1) % tile_count)
+	State.call_deferred("set_current_tile", next_tile)
+	State.call_deferred("emit_signal", "tile_needs_render")
+	yield(VisualServer, "frame_post_draw")
+	scroll_to_tile(next_tile)
+
+		
 
 
 func _on_DeleteTileDialog_popup_hide():
@@ -275,7 +281,6 @@ func _on_LineEdit_text_entered(_new_text):
 	State.popup_ended()
 
 
-
 func call_ruleset_convert_dialog():
 	var tile_list := tile_container.get_children()
 	for i in tile_list.size():
@@ -300,48 +305,86 @@ func get_selected_tile_index() -> int:
 		if tile_container.get_child(i).is_selected:
 			return  i
 	return 0
-	
 
 
 func _input(event: InputEvent):
-	if not has_focus():
-		return
 	if not event is InputEventKey:
 		return
 	if not event.is_pressed():
 		return
-	var selected_tile_index := get_selected_tile_index()
+	if has_focus():
+		var selected_tile_index := get_selected_tile_index()
+		match event.scancode:
+			KEY_UP, KEY_KP_8:
+				selected_tile_index -= 1
+				if selected_tile_index < 0:
+					selected_tile_index = tile_container.get_child_count() - 1
+				select_tile_in_project(tile_container.get_child(selected_tile_index))
+				get_tree().set_input_as_handled()
+			KEY_DOWN, KEY_KP_2:
+				selected_tile_index += 1
+				selected_tile_index = selected_tile_index % tile_container.get_child_count()
+				select_tile_in_project(tile_container.get_child(selected_tile_index))
+				get_tree().set_input_as_handled()
+			KEY_SPACE, KEY_ENTER:
+				tile_container.get_child(selected_tile_index).toggle_collapse()
+				get_tree().set_input_as_handled()
+			KEY_N:
+				if event.control:
+					_on_NewButton_pressed()
+					get_tree().set_input_as_handled()
+			KEY_DELETE:
+				start_delete_tile(tile_container.get_child(selected_tile_index))
+				get_tree().set_input_as_handled()
+			KEY_D:
+				if event.control:
+					copy_tile(tile_container.get_child(selected_tile_index))
+					get_tree().set_input_as_handled()
+			KEY_R:
+				if event.control:
+					start_rename_tile(tile_container.get_child(selected_tile_index))
+					get_tree().set_input_as_handled()
 	match event.scancode:
-		KEY_UP, KEY_KP_8:
-			selected_tile_index -= 1
-			if selected_tile_index < 0:
-				selected_tile_index = tile_container.get_child_count() - 1
-			select_tile_in_project(tile_container.get_child(selected_tile_index))
-			get_tree().set_input_as_handled()
-		KEY_DOWN, KEY_KP_2:
-			selected_tile_index += 1
-			selected_tile_index = selected_tile_index % tile_container.get_child_count()
-			select_tile_in_project(tile_container.get_child(selected_tile_index))
-			get_tree().set_input_as_handled()
-		KEY_SPACE, KEY_ENTER:
-			tile_container.get_child(selected_tile_index).toggle_collapse()
-			get_tree().set_input_as_handled()
 		KEY_O:
 			if event.control:
 				_on_DirLoadButton_pressed()
 				get_tree().set_input_as_handled()
-		KEY_N:
+		KEY_E:
 			if event.control:
-				_on_NewButton_pressed()
+				start_export_dialog()
 				get_tree().set_input_as_handled()
-		KEY_DELETE:
-			start_delete_tile(tile_container.get_child(selected_tile_index))
-			get_tree().set_input_as_handled()
-		KEY_D:
-			if event.control:
-				copy_tile(tile_container.get_child(selected_tile_index))
-				get_tree().set_input_as_handled()
-		KEY_R:
-			if event.control:
-				start_rename_tile(tile_container.get_child(selected_tile_index))
-				get_tree().set_input_as_handled()
+
+
+func on_frame_render(frame_index: int, tile: TPTile):
+	if frame_index == 0:
+		tile.update_tree_icon()
+
+
+func start_export_dialog():
+	export_dialog.popup_centered()
+	export_dialog.setup(tile_container.get_children())
+	yield(VisualServer, "frame_post_draw")
+	
+	for tile_index in tile_container.get_child_count():
+		var tile: TPTile =  tile_container.get_child(tile_index)
+		if tile == null or not tile.is_able_to_render():
+			continue
+		tile.update_tree_icon()
+		for frame_index in tile.frames.size():
+#			var frame: TPTileFrame = tile.frames[frame_index]
+			var renderer := TileRenderer.new()
+			add_child(renderer)
+			renderer.connect("subtiles_ready", self, "on_frame_render", [tile])
+			renderer.connect("subtiles_ready", export_dialog, "on_frame_render", [tile, tile_index])
+			renderer.start_render(tile, frame_index)
+			export_dialog.connect("popup_hide", renderer, "free")
+		yield(VisualServer, "frame_post_draw")
+
+
+func _on_ExportButton_pressed():
+	start_export_dialog()
+
+
+func _on_TileScrollContainer_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
+		grab_focus()

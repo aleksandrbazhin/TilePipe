@@ -34,6 +34,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/exporters/CollisionGenerator.gd"
 }, {
+"base": "WindowDialog",
+"class": "ExportProjectDialog",
+"language": "GDScript",
+"path": "res://src/exporters/Project/ExportProjectDialog.gd"
+}, {
 "base": "VBoxContainer",
 "class": "FrameColumnVariants",
 "language": "GDScript",
@@ -185,6 +190,7 @@ _global_script_class_icons={
 "AdvancedSlider": "",
 "AdvancedSpinBox": "",
 "CollisionGenerator": "",
+"ExportProjectDialog": "",
 "FrameColumnVariants": "",
 "FramePartsContainer": "",
 "FramePartsRowControl": "",
