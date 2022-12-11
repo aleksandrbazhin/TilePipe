@@ -340,7 +340,7 @@ color = Color( 0.117647, 0.235294, 0.313726, 0.352941 )
 [node name="ResourceFileDialog" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
-rect_min_size = Vector2( 700, 500 )
+rect_min_size = Vector2( 900, 600 )
 popup_exclusive = true
 access = 2
 filters = PoolStringArray( "*.tres ; Godot resouces" )
@@ -348,7 +348,7 @@ filters = PoolStringArray( "*.tres ; Godot resouces" )
 [node name="TextureFileDialog" type="FileDialog" parent="."]
 margin_right = 315.0
 margin_bottom = 130.0
-rect_min_size = Vector2( 700, 500 )
+rect_min_size = Vector2( 900, 600 )
 popup_exclusive = true
 access = 2
 filters = PoolStringArray( "*.png ; PNG Images" )
@@ -361,6 +361,7 @@ margin_bottom = 538.0
 
 [node name="CollisionGenerator" parent="." instance=ExtResource( 6 )]
 
+[connection signal="popup_hide" from="." to="." method="_on_Godot3ExportDialog_popup_hide"]
 [connection signal="pressed" from="VBox/HBoxTileset/SelectResourceButton" to="." method="_on_SelectResourceButton_pressed"]
 [connection signal="toggled" from="VBox/HBoxTileset/OverrideCheckButton" to="." method="_on_OverrideCheckButton_toggled"]
 [connection signal="text_changed" from="VBox/TilesPanelContainer/VBox/HBoxNewTile/LineEditName" to="." method="_on_LineEditName_text_changed"]

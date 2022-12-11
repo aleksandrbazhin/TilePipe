@@ -123,7 +123,7 @@ func export_subtiles(dir_path: String, tile: TPTile):
 
 
 func _unhandled_key_input(event: InputEventKey):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
+	if event.pressed and event.scancode == KEY_ESCAPE:
 		if visible:
 			if $FileDialog.visible:
 				$FileDialog.hide()

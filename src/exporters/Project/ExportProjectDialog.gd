@@ -76,8 +76,8 @@ func _on_ButtonCancel_pressed():
 	hide()
 
 # TODO:
-# 1 - check path
 # 2 - esc subdialog hierarchy
+# 3 - check size
 func _on_ButtonOk_pressed():
 	if progress_bar.value < 100:
 		return
@@ -110,3 +110,10 @@ func set_export_path(path: String):
 	export_path = path
 	path_edit.text = path
 	file_dialog.current_path = path
+
+
+func _input(event):
+	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
+		if file_dialog.visible:
+			file_dialog.hide()
+			get_tree().set_input_as_handled()

@@ -119,7 +119,9 @@ func start_export_dialog(tile: TPTile):
 		overwrite_tileset_select.pressed = true
 		overwrite_tileset_select.disabled = true
 	popup_centered()
-
+	State.popup_started(self)
+	State.report_error("hi!")
+	
 
 func _parse_tileset(tileset_file_content: String, project_path: String) -> Dictionary:
 	var parse_result: Dictionary = {
@@ -790,7 +792,7 @@ func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	temp_tile_row.set_collisions(button_pressed)
 
 
-func _unhandled_input(event: InputEvent):
+func _input(event: InputEvent):
 	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
 		if resource_dialog.visible:
 			get_tree().set_input_as_handled()
@@ -798,6 +800,7 @@ func _unhandled_input(event: InputEvent):
 		elif texture_dialog.visible:
 			get_tree().set_input_as_handled()
 			texture_dialog.hide()
-		elif visible:
-			get_tree().set_input_as_handled()
-			hide()
+
+
+func _on_Godot3ExportDialog_popup_hide():
+	State.popup_ended()
