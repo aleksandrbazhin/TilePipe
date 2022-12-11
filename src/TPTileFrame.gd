@@ -3,10 +3,11 @@ extends Reference
 
 # {subtile_position: weakref(Subtile)} 
 var parsed_template := {}
+# {bitmask: [GeneratedSubtile, ...], ...}
 var result_subtiles_by_bitmask := {}
 var result_texture: Texture
 var index := 0
-# {part_index : {variant_index1: variant1_priority, vvarinat_index2: variant2_priority, ...}, ...}
+# {part_index : {variant_index1: variant1_priority, variant_index2: variant2_priority, ...}, ...}
 var part_random_priorities := {}
 
 
@@ -120,3 +121,7 @@ func merge_result_from_subtiles(template_size: Vector2, tile_size: Vector2,
 			itex.set_data(out_image)
 #	set_result_texture(itex)
 	result_texture = itex
+
+#
+#func get_texture_size() -> Vector2:
+#	return Vector2.ZERO

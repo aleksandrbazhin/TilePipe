@@ -202,4 +202,4 @@ margin_bottom = 60.0
 [connection signal="popup_hide" from="DeleteTileDialog" to="." method="_on_DeleteTileDialog_popup_hide"]
 [connection signal="confirmed" from="RulesetConvertDialog" to="." method="_on_RulesetConvertDialog_confirmed"]
 [connection signal="popup_hide" from="RulesetConvertDialog" to="." method="_on_RulesetConvertDialog_popup_hide"]
-[connection signal="export_path_changed" from="ExportProjectDialog" to="." method="_on_ExportProjectDialog_export_path_changed"]
+[connection signal="settings_changed" from="ExportProjectDialog" to="." method="_on_ExportProjectDialog_settings_changed"]

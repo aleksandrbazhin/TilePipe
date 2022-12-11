@@ -29,7 +29,9 @@ func _take_snapshot() -> Dictionary:
 			settings["selected_tile"] = tile.tile_file_name
 			break
 	settings["open_directory"] = State.current_dir
-	settings["project_export_path"] = export_dialog.get_export_path()
+	settings["project_export_type"] = export_dialog.export_type
+	settings["project_export_path_texture"] = export_dialog.export_path_texture
+	settings["project_export_path_godot"] = export_dialog.export_path_godot
 	return settings
 
 
@@ -38,8 +40,12 @@ func _apply_snapshot(settings: Dictionary):
 		if "open_directory" in settings else State.current_dir
 	open_dialog.current_path = open_directory
 	load_project_directory(open_directory, settings["selected_tile"])
-	if "project_export_path" in settings: 
-		export_dialog.set_export_path(settings["project_export_path"])
+	if "project_export_type" in settings:
+		export_dialog.export_type = settings["project_export_type"]
+	if "project_export_path_texture" in settings:
+		export_dialog.export_path_texture = settings["project_export_path_texture"]
+	if "project_export_path_godot" in settings: 
+		export_dialog.export_path_godot = settings["project_export_path_godot"]
 
 
 func on_tile_row_selected(row: TreeItem, tile: TPTile):
@@ -390,5 +396,5 @@ func _on_TileScrollContainer_gui_input(event):
 		grab_focus()
 
 
-func _on_ExportProjectDialog_export_path_changed():
+func _on_ExportProjectDialog_settings_changed():
 	emit_signal("_snapshot_state_changed")

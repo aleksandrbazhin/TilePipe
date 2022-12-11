@@ -33,7 +33,7 @@ enum {
 	PARAM_UI_TREE_COLLAPSED,
 }
 
-const HEIGHT_EXPANDED := 120
+const HEIGHT_EXPANDED := 112
 const HEIGHT_COLLAPSED := 50
 const RULESET_PREFIX :=  "[Ruleset] "
 const TEMPLATE_PREFIX := "[Template] "
@@ -76,7 +76,7 @@ var frame_number := 1
 var ui_result_display_scale: float = 1.0
 var ui_tree_collapsed: bool = true
 
-var export_type: int = Const.EXPORT_TYPE_UKNOWN
+var export_type: int = Const.EXPORT_TILE_UNKNOWN
 var export_png_path: String
 var export_multiple_png_path: String
 var export_godot3_resource_path: String
@@ -163,7 +163,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("output_resize", "output_resize", false)
 	set_tile_param("output_tile_size", "output_tile_size", input_tile_size)
 	set_tile_param("subtile_spacing", "subtile_spacing", Vector2.ZERO)
-	set_tile_param("export_type", "export_type", Const.EXPORT_TYPE_UKNOWN)
+	set_tile_param("export_type", "export_type", Const.EXPORT_TILE_UNKNOWN)
 	set_tile_param("export_png_path", "export_png_path", "")
 	set_tile_param("export_multiple_png_path", "export_multiple_png_path", "")
 	set_tile_param("export_godot3_resource_path", "export_godot3_resource_path", "")
@@ -524,13 +524,17 @@ func update_output_tile_size(new_size: Vector2) -> bool:
 
 
 func update_tree_icon():
+	var tree_icon: TileInTreeIcon = $TileInTreeIcon
 	if frames.size() == 0:
-		return null
+		tree_icon.icon_texture = null
+		tree_icon.update()
+		return
 	var subtile: GeneratedSubTile = frames[0].get_first_subtile()
 	if subtile == null or subtile.image == null:
+		tree_icon.icon_texture = null
+		tree_icon.update()
 		return
 	var icon := subtile.image
-	var tree_icon: TileInTreeIcon = $TileInTreeIcon
 	var itex := ImageTexture.new()
 	itex.create_from_image(icon)
 	tree_icon.icon_texture = itex
@@ -736,6 +740,21 @@ func glue_frames_into_image() -> Image:
 			Vector2(0, frame_size.y * frame.index))
 	return result_image 
 
+
+func get_full_tile_rendered_size() -> Vector2:
+	var total_size :=  get_rendered_frame_size()
+	total_size.y *= frames.size()
+	total_size.y += (frames.size() - 1) * subtile_spacing.y
+	return total_size
+
+
+func get_rendered_frame_size() -> Vector2:
+#	var frame_texture := get_first_frame_texture()
+#	print(frame_texture)
+	if frames.size() == 0:
+		return Vector2.ZERO
+	return template_size * get_output_tile_size() + (template_size - Vector2.ONE) * subtile_spacing
+	
 
 func get_first_frame_texture() -> Texture:
 	if frames.size() == 0:

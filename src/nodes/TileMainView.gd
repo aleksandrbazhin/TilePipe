@@ -149,7 +149,6 @@ func _on_TemplateOptionButton_item_selected(index):
 	State.update_tile_param(TPTile.PARAM_TEMPLATE, template_path, false)
 	if template_path.empty():
 		clear_template()
-		return
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return

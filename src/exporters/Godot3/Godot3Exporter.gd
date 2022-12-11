@@ -120,8 +120,7 @@ func start_export_dialog(tile: TPTile):
 		overwrite_tileset_select.disabled = true
 	popup_centered()
 	State.popup_started(self)
-	State.report_error("hi!")
-	
+
 
 func _parse_tileset(tileset_file_content: String, project_path: String) -> Dictionary:
 	var parse_result: Dictionary = {
@@ -432,7 +431,6 @@ func make_autotile_data_string(new_tile_name: String, new_autotile_type: int,
 	var mask_out_strings: PoolStringArray = []
 	var tile_collision_strings: PoolStringArray = []
 	var line_beginning := str(tile_id) + "/"
-	
 	for frame_index in current_tile_frame_number:
 		var frame_offset := Vector2(0, frame_index * current_template_size.y)
 		for mask in current_tile_masks:

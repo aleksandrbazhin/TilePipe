@@ -12,6 +12,7 @@ const RULESET_DIR := "rulesets/"
 const TEMPLATE_DIR := "templates/"
 const TEXTURE_DIR := "textures/"
 
+
 const HIGHLIGHT_COLORS := [
 	Color("98c0ef"), 
 	Color("f59d00"), 
@@ -28,17 +29,17 @@ const HIGHLIGHT_COLORS := [
 	Color("e0c01c")
 ]
 
+enum EXPORT_PROJECT {SINGLE_TEXTURE, GODOT3}
 
-
-const EXPORT_TYPE_UKNOWN := -1
-enum EXPORT_TYPES {
+const EXPORT_TILE_UNKNOWN := -1
+enum EXPORT_TILE {
 		TEXTURE, 
 		GODOT3, 
 		MULTITEXTURE, T
 		EXTURE_PLUS_JSON}
 
 const GODOT3_UNKNOWN_AUTOTILE_TYPE := -1
-enum GODOT_AUTOTILE_TYPE {BLOB_3x3, WANG_2x2, FULL_3x3}
+enum GODOT_AUTOTILE_TYPE {WANG_2x2, BLOB_3x3, FULL_3x3}
 const GODOT_AUTOTILE_TYPE_NAMES: Dictionary = {
 	GODOT_AUTOTILE_TYPE.BLOB_3x3: "3X3 minimal",
 	GODOT_AUTOTILE_TYPE.WANG_2x2: "2X2",

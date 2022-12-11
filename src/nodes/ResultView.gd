@@ -121,23 +121,23 @@ func display_export_path(export_type: int):
 	if tile == null:
 		return
 	match export_type:
-		Const.EXPORT_TYPES.TEXTURE:
+		Const.EXPORT_TILE.TEXTURE:
 			export_path_edit.text = tile.export_png_path
-		Const.EXPORT_TYPES.GODOT3:
+		Const.EXPORT_TILE.GODOT3:
 			export_path_edit.text = tile.export_godot3_resource_path
-		Const.EXPORT_TYPES.MULTITEXTURE:
+		Const.EXPORT_TILE.MULTITEXTURE:
 			export_path_edit.text = tile.export_multiple_png_path
 		_:
 			export_path_edit.text = ""
 
 
 func set_export_option(export_type: int):
-	if export_type != Const.EXPORT_TYPE_UKNOWN:
+	if export_type != Const.EXPORT_TILE_UNKNOWN:
 		export_type_option.select(export_type)
 
 
 func _on_Godot3ExportDialog_popup_hide():
-	display_export_path(Const.EXPORT_TYPES.GODOT3)
+	display_export_path(Const.EXPORT_TILE.GODOT3)
 	State.popup_ended()
 
 
@@ -154,14 +154,14 @@ func _on_ExportButton_pressed():
 		State.report_error("Error: No generated texture, tile not fully defined")
 		return
 	match export_type_option.selected:
-		Const.EXPORT_TYPES.TEXTURE:
+		Const.EXPORT_TILE.TEXTURE:
 			var dialog := $ExportTextureFileDialog
 			dialog.current_path = tile.export_png_path
 			dialog.popup_centered()
-		Const.EXPORT_TYPES.GODOT3:
+		Const.EXPORT_TILE.GODOT3:
 			var dialog: GodotExporter = $Godot3ExportDialog
 			dialog.start_export_dialog(tile)
-		Const.EXPORT_TYPES.MULTITEXTURE:
+		Const.EXPORT_TILE.MULTITEXTURE:
 			var dialog = $MutitextureExportDialog
 			var itex := ImageTexture.new()
 			itex.create_from_image(tile.glue_frames_into_image())
@@ -178,8 +178,8 @@ func _on_ExportTextureFileDialog_file_selected(path):
 		return
 	result_image.save_png(path)
 	State.update_tile_param(TPTile.PARAM_EXPORT_PNG_PATH, path, false)
-	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, Const.EXPORT_TYPES.TEXTURE, false)
-	display_export_path(Const.EXPORT_TYPES.TEXTURE)
+	State.update_tile_param(TPTile.PARAM_EXPORT_TYPE, Const.EXPORT_TILE.TEXTURE, false)
+	display_export_path(Const.EXPORT_TILE.TEXTURE)
 
 
 func _on_ExportTextureFileDialog_popup_hide():
@@ -191,7 +191,7 @@ func _on_ExportTextureFileDialog_about_to_show():
 
 
 func _on_MutitextureExportDialog_popup_hide():
-	display_export_path(Const.EXPORT_TYPES.MULTITEXTURE)
+	display_export_path(Const.EXPORT_TILE.MULTITEXTURE)
 
 
 func _on_ScaleControls_scale_changed(scale: float):

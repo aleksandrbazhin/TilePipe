@@ -4,7 +4,7 @@ extends TextureRect
 func reset(size: Vector2):
 	var result := Image.new()
 	result.create(int(size.x), int(size.y), false, Image.FORMAT_RGBA8)
-#	result.fill(Color("282d33"))w
+#	result.fill(Color("282d33"))
 	var itex := ImageTexture.new()
 	itex.create_from_image(result)
 	texture = itex
