@@ -18,12 +18,14 @@
 	"random_seed_value": 0,
 	"smoothing": false,
 	"output_tile_size": {
-		"x": 64,
-		"y": 64
+		"x": 48,
+		"y": 48
 	},
 	"output_resize": true,
 	"subtile_spacing": {
 		"x": 0,
 		"y": 0
-	}
+	},
+	"ui_result_display_scale": 1.5,
+	"ui_tree_collapsed": false
 }
