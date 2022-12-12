@@ -7,20 +7,20 @@ signal copy_tile_called(tile)
 signal rename_tile_called(tile)
 signal delete_tile_called(tile)
 
-
 enum {
 	PARAM_TEXTURE,
 	PARAM_RULESET,
 	PARAM_TEMPLATE,
-	PARAM_INPUT_SIZE,
+	PARAM_INPUT_TILE_SIZE,
 	PARAM_MERGE,
 	PARAM_OVERLAP,
 	PARAM_RANDOM_SEED_ENABLED,
 	PARAM_RANDOM_SEED_VALUE,
 	PARAM_SMOOTHING,
 	PARAM_OUTPUT_RESIZE,
-	PARAM_OUTPUT_SIZE,
+	PARAM_OUTPUT_TILE_SIZE,
 	PARAM_SUBTILE_SPACING,
+	PARAM_TEX_OFFSET,
 	PARAM_EXPORT_TYPE,
 	PARAM_EXPORT_PNG_PATH,
 	PARAM_EXPORT_MULTIPLE_PNG_PATH,
@@ -30,7 +30,34 @@ enum {
 	PARAM_FRAME_NUMBER,
 	PARAM_FRAME_RANDOM_PRIORITIES,
 	PARAM_UI_RESULT_DISPLAY_SCALE,
-	PARAM_UI_TREE_COLLAPSED,
+	PARAM_UI_TREE_COLLAPSED
+}
+
+
+const UPDATE_FUNCTIONS = {
+	PARAM_TEXTURE: "update_texture",
+	PARAM_RULESET: "update_ruleset",
+	PARAM_TEMPLATE: "update_template",
+	PARAM_INPUT_TILE_SIZE: "update_input_tile_size",
+	PARAM_MERGE: "update_merge",
+	PARAM_OVERLAP: "update_overlap",
+	PARAM_RANDOM_SEED_ENABLED: "update_random_seed_enabled",
+	PARAM_RANDOM_SEED_VALUE: "update_random_seed_value",
+	PARAM_SMOOTHING: "update_smoothing",
+	PARAM_OUTPUT_RESIZE: "update_output_resize",
+	PARAM_OUTPUT_TILE_SIZE: "update_output_tile_size",
+	PARAM_SUBTILE_SPACING: "update_subtile_spacing",
+	PARAM_TEX_OFFSET: "update_tex_offset",
+	PARAM_EXPORT_TYPE: "update_export_type",
+	PARAM_EXPORT_PNG_PATH: "update_export_png_path",
+	PARAM_EXPORT_MULTIPLE_PNG_PATH: "update_export_multiple_png_path",
+	PARAM_EXPORT_GODOT3_RESOURCE_PATH: "update_export_godot3_resource_path",
+	PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE: "update_export_godot3_autotile_type",
+	PARAM_EXPORT_GODOT3_TILE_NAME: "update_export_godot3_tile_name",
+	PARAM_FRAME_NUMBER: "update_frame_number",
+	PARAM_FRAME_RANDOM_PRIORITIES: "update_frame_random_priorities",
+	PARAM_UI_RESULT_DISPLAY_SCALE: "update_ui_result_display_scale",
+	PARAM_UI_TREE_COLLAPSED: "update_ui_tree_collapsed",
 }
 
 const HEIGHT_EXPANDED := 112
@@ -67,6 +94,7 @@ var input_parts: Dictionary
 var output_resize: bool
 var output_tile_size: Vector2 = Vector2(64,64)
 var subtile_spacing := Vector2.ZERO
+var tex_offset := Vector2.ZERO
 var merge_level := Vector2(0.25, 0.25)
 var overlap_level:= Vector2(0.25, 0.25)
 var smoothing := false
@@ -100,6 +128,7 @@ func _ready():
 			rect_min_size.y = HEIGHT_COLLAPSED
 		else:
 			rect_min_size.y = HEIGHT_EXPANDED
+	tree.connect("item_collapsed", self, "_on_Tree_item_collapsed")
 
 
 # the purpose of this is to be able to add new parameters to .tptile in the future
@@ -163,6 +192,7 @@ func load_tile(directory: String, tile_file: String, is_new: bool = false) -> bo
 	set_tile_param("output_resize", "output_resize", false)
 	set_tile_param("output_tile_size", "output_tile_size", input_tile_size)
 	set_tile_param("subtile_spacing", "subtile_spacing", Vector2.ZERO)
+	set_tile_param("tex_offset", "tex_offset", Vector2.ZERO)
 	set_tile_param("export_type", "export_type", Const.EXPORT_TILE_UNKNOWN)
 	set_tile_param("export_png_path", "export_png_path", "")
 	set_tile_param("export_multiple_png_path", "export_multiple_png_path", "")
@@ -542,7 +572,7 @@ func update_tree_icon():
 	tree_icon.update()
 
 
-func update_merge_level(new_merge_level: Vector2) -> bool:
+func update_merge(new_merge_level: Vector2) -> bool:
 	merge_level = new_merge_level
 	_tile_data["merge_level"] = {
 		"x": new_merge_level.x,
@@ -551,7 +581,7 @@ func update_merge_level(new_merge_level: Vector2) -> bool:
 	return true
 
 
-func update_overlap_level(new_overlap_level: Vector2) -> bool:
+func update_overlap(new_overlap_level: Vector2) -> bool:
 	overlap_level = new_overlap_level
 	_tile_data["overlap_level"] = {
 		"x": overlap_level.x,
@@ -583,6 +613,15 @@ func update_subtile_spacing(new_spacing: Vector2) -> bool:
 	_tile_data["subtile_spacing"] = {
 		"x": subtile_spacing.x,
 		"y": subtile_spacing.y
+	}
+	return true
+
+
+func update_tex_offset(value: Vector2) -> bool:
+	tex_offset = value
+	_tile_data["tex_offset"] = {
+		"x": tex_offset.x,
+		"y": tex_offset.y
 	}
 	return true
 
@@ -661,54 +700,13 @@ func update_ui_tree_collapsed(value: bool):
 	return true
 
 
+# TODO: unify / simplify
 # returns true if param was successfully changed
 func update_param(param_key: int, value) -> bool:
-	match param_key:
-		PARAM_TEXTURE:
-			return update_texture(value)
-		PARAM_RULESET:
-			return update_ruleset(value)
-		PARAM_TEMPLATE:
-			return update_template(value)
-		PARAM_INPUT_SIZE:
-			return update_input_tile_size(value)
-		PARAM_MERGE:
-			return update_merge_level(value)
-		PARAM_OVERLAP:
-			return update_overlap_level(value)
-		PARAM_SMOOTHING:
-			return update_smoothing(value)
-		PARAM_RANDOM_SEED_ENABLED:
-			return update_random_seed_enabled(value)
-		PARAM_RANDOM_SEED_VALUE:
-			return update_random_seed_value(value)
-		PARAM_OUTPUT_RESIZE:
-			return update_output_resize(value)
-		PARAM_OUTPUT_SIZE:
-			return update_output_tile_size(value)
-		PARAM_SUBTILE_SPACING:
-			return update_subtile_spacing(value)
-		PARAM_EXPORT_TYPE:
-			return update_export_type(value)
-		PARAM_EXPORT_PNG_PATH:
-			return update_export_png_path(value)
-		PARAM_EXPORT_MULTIPLE_PNG_PATH:
-			return update_export_multiple_png_path(value)
-		PARAM_EXPORT_GODOT3_RESOURCE_PATH:
-			return update_export_godot3_resource_path(value)
-		PARAM_EXPORT_GODOT3_AUTTOTILE_TYPE:
-			return update_export_godot3_autotile_type(value)
-		PARAM_EXPORT_GODOT3_TILE_NAME:
-			return update_export_godot3_tile_name(value)
-		PARAM_FRAME_NUMBER:
-			return update_frame_number(value)
-		PARAM_FRAME_RANDOM_PRIORITIES:
-			return update_frame_random_priorities(value)
-		PARAM_UI_RESULT_DISPLAY_SCALE:
-			return update_ui_result_display_scale(value)
-		PARAM_UI_TREE_COLLAPSED:
-			return update_ui_tree_collapsed(value)
-	return false
+	if not param_key in UPDATE_FUNCTIONS or not has_method(UPDATE_FUNCTIONS[param_key]):
+		State.report_error("Error updating tile parameter %d" % param_key)
+		return false
+	return call(UPDATE_FUNCTIONS[param_key], value)
 
 
 func save():
@@ -749,8 +747,6 @@ func get_full_tile_rendered_size() -> Vector2:
 
 
 func get_rendered_frame_size() -> Vector2:
-#	var frame_texture := get_first_frame_texture()
-#	print(frame_texture)
 	if frames.size() == 0:
 		return Vector2.ZERO
 	return template_size * get_output_tile_size() + (template_size - Vector2.ONE) * subtile_spacing
@@ -762,9 +758,6 @@ func get_first_frame_texture() -> Texture:
 	if frames[0].result_texture == null:
 		return null
 	return frames[0].result_texture
-
-#
-#func get_first_rendered_subtile(frame: TPTileFrame) -> 
 
 
 func get_tile_icon() -> Image:

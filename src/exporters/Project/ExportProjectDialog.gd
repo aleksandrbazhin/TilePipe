@@ -146,6 +146,7 @@ func export_to_godot3_tileset() -> bool:
 		tileset.tile_set_name(tile_index, tile.tile_file_name.get_basename())
 		tileset.autotile_set_size(tile_index, tile.get_output_tile_size())
 		tileset.tile_set_tile_mode(tile_index, TileSet.AUTO_TILE)
+		tileset.tile_set_texture_offset(tile_index, tile.tex_offset)
 		if tile.frames.empty():
 			continue
 		var bitmask_type := Helpers.assume_godot_autotile_type(tile.frames[0].result_subtiles_by_bitmask)

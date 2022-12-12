@@ -19,6 +19,7 @@ var current_tile_frame_number: int = 1
 var current_template_size: Vector2
 var current_texture_size: Vector2
 var current_tile_spacing: Vector2
+var current_tile_tex_offset: Vector2
 var current_smoothing: bool = false
 var current_tile_icon: Image
 
@@ -72,6 +73,7 @@ func _process(delta):
 func start_export_dialog(tile: TPTile):
 	current_tile_size = tile.get_output_tile_size()
 	current_tile_spacing = tile.subtile_spacing
+	current_tile_tex_offset = tile.tex_offset
 	var frame: TPTileFrame = tile.frames[0]
 	current_tile_masks = frame.result_subtiles_by_bitmask
 	current_template_size = tile.get_template_size()
@@ -382,7 +384,6 @@ func save_tileset_resource() -> bool:
 		updated_content = updated_content.insert(tile_replace_tile_block_start, tile_string)
 	file.open(tileset_path, File.WRITE)
 	file.store_string(updated_content)
-#	print(updated_content.substr(0, 100))
 	file.close()
 	return true
 
@@ -451,7 +452,7 @@ func make_autotile_data_string(new_tile_name: String, new_autotile_type: int,
 		tile_shapes_string = tile_collision_strings.join(", ")
 	out_string += line_beginning + "name = \"%s\"\n" % new_tile_name
 	out_string += line_beginning + "texture = ExtResource( %d )\n" % texture_id
-	out_string += line_beginning + "tex_offset = Vector2( 0, 0 )\n"
+	out_string += line_beginning + "tex_offset = Vector2( %d, %d )\n" % [current_tile_tex_offset.x, current_tile_tex_offset.y]
 	out_string += line_beginning + "modulate = Color( 1, 1, 1, 1 )\n"
 	out_string += line_beginning + "region = Rect2( 0, 0, %d, %d )\n" % [current_texture_size.x, current_texture_size.y]
 	out_string += line_beginning + "tile_mode = 1\n" 

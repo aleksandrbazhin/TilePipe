@@ -116,7 +116,6 @@ rect_min_size = Vector2( 48, 48 )
 mouse_filter = 2
 script = ExtResource( 6 )
 
-[connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_selected" from="Tree" to="." method="_on_Tree_item_selected"]
 [connection signal="pressed" from="Controls/Buttons/RenameButton" to="." method="_on_RenameButton_pressed"]
 [connection signal="pressed" from="Controls/Buttons/CopyButton" to="." method="_on_CopyButton_pressed"]
