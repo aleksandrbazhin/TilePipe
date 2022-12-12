@@ -119,12 +119,20 @@ func _on_ButtonOk_pressed():
 	if export_path_texture.empty():
 		return
 	match export_type:
-		Const.EXPORT_PROJECT.SINGLE_TEXTURE, Const.EXPORT_PROJECT.GODOT3:
+		Const.EXPORT_PROJECT.SINGLE_TEXTURE:
 			if export_image.save_png(export_path_texture) != OK:
 				State.report_error("Error exporting image")
 				return
-			continue
 		Const.EXPORT_PROJECT.GODOT3:
+			if not GodotExporter.is_a_valid_resource_path(export_path_godot):
+				State.report_error("Path is not in any Godot project. \nSelect path in an exisisting Godot project.")
+				return
+			if not GodotExporter.is_a_valid_texture_path(export_path_texture, export_path_godot):
+				State.report_error("Texture must be in the same godot project as the tileset resource.")
+				return
+			if export_image.save_png(export_path_texture) != OK:
+				State.report_error("Error exporting image")
+				return
 			if not export_to_godot3_tileset():
 				return
 	hide()
@@ -167,30 +175,25 @@ func export_to_godot3_tileset() -> bool:
 						Helpers.convert_bitmask_to_godot(bitmask)
 					)
 	if ResourceSaver.save(export_path_godot, tileset) != OK:
-		State.report_error("Error 1 saving tileset")
+		State.report_error("Error saving tileset to a file.")
 		return false
-
 	if not finalize_godot_export_file():
 		return false
-	
 	return true
 
 
 func finalize_godot_export_file() -> bool:
 	var file := File.new()
 	if file.open(export_path_godot, File.READ) != OK:
-		State.report_error("Error 2 saving tileset")
+		State.report_error("Error saving tileset to a file (2).")
 		return false
 	var file_data := file.get_as_text()
-	file.close()
-	
-#	var texture_rel_path: String = export_path_texture
-	var texture_rel_path: String = "all.png"
-
+	file.close()	
+	var texture_rel_path := GodotExporter.project_export_relative_path(export_path_texture)
 	var resource_regex := RegEx.new()
 	resource_regex.compile('\\[resource\\]')
 	file_data = resource_regex.sub(file_data, 
-		'[ext_resource path="res://%s" ' % texture_rel_path +
+		'[ext_resource path="%s" ' % texture_rel_path +
 		'type="Texture" id=1]\n\n[resource]')
 	var tile_name_regex := RegEx.new()
 	tile_name_regex.compile('(\\d+)/name\\s*=\\s*".+"\\n')
@@ -201,7 +204,7 @@ func finalize_godot_export_file() -> bool:
 		file_data = file_data.insert(end, "%d/texture = ExtResource( 1 )\n" % tile_id)
 		reg_result = tile_name_regex.search(file_data, end)
 	if file.open(export_path_godot, File.WRITE) != OK:
-		State.report_error("Error 2 saving tileset")
+		State.report_error("Error saving tileset to a file (3).")
 		return false
 	file.store_string(file_data)
 	file.close()
@@ -238,8 +241,11 @@ func _on_TextureFileDialog_file_selected(path):
 	emit_signal("settings_changed")
 
 
-#TODO: check if tileset in the godot project path
+
 func _on_Godot3FileDialog_file_selected(path):
+	if not GodotExporter.is_a_valid_resource_path(path):
+		State.report_error("Path is not in any Godot project. \nSelect path in an exisisting Godot project.")
+		return
 	export_path_godot = path
 	path_edit_godot.text = export_path_godot
 	emit_signal("settings_changed")

@@ -392,7 +392,7 @@ func tile_name_from_position(pos: Vector2, tile_base_name: String) -> String:
 	return "%s_%d_%d" % [tile_base_name, pos.x, pos.y]
 
 
-func get_godot_project_path(path: String) -> String:
+static func get_godot_project_path(path: String) -> String:
 	var path_array := path.get_base_dir().split("/")
 	var current_test_dir: String = ""
 	for dir in path_array:
@@ -402,7 +402,7 @@ func get_godot_project_path(path: String) -> String:
 	return ""
 
 
-func project_export_relative_path(path: String) -> String:
+static func project_export_relative_path(path: String) -> String:
 	var path_array := path.get_base_dir().split("/")
 	var current_test_dir: String = ""
 	var project_found: bool = false
@@ -419,6 +419,30 @@ func project_export_relative_path(path: String) -> String:
 		var relative_path: String = "res://" + PoolStringArray(relative_path_array).join("/")
 		return relative_path
 	return ""
+
+
+static func is_a_valid_resource_path(test_resource_path: String):
+	if test_resource_path.get_basename().get_file().empty() or not test_resource_path.get_file().is_valid_filename():
+#		State.report_error("Error: \"%s\" is not a valid filename" % test_resource_path.get_file())
+		return false
+	var resource_project_path := get_godot_project_path(test_resource_path)	
+	if resource_project_path.empty():
+		return false
+	else:
+		return true
+
+
+static func is_a_valid_texture_path(test_texture_path: String, test_resource_path: String):
+	if test_texture_path.get_basename().get_file().empty() or not test_texture_path.get_file().is_valid_filename():
+		State.report_error("Error: %s is not a valid filename" % test_texture_path.get_file())
+		return false
+	var resource_project_path := get_godot_project_path(test_resource_path)
+	var texture_project_path := get_godot_project_path(test_texture_path)
+	if texture_project_path.empty() or resource_project_path != resource_project_path:
+		State.report_error("Error: texture is not in the same Godot project with the resource")
+		return false
+	else:
+		return true
 
 
 func make_texture_string(tile_texture_path: String, texture_id: int = 1) -> String:
@@ -573,30 +597,6 @@ func populate_new_from_exisiting_tile(row: GodotTileRow):
 	set_texture_path(base_dir_abs_path, texture_file_name)
 	autotile_type_select.select(row.bitmask_mode)
 	check_existing_for_matches()
-
-
-func is_a_valid_resource_path(test_resource_path: String):
-	if test_resource_path.get_basename().get_file().empty() or not test_resource_path.get_file().is_valid_filename():
-#		State.report_error("Error: \"%s\" is not a valid filename" % test_resource_path.get_file())
-		return false
-	var resource_project_path := get_godot_project_path(test_resource_path)	
-	if resource_project_path.empty():
-		return false
-	else:
-		return true
-
-
-func is_a_valid_texture_path(test_texture_path: String, test_resource_path: String):
-	if test_texture_path.get_basename().get_file().empty() or not test_texture_path.get_file().is_valid_filename():
-		State.report_error("Error: %s is not a valid filename" % test_texture_path.get_file())
-		return false
-	var resource_project_path := get_godot_project_path(test_resource_path)
-	var texture_project_path := get_godot_project_path(test_texture_path)
-	if texture_project_path.empty() or resource_project_path != resource_project_path:
-		State.report_error("Error: texture is not in the same Godot project with the resource")
-		return false
-	else:
-		return true
 
 
 func clear_file_path(path: String) -> String:
