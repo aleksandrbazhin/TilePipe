@@ -3,16 +3,20 @@ extends Reference
 
 # {subtile_position: weakref(Subtile)} 
 var parsed_template := {}
+# {bitmask: [GeneratedSubtile, ...], ...}
 var result_subtiles_by_bitmask := {}
 var result_texture: Texture
 var index := 0
-# this is a dictionary of a form
-# {part_index : {variant_index1: variant1_priority, vvarinat_index2: variant2_priority, ...}, ...}
+# {part_index : {variant_index1: variant1_priority, variant_index2: variant2_priority, ...}, ...}
 var part_random_priorities := {}
 
 
 func _init(new_index):
 	index = new_index
+
+
+func get_subtile_count() -> int:
+	return parsed_template.size()
 
 
 func is_variant_row_disabled(variant_index: int) -> bool:
@@ -73,9 +77,9 @@ func append_subtile(mask: int, pos: Vector2):
 	result_subtiles_by_bitmask[mask].append(subtile)
 	parsed_template[pos] = weakref(subtile)
 
-
-func set_result_texture(tex: Texture):
-	result_texture = tex
+#
+#func set_result_texture(tex: Texture):
+#	result_texture = tex
 
 
 func clear():
@@ -83,3 +87,41 @@ func clear():
 	for mask in result_subtiles_by_bitmask:
 		for variant in result_subtiles_by_bitmask[mask]:
 			variant.reset()
+
+
+func get_first_subtile() -> GeneratedSubTile:
+	if result_subtiles_by_bitmask.empty():
+		return null
+	var first_subtile_key = result_subtiles_by_bitmask.keys()[0]
+	if result_subtiles_by_bitmask[first_subtile_key].size() == 0:
+		return null
+	return result_subtiles_by_bitmask[first_subtile_key][0]
+
+
+func merge_result_from_subtiles(template_size: Vector2, tile_size: Vector2, 
+		subtile_spacing: Vector2 = Vector2.ZERO):
+	var subtiles_by_bitmasks: Dictionary = result_subtiles_by_bitmask
+	if subtiles_by_bitmasks.empty():
+		return
+	var out_image := Image.new()
+	var out_image_size: Vector2 = template_size * tile_size
+	out_image_size += (template_size - Vector2.ONE) * subtile_spacing
+	out_image.create(int(out_image_size.x), int(out_image_size.y), false, Image.FORMAT_RGBA8)
+	var tile_rect := Rect2(Vector2.ZERO, tile_size)
+	var itex = ImageTexture.new()
+	itex.create_from_image(out_image, 0)
+	for mask in subtiles_by_bitmasks.keys():
+		for tile_variant_index in range(subtiles_by_bitmasks[mask].size()):
+			var subtile: GeneratedSubTile = subtiles_by_bitmasks[mask][tile_variant_index]
+			var tile_position: Vector2 = subtile.position_in_template * tile_size
+			tile_position +=  subtile.position_in_template * subtile_spacing
+			if subtile.image == null:
+				continue
+			out_image.blit_rect(subtile.image, tile_rect, tile_position)
+			itex.set_data(out_image)
+#	set_result_texture(itex)
+	result_texture = itex
+
+#
+#func get_texture_size() -> Vector2:
+#	return Vector2.ZERO

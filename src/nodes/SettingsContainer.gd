@@ -12,6 +12,8 @@ onready var output_resize: AdvancedCheckButton = settings_vbox.get_node("OutputS
 onready var output_tile_size_x: AdvancedSpinBox = settings_vbox.get_node("OutputSize/OutputResize/ResizeSpinBoxX")
 onready var subtile_spacing_x: AdvancedSpinBox = settings_vbox.get_node("OutputSize/SubtileSpacing/SpacingXSpinBox")
 #onready var subtile_spacing_y: AdvancedSpinBox = settings_vbox.get_node("OutputSize/SubtileSpacing/SpacingYSpinBox")
+onready var tex_offset_x: AdvancedSpinBox = settings_vbox.get_node("OutputSize/TexOffset/TexOffsetXSpinBox")
+
 onready var smoothing_enabled: AdvancedCheckButton = settings_vbox.get_node("OutputSize/SmoothingContainer/Smoothing")
 onready var random_seed_enabled: AdvancedCheckButton = settings_vbox.get_node("Randomization/SeedContainer/SeedCheckButton")
 onready var random_seed_edit: AdvancedLineEdit = settings_vbox.get_node("Randomization/SeedContainer/SeedLineEdit")
@@ -26,6 +28,7 @@ func load_data(tile: TPTile):
 	output_tile_size_x.editable = tile.output_resize
 	output_tile_size_x.set_value_quietly(tile.output_tile_size.x)
 	subtile_spacing_x.set_value_quietly(tile.subtile_spacing.x)
+	tex_offset_x.set_value_quietly(tile.tex_offset.x)
 	smoothing_enabled.set_toggled_quietly(tile.smoothing)
 	random_seed_enabled.set_toggled_quietly(tile.random_seed_enabled)
 	random_seed_edit.editable = tile.random_seed_enabled
@@ -106,17 +109,21 @@ func _on_SpacingXSpinBox_value_changed_no_silence(value: float):
 	State.update_tile_param(TPTile.PARAM_SUBTILE_SPACING, Vector2(value, y_spacing))
 
 
+func _on_TexOffsetXSpinBox_value_changed_no_silence(value):
+	State.update_tile_param(TPTile.PARAM_TEX_OFFSET, Vector2(value, value), false)
+
+
 func _on_OutpuResizeButton_toggled_no_silence(button_pressed: bool):
 	State.update_tile_param(TPTile.PARAM_OUTPUT_RESIZE, button_pressed, false)
 	output_tile_size_x.editable = button_pressed
 	var tile := State.get_current_tile()
 	if button_pressed and tile != null and not tile.has_loaded_output_tile_size():
-		State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, Const.DEFAULT_TILE_SIZE, false)
+		State.update_tile_param(TPTile.PARAM_OUTPUT_TILE_SIZE, Const.DEFAULT_TILE_SIZE, false)
 	State.emit_signal("tile_needs_render")
 
 
 func _on_ResizeSpinBoxX_value_changed_no_silence(value):
-	State.update_tile_param(TPTile.PARAM_OUTPUT_SIZE, Vector2(value, value))
+	State.update_tile_param(TPTile.PARAM_OUTPUT_TILE_SIZE, Vector2(value, value))
 
 
 func _on_Smoothing_toggled_no_silence(button_pressed):
@@ -132,4 +139,3 @@ func _on_SeedCheckButton_toggled_no_silence(button_pressed):
 func _on_FramesSpinBox_value_changed_no_silence(value):
 	State.update_tile_param(TPTile.PARAM_FRAME_NUMBER, int(value))
 	populate_frame_control()
-

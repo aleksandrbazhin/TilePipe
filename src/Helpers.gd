@@ -107,14 +107,15 @@ func convert_bitmask_to_godot(bitmask: int,
 
 
 func assume_godot_autotile_type(tiles_by_bitmask: Dictionary) -> int:
-	var type: int = Const.GODOT_AUTOTILE_TYPE.WANG_2x2
-	for mask in tiles_by_bitmask:
-		if not tiles_by_bitmask[mask].empty():
-			if not mask in Const.GODOT_AUTOTILE_BITMASKS[Const.GODOT_AUTOTILE_TYPE.WANG_2x2]:
-				type = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
-				if not mask in Const.GODOT_AUTOTILE_BITMASKS[Const.GODOT_AUTOTILE_TYPE.BLOB_3x3]:
-					return Const.GODOT_AUTOTILE_TYPE.FULL_3x3
-	return type
+	var bitmask_type: int = Const.GODOT_AUTOTILE_TYPE.WANG_2x2
+	for mask in tiles_by_bitmask.keys():
+		if tiles_by_bitmask[mask].empty():
+			continue
+		if not mask in Const.GODOT_AUTOTILE_BITMASKS[Const.GODOT_AUTOTILE_TYPE.WANG_2x2]:
+			bitmask_type = Const.GODOT_AUTOTILE_TYPE.BLOB_3x3
+			if not mask in Const.GODOT_AUTOTILE_BITMASKS[Const.GODOT_AUTOTILE_TYPE.BLOB_3x3]:
+				return Const.GODOT_AUTOTILE_TYPE.FULL_3x3
+	return bitmask_type
 
 
 func is_file_a_ruleset(path: String) -> bool:

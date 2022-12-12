@@ -19,6 +19,7 @@ onready var rename_tile_lineedit := $RenameTileDialog/CenterContainer/TileNameLi
 onready var delete_tile_dialog := $DeleteTileDialog
 onready var delete_tile_text := $DeleteTileDialog/CenterContainer/Label
 onready var open_dialog := $OpenFolderDialog
+onready var export_dialog: ExportProjectDialog = $ExportProjectDialog
 
 
 func _take_snapshot() -> Dictionary:
@@ -27,7 +28,11 @@ func _take_snapshot() -> Dictionary:
 		if tile.is_selected:
 			settings["selected_tile"] = tile.tile_file_name
 			break
-	settings["open_directory"] = State.current_dir 
+	settings["open_directory"] = State.current_dir
+	settings["project_export_type"] = export_dialog.export_type
+	settings["project_export_tile_separation"] = export_dialog.export_tile_separation
+	settings["project_export_path_texture"] = export_dialog.export_path_texture
+	settings["project_export_path_godot"] = export_dialog.export_path_godot
 	return settings
 
 
@@ -36,6 +41,14 @@ func _apply_snapshot(settings: Dictionary):
 		if "open_directory" in settings else State.current_dir
 	open_dialog.current_path = open_directory
 	load_project_directory(open_directory, settings["selected_tile"])
+	if "project_export_type" in settings:
+		export_dialog.export_type = settings["project_export_type"]
+	if "project_export_tile_separation" in settings:
+		export_dialog.export_tile_separation = settings["project_export_tile_separation"]
+	if "project_export_path_texture" in settings:
+		export_dialog.export_path_texture = settings["project_export_path_texture"]
+	if "project_export_path_godot" in settings: 
+		export_dialog.export_path_godot = settings["project_export_path_godot"]
 
 
 func on_tile_row_selected(row: TreeItem, tile: TPTile):
@@ -45,6 +58,7 @@ func on_tile_row_selected(row: TreeItem, tile: TPTile):
 			other_tile.set_selected(false)
 	tile.set_selected(true)
 	State.set_current_tile(tile, row)
+	grab_focus()
 	emit_signal("_snapshot_state_changed")
 
 
@@ -171,23 +185,27 @@ func copy_tile(tile: TPTile):
 			(State.current_dir + new_file_name))
 		return
 	var new_tile := add_tile_to_tree(State.current_dir, new_file_name, false, true)
+
 	yield(VisualServer, "frame_post_draw")
 	scroll_to_tile(new_tile)
 
 
 func _on_DeleteTileDialog_confirmed():
 	var tile := State.get_current_tile()
-	if tile != null:
-		var tile_count := get_tile_count()
-		if tile_count > 1:
-			var tile_index := tile.get_index()
-			var next_tile: TPTile = tile_container.get_child((tile_index + 1) % tile_count)
-			State.call_deferred("set_current_tile", next_tile)
-			State.call_deferred("emit_signal", "tile_needs_render")
-		else:
-			State.clear_current_tile()
-		OS.move_to_trash(State.current_dir + tile.tile_file_name)
-		tile.queue_free()
+	if tile == null:
+		return
+	var tile_count := get_tile_count()
+	OS.move_to_trash(State.current_dir + tile.tile_file_name)
+	tile.queue_free()
+	if tile_count <= 1:
+		State.clear_current_tile()
+		return
+	var tile_index := tile.get_index()
+	var next_tile: TPTile = tile_container.get_child((tile_index + 1) % tile_count)
+	State.call_deferred("set_current_tile", next_tile)
+	State.call_deferred("emit_signal", "tile_needs_render")
+	yield(VisualServer, "frame_post_draw")
+	scroll_to_tile(next_tile)
 
 
 func _on_DeleteTileDialog_popup_hide():
@@ -273,7 +291,6 @@ func _on_LineEdit_text_entered(_new_text):
 	State.popup_ended()
 
 
-
 func call_ruleset_convert_dialog():
 	var tile_list := tile_container.get_children()
 	for i in tile_list.size():
@@ -293,3 +310,81 @@ func _on_RulesetConvertDialog_confirmed():
 	load_project_directory(State.current_dir)
 
 
+func get_selected_tile_index() -> int:
+	for i in tile_container.get_child_count():
+		if tile_container.get_child(i).is_selected:
+			return  i
+	return 0
+
+
+func _input(event: InputEvent):
+	if not event is InputEventKey:
+		return
+	if not event.is_pressed():
+		return
+	if has_focus():
+		var selected_tile_index := get_selected_tile_index()
+		match event.scancode:
+			KEY_UP, KEY_KP_8:
+				selected_tile_index -= 1
+				if selected_tile_index < 0:
+					selected_tile_index = tile_container.get_child_count() - 1
+				select_tile_in_project(tile_container.get_child(selected_tile_index))
+				get_tree().set_input_as_handled()
+			KEY_DOWN, KEY_KP_2:
+				selected_tile_index += 1
+				selected_tile_index = selected_tile_index % tile_container.get_child_count()
+				select_tile_in_project(tile_container.get_child(selected_tile_index))
+				get_tree().set_input_as_handled()
+			KEY_SPACE, KEY_ENTER:
+				tile_container.get_child(selected_tile_index).toggle_collapse()
+				get_tree().set_input_as_handled()
+			KEY_N:
+				if event.control:
+					_on_NewButton_pressed()
+					get_tree().set_input_as_handled()
+			KEY_DELETE:
+				start_delete_tile(tile_container.get_child(selected_tile_index))
+				get_tree().set_input_as_handled()
+			KEY_D:
+				if event.control:
+					copy_tile(tile_container.get_child(selected_tile_index))
+					get_tree().set_input_as_handled()
+			KEY_R:
+				if event.control:
+					start_rename_tile(tile_container.get_child(selected_tile_index))
+					get_tree().set_input_as_handled()
+	match event.scancode:
+		KEY_O:
+			if event.control:
+				_on_DirLoadButton_pressed()
+				get_tree().set_input_as_handled()
+		KEY_E:
+			if event.control:
+				start_export_dialog()
+				get_tree().set_input_as_handled()
+
+
+func on_frame_render(frame_index: int, tile: TPTile):
+	if frame_index == 0:
+		tile.update_tree_icon()
+
+
+func start_export_dialog():
+	export_dialog.popup_centered()
+	export_dialog.setup(tile_container.get_children())
+	yield(VisualServer, "frame_post_draw")
+	export_dialog.render_all()
+
+
+func _on_ExportButton_pressed():
+	start_export_dialog()
+
+
+func _on_TileScrollContainer_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
+		grab_focus()
+
+
+func _on_ExportProjectDialog_settings_changed():
+	emit_signal("_snapshot_state_changed")

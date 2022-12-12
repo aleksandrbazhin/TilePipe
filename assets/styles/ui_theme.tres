@@ -143,7 +143,7 @@ expand_margin_left = 3.0
 
 [sub_resource type="StyleBoxFlat" id=15]
 bg_color = Color( 0.266667, 0.305882, 0.384314, 1 )
-expand_margin_left = 2.0
+expand_margin_left = 3.0
 
 [sub_resource type="StyleBoxLine" id=2]
 color = Color( 0.439216, 0.470588, 0.52549, 1 )
@@ -203,10 +203,9 @@ ProgressBar/styles/bg = SubResource( 25 )
 ProgressBar/styles/fg = SubResource( 24 )
 TooltipPanel/styles/panel = SubResource( 20 )
 Tree/colors/font_color = Color( 0.611765, 0.756863, 0.909804, 1 )
-Tree/colors/guide_color = Color( 0, 0, 0, 0 )
 Tree/constants/draw_guides = 0
 Tree/constants/draw_relationship_lines = 1
-Tree/constants/item_margin = 20
+Tree/constants/item_margin = 14
 Tree/constants/vseparation = 6
 Tree/icons/arrow = ExtResource( 2 )
 Tree/icons/arrow_collapsed = ExtResource( 3 )

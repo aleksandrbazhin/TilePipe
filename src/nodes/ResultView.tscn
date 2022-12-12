@@ -1,6 +1,5 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://assets/styles/header_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://src/nodes/ResultView.gd" type="Script" id=2]
 [ext_resource path="res://assets/styles/ui_theme.tres" type="Theme" id=3]
 [ext_resource path="res://src/exporters/Godot3/Godot3Exporter.tscn" type="PackedScene" id=4]
@@ -20,22 +19,6 @@ script = ExtResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/separation = 0
-
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer"]
-visible = false
-margin_right = 1280.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 0, 24 )
-size_flags_horizontal = 3
-color = Color( 0.454902, 0.462745, 0.454902, 0.768627 )
-
-[node name="Label" type="Label" parent="VBoxContainer/ColorRect"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-custom_fonts/font = ExtResource( 1 )
-text = "Result:"
-align = 1
-valign = 1
 
 [node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer" groups=["snapshottable"]]
 margin_right = 1280.0
@@ -96,27 +79,31 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ExportContainer"]
+margin_bottom = 48.0
+
 [node name="Label" type="Label" parent="VBoxContainer/ExportContainer"]
+margin_left = 8.0
 margin_top = 14.0
-margin_right = 70.0
+margin_right = 95.0
 margin_bottom = 33.0
-rect_min_size = Vector2( 70, 0 )
-text = "Export as:"
+rect_min_size = Vector2( 80, 0 )
+text = "Export tile as:"
 align = 2
 
 [node name="ExportOptionButton" type="OptionButton" parent="VBoxContainer/ExportContainer"]
-margin_left = 78.0
+margin_left = 103.0
 margin_top = 8.0
-margin_right = 398.0
+margin_right = 423.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 320, 32 )
 size_flags_vertical = 4
-text = "Texture (single)"
-items = [ "Texture (single)", null, false, 0, null, "Godot 3 (tile in tileset)", null, false, 1, null, "Multiple textures", null, false, 2, null ]
+text = "A texture (.png)"
+items = [ "A texture (.png)", null, false, 0, null, "Godot 3 tile (.tres + .png)", null, false, 1, null, "Multiple textures (.png)", null, false, 2, null ]
 selected = 0
 
 [node name="ExportPathLineEdit" type="LineEdit" parent="VBoxContainer/ExportContainer"]
-margin_left = 406.0
+margin_left = 431.0
 margin_top = 8.0
 margin_right = 1074.0
 margin_bottom = 40.0
@@ -133,7 +120,7 @@ margin_right = 1262.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 180, 32 )
 size_flags_vertical = 4
-text = "Export"
+text = "Export tile"
 
 [node name="Control" type="Control" parent="VBoxContainer/ExportContainer"]
 margin_left = 1270.0
@@ -143,9 +130,9 @@ rect_min_size = Vector2( 10, 0 )
 
 [node name="ExportTextureFileDialog" type="FileDialog" parent="."]
 margin_top = 220.0
-margin_right = 1280.0
-margin_bottom = 720.0
-rect_min_size = Vector2( 700, 620 )
+margin_right = 900.0
+margin_bottom = 820.0
+rect_min_size = Vector2( 900, 600 )
 theme = ExtResource( 3 )
 popup_exclusive = true
 access = 2

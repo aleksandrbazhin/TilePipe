@@ -149,7 +149,6 @@ func _on_TemplateOptionButton_item_selected(index):
 	State.update_tile_param(TPTile.PARAM_TEMPLATE, template_path, false)
 	if template_path.empty():
 		clear_template()
-		return
 	var tile: TPTile = State.get_current_tile()
 	if tile == null:
 		return
@@ -191,6 +190,6 @@ func _on_AddTextureFileDialog_popup_hide():
 
 func _on_ScalableTextureContainer_tile_size_changed(size):
 	current_input_tile_size = size
-	State.update_tile_param(TPTile.PARAM_INPUT_SIZE, current_input_tile_size)
+	State.update_tile_param(TPTile.PARAM_INPUT_TILE_SIZE, current_input_tile_size)
 	settings_container.setup_sliders(current_input_tile_size)
 	settings_container.populate_frame_control()

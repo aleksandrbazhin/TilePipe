@@ -72,12 +72,6 @@ func on_size_changed():
 			emit_signal("_snapshot_state_changed_continous")
 
 
-func _process(_delta: float):
-	if Input.is_action_just_pressed("ui_cancel"):
-		if State.current_modal_popup != null and not error_dialog.visible:
-			State.current_modal_popup.hide()
-
-
 func on_render_progress(progress: int):
 	render_progress.value = progress
 	if progress != 100:
@@ -106,17 +100,20 @@ func add_error_report(text: String):
 
 
 func _on_ErrorDialog_popup_hide():
-	end_modal_popup()
+	if State.current_modal_popup == null:
+		end_modal_popup()
 	error_dialog.dialog_text = ""
 
 
-func _input(event):
-	if event is InputEventKey and event.pressed:
+func _unhandled_key_input(event):
+	if event.pressed:
 		match event.scancode:
-			KEY_ESCAPE, KEY_SPACE, KEY_ENTER:
+			KEY_ESCAPE:
 				if error_dialog.visible:
 					get_tree().set_input_as_handled()
 					error_dialog.hide()
+				elif State.current_modal_popup != null:
+					State.current_modal_popup.hide()
 			KEY_F5:
 				get_tree().set_input_as_handled()
 				var tile: TPTile = State.get_current_tile()

@@ -19,6 +19,7 @@ var current_tile_frame_number: int = 1
 var current_template_size: Vector2
 var current_texture_size: Vector2
 var current_tile_spacing: Vector2
+var current_tile_tex_offset: Vector2
 var current_smoothing: bool = false
 var current_tile_icon: Image
 
@@ -72,6 +73,7 @@ func _process(delta):
 func start_export_dialog(tile: TPTile):
 	current_tile_size = tile.get_output_tile_size()
 	current_tile_spacing = tile.subtile_spacing
+	current_tile_tex_offset = tile.tex_offset
 	var frame: TPTileFrame = tile.frames[0]
 	current_tile_masks = frame.result_subtiles_by_bitmask
 	current_template_size = tile.get_template_size()
@@ -119,6 +121,7 @@ func start_export_dialog(tile: TPTile):
 		overwrite_tileset_select.pressed = true
 		overwrite_tileset_select.disabled = true
 	popup_centered()
+	State.popup_started(self)
 
 
 func _parse_tileset(tileset_file_content: String, project_path: String) -> Dictionary:
@@ -381,7 +384,6 @@ func save_tileset_resource() -> bool:
 		updated_content = updated_content.insert(tile_replace_tile_block_start, tile_string)
 	file.open(tileset_path, File.WRITE)
 	file.store_string(updated_content)
-#	print(updated_content.substr(0, 100))
 	file.close()
 	return true
 
@@ -390,7 +392,7 @@ func tile_name_from_position(pos: Vector2, tile_base_name: String) -> String:
 	return "%s_%d_%d" % [tile_base_name, pos.x, pos.y]
 
 
-func get_godot_project_path(path: String) -> String:
+static func get_godot_project_path(path: String) -> String:
 	var path_array := path.get_base_dir().split("/")
 	var current_test_dir: String = ""
 	for dir in path_array:
@@ -400,7 +402,7 @@ func get_godot_project_path(path: String) -> String:
 	return ""
 
 
-func project_export_relative_path(path: String) -> String:
+static func project_export_relative_path(path: String) -> String:
 	var path_array := path.get_base_dir().split("/")
 	var current_test_dir: String = ""
 	var project_found: bool = false
@@ -419,6 +421,30 @@ func project_export_relative_path(path: String) -> String:
 	return ""
 
 
+static func is_a_valid_resource_path(test_resource_path: String):
+	if test_resource_path.get_basename().get_file().empty() or not test_resource_path.get_file().is_valid_filename():
+#		State.report_error("Error: \"%s\" is not a valid filename" % test_resource_path.get_file())
+		return false
+	var resource_project_path := get_godot_project_path(test_resource_path)	
+	if resource_project_path.empty():
+		return false
+	else:
+		return true
+
+
+static func is_a_valid_texture_path(test_texture_path: String, test_resource_path: String):
+	if test_texture_path.get_basename().get_file().empty() or not test_texture_path.get_file().is_valid_filename():
+		State.report_error("Error: %s is not a valid filename" % test_texture_path.get_file())
+		return false
+	var resource_project_path := get_godot_project_path(test_resource_path)
+	var texture_project_path := get_godot_project_path(test_texture_path)
+	if texture_project_path.empty() or resource_project_path != resource_project_path:
+		State.report_error("Error: texture is not in the same Godot project with the resource")
+		return false
+	else:
+		return true
+
+
 func make_texture_string(tile_texture_path: String, texture_id: int = 1) -> String:
 	var texture_relative_path := project_export_relative_path(tile_texture_path)
 	return "[ext_resource path=\"%s\" type=\"Texture\" id=%d]\n" % [texture_relative_path, texture_id]
@@ -430,7 +456,6 @@ func make_autotile_data_string(new_tile_name: String, new_autotile_type: int,
 	var mask_out_strings: PoolStringArray = []
 	var tile_collision_strings: PoolStringArray = []
 	var line_beginning := str(tile_id) + "/"
-	
 	for frame_index in current_tile_frame_number:
 		var frame_offset := Vector2(0, frame_index * current_template_size.y)
 		for mask in current_tile_masks:
@@ -451,7 +476,7 @@ func make_autotile_data_string(new_tile_name: String, new_autotile_type: int,
 		tile_shapes_string = tile_collision_strings.join(", ")
 	out_string += line_beginning + "name = \"%s\"\n" % new_tile_name
 	out_string += line_beginning + "texture = ExtResource( %d )\n" % texture_id
-	out_string += line_beginning + "tex_offset = Vector2( 0, 0 )\n"
+	out_string += line_beginning + "tex_offset = Vector2( %d, %d )\n" % [current_tile_tex_offset.x, current_tile_tex_offset.y]
 	out_string += line_beginning + "modulate = Color( 1, 1, 1, 1 )\n"
 	out_string += line_beginning + "region = Rect2( 0, 0, %d, %d )\n" % [current_texture_size.x, current_texture_size.y]
 	out_string += line_beginning + "tile_mode = 1\n" 
@@ -572,30 +597,6 @@ func populate_new_from_exisiting_tile(row: GodotTileRow):
 	set_texture_path(base_dir_abs_path, texture_file_name)
 	autotile_type_select.select(row.bitmask_mode)
 	check_existing_for_matches()
-
-
-func is_a_valid_resource_path(test_resource_path: String):
-	if test_resource_path.get_basename().get_file().empty() or not test_resource_path.get_file().is_valid_filename():
-#		State.report_error("Error: \"%s\" is not a valid filename" % test_resource_path.get_file())
-		return false
-	var resource_project_path := get_godot_project_path(test_resource_path)	
-	if resource_project_path.empty():
-		return false
-	else:
-		return true
-
-
-func is_a_valid_texture_path(test_texture_path: String, test_resource_path: String):
-	if test_texture_path.get_basename().get_file().empty() or not test_texture_path.get_file().is_valid_filename():
-		State.report_error("Error: %s is not a valid filename" % test_texture_path.get_file())
-		return false
-	var resource_project_path := get_godot_project_path(test_resource_path)
-	var texture_project_path := get_godot_project_path(test_texture_path)
-	if texture_project_path.empty() or resource_project_path != resource_project_path:
-		State.report_error("Error: texture is not in the same Godot project with the resource")
-		return false
-	else:
-		return true
 
 
 func clear_file_path(path: String) -> String:
@@ -790,7 +791,7 @@ func _on_CollisionsCheckButton_toggled(button_pressed: bool):
 	temp_tile_row.set_collisions(button_pressed)
 
 
-func _unhandled_input(event: InputEvent):
+func _input(event: InputEvent):
 	if event is InputEventKey and event.pressed and event.scancode == KEY_ESCAPE:
 		if resource_dialog.visible:
 			get_tree().set_input_as_handled()
@@ -798,6 +799,7 @@ func _unhandled_input(event: InputEvent):
 		elif texture_dialog.visible:
 			get_tree().set_input_as_handled()
 			texture_dialog.hide()
-		elif visible:
-			get_tree().set_input_as_handled()
-			hide()
+
+
+func _on_Godot3ExportDialog_popup_hide():
+	State.popup_ended()
