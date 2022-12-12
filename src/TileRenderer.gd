@@ -176,3 +176,7 @@ func on_render():
 			is_rendering = false
 			emit_signal("report_progress", 100)
 			emit_signal("subtiles_ready", frame_index)
+			queue_free()
+
+
+#func 

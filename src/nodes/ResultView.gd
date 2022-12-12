@@ -22,6 +22,7 @@ onready var scale_controls: ScaleControls = $VBoxContainer/HSplitContainer/Resul
 func combine_result_from_tile(tile: TPTile):
 	current_output_tile_size = tile.get_output_tile_size()
 	current_subtile_spacing = tile.subtile_spacing
+	result_texture_container.add_constant_override("separation", current_subtile_spacing.y)
 	if last_selected_frame >= tile.frames.size():
 		last_selected_frame = 0
 	scale_controls.set_current_scale(tile.ui_result_display_scale, true)

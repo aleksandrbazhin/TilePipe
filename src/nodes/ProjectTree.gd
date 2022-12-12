@@ -30,6 +30,7 @@ func _take_snapshot() -> Dictionary:
 			break
 	settings["open_directory"] = State.current_dir
 	settings["project_export_type"] = export_dialog.export_type
+	settings["project_export_tile_separation"] = export_dialog.export_tile_separation
 	settings["project_export_path_texture"] = export_dialog.export_path_texture
 	settings["project_export_path_godot"] = export_dialog.export_path_godot
 	return settings
@@ -42,6 +43,8 @@ func _apply_snapshot(settings: Dictionary):
 	load_project_directory(open_directory, settings["selected_tile"])
 	if "project_export_type" in settings:
 		export_dialog.export_type = settings["project_export_type"]
+	if "project_export_tile_separation" in settings:
+		export_dialog.export_tile_separation = settings["project_export_tile_separation"]
 	if "project_export_path_texture" in settings:
 		export_dialog.export_path_texture = settings["project_export_path_texture"]
 	if "project_export_path_godot" in settings: 
@@ -371,20 +374,7 @@ func start_export_dialog():
 	export_dialog.popup_centered()
 	export_dialog.setup(tile_container.get_children())
 	yield(VisualServer, "frame_post_draw")
-	for tile_index in tile_container.get_child_count():
-		var tile: TPTile =  tile_container.get_child(tile_index)
-		if tile == null or not tile.is_able_to_render():
-			continue
-		tile.update_tree_icon()
-		for frame_index in tile.frames.size():
-#			var frame: TPTileFrame = tile.frames[frame_index]
-			var renderer := TileRenderer.new()
-			add_child(renderer)
-			renderer.connect("subtiles_ready", self, "on_frame_render", [tile])
-			renderer.connect("subtiles_ready", export_dialog, "on_frame_render", [tile, tile_index])
-			renderer.start_render(tile, frame_index)
-			export_dialog.connect("popup_hide", renderer, "free")
-		yield(VisualServer, "frame_post_draw")
+	export_dialog.render_all()
 
 
 func _on_ExportButton_pressed():

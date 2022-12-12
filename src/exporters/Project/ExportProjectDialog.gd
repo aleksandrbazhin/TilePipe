@@ -15,60 +15,95 @@ var tile_offsets: Dictionary = {}
 var export_type: int = Const.EXPORT_PROJECT.SINGLE_TEXTURE
 var export_path_texture: String = ""
 var export_path_godot: String = ""
+var export_tile_separation: int = 0
 var rendered_tiles_refs := {}
 
 
-onready var result_texture := $MarginContainer/VBoxContainer/ProjectResultTextureRect
+onready var result_texture := $MarginContainer/VBoxContainer/HBoxContainerMain/ProjectResultTextureRect
 onready var progress_bar := $ProgressBar
 onready var texture_file_dialog := $TextureFileDialog
 onready var godot3_file_dialog := $Godot3FileDialog
-onready var path_edit_texture := $MarginContainer/VBoxContainer/HBoxContainer2/LineEdit
-onready var godot_block := $MarginContainer/VBoxContainer/HBoxContainerGodot
+onready var path_edit_texture := $MarginContainer/VBoxContainer/HBoxContainerTexture/LineEdit
+onready var godot3_block := $MarginContainer/VBoxContainer/HBoxContainerGodot
 onready var path_edit_godot := $MarginContainer/VBoxContainer/HBoxContainerGodot/GodotPath
-onready var export_type_option := $MarginContainer/VBoxContainer/HBoxContainer2/OptionButton
+onready var export_type_option := $MarginContainer/VBoxContainer/HBoxContainerTexture/OptionButton
+onready var tile_settings_container := $MarginContainer/VBoxContainer/HBoxContainerMain/ScrollContainer/VBoxSettings/VBoxContainerTiles
+onready var tile_separation_spinbox := $MarginContainer/VBoxContainer/HBoxContainerMain/ScrollContainer/VBoxSettings/HBoxContainerTileSeparation/SeparationSpinBox
 
 
 func setup(tiles: Array):
-	tile_offsets = {}
 	rendered_tiles_refs = {}
-	total_size = Vector2.ZERO
-	tile_number = tiles.size()
-	frame_number = 0
-	subtile_number = 0
+	for tile_ui in tile_settings_container.get_children():
+		tile_ui.free()
 	for tile_index in tiles.size():
 		var tile: TPTile = tiles[tile_index]
-		if not tile.is_able_to_render():
+		rendered_tiles_refs[tile_index] = weakref(tile)
+		var tile_label := Label.new()
+		tile_label.text = tile.tile_file_name.get_basename()
+		tile_settings_container.add_child(tile_label)
+
+	tile_separation_spinbox.set_value_quietly(export_tile_separation)
+	match export_type:
+		Const.EXPORT_PROJECT.SINGLE_TEXTURE:
+			export_type_option.selected = Const.EXPORT_PROJECT.SINGLE_TEXTURE
+			godot3_block.hide()
+		Const.EXPORT_PROJECT.GODOT3:
+			export_type_option.selected = Const.EXPORT_PROJECT.GODOT3
+			godot3_block.show()
+	path_edit_texture.text = export_path_texture
+	path_edit_godot.text = export_path_godot
+	render_all()
+
+
+func render_all():
+	tile_offsets = {}
+	total_size = Vector2.ZERO
+	frame_number = 0
+	subtile_number = 0
+
+	for tile_index in rendered_tiles_refs.keys():
+		var tile_ref: WeakRef = rendered_tiles_refs[tile_index]
+		if tile_ref == null or not tile_ref.get_ref() is TPTile:
+			continue
+		var tile: TPTile =  tile_ref.get_ref()
+		if tile == null or not tile.is_able_to_render():
 			continue
 		if tile.frames.empty():
 			continue
-#		var frame_size := tile.get_rendered_frame_size()
 		var tile_full_size := tile.get_full_tile_rendered_size()
-#		print(tile.tile_file_name, " ", frame_size)
 		if tile_full_size == Vector2.ZERO:
 			continue
 		frame_number += tile.frames.size()
 		subtile_number += tile.frames[0].get_subtile_count() * tile.frames.size()
-
-		tile_offsets[tile_index] = Vector2(0, total_size.y)
+		tile_offsets[tile_index] = Vector2(0, total_size.y + export_tile_separation)
 		total_size = Vector2(
 			max(total_size.x, tile_full_size.x), 
-			total_size.y + tile_full_size.y)
-		rendered_tiles_refs[tile_index] = weakref(tile)
+			tile_offsets[tile_index].y + tile_full_size.y)
 	result_texture.reset(total_size)
 	update_progress(0)
 	render_subtile_count = 0
-	match export_type:
-		Const.EXPORT_PROJECT.SINGLE_TEXTURE:
-			export_type_option.selected = Const.EXPORT_PROJECT.SINGLE_TEXTURE
-			godot_block.hide()
-		Const.EXPORT_PROJECT.GODOT3:
-			export_type_option.selected = Const.EXPORT_PROJECT.GODOT3
-			godot_block.show()
-	path_edit_texture.text = export_path_texture
-	path_edit_godot.text = export_path_godot
+
+
+	for tile_index in rendered_tiles_refs.keys():
+		var tile_ref: WeakRef = rendered_tiles_refs[tile_index]
+		if tile_ref == null or not tile_ref.get_ref() is TPTile:
+			continue
+		var tile: TPTile =  tile_ref.get_ref()
+		if tile == null or not tile.is_able_to_render():
+			continue
+		for frame_index in tile.frames.size():
+			var renderer := TileRenderer.new()
+			add_child(renderer)
+			renderer.connect("subtiles_ready", self, "on_frame_render", [tile, tile_index])
+			renderer.start_render(tile, frame_index)
+			self.connect("popup_hide", renderer, "free")
+		yield(VisualServer, "frame_post_draw")
 
 
 func on_frame_render(frame_index: int, tile: TPTile, tile_index: int):
+	if frame_index == 0:
+		tile.update_tree_icon()
+
 	add_tile_frame(tile, frame_index, tile_index)
 	if subtile_number != 0:
 		render_subtile_count += tile.frames[0].get_subtile_count()
@@ -150,13 +185,16 @@ func export_to_godot3_tileset() -> bool:
 		if tile_ref == null or not tile_ref.get_ref() is TPTile:
 			continue
 		var tile: TPTile = tile_ref.get_ref()
+		if tile == null or not tile.is_able_to_render():
+			continue
+		if tile.frames.empty():
+			continue
+		
 		tileset.create_tile(tile_index)
 		tileset.tile_set_name(tile_index, tile.tile_file_name.get_basename())
 		tileset.autotile_set_size(tile_index, tile.get_output_tile_size())
 		tileset.tile_set_tile_mode(tile_index, TileSet.AUTO_TILE)
 		tileset.tile_set_texture_offset(tile_index, tile.tex_offset)
-		if tile.frames.empty():
-			continue
 		var bitmask_type := Helpers.assume_godot_autotile_type(tile.frames[0].result_subtiles_by_bitmask)
 		tileset.autotile_set_bitmask_mode(tile_index, bitmask_type)
 		tileset.autotile_set_spacing(tile_index, int(tile.subtile_spacing.x))
@@ -226,12 +264,12 @@ func _on_OptionButton_item_selected(index: int):
 		Const.EXPORT_PROJECT.SINGLE_TEXTURE:
 			export_type = index
 			path_edit_texture.text = export_path_texture
-			godot_block.hide()
+			godot3_block.hide()
 			emit_signal("settings_changed")
 		Const.EXPORT_PROJECT.GODOT3:
 			export_type = index
 			path_edit_godot.text = export_path_godot
-			godot_block.show()
+			godot3_block.show()
 			emit_signal("settings_changed")
 
 
@@ -259,4 +297,10 @@ func _on_FileDialogButton_pressed():
 func _on_GodotFileDialogButton_pressed():
 	godot3_file_dialog.current_path = export_path_godot
 	godot3_file_dialog.popup_centered()
+
+
+func _on_SeparationSpinBox_value_changed_no_silence(value):
+	export_tile_separation = int(value)
+	emit_signal("settings_changed")
+	render_all()
 	
